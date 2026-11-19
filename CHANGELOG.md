@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/jamesblack/thelastgate-godot/compare/v1.0.0...v1.0.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **hud:** make hotkeys work while enter to talk is off ([f587d93](https://github.com/jamesblack/thelastgate-godot/commit/f587d9389af77e3b109b7889668b3a9bf2d2cb45))
+
 ## 1.0.0 (2026-11-19)
 
 
