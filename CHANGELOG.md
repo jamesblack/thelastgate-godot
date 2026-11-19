@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.0.1...v1.1.0) (2026-11-19)
+
+
+### Features
+
+* **launcher:** open the data and sprite overrides folders ([20f7830](https://github.com/jamesblack/thelastgate-godot/commit/20f78309d2a8d4d54d59f07ee8ffdca49789a682)), closes [#3](https://github.com/jamesblack/thelastgate-godot/issues/3)
+
+
+### Bug Fixes
+
+* **hud:** keep the hotbar menu text sharp and bright ([4624125](https://github.com/jamesblack/thelastgate-godot/commit/4624125222399b6b5d9c27aea7d1fbd157982c74))
+* **hud:** send a recalled chat line with one Enter ([2d4b9e8](https://github.com/jamesblack/thelastgate-godot/commit/2d4b9e83d5060ce6d55da005d624a47164a0487b))
+* **map:** keep right-click menu text sharp and bright ([4624125](https://github.com/jamesblack/thelastgate-godot/commit/4624125222399b6b5d9c27aea7d1fbd157982c74))
+
 ## [1.0.1](https://github.com/jamesblack/thelastgate-godot/compare/v1.0.0...v1.0.1) (2026-11-19)
 
 
