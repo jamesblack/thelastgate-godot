@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.1.0...v1.2.0) (2026-11-19)
+
+
+### Features
+
+* **hud:** bring back the gamma key, now for world gamma only ([bb055b3](https://github.com/jamesblack/thelastgate-godot/commit/bb055b3af2195ab00872880ee3b8306e30919b82))
+* **hud:** right-click an offense or defense stat to read what it does ([5fc31ce](https://github.com/jamesblack/thelastgate-godot/commit/5fc31cea97d583ca064f34f2a5a79b7f8f2083d3))
+* **hud:** show offense and defense stats with the List Offenses and List Defenses buttons ([5fc31ce](https://github.com/jamesblack/thelastgate-godot/commit/5fc31cea97d583ca064f34f2a5a79b7f8f2083d3))
+* **hud:** show the summary stats above the skills by clicking List Skills again ([5fc31ce](https://github.com/jamesblack/thelastgate-godot/commit/5fc31cea97d583ca064f34f2a5a79b7f8f2083d3))
+* **windows:** warn when a hotkey would type into the chat line ([87dd248](https://github.com/jamesblack/thelastgate-godot/commit/87dd248259ef2092bfe029c6773387d809e1f6fb))
+
+
+### Bug Fixes
+
+* **hud:** hand typing back to chat when a window field is done ([87dd248](https://github.com/jamesblack/thelastgate-godot/commit/87dd248259ef2092bfe029c6773387d809e1f6fb))
+* **hud:** let the skill list slider run the full height of its frame, without arrows ([5fc31ce](https://github.com/jamesblack/thelastgate-godot/commit/5fc31cea97d583ca064f34f2a5a79b7f8f2083d3))
+* **hud:** scroll the chat log with page up and page down while typing ([87dd248](https://github.com/jamesblack/thelastgate-godot/commit/87dd248259ef2092bfe029c6773387d809e1f6fb))
+* **launcher:** show the connection status in the launcher and stay there if it fails ([70f475a](https://github.com/jamesblack/thelastgate-godot/commit/70f475ab5cd4e4876a922ac2ef1ec1b39b28ed94))
+* **planner:** show the Bless power that recasting settles at ([f7a5c5f](https://github.com/jamesblack/thelastgate-godot/commit/f7a5c5f4174097df59caa2e7a295411c4766026a))
+* **planner:** stop a placeholder effect showing on spell rows and covering the warning ([f7a5c5f](https://github.com/jamesblack/thelastgate-godot/commit/f7a5c5f4174097df59caa2e7a295411c4766026a))
+
 ## [1.1.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.0.1...v1.1.0) (2026-11-19)
 
 
