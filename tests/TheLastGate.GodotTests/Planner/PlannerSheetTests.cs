@@ -1,10 +1,13 @@
+using GdUnit4;
 using TheLastGate.Buffs;
 using TheLastGate.Planner;
 using TheLastGate.State;
 using TheLastGate.Stats;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Planner;
 
+[TestSuite]
 public class PlannerSheetTests
 {
     private const int BlessSkill = 21;
@@ -14,38 +17,44 @@ public class PlannerSheetTests
     private const int Agility = (int)AttributeSlot.Agility;
     private const int Braveness = (int)AttributeSlot.Braveness;
 
-    private readonly PlannerGame game = Game();
+    private PlannerGame game = null!;
 
-    [Fact]
+    [BeforeTest]
+    public void StartAGame() => game = Game();
+
+    [TestCase]
     public void WithoutTheMetaStats_TheRowsShowTheServersValues()
     {
         game.MetaStats.Clear();
 
         var sheet = PlannerSheet.For(game);
 
-        Assert.False(sheet.BuffsAvailable);
-        Assert.All(sheet.Attributes, row => Assert.Equal((50, 0), (row.Preview, row.BuffShift)));
+        AssertThat(sheet.BuffsAvailable).IsFalse();
+        AssertThat(sheet.Attributes.Select(row => (row.Preview, row.BuffShift)).Distinct().ToArray())
+            .ContainsExactly((50, 0));
     }
 
-    [Fact]
+    [TestCase]
     public void AShownBless_LiftsTheAttributeRows()
     {
         var sheet = PlannerSheet.For(game);
 
-        Assert.True(sheet.BuffsAvailable);
-        Assert.Equal(66, sheet.Planned!.CastPower[(int)BuffKind.Bless]);
-        Assert.All(sheet.Attributes, row => Assert.Equal((61, 11), (row.Preview, row.BuffShift)));
+        AssertThat(sheet.BuffsAvailable).IsTrue();
+        AssertThat(sheet.Planned!.CastPower[(int)BuffKind.Bless]).IsEqual(66);
+        AssertThat(sheet.Attributes.Select(row => (row.Preview, row.BuffShift)).Distinct().ToArray())
+            .ContainsExactly((61, 11));
     }
 
-    [Fact]
+    [TestCase]
     public void ABlessNotToggledOn_LeavesThemAlone()
     {
         game.Choices.SpellToggles = 0;
 
-        Assert.All(PlannerSheet.For(game).Attributes, row => Assert.Equal(50, row.Preview));
+        AssertThat(PlannerSheet.For(game).Attributes.Select(row => row.Preview).Distinct().ToArray())
+            .ContainsExactly(50);
     }
 
-    [Fact]
+    [TestCase]
     public void APlannedAttribute_ShowsWhatWasBoughtAndTheNextCost()
     {
         game.Choices.SpellToggles = 0;
@@ -53,15 +62,14 @@ public class PlannerSheetTests
 
         var strength = PlannerSheet.For(game).Attributes[Strength];
 
-        Assert.Equal(
-            ("Strength", 40, 50, 1, 51),
-            (strength.Name, strength.Base, strength.Current, strength.DirectRaise, strength.Preview));
-        Assert.Equal(41 * 41 * 41 * 3 / 20, strength.Cost);
-        Assert.True(strength.CanRaise);
-        Assert.True(strength.CanLower);
+        AssertThat((strength.Name, strength.Base, strength.Current, strength.DirectRaise, strength.Preview))
+            .IsEqual(("Strength", 40, 50, 1, 51));
+        AssertThat(strength.Cost).IsEqual(41 * 41 * 41 * 3 / 20);
+        AssertThat(strength.CanRaise).IsTrue();
+        AssertThat(strength.CanLower).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void SkillRows_FollowTheListAndOnlyShowShownSkills()
     {
         game.SkillOrder = [BlessSkill, StaffSkill, SwordSkill];
@@ -70,11 +78,11 @@ public class PlannerSheetTests
 
         var skills = PlannerSheet.For(game).Skills;
 
-        Assert.Equal(["Bless", "Staff"], skills.Select(row => row.Name));
-        Assert.Equal(StatPlan.SkillSlot(BlessSkill), skills[0].Slot);
+        AssertThat(skills.Select(row => row.Name)).ContainsExactly("Bless", "Staff");
+        AssertThat(skills[0].Slot).IsEqual(StatPlan.SkillSlot(BlessSkill));
     }
 
-    [Fact]
+    [TestCase]
     public void ASkillRow_GainsFromItsRaisedAttributes()
     {
         game.MetaStats.Clear();
@@ -83,14 +91,16 @@ public class PlannerSheetTests
         game.Skills[StaffSkill][0] = 20;
         game.Plan.Raise(Agility, game.ValuesFor(Agility), game.Points, 3);
 
-        var staff = Assert.Single(PlannerSheet.For(game).Skills);
+        var staffs = PlannerSheet.For(game).Skills;
+        AssertThat(staffs).HasSize(1);
+        var staff = staffs[0];
 
         // (53 + 53 + 50) / 5 = 31 against 150 / 5 = 30.
-        Assert.Equal(1, staff.AttributeGain);
-        Assert.True(staff.UsesRaisedAttribute);
+        AssertThat(staff.AttributeGain).IsEqual(1);
+        AssertThat(staff.UsesRaisedAttribute).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void InHardMode_TheAttributesDivideBySix()
     {
         game.MetaStats.Clear();
@@ -100,31 +110,31 @@ public class PlannerSheetTests
         game.Skills[StaffSkill][0] = 20;
         game.Plan.Raise(Agility, game.ValuesFor(Agility), game.Points, 3);
 
-        Assert.Equal(1, Assert.Single(PlannerSheet.For(game).Skills).AttributeGain);
+        AssertThat(PlannerSheet.For(game).Skills.Single().AttributeGain).IsEqual(1);
         game.Plan.Lower(Agility, game.ValuesFor(Agility), 1);
-        Assert.Equal(0, Assert.Single(PlannerSheet.For(game).Skills).AttributeGain);
+        AssertThat(PlannerSheet.For(game).Skills.Single().AttributeGain).IsEqual(0);
     }
 
-    [Fact]
+    [TestCase]
     public void ACappedStat_HasNoCostAndCantBeRaised()
     {
         game.Attributes[Strength][2] = 40;
 
         var strength = PlannerSheet.For(game).Attributes[Strength];
 
-        Assert.Null(strength.Cost);
-        Assert.False(strength.CanRaise);
+        AssertThat(strength.Cost).IsNull();
+        AssertThat(strength.CanRaise).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void TooFewPoints_CantRaiseAStat()
     {
         game.Points = 100;
 
-        Assert.False(PlannerSheet.For(game).Attributes[Strength].CanRaise);
+        AssertThat(PlannerSheet.For(game).Attributes[Strength].CanRaise).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void TheVitalRows_AreHitpointsAndMana()
     {
         game.HitPoints[0] = 120;
@@ -134,43 +144,41 @@ public class PlannerSheetTests
 
         var vitals = PlannerSheet.For(game).Vitals;
 
-        Assert.Equal(
-            [("Hitpoints", StatPlan.HitPointsSlot, 120, 300), ("Mana", StatPlan.ManaSlot, 80, 150)],
-            vitals.Select(row => (row.Name, row.Slot, row.Base, row.Current)));
+        AssertThat(vitals.Select(row => (row.Name, row.Slot, row.Base, row.Current)))
+            .ContainsExactly(("Hitpoints", StatPlan.HitPointsSlot, 120, 300), ("Mana", StatPlan.ManaSlot, 80, 150));
     }
 
-    [Theory]
-    [InlineData(1u << 4, 75)]
-    [InlineData(1u << 0, 100)]
-    [InlineData(1u << 6, 105)]
-    [InlineData(1u << 1, 95)]
-    [InlineData(1u << 5, 80)]
-    [InlineData(1u << 12, 80)]
-    [InlineData(1u << 10, 105)]
-    [InlineData(1u << 11, 105)]
-    [InlineData(1u << 13, 110)]
-    [InlineData(1u << 9, 110)]
-    [InlineData(1u << 14, 115)]
-    [InlineData(1u << 16, 100)]
-    [InlineData(0u, 100)]
+    [TestCase(1u << 4, 75)]
+    [TestCase(1u << 0, 100)]
+    [TestCase(1u << 6, 105)]
+    [TestCase(1u << 1, 95)]
+    [TestCase(1u << 5, 80)]
+    [TestCase(1u << 12, 80)]
+    [TestCase(1u << 10, 105)]
+    [TestCase(1u << 11, 105)]
+    [TestCase(1u << 13, 110)]
+    [TestCase(1u << 9, 110)]
+    [TestCase(1u << 14, 115)]
+    [TestCase(1u << 16, 100)]
+    [TestCase(0u, 100)]
     public void SpellRaceModifier_IsTheClasssPercent(uint kindred, int percent)
     {
-        Assert.Equal(percent, PlannerSheet.SpellRaceModifier(kindred));
+        AssertThat(PlannerSheet.SpellRaceModifier(kindred)).IsEqual(percent);
     }
 
-    [Fact]
+    [TestCase]
     public void EmptyGearSlots_LeaveOutTheCharmsAndTheOffhand()
     {
         var worn = new int[PlayerState.WornSlots];
-        Assert.Equal(10, PlannerSheet.EmptyGearSlots(worn));
+        AssertThat(PlannerSheet.EmptyGearSlots(worn)).IsEqual(10);
 
         worn[0] = 100;
         worn[5] = 100;
         worn[7] = 100;
-        Assert.Equal(9, PlannerSheet.EmptyGearSlots(worn));
+        AssertThat(PlannerSheet.EmptyGearSlots(worn)).IsEqual(9);
     }
 
-    [Fact]
+    [TestCase]
     public void AFirstLook_PicksTheWeaponAndOffhandFromTheBestSkills()
     {
         game.Skills[SwordSkill][0] = 40;
@@ -178,22 +186,22 @@ public class PlannerSheetTests
 
         var sheet = PlannerSheet.For(game);
 
-        Assert.True(sheet.ChoicesChanged);
-        Assert.Equal(CombatWeapon.Sword, game.Choices.Weapon);
-        Assert.Equal(CombatOffhand.None, game.Choices.Offhand);
-        Assert.Equal(CombatWeapon.Sword, sheet.Combat?.Weapon);
-        Assert.False(PlannerSheet.For(game).ChoicesChanged);
+        AssertThat(sheet.ChoicesChanged).IsTrue();
+        AssertThat(game.Choices.Weapon).IsEqual(CombatWeapon.Sword);
+        AssertThat(game.Choices.Offhand).IsEqual(CombatOffhand.None);
+        AssertThat(sheet.Combat?.Weapon).IsEqual(CombatWeapon.Sword);
+        AssertThat(PlannerSheet.For(game).ChoicesChanged).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void TheCombatModel_WaitsForHitAndParry()
     {
         game.MetaStats.Remove("Parry Score");
 
-        Assert.Null(PlannerSheet.For(game).Combat);
+        AssertThat(PlannerSheet.For(game).Combat).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void TheCombatModel_ReadsTheClassAndGear()
     {
         game.Kindred = (1u << 5) | (1u << 16);
@@ -202,25 +210,25 @@ public class PlannerSheetTests
 
         var combat = PlannerSheet.For(game).Combat!;
 
-        Assert.Equal(CombatGearClass.ArchTemplar, combat.GearClass);
-        Assert.True(combat.Rampart);
-        Assert.True(combat.Lycanth);
-        Assert.Equal(9, combat.EmptySlots);
-        Assert.Equal((100, 90), (combat.ServerHit, combat.ServerParry));
+        AssertThat(combat.GearClass).IsEqual(CombatGearClass.ArchTemplar);
+        AssertThat(combat.Rampart).IsTrue();
+        AssertThat(combat.Lycanth).IsTrue();
+        AssertThat(combat.EmptySlots).IsEqual(9);
+        AssertThat((combat.ServerHit, combat.ServerParry)).IsEqual((100, 90));
     }
 
-    [Fact]
+    [TestCase]
     public void WithNothingPlannedOrShown_TheCombatBlockShowsTheServersValues()
     {
         game.Choices.SpellToggles = 0;
 
         var sheet = PlannerSheet.For(game);
 
-        Assert.Equal(new CombatValues(100, 90, 30, 30), sheet.CombatShown);
-        Assert.False(sheet.CombatChanged);
+        AssertThat(sheet.CombatShown).IsEqual(new CombatValues(100, 90, 30, 30));
+        AssertThat(sheet.CombatChanged).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void RaisingTheWeaponSkill_RaisesHit()
     {
         game.Choices.SpellToggles = 0;
@@ -232,42 +240,41 @@ public class PlannerSheetTests
 
         var sheet = PlannerSheet.For(game);
 
-        Assert.Equal(CombatWeapon.Sword, sheet.Combat?.Weapon);
-        Assert.True(sheet.CombatShown?.Hit > 100);
-        Assert.True(sheet.CombatChanged);
+        AssertThat(sheet.Combat?.Weapon).IsEqual(CombatWeapon.Sword);
+        AssertThat(sheet.CombatShown?.Hit > 100).IsTrue();
+        AssertThat(sheet.CombatChanged).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void WithoutHitAndParry_ThereAreNoCombatValues()
     {
         game.MetaStats.Remove("Hit Score");
 
-        Assert.Null(PlannerSheet.For(game).CombatShown);
+        AssertThat(PlannerSheet.For(game).CombatShown).IsNull();
     }
 
-    [Theory]
-    [InlineData(125, true, "%", "1.25%")]
-    [InlineData(7, true, "", "0.07")]
-    [InlineData(90, false, "", "90")]
-    [InlineData(250, false, " pts", "250 pts")]
+    [TestCase(125, true, "%", "1.25%")]
+    [TestCase(7, true, "", "0.07")]
+    [TestCase(90, false, "", "90")]
+    [TestCase(250, false, " pts", "250 pts")]
     public void FormatMeta_WritesHundredthsForADecimalStat(int value, bool isDecimal, string affix, string text)
     {
-        Assert.Equal(text, PlannerSheet.FormatMeta(value, new MetaFormat(isDecimal, affix)));
+        AssertThat(PlannerSheet.FormatMeta(value, new MetaFormat(isDecimal, affix))).IsEqual(text);
     }
 
-    [Fact]
+    [TestCase]
     public void MetaText_IsADashUntilTheStatArrives()
     {
         game.MetaFormats[PlannerSheet.SpellMultiplier] = new MetaFormat(true, "x");
 
         var sheet = PlannerSheet.For(game);
 
-        Assert.Equal("-", sheet.MetaText("Nothing Like It"));
-        Assert.Equal("1.00x", sheet.MetaText(PlannerSheet.SpellMultiplier));
-        Assert.Equal("90", sheet.MetaText(PlannerSheet.ParryScore));
+        AssertThat(sheet.MetaText("Nothing Like It")).IsEqual("-");
+        AssertThat(sheet.MetaText(PlannerSheet.SpellMultiplier)).IsEqual("1.00x");
+        AssertThat(sheet.MetaText(PlannerSheet.ParryScore)).IsEqual("90");
     }
 
-    [Fact]
+    [TestCase]
     public void MathLines_ListWhatFeedsTheNumbers()
     {
         const uint seyan = 1u << 1;
@@ -290,42 +297,47 @@ public class PlannerSheetTests
         var unmodelled = FirstIndex(ItemEffects.Gears, gear => !gear.Modelled);
         game.Choices.GearTicks = 1u << unmodelled;
 
-        Assert.Equal(
-            [
-                "Hard Mode", "Bless", "The Magician", "Node Five (skill tree)", "False Strength (skill tree)",
-                "False Tactician (not modelled) (skill tree)", "False Agility x2", "More Braveness x3",
-                ItemEffects.Enchants[uncounted].Name, $"{ItemEffects.Gears[unmodelled].Name} (not modelled)",
-            ],
-            PlannerSheet.For(game).MathLines);
+        AssertThat(PlannerSheet.For(game).MathLines)
+            .ContainsExactly(
+                "Hard Mode",
+                "Bless",
+                "The Magician",
+                "Node Five (skill tree)",
+                "False Strength (skill tree)",
+                "False Tactician (not modelled) (skill tree)",
+                "False Agility x2",
+                "More Braveness x3",
+                ItemEffects.Enchants[uncounted].Name,
+                $"{ItemEffects.Gears[unmodelled].Name} (not modelled)");
     }
 
-    [Fact]
+    [TestCase]
     public void MathLines_LeaveOutUnlearnedNodesAndSpellsYouDontKnow()
     {
         game.Kindred = 1u << 1;
         game.TreePoints = TreeBit(1);
         game.Skills[BlessSkill][0] = 0;
 
-        Assert.Empty(PlannerSheet.For(game).MathLines);
+        AssertThat(PlannerSheet.For(game).MathLines).IsEmpty();
     }
 
-    [Fact]
+    [TestCase]
     public void CardNames_AreTheUprightCardsThenTheReversed()
     {
-        Assert.Equal(TarotMath.CardCount, TarotMath.CardNames.Count);
-        Assert.Equal("The Fool", TarotMath.CardNames[0]);
-        Assert.Equal("The World", TarotMath.CardNames[21]);
-        Assert.Equal("The Fool, Reversed", TarotMath.CardNames[22]);
-        Assert.Equal("The World, Reversed", TarotMath.CardNames[43]);
+        AssertThat(TarotMath.CardNames.Count).IsEqual(TarotMath.CardCount);
+        AssertThat(TarotMath.CardNames[0]).IsEqual("The Fool");
+        AssertThat(TarotMath.CardNames[21]).IsEqual("The World");
+        AssertThat(TarotMath.CardNames[22]).IsEqual("The Fool, Reversed");
+        AssertThat(TarotMath.CardNames[43]).IsEqual("The World, Reversed");
     }
 
-    [Fact]
+    [TestCase]
     public void Score_JoinsTheHighAndLowParts()
     {
-        Assert.Equal(300, PlannerGame.Score([0, 0, 0, 0, 1, 44]));
+        AssertThat(PlannerGame.Score([0, 0, 0, 0, 1, 44])).IsEqual(300);
     }
 
-    [Fact]
+    [TestCase]
     public void From_CopiesThePlayersStats()
     {
         var player = new PlayerState();
@@ -340,12 +352,12 @@ public class PlannerSheetTests
             new BuffWatch(player),
             false);
 
-        Assert.Equal(40, copied.Attributes[Strength][0]);
-        Assert.Equal(12, copied.Skills[SwordSkill][0]);
-        Assert.Equal(Terminology.SkillCount, copied.SkillOrder.Count);
-        Assert.Empty(copied.MetaStats);
-        Assert.Empty(copied.MetaFormats);
-        Assert.Equal("p01", copied.TreeNodeNames[0]);
+        AssertThat(copied.Attributes[Strength][0]).IsEqual(40);
+        AssertThat(copied.Skills[SwordSkill][0]).IsEqual(12);
+        AssertThat(copied.SkillOrder.Count).IsEqual(Terminology.SkillCount);
+        AssertThat(copied.MetaStats).IsEmpty();
+        AssertThat(copied.MetaFormats).IsEmpty();
+        AssertThat(copied.TreeNodeNames[0]).IsEqual("p01");
     }
 
     private static int TreeBit(int node) => 1 << (12 - node + 4);

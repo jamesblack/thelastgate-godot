@@ -1,9 +1,12 @@
+using GdUnit4;
 using TheLastGate.Buffs;
 using TheLastGate.Planner;
 using TheLastGate.State;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Planner;
 
+[TestSuite]
 public class BuffFocusTests
 {
     private const int FocusedSlot = 8;
@@ -15,19 +18,19 @@ public class BuffFocusTests
 
     private const int Bless = (int)BuffKind.Bless;
 
-    [Fact]
+    [TestCase]
     public void BlessPoints_WinWhenCheapest()
     {
         var result = BuffFocus.Search(Fixture());
 
-        Assert.Equal(106, result.CurrentValue);
+        AssertThat(result.CurrentValue).IsEqual(106);
         AssertSingle(result.Best, BlessSlot, 7, 140);
         AssertSingle(result.Direct, FocusedSlot, 1, 1000);
         AssertSingle(result.ThroughAttributes, 4, 1, 500);
         AssertSingle(result.ThroughBless, BlessSlot, 7, 140);
     }
 
-    [Fact]
+    [TestCase]
     public void Direct_WinsWhenCheap()
     {
         var input = Fixture();
@@ -41,7 +44,7 @@ public class BuffFocusTests
         AssertSingle(result.ThroughBless, BlessSlot, 7, 140);
     }
 
-    [Fact]
+    [TestCase]
     public void ACappedBless_IsGoneAround()
     {
         var input = Fixture();
@@ -56,10 +59,10 @@ public class BuffFocusTests
         AssertSingle(result.ThroughAttributes, 4, 1, 500);
 
         // A Bless point the route would succeed without doesn't make it a route through Bless.
-        Assert.Equal(1180, result.ThroughBless?.TotalCost);
+        AssertThat(result.ThroughBless?.TotalCost).IsEqual(1180);
     }
 
-    [Fact]
+    [TestCase]
     public void EverythingCapped_LeavesNoRoute()
     {
         var input = Fixture();
@@ -70,13 +73,13 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Null(result.Best);
-        Assert.Null(result.Direct);
-        Assert.Null(result.ThroughAttributes);
-        Assert.Null(result.ThroughBless);
+        AssertThat(result.Best).IsNull();
+        AssertThat(result.Direct).IsNull();
+        AssertThat(result.ThroughAttributes).IsNull();
+        AssertThat(result.ThroughBless).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void FocusingBlessItself_MakesABlessPointTheDirectRaise()
     {
         var input = new BuffFocusInput
@@ -91,13 +94,13 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Equal(66, result.CurrentValue);
+        AssertThat(result.CurrentValue).IsEqual(66);
         AssertSingle(result.Best, BlessSlot, 1, 20);
         AssertSingle(result.Direct, BlessSlot, 1, 20);
-        Assert.Null(result.ThroughBless);
+        AssertThat(result.ThroughBless).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void FoolReversed_UsesTheAttributePool()
     {
         var model = Model();
@@ -119,7 +122,7 @@ public class BuffFocusTests
         AssertSingle(result.Best, BuffFocus.AttributePool, 10, 100);
     }
 
-    [Fact]
+    [TestCase]
     public void Armor_FeedsResistanceThroughGearMastery()
     {
         var input = ResistFixture();
@@ -135,11 +138,11 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Equal(70, result.CurrentValue);
+        AssertThat(result.CurrentValue).IsEqual(70);
         AssertSingle(result.Best, GearMasterySlot, 1, 5);
     }
 
-    [Fact]
+    [TestCase]
     public void AHitpointRaise_ReachesResistanceThroughTheOdachi()
     {
         var input = ResistFixture();
@@ -152,11 +155,11 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Equal(70, result.CurrentValue);
+        AssertThat(result.CurrentValue).IsEqual(70);
         AssertSingle(result.Best, BuffFocus.HitpointsRaise, 1, 3);
     }
 
-    [Fact]
+    [TestCase]
     public void ManyCandidates_StillFindACheapRoute()
     {
         var input = Fixture();
@@ -167,14 +170,14 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Equal(FocusSearch.MostCandidates, input.Candidates.Count);
+        AssertThat(input.Candidates.Count).IsEqual(FocusSearch.MostCandidates);
         AssertSingle(result.Best, BlessSlot, 7, 140);
         AssertSingle(result.Direct, FocusedSlot, 1, 1000);
         AssertSingle(result.ThroughAttributes, 4, 1, 500);
         AssertSingle(result.ThroughBless, BlessSlot, 7, 140);
     }
 
-    [Fact]
+    [TestCase]
     public void ASearchWithoutARoute_StopsAtTheStateLimit()
     {
         var input = Fixture();
@@ -186,11 +189,11 @@ public class BuffFocusTests
 
         var result = BuffFocus.Search(input);
 
-        Assert.Equal(106, result.CurrentValue);
-        Assert.Null(result.Best);
-        Assert.Null(result.Direct);
-        Assert.Null(result.ThroughAttributes);
-        Assert.Null(result.ThroughBless);
+        AssertThat(result.CurrentValue).IsEqual(106);
+        AssertThat(result.Best).IsNull();
+        AssertThat(result.Direct).IsNull();
+        AssertThat(result.ThroughAttributes).IsNull();
+        AssertThat(result.ThroughBless).IsNull();
     }
 
     private static BuffModelInput Model()
@@ -263,8 +266,8 @@ public class BuffFocusTests
 
     private static void AssertSingle(FocusRoute? route, int raiseIndex, int points, int cost)
     {
-        Assert.NotNull(route);
-        Assert.Equal(cost, route.TotalCost);
-        Assert.Equal([new FocusRaise(raiseIndex, points, cost)], route.Raises);
+        AssertThat(route).IsNotNull();
+        AssertThat(route.TotalCost).IsEqual(cost);
+        AssertThat(route.Raises).ContainsExactly(new FocusRaise(raiseIndex, points, cost));
     }
 }

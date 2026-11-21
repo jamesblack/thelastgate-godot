@@ -1,8 +1,11 @@
+using GdUnit4;
 using TheLastGate.Planner;
 using TheLastGate.State;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Planner;
 
+[TestSuite]
 public class CombatFocusTests
 {
     private const int SwordSlot = 8;
@@ -13,7 +16,7 @@ public class CombatFocusTests
     private const int Agility = (int)AttributeSlot.Agility;
     private const int Strength = (int)AttributeSlot.Strength;
 
-    [Fact]
+    [TestCase]
     public void ACheapWeaponSkillPoint_Wins()
     {
         var input = Fixture(CombatStat.Hit);
@@ -24,12 +27,12 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(100, result.CurrentValue);
-        Assert.Equal(10, result.Best?.TotalCost);
-        Assert.Equal([new FocusRaise(SwordSlot, 1, 10)], result.Best!.Raises);
+        AssertThat(result.CurrentValue).IsEqual(100);
+        AssertThat(result.Best?.TotalCost).IsEqual(10);
+        AssertThat(result.Best!.Raises).ContainsExactly(new FocusRaise(SwordSlot, 1, 10));
     }
 
-    [Fact]
+    [TestCase]
     public void AnAttributeRoute_WinsWhenCheaper()
     {
         var input = Fixture(CombatStat.Parry);
@@ -42,12 +45,12 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(90, result.CurrentValue);
-        Assert.Equal(60, result.Best?.TotalCost);
-        Assert.Equal([new FocusRaise(Agility, 3, 60)], result.Best!.Raises);
+        AssertThat(result.CurrentValue).IsEqual(90);
+        AssertThat(result.Best?.TotalCost).IsEqual(60);
+        AssertThat(result.Best!.Raises).ContainsExactly(new FocusRaise(Agility, 3, 60));
     }
 
-    [Fact]
+    [TestCase]
     public void AnEqualCost_GoesToFewerPoints()
     {
         var input = Fixture(CombatStat.Hit);
@@ -57,11 +60,11 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(30, result.Best?.TotalCost);
-        Assert.Equal([new FocusRaise(SwordSlot, 1, 30)], result.Best!.Raises);
+        AssertThat(result.Best?.TotalCost).IsEqual(30);
+        AssertThat(result.Best!.Raises).ContainsExactly(new FocusRaise(SwordSlot, 1, 30));
     }
 
-    [Fact]
+    [TestCase]
     public void Tactics_NeedsSeveralPoints()
     {
         var input = Fixture(CombatStat.Hit);
@@ -76,11 +79,11 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(30, result.Best?.TotalCost);
-        Assert.Equal(6, Assert.Single(result.Best!.Raises).Points);
+        AssertThat(result.Best?.TotalCost).IsEqual(30);
+        AssertThat(result.Best!.Raises.Single().Points).IsEqual(6);
     }
 
-    [Fact]
+    [TestCase]
     public void ACappedSkill_HasNoRoute()
     {
         var input = Fixture(CombatStat.Hit);
@@ -89,11 +92,11 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(100, result.CurrentValue);
-        Assert.Null(result.Best);
+        AssertThat(result.CurrentValue).IsEqual(100);
+        AssertThat(result.Best).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void AStatNothingCanMove_HasNoRoute()
     {
         var input = Fixture(CombatStat.Armor);
@@ -103,11 +106,11 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(20, result.CurrentValue);
-        Assert.Null(result.Best);
+        AssertThat(result.CurrentValue).IsEqual(20);
+        AssertThat(result.Best).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void TheBestWeaponSkill_CanBeOvertaken()
     {
         var input = Fixture(CombatStat.Hit);
@@ -119,11 +122,11 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(30, result.Best?.TotalCost);
-        Assert.Equal([new FocusRaise(AxeSlot, 3, 30)], result.Best!.Raises);
+        AssertThat(result.Best?.TotalCost).IsEqual(30);
+        AssertThat(result.Best!.Raises).ContainsExactly(new FocusRaise(AxeSlot, 3, 30));
     }
 
-    [Fact]
+    [TestCase]
     public void ParryToHit_LetsShieldPointsRaiseHit()
     {
         var input = Fixture(CombatStat.Hit);
@@ -136,12 +139,12 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(100, result.CurrentValue);
-        Assert.Equal(40, result.Best?.TotalCost);
-        Assert.Equal([new FocusRaise(ShieldSlot, 8, 40)], result.Best!.Raises);
+        AssertThat(result.CurrentValue).IsEqual(100);
+        AssertThat(result.Best?.TotalCost).IsEqual(40);
+        AssertThat(result.Best!.Raises).ContainsExactly(new FocusRaise(ShieldSlot, 8, 40));
     }
 
-    [Fact]
+    [TestCase]
     public void AnEmptyPlan_ShowsTheServersValues()
     {
         var input = Fixture(CombatStat.Hit);
@@ -153,10 +156,10 @@ public class CombatFocusTests
         input.Combat.BestWeaponSkill = true;
         SetCombatSkill(input, CombatSkill.Sword, SwordSlot, 60);
 
-        Assert.Equal(new CombatValues(100, 90, 30, 20), Shown(input));
+        AssertThat(Shown(input)).IsEqual(new CombatValues(100, 90, 30, 20));
     }
 
-    [Fact]
+    [TestCase]
     public void EvergreensWeaponValue_GoesThroughTheLoversAndTheHermit()
     {
         var input = Fixture(CombatStat.Weapon);
@@ -170,11 +173,11 @@ public class CombatFocusTests
 
         var shown = Shown(input);
 
-        Assert.Equal(41, shown.Weapon);
-        Assert.Equal(47, shown.Armor);
+        AssertThat(shown.Weapon).IsEqual(41);
+        AssertThat(shown.Armor).IsEqual(47);
     }
 
-    [Fact]
+    [TestCase]
     public void AHitpointRaise_ReachesWeaponValueThroughGornAndTheTachi()
     {
         var input = Fixture(CombatStat.Weapon);
@@ -187,12 +190,12 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(30, result.CurrentValue);
-        Assert.Equal(3, result.Best?.TotalCost);
-        Assert.Equal(BuffFocus.HitpointsRaise, result.Best!.Raises[0].RaiseIndex);
+        AssertThat(result.CurrentValue).IsEqual(30);
+        AssertThat(result.Best?.TotalCost).IsEqual(3);
+        AssertThat(result.Best!.Raises[0].RaiseIndex).IsEqual(BuffFocus.HitpointsRaise);
     }
 
-    [Fact]
+    [TestCase]
     public void AManaRaise_ReachesWeaponValueThroughNeisClaw()
     {
         var input = Fixture(CombatStat.Weapon);
@@ -205,8 +208,8 @@ public class CombatFocusTests
 
         var result = CombatFocus.Search(input);
 
-        Assert.Equal(6, result.Best?.TotalCost);
-        Assert.Equal(2, result.Best!.Raises[0].Points);
+        AssertThat(result.Best?.TotalCost).IsEqual(6);
+        AssertThat(result.Best!.Raises[0].Points).IsEqual(2);
     }
 
     private static CombatFocusInput Fixture(CombatStat stat)

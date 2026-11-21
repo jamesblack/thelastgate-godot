@@ -1,9 +1,12 @@
+using GdUnit4;
 using TheLastGate.Planner;
 using TheLastGate.State;
 using TheLastGate.Stats;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Planner;
 
+[TestSuite]
 public class FocusPanelTests
 {
     private const int SwordSkill = 3;
@@ -12,41 +15,42 @@ public class FocusPanelTests
     private const int Agility = (int)AttributeSlot.Agility;
 
     private static readonly int SwordSlot = StatPlan.SkillSlot(SwordSkill);
-    private readonly FocusCache cache = new();
+    private FocusCache cache = new();
 
-    private readonly PlannerGame game = FocusInputsTests.SwordGame();
+    private PlannerGame game = null!;
 
-    [Fact]
+    [BeforeTest]
+    public void StartAGame() => (cache, game) = (new FocusCache(), FocusInputsTests.SwordGame());
+
+    [TestCase]
     public void WithoutAFocus_ThePanelSaysHowToFocus()
     {
         var panel = Panel(null);
 
-        Assert.Equal([new FocusLine(FocusPanel.Prompt, null, false, FocusTone.Normal)], panel.Lines);
-        Assert.Empty(panel.Plan);
-        Assert.False(panel.LostFocus);
+        AssertThat(panel.Lines).ContainsExactly(new FocusLine(FocusPanel.Prompt, null, false, FocusTone.Normal));
+        AssertThat(panel.Plan).IsEmpty();
+        AssertThat(panel.LostFocus).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void ACheapSkillPoint_IsTheCheapestPlainRoute()
     {
         game.Choices.SpellToggles = 0;
 
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.Equal(
-            [
+        AssertThat(panel.Lines)
+            .ContainsExactly(
                 new FocusLine("Sword  80 -> 81", null, false, FocusTone.Heading),
                 new FocusLine("Cheapest +1", "4800 exp", false, FocusTone.Normal),
                 new FocusLine("+1 Sword", "4800", true, FocusTone.SkillRaise),
-                new FocusLine("Through attributes", "49476 exp", false, FocusTone.OtherRoute),
-            ],
-            panel.Lines);
-        Assert.Equal([new FocusRaise(SwordSlot, 1, 4800)], panel.Plan);
-        Assert.Equal(4800, panel.PlanCost);
-        Assert.True(panel.Affordable);
+                new FocusLine("Through attributes", "49476 exp", false, FocusTone.OtherRoute));
+        AssertThat(panel.Plan).ContainsExactly(new FocusRaise(SwordSlot, 1, 4800));
+        AssertThat(panel.PlanCost).IsEqual(4800);
+        AssertThat(panel.Affordable).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void ADearSkillPoint_LosesToItsAttributes()
     {
         game.Choices.SpellToggles = 0;
@@ -54,22 +58,22 @@ public class FocusPanelTests
 
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.Equal(
-            [
+        AssertThat(panel.Lines)
+            .ContainsExactly(
                 new FocusLine("Sword  80 -> 81", null, false, FocusTone.Heading),
                 new FocusLine("Cheapest +1", "49476 exp", false, FocusTone.Normal),
                 new FocusLine("+1 Braveness", "9600", true, FocusTone.AttributeRaise),
                 new FocusLine("+2 Agility", "19938", true, FocusTone.AttributeRaise),
                 new FocusLine("+2 Strength", "19938", true, FocusTone.AttributeRaise),
-                new FocusLine("Direct (+1 Sword)", "64000 exp", false, FocusTone.OtherRoute),
-            ],
-            panel.Lines);
-        Assert.Equal(
-            [new FocusRaise(0, 1, 9600), new FocusRaise(Agility, 2, 19938), new FocusRaise(4, 2, 19938)],
-            panel.Plan);
+                new FocusLine("Direct (+1 Sword)", "64000 exp", false, FocusTone.OtherRoute));
+        AssertThat(panel.Plan)
+            .ContainsExactly(
+                new FocusRaise(0, 1, 9600),
+                new FocusRaise(Agility, 2, 19938),
+                new FocusRaise(4, 2, 19938));
     }
 
-    [Fact]
+    [TestCase]
     public void ARouteThatCantBeBought_SaysSo()
     {
         game.Choices.SpellToggles = 0;
@@ -77,12 +81,11 @@ public class FocusPanelTests
 
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.Equal(
-            new FocusLine("Direct (+1 Sword) not available", null, false, FocusTone.OtherRoute),
-            panel.Lines[^1]);
+        AssertThat(panel.Lines[^1])
+            .IsEqual(new FocusLine("Direct (+1 Sword) not available", null, false, FocusTone.OtherRoute));
     }
 
-    [Fact]
+    [TestCase]
     public void ASkillWithNothingLeftToBuy_CantBeRaised()
     {
         game.Choices.SpellToggles = 0;
@@ -94,53 +97,51 @@ public class FocusPanelTests
 
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.Equal(
-            [
+        AssertThat(panel.Lines)
+            .ContainsExactly(
                 new FocusLine("Sword  80 -> 81", null, false, FocusTone.Heading),
-                new FocusLine("Sword can't be raised further", null, false, FocusTone.Normal),
-            ],
-            panel.Lines);
-        Assert.Empty(panel.Plan);
+                new FocusLine("Sword can't be raised further", null, false, FocusTone.Normal));
+        AssertThat(panel.Plan).IsEmpty();
     }
 
-    [Fact]
+    [TestCase]
     public void TooFewPoints_LeaveTheRouteUnaffordable()
     {
         game.Choices.SpellToggles = 0;
         game.Points = 4000;
 
-        Assert.False(Panel(PlannerFocus.OnSkill(SwordSkill)).Affordable);
+        AssertThat(Panel(PlannerFocus.OnSkill(SwordSkill)).Affordable).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void AShownBless_SearchesTheBuffModelAndListsTheRoutesThatLost()
     {
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.StartsWith("Sword  ", panel.Lines[0].Text);
-        Assert.Equal(FocusTone.Heading, panel.Lines[0].Tone);
-        Assert.Equal(new FocusLine("Cheapest +1", $"{panel.PlanCost} exp", false, FocusTone.Normal), panel.Lines[1]);
-        Assert.Equal(panel.Plan.Sum(raise => raise.Cost), panel.PlanCost);
+        AssertThat(panel.Lines[0].Text).StartsWith("Sword  ");
+        AssertThat(panel.Lines[0].Tone).IsEqual(FocusTone.Heading);
+        AssertThat(panel.Lines[1])
+            .IsEqual(new FocusLine("Cheapest +1", $"{panel.PlanCost} exp", false, FocusTone.Normal));
+        AssertThat(panel.PlanCost).IsEqual(panel.Plan.Sum(raise => raise.Cost));
         var others = panel.Lines.Where(line => line.Tone == FocusTone.OtherRoute)
             .Select(line => line.Text.Replace(" not available", ""))
             .ToArray();
-        Assert.Equal(2, others.Length);
-        Assert.Subset(
-            new HashSet<string> { "Direct (+1 Sword)", "Through attributes", "Through Bless" },
-            others.ToHashSet());
+        AssertThat(others.Length).IsEqual(2);
+        string[] routes = ["Direct (+1 Sword)", "Through attributes", "Through Bless"];
+        AssertThat(others.Except(routes).ToArray()).IsEmpty();
     }
 
-    [Fact]
+    [TestCase]
     public void FocusingBless_HasNoRouteThroughBless()
     {
         var panel = Panel(PlannerFocus.OnSkill(BlessSkill));
 
-        Assert.StartsWith("Bless  ", panel.Lines[0].Text);
-        Assert.DoesNotContain(panel.Lines, line => line.Text.StartsWith("Through Bless"));
-        Assert.Single(panel.Lines, line => line.Tone == FocusTone.OtherRoute);
+        AssertThat(panel.Lines[0].Text).StartsWith("Bless  ");
+        AssertThat(panel.Lines.Any(line => line.Text.StartsWith("Through Bless"))).IsFalse();
+        AssertThat(panel.Lines.Count(line => line.Tone == FocusTone.OtherRoute)).IsEqual(1);
     }
 
-    [Fact]
+    [TestCase]
     public void RouteLines_ColourSkillsGreenAndAttributesBlue()
     {
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
@@ -148,11 +149,11 @@ public class FocusPanelTests
         foreach (var (line, raise) in panel.Lines.Where(line => line.Indented).Zip(panel.Plan))
         {
             var skill = raise.RaiseIndex >= StatPlan.FirstSkillSlot;
-            Assert.Equal(skill ? FocusTone.SkillRaise : FocusTone.AttributeRaise, line.Tone);
+            AssertThat(line.Tone).IsEqual(skill ? FocusTone.SkillRaise : FocusTone.AttributeRaise);
         }
     }
 
-    [Fact]
+    [TestCase]
     public void UnderTheReverseFool_ThePoolIsSplitIntoAttributes()
     {
         game.Choices.TarotCards = 1ul << (int)TarotCard.FoolReversed;
@@ -161,63 +162,63 @@ public class FocusPanelTests
 
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.NotEmpty(panel.Plan);
-        Assert.All(panel.Plan, raise => Assert.InRange(raise.RaiseIndex, 0, AttributeAmounts.Count - 1));
-        Assert.Equal(panel.PlanCost, panel.Plan.Sum(raise => raise.Cost));
+        AssertThat(panel.Plan).IsNotEmpty();
+        AssertThat(panel.Plan.All(raise => raise.RaiseIndex is >= 0 and < AttributeAmounts.Count)).IsTrue();
+        AssertThat(panel.Plan.Sum(raise => raise.Cost)).IsEqual(panel.PlanCost);
     }
 
-    [Fact]
+    [TestCase]
     public void ACombatStat_ShowsItsCheapestRoute()
     {
         game.Choices.SpellToggles = 0;
 
         var panel = Panel(PlannerFocus.OnStat(CombatStat.Hit));
 
-        Assert.Equal(new FocusLine("Hit Score  100 -> 101", null, false, FocusTone.Heading), panel.Lines[0]);
-        Assert.Equal("Cheapest +1", panel.Lines[1].Text);
-        Assert.NotEmpty(panel.Plan);
-        Assert.DoesNotContain(panel.Lines, line => line.Tone == FocusTone.OtherRoute);
+        AssertThat(panel.Lines[0]).IsEqual(new FocusLine("Hit Score  100 -> 101", null, false, FocusTone.Heading));
+        AssertThat(panel.Lines[1].Text).IsEqual("Cheapest +1");
+        AssertThat(panel.Plan).IsNotEmpty();
+        AssertThat(panel.Lines.Any(line => line.Tone == FocusTone.OtherRoute)).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void ACombatStatWithoutHitAndParry_LosesItsFocus()
     {
         game.MetaStats.Remove("Parry Score");
 
         var panel = Panel(PlannerFocus.OnStat(CombatStat.Armor));
 
-        Assert.True(panel.LostFocus);
-        Assert.Equal(FocusPanel.Prompt, Assert.Single(panel.Lines).Text);
+        AssertThat(panel.LostFocus).IsTrue();
+        AssertThat(panel.Lines.Single().Text).IsEqual(FocusPanel.Prompt);
     }
 
-    [Theory]
-    [InlineData(UnlearnedSkill)]
-    [InlineData(SwordSkill)]
+    [TestCase(UnlearnedSkill)]
+    [TestCase(SwordSkill)]
     public void ASkillNotLearnedOrNotListed_LosesItsFocus(int skill)
     {
         game.SkillTexts[SwordSkill] = game.SkillTexts[SwordSkill] with { Show = 0 };
 
         var panel = Panel(PlannerFocus.OnSkill(skill));
 
-        Assert.True(panel.LostFocus);
-        Assert.Empty(panel.Plan);
+        AssertThat(panel.LostFocus).IsTrue();
+        AssertThat(panel.Plan).IsEmpty();
     }
 
-    [Fact]
+    [TestCase]
     public void Planning_ARouteRaisesEveryPartOfIt()
     {
         game.Choices.SpellToggles = 0;
         game.Skills[SwordSkill][3] = 40;
         var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
 
-        Assert.True(
-            game.Plan.RaiseAll(
-                panel.Plan.Select(raise => (raise.RaiseIndex, raise.Points)).ToArray(),
-                game.ValuesFor,
-                game.Points));
+        AssertThat(
+                game.Plan.RaiseAll(
+                    panel.Plan.Select(raise => (raise.RaiseIndex, raise.Points)).ToArray(),
+                    game.ValuesFor,
+                    game.Points))
+            .IsTrue();
 
-        Assert.Equal(81, PlannerSheet.For(game).Skills.Single(row => row.Slot == SwordSlot).Preview);
-        Assert.Equal(panel.PlanCost, game.Plan.PointsUsed);
+        AssertThat(PlannerSheet.For(game).Skills.Single(row => row.Slot == SwordSlot).Preview).IsEqual(81);
+        AssertThat(game.Plan.PointsUsed).IsEqual(panel.PlanCost);
     }
 
     private FocusPanel Panel(PlannerFocus? focus) => FocusPanel.For(PlannerSheet.For(game), focus, cache);

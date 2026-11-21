@@ -1,11 +1,14 @@
+using GdUnit4;
 using TheLastGate.Planner;
 using TheLastGate.State;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Planner;
 
+[TestSuite]
 public class SkillFocusTests
 {
-    [Fact]
+    [TestCase]
     public void Direct_WinsWhenCheaper()
     {
         var input = Input(0, 1, 2, 5);
@@ -14,12 +17,12 @@ public class SkillFocusTests
 
         var suggestion = SkillFocus.Suggest(input);
 
-        Assert.True(suggestion.UseDirect);
-        Assert.Equal(300, suggestion.Direct?.TotalCost);
-        Assert.Equal(500, suggestion.Attributes?.TotalCost);
+        AssertThat(suggestion.UseDirect).IsTrue();
+        AssertThat(suggestion.Direct?.TotalCost).IsEqual(300);
+        AssertThat(suggestion.Attributes?.TotalCost).IsEqual(500);
     }
 
-    [Fact]
+    [TestCase]
     public void Attributes_SplitWhereCheapest()
     {
         var input = Input(0, 1, 2, 5);
@@ -30,17 +33,15 @@ public class SkillFocusTests
 
         var suggestion = SkillFocus.Suggest(input);
 
-        Assert.False(suggestion.UseDirect);
-        Assert.Equal(220, suggestion.Attributes!.TotalCost);
-        Assert.Equal(
-            [
+        AssertThat(suggestion.UseDirect).IsFalse();
+        AssertThat(suggestion.Attributes!.TotalCost).IsEqual(220);
+        AssertThat(suggestion.Attributes.Raises)
+            .ContainsExactly(
                 new SkillFocusRaise(AttributeSlot.Braveness, 1, 100),
-                new SkillFocusRaise(AttributeSlot.Willpower, 1, 120),
-            ],
-            suggestion.Attributes.Raises);
+                new SkillFocusRaise(AttributeSlot.Willpower, 1, 120));
     }
 
-    [Fact]
+    [TestCase]
     public void OnABoundary_AWholeDivisorIsNeeded()
     {
         var input = Input(0, 1, 2, 5);
@@ -49,11 +50,11 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(50, route.TotalCost);
-        Assert.Equal(5, route.Raises.Sum(raise => raise.Points));
+        AssertThat(route.TotalCost).IsEqual(50);
+        AssertThat(route.Raises.Sum(raise => raise.Points)).IsEqual(5);
     }
 
-    [Fact]
+    [TestCase]
     public void ADoubledAttribute_LosesToCheaperSinglePoints()
     {
         var input = Input(3, 3, 4, 5);
@@ -62,11 +63,11 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(260, route.TotalCost);
-        Assert.Equal([new SkillFocusRaise(AttributeSlot.Strength, 4, 260)], route.Raises);
+        AssertThat(route.TotalCost).IsEqual(260);
+        AssertThat(route.Raises).ContainsExactly(new SkillFocusRaise(AttributeSlot.Strength, 4, 260));
     }
 
-    [Fact]
+    [TestCase]
     public void ADoubledAttribute_CountsTwiceWhenCheap()
     {
         var input = Input(3, 3, 4, 5);
@@ -75,11 +76,11 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(80, route.TotalCost);
-        Assert.Equal([new SkillFocusRaise(AttributeSlot.Agility, 2, 80)], route.Raises);
+        AssertThat(route.TotalCost).IsEqual(80);
+        AssertThat(route.Raises).ContainsExactly(new SkillFocusRaise(AttributeSlot.Agility, 2, 80));
     }
 
-    [Fact]
+    [TestCase]
     public void ACappedAttribute_IsSplitAround()
     {
         var input = Input(0, 1, 2, 5);
@@ -90,11 +91,11 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(60, route.TotalCost);
-        Assert.Equal(2, route.Raises.Count);
+        AssertThat(route.TotalCost).IsEqual(60);
+        AssertThat(route.Raises.Count).IsEqual(2);
     }
 
-    [Fact]
+    [TestCase]
     public void EveryAttributeCapped_LeavesOnlyDirect()
     {
         var input = Input(0, 1, 2, 5);
@@ -102,12 +103,12 @@ public class SkillFocusTests
 
         var suggestion = SkillFocus.Suggest(input);
 
-        Assert.Null(suggestion.Attributes);
-        Assert.True(suggestion.UseDirect);
-        Assert.True(suggestion.AnyAvailable);
+        AssertThat(suggestion.Attributes).IsNull();
+        AssertThat(suggestion.UseDirect).IsTrue();
+        AssertThat(suggestion.AnyAvailable).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void EverythingCapped_LeavesNothing()
     {
         var input = Input(0, 1, 2, 5);
@@ -116,12 +117,12 @@ public class SkillFocusTests
 
         var suggestion = SkillFocus.Suggest(input);
 
-        Assert.Null(suggestion.Direct);
-        Assert.Null(suggestion.Attributes);
-        Assert.False(suggestion.AnyAvailable);
+        AssertThat(suggestion.Direct).IsNull();
+        AssertThat(suggestion.Attributes).IsNull();
+        AssertThat(suggestion.AnyAvailable).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void ATie_GoesToDirect()
     {
         var input = Input(0, 1, 2, 5);
@@ -130,11 +131,11 @@ public class SkillFocusTests
 
         var suggestion = SkillFocus.Suggest(input);
 
-        Assert.Equal(500, suggestion.Attributes?.TotalCost);
-        Assert.True(suggestion.UseDirect);
+        AssertThat(suggestion.Attributes?.TotalCost).IsEqual(500);
+        AssertThat(suggestion.UseDirect).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void HardMode_NeedsSixPoints()
     {
         var input = Input(0, 1, 2, 6);
@@ -143,11 +144,11 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(60, route.TotalCost);
-        Assert.Equal(6, route.Raises.Sum(raise => raise.Points));
+        AssertThat(route.TotalCost).IsEqual(60);
+        AssertThat(route.Raises.Sum(raise => raise.Points)).IsEqual(6);
     }
 
-    [Fact]
+    [TestCase]
     public void AnUnusedSlot_IsIgnored()
     {
         var input = Input(0, null, 2, 5);
@@ -158,30 +159,30 @@ public class SkillFocusTests
 
         var route = SkillFocus.Suggest(input).Attributes!;
 
-        Assert.Equal(20, route.TotalCost);
-        Assert.Equal([new SkillFocusRaise(AttributeSlot.Intuition, 1, 20)], route.Raises);
+        AssertThat(route.TotalCost).IsEqual(20);
+        AssertThat(route.Raises).ContainsExactly(new SkillFocusRaise(AttributeSlot.Intuition, 1, 20));
     }
 
-    [Fact]
+    [TestCase]
     public void FoolReversed_BuysTwoBreakpointsWhereCheapest()
     {
         var suggestion = SkillFocus.Suggest(FoolReversedInput(5));
 
-        Assert.Equal(100, suggestion.Attributes?.TotalCost);
-        Assert.Equal([new SkillFocusRaise(AttributeSlot.Agility, 10, 100)], suggestion.Attributes!.Raises);
-        Assert.False(suggestion.UseDirect);
+        AssertThat(suggestion.Attributes?.TotalCost).IsEqual(100);
+        AssertThat(suggestion.Attributes!.Raises).ContainsExactly(new SkillFocusRaise(AttributeSlot.Agility, 10, 100));
+        AssertThat(suggestion.UseDirect).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void FoolReversed_InHardMode()
     {
         var route = SkillFocus.Suggest(FoolReversedInput(6)).Attributes!;
 
-        Assert.Equal(5, route.Raises.Sum(raise => raise.Points));
-        Assert.Equal(50, route.TotalCost);
+        AssertThat(route.Raises.Sum(raise => raise.Points)).IsEqual(5);
+        AssertThat(route.TotalCost).IsEqual(50);
     }
 
-    [Fact]
+    [TestCase]
     public void FoolReversed_HasNoRouteWhenThePoolIsCapped()
     {
         var input = FoolReversedInput(5);
@@ -193,7 +194,7 @@ public class SkillFocusTests
             }
         }
 
-        Assert.Null(SkillFocus.Suggest(input).Attributes);
+        AssertThat(SkillFocus.Suggest(input).Attributes).IsNull();
     }
 
     private static SkillFocusInput Input(int? first, int? second, int? third, int divisor)
