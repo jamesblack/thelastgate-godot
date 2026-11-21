@@ -1,6 +1,7 @@
 using TheLastGate.Items;
 using TheLastGate.Session;
 using TheLastGate.State;
+using TheLastGate.Stats;
 using TheLastGate.Windows;
 using TheLastGate.World;
 
@@ -49,6 +50,8 @@ public sealed class GameSession
     public AutoWalk AutoWalk { get; } = new();
 
     public MapFrames MapFrames { get; } = new();
+
+    public StatPlan StatPlan { get; } = new();
 
     public UseQueue UseQueue { get; }
 

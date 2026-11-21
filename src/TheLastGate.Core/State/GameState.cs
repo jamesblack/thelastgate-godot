@@ -2,7 +2,6 @@ using System;
 using TheLastGate.Buffs;
 using TheLastGate.Items;
 using TheLastGate.Net;
-using TheLastGate.Stats;
 
 namespace TheLastGate.State;
 
@@ -26,7 +25,6 @@ public sealed class GameState
     public Terminology Terminology { get; } = new();
     public CharacterNames Names { get; } = new();
     public ItemLooks ItemLooks { get; }
-    public StatPlan StatPlan { get; } = new();
     public BuffWatch BuffWatch { get; }
     public ShopRefresh ShopRefresh { get; } = new();
     public NameRequests NameRequests { get; } = new();

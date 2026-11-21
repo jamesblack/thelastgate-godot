@@ -190,7 +190,7 @@ public partial class HudView : Control
     {
         state = shownState;
         gameSession = shownSession;
-        statPlan = shownState.StatPlan;
+        statPlan = shownSession.StatPlan;
         sendCommand = sendToServer;
         for (var slot = WornSlot.Head; slot <= WornSlot.SecondCharm; slot++)
         {
