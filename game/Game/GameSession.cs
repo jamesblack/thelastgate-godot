@@ -44,7 +44,7 @@ public sealed class GameSession
 
     public bool SessionStatsOpen { get; set; }
 
-    public AutoWalk AutoWalk => state.AutoWalk;
+    public AutoWalk AutoWalk { get; } = new();
 
     public bool CloseShop()
     {
@@ -108,6 +108,6 @@ public sealed class GameSession
         }
 
         Pause.EndOfTick();
-        state.AutoWalk.EndOfTick(state.Map);
+        AutoWalk.EndOfTick(state.Map);
     }
 }

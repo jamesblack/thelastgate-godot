@@ -31,7 +31,6 @@ public sealed class GameState
     public ShopRefresh ShopRefresh { get; } = new();
     public UseQueue UseQueue { get; }
     public GiveMore GiveMore { get; } = new();
-    public AutoWalk AutoWalk { get; } = new();
     public CharacterLook? Look { get; internal set; }
     public CharacterLook Shop { get; internal set; } = new();
     public ShopKind? OpenShop { get; internal set; }

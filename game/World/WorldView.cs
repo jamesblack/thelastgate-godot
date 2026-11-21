@@ -83,6 +83,7 @@ public partial class WorldView : Node2D
     private float worldGamma = Gamma.Normal;
 
     public GameState State { get; set; } = null!;
+    public GameSession Session { get; set; } = null!;
     public SpriteLoader Sprites { get; set; } = null!;
     public IFontSet Fonts { get; set; } = null!;
     public bool HideWalls { get; set; } = true;
@@ -283,7 +284,7 @@ public partial class WorldView : Node2D
     private void QueueArea()
     {
         var targets = AreaUse.Pick(State.Map, AreaTiles());
-        State.AutoWalk.Stop();
+        Session.AutoWalk.Stop();
         var queued = State.UseQueue.QueueArea(targets, State.Player.Target);
         if (queued > 0)
         {
@@ -349,7 +350,7 @@ public partial class WorldView : Node2D
         if (button == MapButton.Left
             && AutoWalk.ButtonAt((int)click.Position.X, (int)click.Position.Y) is { } walkDirection)
         {
-            State.AutoWalk.Start(walkDirection);
+            Session.AutoWalk.Start(walkDirection);
             GetViewport().SetInputAsHandled();
             return;
         }
@@ -360,7 +361,7 @@ public partial class WorldView : Node2D
         var action = MapActions.Decide(State, PointUnder(click.Position), keys, button, SelectedCharacter);
         if (action.Command != null || action.NewSelection != null)
         {
-            State.AutoWalk.Stop();
+            Session.AutoWalk.Stop();
         }
 
         if (action.GivesMore)

@@ -223,6 +223,7 @@ public partial class GameScreen : Control
         worldView = new WorldView
         {
             State = gameState,
+            Session = gameSession,
             Sprites = sprites,
             Fonts = fonts,
             SendCommand = SendAction,
@@ -266,7 +267,7 @@ public partial class GameScreen : Control
         pacer.Adaptive = clientSettings.AdaptivePacing;
         gameState.GiveMore.Send = SendAction;
         gameState.ShopRefresh.Send = connection.SendCommand;
-        gameState.AutoWalk.Send = connection.SendCommand;
+        gameSession.AutoWalk.Send = connection.SendCommand;
         gameState.BuffWatch.Say = text =>
         {
             foreach (var packet in ChatPackets.Say(text))
