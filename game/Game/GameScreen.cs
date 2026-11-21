@@ -79,6 +79,7 @@ public partial class GameScreen : Control
         gameState.UniqueIdReceived += UniqueIdStore.Save;
         gameState.ExitRequested += LeaveOnServerExit;
         gameState.UnusualDataSeen += ReportUnusualDataOnce;
+        gameSession.MapFrames.UnusualDataSeen += ReportUnusualDataOnce;
     }
 
     public override void _Process(double delta)
@@ -119,7 +120,7 @@ public partial class GameScreen : Control
             {
                 if (sprites != null)
                 {
-                    exploredMap?.See(gameState.Map, sprites);
+                    exploredMap?.See(gameState.Map, gameSession.MapFrames, sprites);
                 }
 
                 worldView?.Refresh();

@@ -536,7 +536,7 @@ public partial class WorldView : Node2D
         Show(
             floors,
             tileIndex,
-            MapSpriteRules.FloorSprite(tile, State.ClientTick),
+            MapSpriteRules.FloorSprite(tile, Session.MapFrames.TickCount),
             new SpriteLook(
                 tile.Light,
                 environmentTint,
@@ -545,7 +545,13 @@ public partial class WorldView : Node2D
         Show(
             objects,
             tileIndex,
-            MapSpriteRules.ObjectSprite(tile, column, row, State.Player, HideWalls),
+            MapSpriteRules.ObjectSprite(
+                tile,
+                Session.MapFrames.ItemSprite(tileIndex),
+                column,
+                row,
+                State.Player,
+                HideWalls),
             new SpriteLook(
                 tile.Light,
                 environmentTint,

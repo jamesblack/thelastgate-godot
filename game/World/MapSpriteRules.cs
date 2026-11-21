@@ -39,9 +39,15 @@ public static class MapSpriteRules
             : tile.BackgroundSprite;
     }
 
-    public static int ObjectSprite(in MapTile tile, int column, int row, PlayerState player, bool hideWalls)
+    public static int ObjectSprite(
+        in MapTile tile,
+        int itemSprite,
+        int column,
+        int row,
+        PlayerState player,
+        bool hideWalls)
     {
-        if (tile.AnimatedItemSprite == 0 || HidesObjectsAndCharacters(tile, column, row))
+        if (itemSprite == 0 || HidesObjectsAndCharacters(tile, column, row))
         {
             return 0;
         }
@@ -49,18 +55,18 @@ public static class MapSpriteRules
         var hidesHere = hideWalls && !IsInFrontOfPlayer(column, row);
         if (hidesHere && !((MapFlags)tile.Flags).HasFlag(MapFlags.IsItem))
         {
-            return tile.AnimatedItemSprite + 1;
+            return itemSprite + 1;
         }
 
         if (hidesHere && !IsFacedByPlayer(column, row, player.Direction)
-            && LowMineWall(tile.AnimatedItemSprite) is { } lowWall)
+            && LowMineWall(itemSprite) is { } lowWall)
         {
             return lowWall;
         }
 
-        return tile.AnimatedItemSprite == Waypoint && IsFoundWaypoint(tile.BackgroundSprite, player.Waypoints)
+        return itemSprite == Waypoint && IsFoundWaypoint(tile.BackgroundSprite, player.Waypoints)
             ? LitWaypoint
-            : tile.AnimatedItemSprite;
+            : itemSprite;
     }
 
     public static int CharacterSprite(in MapTile tile, int column, int row) =>

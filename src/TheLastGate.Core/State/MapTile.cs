@@ -24,7 +24,6 @@ public struct MapTile
 
     public int ItemSprite { get; internal set; }
     public int ItemStatus { get; internal set; }
-    public int AnimatedItemSprite { get; internal set; }
     public int AnimatedCharacterSprite { get; internal set; }
     public int CharacterOffsetX { get; internal set; }
     public int CharacterOffsetY { get; internal set; }

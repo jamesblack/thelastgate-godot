@@ -3,6 +3,7 @@ using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Net;
 using TheLastGate.State;
+using TheLastGate.World;
 
 namespace TheLastGate.Map;
 
@@ -30,11 +31,12 @@ public sealed class ExploredMapKeeper
     // Forgets every area explored on the server, by every character; the notes are kept.
     public static bool ClearSaved(ServerAddress server) => ExploredMap.ClearSaved(OwnPath(server));
 
-    public void See(WorldMap view, SpriteLoader sprites)
+    public void See(WorldMap view, MapFrames frames, SpriteLoader sprites)
     {
-        foreach (var tile in view.Tiles)
+        for (var tileIndex = 0; tileIndex < WorldMap.TileCount; tileIndex++)
         {
-            if (ExploredMapRecorder.SpriteToAverage(tile.Flags, tile.BackgroundSprite, tile.AnimatedItemSprite) is
+            ref readonly var tile = ref view.Tiles[tileIndex];
+            if (ExploredMapRecorder.SpriteToAverage(tile.Flags, tile.BackgroundSprite, frames.ItemSprite(tileIndex)) is
                 { } sprite)
             {
                 Recorder.See(tile.X, tile.Y, sprites.AverageColour(sprite));

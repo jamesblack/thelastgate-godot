@@ -139,7 +139,14 @@ public class MapSpriteRulesTests
     {
         var (tile, player) = Tile(BehindThePlayer, floor, Waypoint, MapFlags.IsItem, waypoints: 1u << waypointBit);
 
-        AssertThat(MapSpriteRules.ObjectSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row, player, true))
+        AssertThat(
+                MapSpriteRules.ObjectSprite(
+                    tile,
+                    tile.ItemSprite,
+                    BehindThePlayer.Column,
+                    BehindThePlayer.Row,
+                    player,
+                    true))
             .IsEqual(LitWaypoint);
     }
 
@@ -149,11 +156,19 @@ public class MapSpriteRulesTests
         var (unfound, player) = Tile(BehindThePlayer, 1002, Waypoint, MapFlags.IsItem, waypoints: 1u << 1);
         var (otherFloor, playerWithIt) = Tile(BehindThePlayer, 1008, Waypoint, MapFlags.IsItem, waypoints: 1u << 0);
 
-        AssertThat(MapSpriteRules.ObjectSprite(unfound, BehindThePlayer.Column, BehindThePlayer.Row, player, true))
+        AssertThat(
+                MapSpriteRules.ObjectSprite(
+                    unfound,
+                    unfound.ItemSprite,
+                    BehindThePlayer.Column,
+                    BehindThePlayer.Row,
+                    player,
+                    true))
             .IsEqual(Waypoint);
         AssertThat(
                 MapSpriteRules.ObjectSprite(
                     otherFloor,
+                    otherFloor.ItemSprite,
                     BehindThePlayer.Column,
                     BehindThePlayer.Row,
                     playerWithIt,
@@ -187,7 +202,7 @@ public class MapSpriteRulesTests
         int direction = 0)
     {
         var (tile, player) = Tile(position, objectSprite: objectSprite, flags: flags, direction: direction);
-        return MapSpriteRules.ObjectSprite(tile, position.Column, position.Row, player, hideWalls);
+        return MapSpriteRules.ObjectSprite(tile, tile.ItemSprite, position.Column, position.Row, player, hideWalls);
     }
 
     private static (MapTile Tile, PlayerState Player) Tile(

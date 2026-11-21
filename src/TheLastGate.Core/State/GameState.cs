@@ -34,7 +34,6 @@ public sealed class GameState
     public CharacterLook Shop { get; internal set; } = new();
     public ShopKind? OpenShop { get; internal set; }
     public int ServerTick { get; internal set; }
-    public int ClientTick { get; internal set; }
     public int ServerLoad { get; internal set; }
 
     internal CharacterLook PendingLook { get; } = new();
