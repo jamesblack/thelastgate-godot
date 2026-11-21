@@ -1,8 +1,11 @@
 using System.Numerics;
+using GdUnit4;
 using TheLastGate.World;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.World;
 
+[TestSuite]
 public class MovementGlideTests
 {
     private const long Start = 1_000;
@@ -11,32 +14,32 @@ public class MovementGlideTests
 
     private static readonly Dictionary<int, Vector2> NoCharacters = [];
 
-    [Fact]
+    [TestCase]
     public void WorldPoint_LaysTilesOnTheDiamondGridPlusTheirOffset()
     {
-        Assert.Equal(new Vector2(16 * 1025 + 14, 8 * 1 + 7), MovementGlide.WorldPoint(513, 512, 14, 7));
+        AssertThat(MovementGlide.WorldPoint(513, 512, 14, 7)).IsEqual(new Vector2(16 * 1025 + 14, 8 * 1 + 7));
     }
 
-    [Fact]
+    [TestCase]
     public void WorldPoint_IsSeamlessWhenAStepCrossesIntoTheNextTile()
     {
         var lastStepInTile = MovementGlide.WorldPoint(513, 512, 14, 7);
         var firstStepInNextTile = MovementGlide.WorldPoint(514, 512, 0, 0);
 
-        Assert.Equal(new Vector2(2, 1), firstStepInNextTile - lastStepInTile);
+        AssertThat(firstStepInNextTile - lastStepInTile).IsEqual(new Vector2(2, 1));
     }
 
-    [Fact]
+    [TestCase]
     public void Player_SnapsOnTheFirstRecord()
     {
         var glide = new MovementGlide();
 
         glide.Record(new Vector2(100, 50), NoCharacters, Start, 1, TickLength);
 
-        Assert.Equal(new Vector2(100, 50), glide.Player(Start));
+        AssertThat(glide.Player(Start)).IsEqual(new Vector2(100, 50));
     }
 
-    [Fact]
+    [TestCase]
     public void Player_GlidesOverOneTickLength()
     {
         var glide = new MovementGlide();
@@ -44,11 +47,11 @@ public class MovementGlideTests
 
         glide.Record(new Vector2(104, 52), NoCharacters, Start + 50, 1, TickLength);
 
-        Assert.Equal(new Vector2(102, 51), glide.Player(Start + 75));
-        Assert.Equal(new Vector2(104, 52), glide.Player(Start + 100));
+        AssertThat(glide.Player(Start + 75)).IsEqual(new Vector2(102, 51));
+        AssertThat(glide.Player(Start + 100)).IsEqual(new Vector2(104, 52));
     }
 
-    [Fact]
+    [TestCase]
     public void Player_TakesTwiceAsLongWhenTwoTicksArriveTogether()
     {
         var glide = new MovementGlide();
@@ -56,38 +59,38 @@ public class MovementGlideTests
 
         glide.Record(new Vector2(104, 52), NoCharacters, Start + 50, 2, TickLength);
 
-        Assert.Equal(new Vector2(102, 51), glide.Player(Start + 100));
-        Assert.Equal(new Vector2(104, 52), glide.Player(Start + 150));
+        AssertThat(glide.Player(Start + 100)).IsEqual(new Vector2(102, 51));
+        AssertThat(glide.Player(Start + 150)).IsEqual(new Vector2(104, 52));
     }
 
-    [Fact]
+    [TestCase]
     public void Character_IsUnknownUntilRecorded()
     {
-        Assert.Null(new MovementGlide().Character(Goblin, Start));
+        AssertThat(new MovementGlide().Character(Goblin, Start)).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void Character_SnapsWhenItFirstAppearsAndGlidesAfterwards()
     {
         var glide = new MovementGlide();
         glide.Record(Vector2.Zero, new Dictionary<int, Vector2> { [Goblin] = new(10, 10) }, Start, 1, TickLength);
-        Assert.Equal(new Vector2(10, 10), glide.Character(Goblin, Start));
+        AssertThat(glide.Character(Goblin, Start)).IsEqual(new Vector2(10, 10));
 
         glide.Record(Vector2.Zero, new Dictionary<int, Vector2> { [Goblin] = new(14, 10) }, Start + 50, 1, TickLength);
 
-        Assert.Equal(new Vector2(12, 10), glide.Character(Goblin, Start + 75));
+        AssertThat(glide.Character(Goblin, Start + 75)).IsEqual(new Vector2(12, 10));
     }
 
-    [Fact]
+    [TestCase]
     public void Character_IsForgottenOnceItLeavesTheScreen()
     {
         var glide = new MovementGlide();
         glide.Record(Vector2.Zero, new Dictionary<int, Vector2> { [Goblin] = new(10, 10) }, Start, 1, TickLength);
         glide.Record(Vector2.Zero, NoCharacters, Start + 50, 1, TickLength);
-        Assert.Null(glide.Character(Goblin, Start + 50));
+        AssertThat(glide.Character(Goblin, Start + 50)).IsNull();
 
         glide.Record(Vector2.Zero, new Dictionary<int, Vector2> { [Goblin] = new(14, 10) }, Start + 100, 1, TickLength);
 
-        Assert.Equal(new Vector2(14, 10), glide.Character(Goblin, Start + 100));
+        AssertThat(glide.Character(Goblin, Start + 100)).IsEqual(new Vector2(14, 10));
     }
 }

@@ -1,9 +1,12 @@
+using GdUnit4;
 using TheLastGate.Net;
 using TheLastGate.State;
 using TheLastGate.World;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.World;
 
+[TestSuite]
 public class MapSpriteRulesTests
 {
     private const byte AbsoluteSetMap = 0x80;
@@ -17,165 +20,163 @@ public class MapSpriteRulesTests
     private static readonly (int Column, int Row) InFrontOfThePlayer = (Centre - 17, Centre + 13);
     private static readonly (int Column, int Row) HiddenCorner = (WorldMap.Size - 1, 0);
 
-    [Fact]
+    [TestCase]
     public void FloorSprite_IsTheTilesFloor()
     {
         var (tile, _) = Tile(BehindThePlayer, 1002);
 
-        Assert.Equal(1002, MapSpriteRules.FloorSprite(tile, 0));
+        AssertThat(MapSpriteRules.FloorSprite(tile, 0)).IsEqual(1002);
     }
 
-    [Fact]
+    [TestCase]
     public void FloorSprite_ShowsNothingOnATileOutOfSight()
     {
         var (tile, _) = Tile(BehindThePlayer, 1002, flags: MapFlags.Invisible);
 
-        Assert.Equal(0, MapSpriteRules.FloorSprite(tile, 0));
+        AssertThat(MapSpriteRules.FloorSprite(tile, 0)).IsEqual(0);
     }
 
-    [Theory]
-    [InlineData(MapFlags.None, SpriteTint.None)]
-    [InlineData(MapFlags.Infrared, SpriteTint.Infrared)]
-    [InlineData(MapFlags.Underwater, SpriteTint.Underwater)]
-    [InlineData(MapFlags.Infrared | MapFlags.Underwater, SpriteTint.Infrared | SpriteTint.Underwater)]
-    [InlineData(MapFlags.Stoned | MapFlags.Bloody, SpriteTint.None)]
+    [TestCase(MapFlags.None, SpriteTint.None)]
+    [TestCase(MapFlags.Infrared, SpriteTint.Infrared)]
+    [TestCase(MapFlags.Underwater, SpriteTint.Underwater)]
+    [TestCase(MapFlags.Infrared | MapFlags.Underwater, SpriteTint.Infrared | SpriteTint.Underwater)]
+    [TestCase(MapFlags.Stoned | MapFlags.Bloody, SpriteTint.None)]
     public void EnvironmentTint_TintsFloorsAndObjectsForInfraredAndUnderwater(MapFlags flags, SpriteTint tint)
     {
         var (tile, _) = Tile(BehindThePlayer, flags: flags);
 
-        Assert.Equal(tint, MapSpriteRules.EnvironmentTint(tile));
+        AssertThat(MapSpriteRules.EnvironmentTint(tile)).IsEqual(tint);
     }
 
-    [Theory]
-    [InlineData(MapFlags.None, SpriteTint.None)]
-    [InlineData(MapFlags.Stoned, SpriteTint.Grey)]
-    [InlineData(MapFlags.Bloody, SpriteTint.Infrared)]
-    [InlineData(MapFlags.Infrared, SpriteTint.Infrared)]
-    [InlineData(MapFlags.Underwater, SpriteTint.Underwater)]
-    [InlineData(MapFlags.Stoned | MapFlags.Underwater, SpriteTint.Grey | SpriteTint.Underwater)]
+    [TestCase(MapFlags.None, SpriteTint.None)]
+    [TestCase(MapFlags.Stoned, SpriteTint.Grey)]
+    [TestCase(MapFlags.Bloody, SpriteTint.Infrared)]
+    [TestCase(MapFlags.Infrared, SpriteTint.Infrared)]
+    [TestCase(MapFlags.Underwater, SpriteTint.Underwater)]
+    [TestCase(MapFlags.Stoned | MapFlags.Underwater, SpriteTint.Grey | SpriteTint.Underwater)]
     public void CharacterTint_AlsoGreysStonedAndReddensBloodyCharacters(MapFlags flags, SpriteTint tint)
     {
         var (tile, _) = Tile(BehindThePlayer, flags: flags, character: 3021);
 
-        Assert.Equal(tint, MapSpriteRules.CharacterTint(tile));
+        AssertThat(MapSpriteRules.CharacterTint(tile)).IsEqual(tint);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsTheLowWallBehindThePlayer()
     {
-        Assert.Equal(Wall + 1, ObjectAt(BehindThePlayer, Wall));
+        AssertThat(ObjectAt(BehindThePlayer, Wall)).IsEqual(Wall + 1);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsTheWholeWallWhenWallsArentHidden()
     {
-        Assert.Equal(Wall, ObjectAt(BehindThePlayer, Wall, hideWalls: false));
+        AssertThat(ObjectAt(BehindThePlayer, Wall, hideWalls: false)).IsEqual(Wall);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsAWholeItem()
     {
-        Assert.Equal(Wall, ObjectAt(BehindThePlayer, Wall, MapFlags.IsItem));
+        AssertThat(ObjectAt(BehindThePlayer, Wall, MapFlags.IsItem)).IsEqual(Wall);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsTheWholeWallInFrontOfThePlayer()
     {
-        Assert.Equal(Wall, ObjectAt(InFrontOfThePlayer, Wall));
+        AssertThat(ObjectAt(InFrontOfThePlayer, Wall)).IsEqual(Wall);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsNothingWhereThereIsNoObject()
     {
-        Assert.Equal(0, ObjectAt(BehindThePlayer, 0));
+        AssertThat(ObjectAt(BehindThePlayer, 0)).IsEqual(0);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_ShowsNothingOnAnInvisibleTileOrInTheHiddenCorner()
     {
-        Assert.Equal(0, ObjectAt(BehindThePlayer, Wall, MapFlags.IsItem | MapFlags.Invisible));
-        Assert.Equal(0, ObjectAt(HiddenCorner, Wall, MapFlags.IsItem));
+        AssertThat(ObjectAt(BehindThePlayer, Wall, MapFlags.IsItem | MapFlags.Invisible)).IsEqual(0);
+        AssertThat(ObjectAt(HiddenCorner, Wall, MapFlags.IsItem)).IsEqual(0);
     }
 
-    [Theory]
-    [InlineData(16350, 457)]
-    [InlineData(16358, 456)]
-    [InlineData(16366, 455)]
-    [InlineData(16374, 466)]
-    [InlineData(16382, 459)]
-    [InlineData(16390, 458)]
-    [InlineData(16398, 468)]
-    [InlineData(16406, 467)]
-    [InlineData(16414, 467)]
+    [TestCase(16350, 457)]
+    [TestCase(16358, 456)]
+    [TestCase(16366, 455)]
+    [TestCase(16374, 466)]
+    [TestCase(16382, 459)]
+    [TestCase(16390, 458)]
+    [TestCase(16398, 468)]
+    [TestCase(16406, 467)]
+    [TestCase(16414, 467)]
     public void ObjectSprite_ShowsALowMineWallBehindThePlayer(int mineWall, int lowWall)
     {
-        Assert.Equal(lowWall, ObjectAt(BehindThePlayer, mineWall, MapFlags.IsItem));
+        AssertThat(ObjectAt(BehindThePlayer, mineWall, MapFlags.IsItem)).IsEqual(lowWall);
     }
 
-    [Theory]
-    [InlineData(16357)]
-    [InlineData(16365)]
-    [InlineData(16421)]
-    [InlineData(16422)]
+    [TestCase(16357)]
+    [TestCase(16365)]
+    [TestCase(16421)]
+    [TestCase(16422)]
     public void ObjectSprite_KeepsAMineWallThatHasNoLowVersion(int mineWall)
     {
-        Assert.Equal(mineWall, ObjectAt(BehindThePlayer, mineWall, MapFlags.IsItem));
+        AssertThat(ObjectAt(BehindThePlayer, mineWall, MapFlags.IsItem)).IsEqual(mineWall);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_KeepsTheWholeMineWallThePlayerFaces()
     {
-        Assert.Equal(16350, ObjectAt((Centre + 1, Centre), 16350, MapFlags.IsItem, direction: FacingEast));
+        AssertThat(ObjectAt((Centre + 1, Centre), 16350, MapFlags.IsItem, direction: FacingEast)).IsEqual(16350);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_KeepsTheWholeMineWallWhenWallsArentHidden()
     {
-        Assert.Equal(16350, ObjectAt(BehindThePlayer, 16350, MapFlags.IsItem, false));
+        AssertThat(ObjectAt(BehindThePlayer, 16350, MapFlags.IsItem, false)).IsEqual(16350);
     }
 
-    [Theory]
-    [InlineData(0, 1002)]
-    [InlineData(31, 549)]
+    [TestCase(0, 1002)]
+    [TestCase(31, 549)]
     public void ObjectSprite_LightsAWaypointTheCharacterHasFound(int waypointBit, int floor)
     {
         var (tile, player) = Tile(BehindThePlayer, floor, Waypoint, MapFlags.IsItem, waypoints: 1u << waypointBit);
 
-        Assert.Equal(
-            LitWaypoint,
-            MapSpriteRules.ObjectSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row, player, true));
+        AssertThat(MapSpriteRules.ObjectSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row, player, true))
+            .IsEqual(LitWaypoint);
     }
 
-    [Fact]
+    [TestCase]
     public void ObjectSprite_LeavesAWaypointDarkUntilItsFound()
     {
         var (unfound, player) = Tile(BehindThePlayer, 1002, Waypoint, MapFlags.IsItem, waypoints: 1u << 1);
         var (otherFloor, playerWithIt) = Tile(BehindThePlayer, 1008, Waypoint, MapFlags.IsItem, waypoints: 1u << 0);
 
-        Assert.Equal(
-            Waypoint,
-            MapSpriteRules.ObjectSprite(unfound, BehindThePlayer.Column, BehindThePlayer.Row, player, true));
-        Assert.Equal(
-            Waypoint,
-            MapSpriteRules.ObjectSprite(otherFloor, BehindThePlayer.Column, BehindThePlayer.Row, playerWithIt, true));
+        AssertThat(MapSpriteRules.ObjectSprite(unfound, BehindThePlayer.Column, BehindThePlayer.Row, player, true))
+            .IsEqual(Waypoint);
+        AssertThat(
+                MapSpriteRules.ObjectSprite(
+                    otherFloor,
+                    BehindThePlayer.Column,
+                    BehindThePlayer.Row,
+                    playerWithIt,
+                    true))
+            .IsEqual(Waypoint);
     }
 
-    [Fact]
+    [TestCase]
     public void CharacterSprite_ShowsTheCharacter()
     {
         var (tile, _) = Tile(BehindThePlayer, character: 3021);
 
-        Assert.Equal(3021, MapSpriteRules.CharacterSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row));
+        AssertThat(MapSpriteRules.CharacterSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row)).IsEqual(3021);
     }
 
-    [Fact]
+    [TestCase]
     public void CharacterSprite_ShowsNothingOnAnInvisibleTileOrInTheHiddenCorner()
     {
         var (invisible, _) = Tile(BehindThePlayer, flags: MapFlags.Invisible, character: 3021);
         var (cornered, _) = Tile(HiddenCorner, character: 3021);
 
-        Assert.Equal(0, MapSpriteRules.CharacterSprite(invisible, BehindThePlayer.Column, BehindThePlayer.Row));
-        Assert.Equal(0, MapSpriteRules.CharacterSprite(cornered, HiddenCorner.Column, HiddenCorner.Row));
+        AssertThat(MapSpriteRules.CharacterSprite(invisible, BehindThePlayer.Column, BehindThePlayer.Row)).IsEqual(0);
+        AssertThat(MapSpriteRules.CharacterSprite(cornered, HiddenCorner.Column, HiddenCorner.Row)).IsEqual(0);
     }
 
     private static int ObjectAt(

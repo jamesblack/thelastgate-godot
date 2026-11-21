@@ -1,17 +1,14 @@
 using TheLastGate.Net;
 using TheLastGate.State;
-using TheLastGate.World;
 
 namespace TheLastGate.Tests;
 
 public class ItemAndFloorAnimationTests
 {
     private const byte AbsoluteSetMap = 0x80;
-    private const byte FloorOnly = 0b0000_0001;
     private const byte ItemSpriteAndStatus = 0b0001_1000;
     private const int TileIndex = 10 * WorldMap.Size + 10;
     private const int Sprite = 5000;
-    private const int ShimmeringFloor = 16980;
     private const int EvenServerTick = 50;
 
     [Theory]
@@ -93,45 +90,12 @@ public class ItemAndFloorAnimationTests
         Assert.Equal(5, state.ClientTick);
     }
 
-    [Theory]
-    [InlineData(6160, ShimmeringFloor)]
-    [InlineData(6167, ShimmeringFloor + 3)]
-    [InlineData(6169, ShimmeringFloor + 4)]
-    public void FloorSprite_FlickersTheShimmeringFloorWhenItsTurnComes(int clientTick, int sprite)
-    {
-        Assert.Equal(sprite, MapSpriteRules.FloorSprite(FloorAt100By200(ShimmeringFloor), clientTick));
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(6170)]
-    public void FloorSprite_LeavesTheShimmeringFloorStillAtOtherTimes(int clientTick)
-    {
-        Assert.Equal(ShimmeringFloor, MapSpriteRules.FloorSprite(FloorAt100By200(ShimmeringFloor), clientTick));
-    }
-
-    [Fact]
-    public void FloorSprite_DoesNotFlickerOtherFloors()
-    {
-        Assert.Equal(1002, MapSpriteRules.FloorSprite(FloorAt100By200(1002), 6167));
-    }
-
     private static TestCommand Item(int status, int sprite = Sprite) =>
         TestCommand.Of(AbsoluteSetMap)
             .Byte(ItemSpriteAndStatus)
             .UInt16(TileIndex)
             .UInt16((ushort)sprite)
             .Byte((byte)status);
-
-    private static MapTile FloorAt100By200(int floor)
-    {
-        var state = new GameState();
-        new TickProcessor(state).Process(
-            TestCommand.Payload(
-                TestCommand.Of(ServerCommand.SetOrigin).UInt16(90).UInt16(190),
-                TestCommand.Of(AbsoluteSetMap).Byte(FloorOnly).UInt16(TileIndex).UInt16((ushort)floor)));
-        return state.Map.Tiles[TileIndex];
-    }
 
     private static MapTile Run(TestCommand item, int serverTick, int moreTicks = 0)
     {

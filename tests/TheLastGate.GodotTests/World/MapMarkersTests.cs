@@ -1,9 +1,12 @@
+using GdUnit4;
 using TheLastGate.Net;
 using TheLastGate.State;
 using TheLastGate.World;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.World;
 
+[TestSuite]
 public class MapMarkersTests
 {
     private const byte AbsoluteSetMap = 0x80;
@@ -20,59 +23,59 @@ public class MapMarkersTests
     private const int Use = 4;
     private const int Wave = 6;
 
-    [Fact]
+    [TestCase]
     public void IsWalkTarget_ForTheTileThePlayerIsWalkingTo()
     {
         var tile = Tile();
 
-        Assert.True(MapMarkers.IsWalkTarget(tile, new PlayerTarget(0, OriginX + Column, OriginY + Row, 0, 0, 0)));
-        Assert.False(MapMarkers.IsWalkTarget(tile, new PlayerTarget(0, OriginX + Column + 1, OriginY + Row, 0, 0, 0)));
+        AssertThat(MapMarkers.IsWalkTarget(tile, new PlayerTarget(0, OriginX + Column, OriginY + Row, 0, 0, 0)))
+            .IsTrue();
+        AssertThat(MapMarkers.IsWalkTarget(tile, new PlayerTarget(0, OriginX + Column + 1, OriginY + Row, 0, 0, 0)))
+            .IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void IsAttackTarget_ForTheCharacterThePlayerAttacks()
     {
         var tile = Tile();
 
-        Assert.True(MapMarkers.IsAttackTarget(tile, new PlayerTarget(Number, 0, 0, 0, 0, 0)));
-        Assert.False(MapMarkers.IsAttackTarget(tile, new PlayerTarget(Number + 1, 0, 0, 0, 0, 0)));
+        AssertThat(MapMarkers.IsAttackTarget(tile, new PlayerTarget(Number, 0, 0, 0, 0, 0))).IsTrue();
+        AssertThat(MapMarkers.IsAttackTarget(tile, new PlayerTarget(Number + 1, 0, 0, 0, 0, 0))).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void IsAttackTarget_NeverWhileThePlayerIsNotAttacking()
     {
-        Assert.False(MapMarkers.IsAttackTarget(Tile(0), new PlayerTarget(0, 0, 0, 0, 0, 0)));
+        AssertThat(MapMarkers.IsAttackTarget(Tile(0), new PlayerTarget(0, 0, 0, 0, 0, 0))).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void IsGiveTarget_ForTheCharacterTheGiveIsAimedAtById()
     {
         var tile = Tile();
 
-        Assert.True(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Give, Id, 0)));
-        Assert.False(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Give, Number, 0)));
-        Assert.False(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Use, Id, 0)));
+        AssertThat(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Give, Id, 0))).IsTrue();
+        AssertThat(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Give, Number, 0))).IsFalse();
+        AssertThat(MapMarkers.IsGiveTarget(tile, new PlayerTarget(0, 0, 0, Use, Id, 0))).IsFalse();
     }
 
-    [Theory]
-    [InlineData(Drop, 32)]
-    [InlineData(PickUp, 33)]
-    [InlineData(Use, 45)]
-    [InlineData(Give, 0)]
-    [InlineData(Wave, 0)]
+    [TestCase(Drop, 32)]
+    [TestCase(PickUp, 33)]
+    [TestCase(Use, 45)]
+    [TestCase(Give, 0)]
+    [TestCase(Wave, 0)]
     public void ActionMarker_MarksTheTileOfADropPickUpOrUse(int action, int sprite)
     {
-        Assert.Equal(
-            sprite,
-            MapMarkers.ActionMarker(Tile(), new PlayerTarget(0, 0, 0, action, OriginX + Column, OriginY + Row)));
+        AssertThat(MapMarkers.ActionMarker(Tile(), new PlayerTarget(0, 0, 0, action, OriginX + Column, OriginY + Row)))
+            .IsEqual(sprite);
     }
 
-    [Fact]
+    [TestCase]
     public void ActionMarker_NotOnOtherTiles()
     {
-        Assert.Equal(
-            0,
-            MapMarkers.ActionMarker(Tile(), new PlayerTarget(0, 0, 0, Drop, OriginX + Column, OriginY + Row + 1)));
+        AssertThat(
+                MapMarkers.ActionMarker(Tile(), new PlayerTarget(0, 0, 0, Drop, OriginX + Column, OriginY + Row + 1)))
+            .IsEqual(0);
     }
 
     private static MapTile Tile(int number = Number)
