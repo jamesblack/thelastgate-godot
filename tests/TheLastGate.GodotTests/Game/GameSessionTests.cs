@@ -37,7 +37,7 @@ public class GameSessionTests
         session = new GameSession(state);
         processor = new TickProcessor(state);
         sent = [];
-        state.AutoWalk.Send = sent.Add;
+        session.AutoWalk.Send = sent.Add;
         Process(TestCommand.Of(ServerCommand.SetOrigin).UInt16(OriginX).UInt16(OriginY));
         sent.Clear();
     }
@@ -48,7 +48,7 @@ public class GameSessionTests
     [TestCase(WalkDirection.East, 27, 34)]
     public void Walking_MovesToTheTileSevenAwayOnTheNextTick(WalkDirection direction, int column, int row)
     {
-        state.AutoWalk.Start(direction);
+        session.AutoWalk.Start(direction);
 
         Process();
 
@@ -59,7 +59,7 @@ public class GameSessionTests
     [TestCase]
     public void Walking_StepsAgainEveryFourTicks()
     {
-        state.AutoWalk.Start(WalkDirection.North);
+        session.AutoWalk.Start(WalkDirection.North);
 
         for (var tick = 0; tick < StepTicks; tick++)
         {
@@ -75,7 +75,7 @@ public class GameSessionTests
     public void Walking_StopsByItselfAfterAThousandSteps()
     {
         const int stepsBeforeStopping = 1002;
-        state.AutoWalk.Start(WalkDirection.North);
+        session.AutoWalk.Start(WalkDirection.North);
 
         for (var tick = 0; tick < (stepsBeforeStopping + 10) * StepTicks; tick++)
         {
@@ -83,23 +83,23 @@ public class GameSessionTests
         }
 
         AssertThat(sent).HasSize(stepsBeforeStopping);
-        AssertThat(state.AutoWalk.Walking).IsFalse();
+        AssertThat(session.AutoWalk.Walking).IsFalse();
     }
 
     [TestCase]
     public void Stopping_SendsNoMoreSteps()
     {
-        state.AutoWalk.Start(WalkDirection.North);
+        session.AutoWalk.Start(WalkDirection.North);
         Process();
 
-        state.AutoWalk.Stop();
+        session.AutoWalk.Stop();
         for (var tick = 0; tick < StepTicks * 2; tick++)
         {
             Process();
         }
 
         AssertThat(sent).HasSize(1);
-        AssertThat(state.AutoWalk.Walking).IsFalse();
+        AssertThat(session.AutoWalk.Walking).IsFalse();
     }
 
     [TestCase(23, false)]

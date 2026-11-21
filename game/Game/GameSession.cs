@@ -44,6 +44,8 @@ public sealed class GameSession
 
     public bool SessionStatsOpen { get; set; }
 
+    public AutoWalk AutoWalk => state.AutoWalk;
+
     public bool CloseShop()
     {
         if (!state.CloseShop())
