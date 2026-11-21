@@ -1,4 +1,3 @@
-using TheLastGate.Assets;
 using TheLastGate.Items;
 using TheLastGate.Net;
 using TheLastGate.State;
@@ -10,10 +9,10 @@ public class ItemLooksTests
     private const int Sword = 100;
     private const int Shield = 200;
 
-    private static readonly LogLine Header = new("Steel Sword:", (int)TextColour.Lime);
-    private static readonly LogLine OtherHeader = new("Bronze Sword:", (int)TextColour.Lime);
-    private static readonly LogLine Description = new("A finely crafted steel sword.", (int)TextColour.Yellow);
-    private static readonly LogLine Chatter = new("Bob: hello", (int)TextColour.Blue);
+    private static readonly LogLine Header = new("Steel Sword:", (int)LogFont.Lime);
+    private static readonly LogLine OtherHeader = new("Bronze Sword:", (int)LogFont.Lime);
+    private static readonly LogLine Description = new("A finely crafted steel sword.", (int)LogFont.Yellow);
+    private static readonly LogLine Chatter = new("Bob: hello", (int)LogFont.Blue);
 
     private readonly TextLog chat = new();
     private readonly ItemLooks looks;

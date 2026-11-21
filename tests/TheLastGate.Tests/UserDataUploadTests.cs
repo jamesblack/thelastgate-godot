@@ -1,5 +1,4 @@
 using System.Text;
-using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.Net;
 using TheLastGate.State;
@@ -89,13 +88,13 @@ public class UserDataUploadTests
         var upload = new UserDataUpload("Ishtar", "A tall templar.", chat);
 
         TickUntilSent(upload);
-        Assert.Equal([new LogLine("Transfering user data...", (int)TextColour.Yellow)], chat.Lines);
+        Assert.Equal([new LogLine("Transfering user data...", (int)LogFont.Yellow)], chat.Lines);
         while (!upload.Done)
         {
             upload.Tick();
         }
 
-        Assert.Equal(new LogLine("Transfer done.", (int)TextColour.Yellow), chat.Lines[^1]);
+        Assert.Equal(new LogLine("Transfer done.", (int)LogFont.Yellow), chat.Lines[^1]);
         Assert.Equal(2, chat.Lines.Count);
     }
 

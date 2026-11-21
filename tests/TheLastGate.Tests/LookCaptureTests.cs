@@ -1,4 +1,3 @@
-using TheLastGate.Assets;
 using TheLastGate.Items;
 using TheLastGate.State;
 
@@ -6,9 +5,9 @@ namespace TheLastGate.Tests;
 
 public class LookCaptureTests
 {
-    private static readonly LogLine Header = new("Steel Sword:", (int)TextColour.Lime);
-    private static readonly LogLine Description = new("A finely crafted steel sword.", (int)TextColour.Yellow);
-    private static readonly LogLine Chatter = new("Bob: hello", (int)TextColour.Blue);
+    private static readonly LogLine Header = new("Steel Sword:", (int)LogFont.Lime);
+    private static readonly LogLine Description = new("A finely crafted steel sword.", (int)LogFont.Yellow);
+    private static readonly LogLine Chatter = new("Bob: hello", (int)LogFont.Blue);
     private readonly LookCapture capture;
 
     private readonly List<LookReply> replies = [];
@@ -87,7 +86,7 @@ public class LookCaptureTests
     [Fact]
     public void Offer_CapturesEmptyLinesInsideAReply()
     {
-        var blank = new LogLine("", (int)TextColour.Yellow);
+        var blank = new LogLine("", (int)LogFont.Yellow);
         capture.ExpectFetch(0);
 
         capture.Offer(Header);
@@ -136,7 +135,7 @@ public class LookCaptureTests
     [Fact]
     public void EndOfTick_ReleasesEverythingWhenTheRepliesShareNothing()
     {
-        var otherHeader = new LogLine("Bronze Sword:", (int)TextColour.Lime);
+        var otherHeader = new LogLine("Bronze Sword:", (int)LogFont.Lime);
         capture.ExpectFetch(0);
 
         capture.Offer(Header);

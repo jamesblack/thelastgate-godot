@@ -1,5 +1,4 @@
 using System;
-using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.State;
 
@@ -57,7 +56,7 @@ public sealed class UserDataUpload
         ticksWaited = 0;
         if (nextChunk == 0)
         {
-            chat.Add(new LogLine(StartMessage, (int)TextColour.Yellow));
+            chat.Add(new LogLine(StartMessage, (int)LogFont.Yellow));
         }
 
         var packet = new byte[Protocol.PacketSize];
@@ -68,7 +67,7 @@ public sealed class UserDataUpload
         nextChunk++;
         if (Done)
         {
-            chat.Add(new LogLine(DoneMessage, (int)TextColour.Yellow));
+            chat.Add(new LogLine(DoneMessage, (int)LogFont.Yellow));
         }
 
         return packet;

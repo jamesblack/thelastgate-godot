@@ -1,5 +1,4 @@
 using System.Globalization;
-using TheLastGate.Assets;
 using TheLastGate.Items;
 using TheLastGate.State;
 
@@ -15,20 +14,20 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Steel Sword:"),
-            Line(TextColour.Yellow, "A finely crafted steel sword."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, PlainWithRequired("Strength", 2, 4, 30)),
-            Line(TextColour.Yellow, PlainWithRequired("Sword", 0, 0, 25)),
-            Line(TextColour.Yellow, Plain("Weapon Value", 24, 24)),
-            Line(TextColour.Yellow, WholePercent("Crit Bonus", 5, 5)),
-            Line(TextColour.Yellow, TenthsPercent("Dmg Bonus", 1, 5, 2, 5)),
-            Line(TextColour.Yellow, Rank("Min. Rank", 5, "Sergeant")),
-            Line(TextColour.Orange, "Can be Whetstoned."),
-            Line(TextColour.Red, "Cannot be Soulstoned."),
-            Line(TextColour.Purple, "Has been Enchanted."),
-            Line(TextColour.Yellow, "It's fairly old."),
-            Line(TextColour.Lime, "You estimate this could sell for 12G 34S."),
+            Line(LogFont.Lime, "Steel Sword:"),
+            Line(LogFont.Yellow, "A finely crafted steel sword."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, PlainWithRequired("Strength", 2, 4, 30)),
+            Line(LogFont.Yellow, PlainWithRequired("Sword", 0, 0, 25)),
+            Line(LogFont.Yellow, Plain("Weapon Value", 24, 24)),
+            Line(LogFont.Yellow, WholePercent("Crit Bonus", 5, 5)),
+            Line(LogFont.Yellow, TenthsPercent("Dmg Bonus", 1, 5, 2, 5)),
+            Line(LogFont.Yellow, Rank("Min. Rank", 5, "Sergeant")),
+            Line(LogFont.Orange, "Can be Whetstoned."),
+            Line(LogFont.Red, "Cannot be Soulstoned."),
+            Line(LogFont.Purple, "Has been Enchanted."),
+            Line(LogFont.Yellow, "It's fairly old."),
+            Line(LogFont.Lime, "You estimate this could sell for 12G 34S."),
         ]);
 
         Assert.Equal("Steel Sword", details.Name);
@@ -57,11 +56,11 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Soulstone:"),
-            Line(TextColour.Yellow, "A glowing stone."),
-            Line(TextColour.Orange, "Stat               Adds"),
-            Line(TextColour.Yellow, Adds("Dagger", 3)),
-            Line(TextColour.Yellow, Plain("Armor Value", 2, 2)),
+            Line(LogFont.Lime, "Soulstone:"),
+            Line(LogFont.Yellow, "A glowing stone."),
+            Line(LogFont.Orange, "Stat               Adds"),
+            Line(LogFont.Yellow, Adds("Dagger", 3)),
+            Line(LogFont.Yellow, Plain("Armor Value", 2, 2)),
         ]);
 
         Assert.True(details.SoulstoneTable);
@@ -75,12 +74,12 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Healing Potion:"),
-            Line(TextColour.Yellow, "Restores health over time."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, Regen("HP Regen", 120, 4)),
-            Line(TextColour.Yellow, Seconds("Duration", 30)),
-            Line(TextColour.Yellow, Single("Complexity", 12)),
+            Line(LogFont.Lime, "Healing Potion:"),
+            Line(LogFont.Yellow, "Restores health over time."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, Regen("HP Regen", 120, 4)),
+            Line(LogFont.Yellow, Seconds("Duration", 30)),
+            Line(LogFont.Yellow, Single("Complexity", 12)),
         ]);
 
         Assert.Equal(
@@ -97,13 +96,13 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Ring of Warmth:"),
-            Line(TextColour.Yellow, "A warm ring."),
-            Line(TextColour.Purple, "20% more maximum Endurance."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, Plain("Armor Value", 1, 1)),
-            Line(TextColour.Green, "Level 3. Next level in 120 kills."),
-            Line(TextColour.Pink, "Something the parser has never seen."),
+            Line(LogFont.Lime, "Ring of Warmth:"),
+            Line(LogFont.Yellow, "A warm ring."),
+            Line(LogFont.Purple, "20% more maximum Endurance."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, Plain("Armor Value", 1, 1)),
+            Line(LogFont.Green, "Level 3. Next level in 120 kills."),
+            Line(LogFont.Pink, "Something the parser has never seen."),
         ]);
 
         Assert.Equal([2], details.EffectLines);
@@ -118,14 +117,14 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Steel Sword:"),
-            Line(TextColour.Yellow, "A sword."),
-            Line(TextColour.Yellow, " "),
-            Line(TextColour.Yellow, "You compare it with a Bronze Sword:"),
-            Line(TextColour.Yellow, "A Steel Sword is the better weapon."),
-            Line(TextColour.Yellow, "No difference as armor."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, Plain("Weapon Value", 24, 24)),
+            Line(LogFont.Lime, "Steel Sword:"),
+            Line(LogFont.Yellow, "A sword."),
+            Line(LogFont.Yellow, " "),
+            Line(LogFont.Yellow, "You compare it with a Bronze Sword:"),
+            Line(LogFont.Yellow, "A Steel Sword is the better weapon."),
+            Line(LogFont.Yellow, "No difference as armor."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, Plain("Weapon Value", 24, 24)),
         ]);
 
         Assert.Empty(details.EffectLines);
@@ -136,7 +135,7 @@ public class ItemDetailsParserTests
     [Fact]
     public void Parse_LeavesValuesThatWereNotShownEmpty()
     {
-        var details = ItemDetailsParser.Parse([Line(TextColour.Lime, "Talisman:")]);
+        var details = ItemDetailsParser.Parse([Line(LogFont.Lime, "Talisman:")]);
 
         Assert.Equal("Talisman", details.Name);
         Assert.Null(details.DescriptionLine);
@@ -151,12 +150,12 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Yellow, "A contract. It reads:"),
-            Line(TextColour.Yellow, " "),
-            Line(TextColour.Green, "Clear the area of all enemies."),
-            Line(TextColour.Yellow, " "),
-            Line(TextColour.Green, "  + Enemies have more gold"),
-            Line(TextColour.Green, "A contract for a mercenary."),
+            Line(LogFont.Yellow, "A contract. It reads:"),
+            Line(LogFont.Yellow, " "),
+            Line(LogFont.Green, "Clear the area of all enemies."),
+            Line(LogFont.Yellow, " "),
+            Line(LogFont.Green, "  + Enemies have more gold"),
+            Line(LogFont.Green, "A contract for a mercenary."),
         ]);
 
         Assert.Equal("Contract", details.Name);
@@ -170,7 +169,7 @@ public class ItemDetailsParserTests
     public void Parse_ReadsBlessings(string text, int blessings, int kills)
     {
         var details = ItemDetailsParser.Parse(
-            [Line(TextColour.Lime, "Godly Blade:"), Line(TextColour.Yellow, "Blessed."), Line(TextColour.Green, text)]);
+            [Line(LogFont.Lime, "Godly Blade:"), Line(LogFont.Yellow, "Blessed."), Line(LogFont.Green, text)]);
 
         Assert.Equal(blessings, details.Blessings);
         Assert.Equal(kills, details.KillsToBlessing);
@@ -181,22 +180,22 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Old Axe:"),
-            Line(TextColour.Yellow, "Heavy."),
-            Line(TextColour.Purple, "Has been Whetstoned."),
-            Line(TextColour.Purple, "Has been Soulstoned."),
-            Line(TextColour.Purple, "Has been Catalyzed."),
-            Line(TextColour.Purple, "Has been Enchanted."),
-            Line(TextColour.Purple, "Has been Focused."),
-            Line(TextColour.Purple, "Has been Augmented."),
-            Line(TextColour.Purple, "Has been made easier to use."),
-            Line(TextColour.Purple, "Has been Corrupted."),
-            Line(TextColour.Purple, "Legacy item."),
-            Line(TextColour.Orange, "Can be Enchanted."),
-            Line(TextColour.Orange, "Can be Soulstoned."),
-            Line(TextColour.Orange, "May be further enhanced by Osiris."),
-            Line(TextColour.Red, "Cannot be Enchanted."),
-            Line(TextColour.Yellow, "It is very old and battered."),
+            Line(LogFont.Lime, "Old Axe:"),
+            Line(LogFont.Yellow, "Heavy."),
+            Line(LogFont.Purple, "Has been Whetstoned."),
+            Line(LogFont.Purple, "Has been Soulstoned."),
+            Line(LogFont.Purple, "Has been Catalyzed."),
+            Line(LogFont.Purple, "Has been Enchanted."),
+            Line(LogFont.Purple, "Has been Focused."),
+            Line(LogFont.Purple, "Has been Augmented."),
+            Line(LogFont.Purple, "Has been made easier to use."),
+            Line(LogFont.Purple, "Has been Corrupted."),
+            Line(LogFont.Purple, "Legacy item."),
+            Line(LogFont.Orange, "Can be Enchanted."),
+            Line(LogFont.Orange, "Can be Soulstoned."),
+            Line(LogFont.Orange, "May be further enhanced by Osiris."),
+            Line(LogFont.Red, "Cannot be Enchanted."),
+            Line(LogFont.Yellow, "It is very old and battered."),
         ]);
 
         Assert.Equal(
@@ -216,11 +215,11 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Cursed Ring:"),
-            Line(TextColour.Yellow, "Cold."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, PlainWithRequired("Agility", -3, -5, 10)),
-            Line(TextColour.Yellow, WholePercent("Crit Bonus", -2, -4)),
+            Line(LogFont.Lime, "Cursed Ring:"),
+            Line(LogFont.Yellow, "Cold."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, PlainWithRequired("Agility", -3, -5, 10)),
+            Line(LogFont.Yellow, WholePercent("Crit Bonus", -2, -4)),
         ]);
 
         Assert.Equal(
@@ -236,12 +235,12 @@ public class ItemDetailsParserTests
     {
         var details = ItemDetailsParser.Parse(
         [
-            Line(TextColour.Lime, "Strange Gem:"),
-            Line(TextColour.Yellow, "Odd."),
-            Line(TextColour.Orange, TableHeader),
-            Line(TextColour.Yellow, Plain("Armor Value", 1, 1)),
-            Line(TextColour.Yellow, "Hums quietly."),
-            Line(TextColour.Yellow, Plain("Weapon Value", 2, 2)),
+            Line(LogFont.Lime, "Strange Gem:"),
+            Line(LogFont.Yellow, "Odd."),
+            Line(LogFont.Orange, TableHeader),
+            Line(LogFont.Yellow, Plain("Armor Value", 1, 1)),
+            Line(LogFont.Yellow, "Hums quietly."),
+            Line(LogFont.Yellow, Plain("Weapon Value", 2, 2)),
         ]);
 
         Assert.Single(details.Stats);
@@ -249,17 +248,17 @@ public class ItemDetailsParserTests
     }
 
     [Theory]
-    [InlineData("Steel Sword:", TextColour.Lime, true)]
-    [InlineData("A contract. It reads:", TextColour.Yellow, true)]
-    [InlineData("A finely crafted sword:", TextColour.Yellow, false)]
-    [InlineData("Steel Sword", TextColour.Lime, false)]
-    [InlineData(":", TextColour.Lime, false)]
-    public void IsReplyStart_SpotsTheFirstLineOfALookReply(string text, TextColour font, bool start)
+    [InlineData("Steel Sword:", LogFont.Lime, true)]
+    [InlineData("A contract. It reads:", LogFont.Yellow, true)]
+    [InlineData("A finely crafted sword:", LogFont.Yellow, false)]
+    [InlineData("Steel Sword", LogFont.Lime, false)]
+    [InlineData(":", LogFont.Lime, false)]
+    public void IsReplyStart_SpotsTheFirstLineOfALookReply(string text, LogFont font, bool start)
     {
         Assert.Equal(start, ItemDetailsParser.IsReplyStart(text, (int)font));
     }
 
-    private static LogLine Line(TextColour font, string text) => new(text, (int)font);
+    private static LogLine Line(LogFont font, string text) => new(text, (int)font);
 
     private static string Name(string name) => name.PadRight(16)[..16];
 

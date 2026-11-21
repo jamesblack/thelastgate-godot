@@ -1,6 +1,7 @@
-namespace TheLastGate.Assets;
+namespace TheLastGate.State;
 
-public enum TextColour
+// The fonts the server's log lines (Log0 to Log9) come in.
+public enum LogFont
 {
     Red,
     Yellow,
@@ -12,6 +13,4 @@ public enum TextColour
     Teal,
     Purple,
     White,
-    Grey,
-    Dim,
 }

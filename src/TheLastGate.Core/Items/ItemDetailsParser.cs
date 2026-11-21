@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheLastGate.Assets;
 using TheLastGate.State;
 
 namespace TheLastGate.Items;
@@ -52,7 +51,7 @@ public static class ItemDetailsParser
     ];
 
     public static bool IsReplyStart(string text, int font) =>
-        text == ContractOpening || (font == (int)TextColour.Lime && text.Length >= 2 && text[^1] == ':');
+        text == ContractOpening || (font == (int)LogFont.Lime && text.Length >= 2 && text[^1] == ':');
 
     public static ItemDetails Parse(IReadOnlyList<LogLine> reply)
     {
@@ -183,7 +182,7 @@ public static class ItemDetailsParser
 
         public bool ReadTableLine(LogLine line)
         {
-            if (line.Font == (int)TextColour.Orange && line.Text.StartsWith(TableOpening, StringComparison.Ordinal))
+            if (line.Font == (int)LogFont.Orange && line.Text.StartsWith(TableOpening, StringComparison.Ordinal))
             {
                 inTable = true;
                 seenTable = true;
