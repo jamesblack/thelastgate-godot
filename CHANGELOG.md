@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.2.0...v1.3.0) (2026-11-21)
+
+
+### Features
+
+* **display:** add a Display Toggles section with a more obvious hole traps option ([42a3d46](https://github.com/jamesblack/thelastgate-godot/commit/42a3d4645894ca306be13b9eb0f5fdf7aa61b4ae))
+* **display:** let each window's background be made see-through ([42a3d46](https://github.com/jamesblack/thelastgate-godot/commit/42a3d4645894ca306be13b9eb0f5fdf7aa61b4ae))
+* **display:** option to draw infravision in normal colours instead of red ([3a32303](https://github.com/jamesblack/thelastgate-godot/commit/3a323032eece8ee5f2c689c6a63795fbbe361ccd))
+* **windows:** drag the waypoint window's scrollbar, like the inventory and skill list ([ee08b98](https://github.com/jamesblack/thelastgate-godot/commit/ee08b98c8d8847a58bb6dcef90b1fc4d908d5418))
+* **windows:** move through the waypoint list with the arrow keys and travel with Enter ([ee08b98](https://github.com/jamesblack/thelastgate-godot/commit/ee08b98c8d8847a58bb6dcef90b1fc4d908d5418))
+* **windows:** reset each options tab to its defaults on its own ([62ab1f7](https://github.com/jamesblack/thelastgate-godot/commit/62ab1f75056ba967167f273ec50b2e7d0201e421))
+* **windows:** restyle the options window to match the game's dark windows ([62ab1f7](https://github.com/jamesblack/thelastgate-godot/commit/62ab1f75056ba967167f273ec50b2e7d0201e421))
+* **windows:** show what each currency earned and spent this session in a stats window ([1c70388](https://github.com/jamesblack/thelastgate-godot/commit/1c70388dd99dac516447120c37da4fa753de670b))
+* **windows:** type in the waypoint window to find a waypoint ([ee08b98](https://github.com/jamesblack/thelastgate-godot/commit/ee08b98c8d8847a58bb6dcef90b1fc4d908d5418))
+* **world:** queue every use and pickup in a dragged area with the Area Use hotkey ([f6035f7](https://github.com/jamesblack/thelastgate-godot/commit/f6035f771c65f6959ec28d85ad14414bf4bc6339))
+
+
+### Bug Fixes
+
+* **windows:** call the text window background setting Tutorial / MOTD ([68893e6](https://github.com/jamesblack/thelastgate-godot/commit/68893e6d800f8079447b9f3afa105469f206a958))
+* **windows:** make the options window text brighter and easier to read ([68893e6](https://github.com/jamesblack/thelastgate-godot/commit/68893e6d800f8079447b9f3afa105469f206a958))
+* **windows:** move through the waypoint search results with the arrow keys again ([c7dc1ac](https://github.com/jamesblack/thelastgate-godot/commit/c7dc1acd48479bf2f9361973fd9cda7261fe3921))
+* **windows:** rename the Display Toggles section to Accessibility ([68893e6](https://github.com/jamesblack/thelastgate-godot/commit/68893e6d800f8079447b9f3afa105469f206a958))
+* **windows:** reword the glide movement option ([68893e6](https://github.com/jamesblack/thelastgate-godot/commit/68893e6d800f8079447b9f3afa105469f206a958))
+
 ## [1.2.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.1.0...v1.2.0) (2026-11-19)
 
 
