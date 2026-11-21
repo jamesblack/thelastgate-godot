@@ -21,6 +21,7 @@ Everything is laid out for a 1280×720 virtual resolution (`viewport_width`/`vie
 | `game/` | The Godot project: `project.godot`, `TheLastGate.csproj` and Godot's own `TheLastGate.sln`. Godot can't see anything outside this folder. |
 | `src/TheLastGate.Core/` | Everything a headless client needs: the protocol, the game state, and the file formats those use |
 | `src/TheLastGate.Assets/` | The sprite archive format and how archives and sprite overrides are read, shared by the game and the SpriteCompiler. It references nothing else here. |
+| `src/TheLastGate.Rules/` | Copies of the server's formulas, for client state the server doesn't send, such as the planner's raise costs, tarot steps and buff powers. It references Core, and Core never references it. |
 | `src/TheLastGate.Starter/` | The small executable Velopack installs as the app's entry point. It answers Velopack's install and update hooks without starting Godot, then starts the game. Ships with every build. |
 | `tools/SpriteCompiler/` | Console tool that builds the sprite archives. Never referenced by the game. |
 | `tests/TheLastGate.Tests/` | xUnit tests for Core, Assets and the tools; they run without the engine |
@@ -92,7 +93,7 @@ bash tools/package-release.sh <win|linux> <version> <channel> <notes-file> <rele
 - **Core holds only what a headless client needs.** A headless client logs in, keeps the game state from the ticks, and sends commands, with no screen. If it wouldn't use something, that code belongs in `game/` beside the nodes that use it. Core mirrors as much client state as it can, including state it has to ask the server for, such as buff readings and item looks.
 - **Testability is not a reason to put code in Core.** Engine behaviour is tested with GdUnit4 (`tests/TheLastGate.GodotTests`), which can also run plain C# tests on code in `game/` without starting Godot.
 - **Protocol and file-format code is plain C#** over `ReadOnlySpan<byte>` / `BinaryPrimitives` (little-endian).
-- **The game references Core and Assets, never the tools.** Code only the build needs (the sprite compiler, the archive writers and its image decoding) stays in `tools/`, so it never ships to players.
+- **The game references Core, Assets and Rules, never the tools.** Code only the build needs (the sprite compiler, the archive writers and its image decoding) stays in `tools/`, so it never ships to players.
 - **All packet reads go through a bounds-checked `PacketReader`.** Every command type needs an exact length, because one wrong length loses the client's place in the tick stream.
 - **One inflater for the whole session,** started after login succeeds. Decompressing each frame on its own fails from the second frame on.
 - Sprites load on first use into a size-limited cache. Never import the archives as Godot resources.
