@@ -4,6 +4,8 @@ namespace TheLastGate.Tests;
 
 public class CharacterRecordTests
 {
+    private const int SomeSettingByte = 344;
+
     [Fact]
     public void CreateNew_IsANewAccountWithDefaultSettings()
     {
@@ -12,8 +14,6 @@ public class CharacterRecordTests
         Assert.Equal(new LoginKey(0, 0, 0, CharacterRecord.NewAccountName, 0), record.Key);
         Assert.Equal("", record.CharacterName);
         Assert.True(record.Changed);
-        Assert.True(record.Settings().HideWalls);
-        Assert.Equal(CharacterSettings.Unassigned, record.Settings().HotbarActions[0]);
     }
 
     [Fact]
@@ -35,10 +35,11 @@ public class CharacterRecordTests
         Assert.Equal("Ishtar", read.CharacterName);
         Assert.Equal("A quiet Harakim.", read.Description);
         Assert.False(read.Changed);
+        Assert.True(read.SettingsRead);
     }
 
     [Fact]
-    public void Read_GivesAKeyOnlyFileDefaultSettings()
+    public void Read_KeepsTheKeyOfAKeyOnlyFileButNoSettings()
     {
         using var folder = new TempFolder();
         var keyBytes = new byte[LoginKey.Size];
@@ -49,7 +50,7 @@ public class CharacterRecordTests
 
         Assert.Equal(77u, record.Key.UserNumber);
         Assert.Equal("", record.CharacterName);
-        Assert.True(record.Settings().ShowNames);
+        Assert.False(record.SettingsRead);
     }
 
     [Fact]
@@ -74,15 +75,13 @@ public class CharacterRecordTests
     }
 
     [Fact]
-    public void StartNewAccount_ForgetsTheAccountButKeepsTheDescriptionAndHotbar()
+    public void StartNewAccount_ForgetsTheAccountButKeepsTheDescriptionAndSettings()
     {
         var record = CharacterRecord.CreateNew();
         record.Key = new LoginKey(1234, 5, 6, "Ishtar", 110009);
         record.CharacterName = "Ishtar";
         record.Description = "A quiet Harakim.";
-        var settings = record.Settings();
-        settings.HotbarActions[0] = 50;
-        record.Store(settings);
+        record.SettingsBlock[SomeSettingByte] = 50;
         record.Changed = false;
 
         record.StartNewAccount();
@@ -90,7 +89,7 @@ public class CharacterRecordTests
         Assert.Equal(0u, record.Key.UserNumber);
         Assert.Equal("", record.CharacterName);
         Assert.Equal("A quiet Harakim.", record.Description);
-        Assert.Equal(50, record.Settings().HotbarActions[0]);
+        Assert.Equal(50, record.SettingsBlock[SomeSettingByte]);
         Assert.True(record.Changed);
     }
 }

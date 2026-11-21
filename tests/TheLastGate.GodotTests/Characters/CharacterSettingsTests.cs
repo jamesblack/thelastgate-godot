@@ -1,24 +1,27 @@
+using GdUnit4;
 using TheLastGate.Characters;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Characters;
 
+[TestSuite]
 public class CharacterSettingsTests
 {
-    [Fact]
+    [TestCase]
     public void New_ShowsWallsNamesAndHealthPercentWithAnEmptyHotbar()
     {
         var settings = new CharacterSettings();
 
-        Assert.True(settings.HideWalls);
-        Assert.True(settings.ShowNames);
-        Assert.True(settings.ShowHealthPercent);
-        Assert.False(settings.ShowHealthBars);
-        Assert.False(settings.ShowStatBase);
-        Assert.All(settings.HotbarActions, action => Assert.Equal(CharacterSettings.Unassigned, action));
-        Assert.All(settings.HotbarNames, name => Assert.Equal("-", name));
+        AssertThat(settings.HideWalls).IsTrue();
+        AssertThat(settings.ShowNames).IsTrue();
+        AssertThat(settings.ShowHealthPercent).IsTrue();
+        AssertThat(settings.ShowHealthBars).IsFalse();
+        AssertThat(settings.ShowStatBase).IsFalse();
+        AssertThat(settings.HotbarActions.Distinct().ToArray()).ContainsExactly(CharacterSettings.Unassigned);
+        AssertThat(settings.HotbarNames.Distinct().ToArray()).ContainsExactly("-");
     }
 
-    [Fact]
+    [TestCase]
     public void Write_ThenParse_KeepsTogglesAndHotbar()
     {
         var settings = new CharacterSettings { HideWalls = false, ShowHealthBars = true };
@@ -29,15 +32,15 @@ public class CharacterSettingsTests
         settings.Write(stored);
         var parsed = CharacterSettings.Parse(stored);
 
-        Assert.False(parsed.HideWalls);
-        Assert.True(parsed.ShowNames);
-        Assert.True(parsed.ShowHealthBars);
-        Assert.Equal(17, parsed.HotbarActions[3]);
-        Assert.Equal("Protect", parsed.HotbarNames[3]);
-        Assert.Equal(CharacterSettings.Unassigned, parsed.HotbarActions[4]);
+        AssertThat(parsed.HideWalls).IsFalse();
+        AssertThat(parsed.ShowNames).IsTrue();
+        AssertThat(parsed.ShowHealthBars).IsTrue();
+        AssertThat(parsed.HotbarActions[3]).IsEqual(17);
+        AssertThat(parsed.HotbarNames[3]).IsEqual("Protect");
+        AssertThat(parsed.HotbarActions[4]).IsEqual(CharacterSettings.Unassigned);
     }
 
-    [Fact]
+    [TestCase]
     public void Write_TruncatesHotbarNamesToFitTheirField()
     {
         var settings = new CharacterSettings();
@@ -46,16 +49,16 @@ public class CharacterSettingsTests
 
         settings.Write(stored);
 
-        Assert.Equal("Magic S", CharacterSettings.Parse(stored).HotbarNames[0]);
+        AssertThat(CharacterSettings.Parse(stored).HotbarNames[0]).IsEqual("Magic S");
     }
 
-    [Fact]
+    [TestCase]
     public void SetStartingHotbar_GivesATemplarCleave()
     {
         AssertStartingHotbar(CharacterClass.Templar, (7, 40, "Cleave"));
     }
 
-    [Fact]
+    [TestCase]
     public void SetStartingHotbar_GivesAHarakimBlastGhostCompanionMagicShieldAndProtect()
     {
         AssertStartingHotbar(
@@ -66,16 +69,15 @@ public class CharacterSettingsTests
             (11, 27, "Ghost C"));
     }
 
-    [Theory]
-    [InlineData(CharacterClass.Mercenary)]
-    [InlineData(CharacterClass.Seyan)]
-    [InlineData(CharacterClass.Lycanthrope)]
+    [TestCase(CharacterClass.Mercenary)]
+    [TestCase(CharacterClass.Seyan)]
+    [TestCase(CharacterClass.Lycanthrope)]
     public void SetStartingHotbar_GivesEveryOtherClassBlindAndProtect(CharacterClass characterClass)
     {
         AssertStartingHotbar(characterClass, (3, 17, "Protect"), (11, 37, "Blind"));
     }
 
-    [Fact]
+    [TestCase]
     public void SetStartingHotbar_ClearsWhatTheHotbarHeldBefore()
     {
         var settings = new CharacterSettings();
@@ -84,8 +86,8 @@ public class CharacterSettingsTests
 
         settings.SetStartingHotbar(CharacterClass.Templar);
 
-        Assert.Equal(CharacterSettings.Unassigned, settings.HotbarActions[10]);
-        Assert.Equal("-", settings.HotbarNames[10]);
+        AssertThat(settings.HotbarActions[10]).IsEqual(CharacterSettings.Unassigned);
+        AssertThat(settings.HotbarNames[10]).IsEqual("-");
     }
 
     private static void AssertStartingHotbar(
@@ -104,7 +106,7 @@ public class CharacterSettingsTests
             expectedNames[slot] = name;
         }
 
-        Assert.Equal(expectedActions, settings.HotbarActions);
-        Assert.Equal(expectedNames, settings.HotbarNames);
+        AssertThat(settings.HotbarActions).IsEqual(expectedActions);
+        AssertThat(settings.HotbarNames).IsEqual(expectedNames);
     }
 }

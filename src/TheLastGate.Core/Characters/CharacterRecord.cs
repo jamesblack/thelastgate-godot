@@ -47,6 +47,10 @@ public sealed class CharacterRecord
         set => bytes[LoginKey.Size + ChangedOffset] = (byte)(value ? 1 : 0);
     }
 
+    public bool SettingsRead => throw new NotImplementedException();
+
+    public Span<byte> SettingsBlock => throw new NotImplementedException();
+
     public CharacterSettings Settings() => CharacterSettings.Parse(bytes.AsSpan(LoginKey.Size));
 
     public void Store(CharacterSettings settings) => settings.Write(bytes.AsSpan(LoginKey.Size));
