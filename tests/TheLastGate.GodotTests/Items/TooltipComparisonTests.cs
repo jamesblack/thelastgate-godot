@@ -1,65 +1,67 @@
+using GdUnit4;
 using TheLastGate.Assets;
 using TheLastGate.Items;
 using TheLastGate.State;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Items;
 
+[TestSuite]
 public class TooltipComparisonTests
 {
     private const string TableHeader = "Stat              Passiv   Active   Requi";
 
-    [Fact]
+    [TestCase]
     public void Comparing_StartsWithEquippedAndAddsTheChangeAfterAValue()
     {
         var parts = Compare(Item(Row("Armor Value", "   +2      +2")), Item(Row("Armor Value", "   +5      +5")));
 
-        Assert.Equivalent(new TooltipLine(new TooltipText("Equipped", TextColour.Dim)), parts[0], true);
+        TooltipParts.AssertEqual(parts[0], new TooltipLine(new TooltipText("Equipped", TextColour.Dim)));
         var table = Table(parts);
-        Assert.Equal(Cells(TextColour.Orange, "Stat", "Value"), table.Header);
-        Assert.Equal(
-            [Text("Armor Value", TextColour.Yellow), Gain("+2", TextColour.White, "+3")],
-            table.Rows[0]);
+        AssertThat(table.Header).ContainsExactly(Cells(TextColour.Orange, "Stat", "Value"));
+        AssertThat(table.Rows[0])
+            .ContainsExactly(Text("Armor Value", TextColour.Yellow), Gain("+2", TextColour.White, "+3"));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_ShowsALossInRed()
     {
         var table = Table(
             Compare(Item(Row("Armor Value", "   +2      +2")), Item(Row("Armor Value", "   +1      +1"))));
 
-        Assert.Equal(Loss("+2", TextColour.White, "-1"), table.Rows[0][1]);
+        AssertThat(table.Rows[0][1]).IsEqual(Loss("+2", TextColour.White, "-1"));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_AddsNothingWhereTheValuesMatch()
     {
         var table = Table(
             Compare(Item(Row("Armor Value", "   +2      +2")), Item(Row("Armor Value", "   +2      +2"))));
 
-        Assert.Equal(Text("+2", TextColour.White), table.Rows[0][1]);
+        AssertThat(table.Rows[0][1]).IsEqual(Text("+2", TextColour.White));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_WritesPercentChangesAsPercents()
     {
         var table = Table(
             Compare(Item(Row("Crit Bonus", "   +5%     +5%")), Item(Row("Crit Bonus", "   +8%     +8%"))));
 
-        Assert.Equal(Gain("+5%", TextColour.White, "+3%"), table.Rows[0][1]);
+        AssertThat(table.Rows[0][1]).IsEqual(Gain("+5%", TextColour.White, "+3%"));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_ChangesTheActiveValueToo()
     {
         var table = Table(
             Compare(Item(Row("Strength", "   +2     +4      30")), Item(Row("Strength", "   +3     +6      30"))));
 
-        Assert.Equal(Gain("+2", TextColour.White, "+1"), table.Rows[0][1]);
-        Assert.Equal(Gain("+4", TextColour.Teal, "+2"), table.Rows[0][2]);
-        Assert.Equal(Text("30", TextColour.Dim), table.Rows[0][3]);
+        AssertThat(table.Rows[0][1]).IsEqual(Gain("+2", TextColour.White, "+1"));
+        AssertThat(table.Rows[0][2]).IsEqual(Gain("+4", TextColour.Teal, "+2"));
+        AssertThat(table.Rows[0][3]).IsEqual(Text("30", TextColour.Dim));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_CountsAStatTheHeldItemLacksAsALoss()
     {
         var table = Table(
@@ -67,32 +69,31 @@ public class TooltipComparisonTests
                 Item(Row("Armor Value", "   +2      +2"), Row("Hit Bonus", "   +1      +1")),
                 Item(Row("Hit Bonus", "   +1      +1"))));
 
-        Assert.Equal(Loss("+2", TextColour.White, "-2"), table.Rows[0][1]);
+        AssertThat(table.Rows[0][1]).IsEqual(Loss("+2", TextColour.White, "-2"));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_AddsDimRowsForStatsOnlyTheHeldItemHas()
     {
         var held = Item(Row("Armor Value", "   +2      +2"), Row("Agility", "   +4      +4"));
 
         var table = Table(Compare(Item(Row("Armor Value", "   +2      +2")), held));
 
-        Assert.Equal(2, table.Rows.Count);
-        Assert.Equal([Text("Agility", TextColour.Dim), Gain("-", TextColour.Dim, "+4")], table.Rows[1]);
+        AssertThat(table.Rows.Count).IsEqual(2);
+        AssertThat(table.Rows[1]).ContainsExactly(Text("Agility", TextColour.Dim), Gain("-", TextColour.Dim, "+4"));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_ChangesSingleValuesBelowTheTable()
     {
         var parts = Compare(Item(Row("Complexity", "     12")), Item(Row("Complexity", "     20")));
 
-        Assert.Equivalent(
-            new TooltipLine(Gain("Complexity: 12", TextColour.Yellow, "+8")),
+        TooltipParts.AssertEqual(
             parts.OfType<TooltipLine>().Single(line => line.Text.Text.StartsWith("Complexity")),
-            true);
+            new TooltipLine(Gain("Complexity: 12", TextColour.Yellow, "+8")));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_ListsSingleValuesOnlyTheHeldItemHas()
     {
         var held = Item(
@@ -103,21 +104,20 @@ public class TooltipComparisonTests
         var parts = Compare(Item(Row("Armor Value", "   +2      +2")), held);
 
         var lines = parts.OfType<TooltipLine>().Select(line => line.Text).ToList();
-        Assert.Contains(Gain("Complexity: -", TextColour.Dim, "+20"), lines);
-        Assert.Contains(Text("Min. Rank: -", TextColour.Dim), lines);
+        AssertThat(lines).Contains(Gain("Complexity: -", TextColour.Dim, "+20"));
+        AssertThat(lines).Contains(Text("Min. Rank: -", TextColour.Dim));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_LeavesRanksUncompared()
     {
         var parts = Compare(Item(Row("Min. Rank", "      5 (Sergeant)")), Item(Row("Min. Rank", "      9 (Captain)")));
 
-        Assert.Contains(
-            Text("Min. Rank: 5 (Sergeant)", TextColour.Yellow),
-            parts.OfType<TooltipLine>().Select(line => line.Text));
+        AssertThat(parts.OfType<TooltipLine>().Select(line => line.Text).ToArray())
+            .Contains(Text("Min. Rank: 5 (Sergeant)", TextColour.Yellow));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_DoesNotCompareWithASoulstone()
     {
         LogLine[] soulstone =
@@ -130,24 +130,23 @@ public class TooltipComparisonTests
 
         var table = Table(Compare(Item(Row("Armor Value", "   +2      +2")), ItemDetailsParser.Parse(soulstone)));
 
-        Assert.Single(table.Rows);
-        Assert.Equal(Text("+2", TextColour.White), table.Rows[0][1]);
+        AssertThat(table.Rows).HasSize(1);
+        AssertThat(table.Rows[0][1]).IsEqual(Text("+2", TextColour.White));
     }
 
-    [Fact]
+    [TestCase]
     public void Comparing_SaysSoWhenTheHeldItemIsUnknown()
     {
         var parts = TooltipContent.Comparing(Item(Row("Armor Value", "   +2      +2")), null);
 
-        Assert.Equivalent(new TooltipLine(new TooltipText("Equipped", TextColour.Dim)), parts[0], true);
-        Assert.Equivalent(
-            new TooltipLine(new TooltipText("No details for the held item.", TextColour.Dim)),
+        TooltipParts.AssertEqual(parts[0], new TooltipLine(new TooltipText("Equipped", TextColour.Dim)));
+        TooltipParts.AssertEqual(
             parts[^1],
-            true);
-        Assert.Equal(Text("+2", TextColour.White), Table(parts).Rows[0][1]);
+            new TooltipLine(new TooltipText("No details for the held item.", TextColour.Dim)));
+        AssertThat(Table(parts).Rows[0][1]).IsEqual(Text("+2", TextColour.White));
     }
 
-    [Fact]
+    [TestCase]
     public void ComparingEmptySlot_ShowsEverythingTheHeldItemHasAsAGain()
     {
         var held = Details(
@@ -157,26 +156,30 @@ public class TooltipComparisonTests
 
         var parts = TooltipContent.ComparingEmptySlot(held);
 
-        Assert.Equivalent(new TooltipLine(new TooltipText("Empty slot", TextColour.Dim)), parts[0], true);
-        Assert.IsType<TooltipSeparator>(parts[1]);
+        TooltipParts.AssertEqual(parts[0], new TooltipLine(new TooltipText("Empty slot", TextColour.Dim)));
+        AssertThat(parts[1]).IsInstanceOf<TooltipSeparator>();
         var table = Table(parts);
-        Assert.Equal(Cells(TextColour.Orange, "Stat", "Passive", "Active"), table.Header);
-        Assert.Equal(
-            [Text("Armor Value", TextColour.Dim), Gain("-", TextColour.Dim, "+3"), Gain("-", TextColour.Dim, "+3")],
-            table.Rows[0]);
-        Assert.Equal(
-            [Text("Strength", TextColour.Dim), Gain("-", TextColour.Dim, "+2"), Gain("-", TextColour.Dim, "+4")],
-            table.Rows[1]);
-        Assert.Equivalent(new TooltipLine(Gain("Complexity: -", TextColour.Dim, "+20")), parts[^1], true);
+        AssertThat(table.Header).ContainsExactly(Cells(TextColour.Orange, "Stat", "Passive", "Active"));
+        AssertThat(table.Rows[0])
+            .ContainsExactly(
+                Text("Armor Value", TextColour.Dim),
+                Gain("-", TextColour.Dim, "+3"),
+                Gain("-", TextColour.Dim, "+3"));
+        AssertThat(table.Rows[1])
+            .ContainsExactly(
+                Text("Strength", TextColour.Dim),
+                Gain("-", TextColour.Dim, "+2"),
+                Gain("-", TextColour.Dim, "+4"));
+        TooltipParts.AssertEqual(parts[^1], new TooltipLine(Gain("Complexity: -", TextColour.Dim, "+20")));
     }
 
-    [Fact]
+    [TestCase]
     public void ComparingEmptySlot_ShowsJustTheHeadingForAnItemWithoutStats()
     {
         var parts = TooltipContent.ComparingEmptySlot(Details());
 
         var heading = new TooltipLine(new TooltipText("Empty slot", TextColour.Dim));
-        Assert.Equivalent(new TooltipPart[] { heading }, parts, true);
+        TooltipParts.AssertEqual(parts, heading);
     }
 
     private static IReadOnlyList<TooltipPart> Compare(ItemLook equipped, ItemLook held) =>
@@ -201,7 +204,7 @@ public class TooltipComparisonTests
         .. rows.Select(row => Line(TextColour.Yellow, row)),
     ];
 
-    private static TooltipTable Table(IReadOnlyList<TooltipPart> parts) => Assert.Single(parts.OfType<TooltipTable>());
+    private static TooltipTable Table(IReadOnlyList<TooltipPart> parts) => parts.OfType<TooltipTable>().Single();
 
     private static LogLine Line(TextColour font, string text) => new(text, (int)font);
 
