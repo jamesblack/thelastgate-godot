@@ -174,8 +174,8 @@ public partial class GameScreen : Control
         soundEffects.Volume = settings.SoundVolume;
         CursorShapes.Register(settings.CursorScale);
         gameState.Tooltips.Enabled = settings.ItemTooltips;
-        gameState.UseQueue.Enabled = settings.UseQueue;
-        gameState.GiveMore.Enabled = settings.GiveMore;
+        gameSession.UseQueue.Enabled = settings.UseQueue;
+        gameSession.GiveMore.Enabled = settings.GiveMore;
         pacer.Adaptive = settings.AdaptivePacing;
         screenGamma?.ShowGamma(settings.ScreenGamma);
         if (worldView != null)
@@ -259,13 +259,13 @@ public partial class GameScreen : Control
         gameState.SoundRequested += soundEffects.PlayServerSound;
         gameState.Tooltips.SendLook = connection.SendCommand;
         gameState.Tooltips.Enabled = clientSettings.ItemTooltips;
-        gameState.UseQueue.Enabled = clientSettings.UseQueue;
+        gameSession.UseQueue.Enabled = clientSettings.UseQueue;
 
         // A queued use has already clicked when it was queued.
-        gameState.UseQueue.Send = connection.SendCommand;
-        gameState.GiveMore.Enabled = clientSettings.GiveMore;
+        gameSession.UseQueue.Send = connection.SendCommand;
+        gameSession.GiveMore.Enabled = clientSettings.GiveMore;
         pacer.Adaptive = clientSettings.AdaptivePacing;
-        gameState.GiveMore.Send = SendAction;
+        gameSession.GiveMore.Send = SendAction;
         gameState.ShopRefresh.Send = connection.SendCommand;
         gameSession.AutoWalk.Send = connection.SendCommand;
         gameState.BuffWatch.Say = text =>
@@ -307,7 +307,7 @@ public partial class GameScreen : Control
     private void SendAction(byte[] packet)
     {
         soundEffects.PlayClickFor(packet);
-        gameState.UseQueue.Sent(packet);
+        gameSession.UseQueue.Sent(packet);
         if (ItemTooltips.IsManualLook(packet))
         {
             gameState.Tooltips.ManualLookSent();

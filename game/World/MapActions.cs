@@ -1,4 +1,5 @@
 using TheLastGate.Cursors;
+using TheLastGate.Game;
 using TheLastGate.Net;
 using TheLastGate.State;
 
@@ -8,6 +9,7 @@ public static class MapActions
 {
     public static MapAction Decide(
         GameState state,
+        GameSession session,
         (float Column, float Row)? point,
         MapKeys keys,
         MapButton button,
@@ -41,9 +43,9 @@ public static class MapActions
             MapKeys.Shift => ItemAction(state.Map, mouse, mouseTile, heldItem != 0, button),
             MapKeys.Ctrl => CharacterAction(state, mouse, mouseTile, button),
             MapKeys.Alt => SelectAction(state.Map, mouse, mouseTile, button, selectedCharacter),
-            MapKeys.Shift | MapKeys.Ctrl when state.GiveMore.Enabled && heldItem != 0 =>
+            MapKeys.Shift | MapKeys.Ctrl when session.GiveMore.Enabled && heldItem != 0 =>
                 GiveMoreAction(state.Map, mouse, mouseTile, button),
-            MapKeys.Shift | MapKeys.Ctrl when state.UseQueue.Enabled =>
+            MapKeys.Shift | MapKeys.Ctrl when session.UseQueue.Enabled =>
                 QueueAction(state.Map, mouse, mouseTile, heldItem != 0, button),
             _ => MapAction.Nothing,
         };

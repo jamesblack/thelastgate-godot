@@ -1,5 +1,6 @@
 using GdUnit4;
 using TheLastGate.Cursors;
+using TheLastGate.Game;
 using TheLastGate.Net;
 using TheLastGate.State;
 using TheLastGate.World;
@@ -22,6 +23,12 @@ public class MapActionsTests
     private const MapKeys QueueKeys = MapKeys.Shift | MapKeys.Ctrl;
     private static readonly (float Column, float Row) OnPlayerTile = (27.5f, 27.5f);
     private static readonly (float Column, float Row) NearTheNextTile = (27.9f, 27.5f);
+
+    private bool giveMore;
+    private bool useQueue;
+
+    [BeforeTest]
+    public void SwitchTheOptionsOff() => (giveMore, useQueue) = (false, false);
 
     [TestCase]
     public void NoKeys_HighlightsTheFloorWithTheWalkCursor()
@@ -140,7 +147,7 @@ public class MapActionsTests
     public void CtrlShift_GivingMoreWithNoCharacterNearDoesNothing()
     {
         var state = GiveMoreState(HeldItem(Candle));
-        state.UseQueue.Enabled = true;
+        useQueue = true;
 
         AssertThat(Decide(state, OnPlayerTile, QueueKeys, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
@@ -149,7 +156,7 @@ public class MapActionsTests
     public void CtrlShift_WithAnEmptyHandStillQueuesUses()
     {
         var state = GiveMoreState(Item(28, 27, MapFlags.IsUsable));
-        state.UseQueue.Enabled = true;
+        useQueue = true;
 
         AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.Left).QueuedUse.GetValueOrDefault())
             .IsEqual((OriginX + 28, OriginY + 27));
@@ -274,18 +281,16 @@ public class MapActionsTests
 
     private static int Tile(int column, int row) => column + row * WorldMap.Size;
 
-    private static GameState GiveMoreState(params TestCommand[] commands)
+    private GameState GiveMoreState(params TestCommand[] commands)
     {
-        var state = State(commands);
-        state.GiveMore.Enabled = true;
-        return state;
+        giveMore = true;
+        return State(commands);
     }
 
-    private static GameState QueueState(params TestCommand[] commands)
+    private GameState QueueState(params TestCommand[] commands)
     {
-        var state = State(commands);
-        state.UseQueue.Enabled = true;
-        return state;
+        useQueue = true;
+        return State(commands);
     }
 
     private static TestCommand Item(int column, int row, MapFlags extraFlags = MapFlags.None) =>
@@ -321,11 +326,16 @@ public class MapActionsTests
         return state;
     }
 
-    private static MapAction Decide(
+    private MapAction Decide(
         GameState state,
         (float Column, float Row)? point,
         MapKeys keys,
         MapButton button,
-        int selectedCharacter = 0) =>
-        MapActions.Decide(state, point, keys, button, selectedCharacter);
+        int selectedCharacter = 0)
+    {
+        var session = new GameSession(state);
+        session.GiveMore.Enabled = giveMore;
+        session.UseQueue.Enabled = useQueue;
+        return MapActions.Decide(state, session, point, keys, button, selectedCharacter);
+    }
 }

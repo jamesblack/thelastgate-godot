@@ -4,7 +4,6 @@ using TheLastGate.Items;
 using TheLastGate.Net;
 using TheLastGate.Stats;
 using TheLastGate.Windows;
-using TheLastGate.World;
 
 namespace TheLastGate.State;
 
@@ -16,7 +15,6 @@ public sealed class GameState
     {
         Tooltips = new ItemTooltips(Chat);
         BuffWatch = new BuffWatch(Player);
-        UseQueue = new UseQueue(Chat);
     }
 
     public PlayerState Player { get; } = new();
@@ -29,8 +27,6 @@ public sealed class GameState
     public StatPlan StatPlan { get; } = new();
     public BuffWatch BuffWatch { get; }
     public ShopRefresh ShopRefresh { get; } = new();
-    public UseQueue UseQueue { get; }
-    public GiveMore GiveMore { get; } = new();
     public CharacterLook? Look { get; internal set; }
     public CharacterLook Shop { get; internal set; } = new();
     public ShopKind? OpenShop { get; internal set; }

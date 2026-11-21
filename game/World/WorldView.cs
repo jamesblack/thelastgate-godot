@@ -285,7 +285,7 @@ public partial class WorldView : Node2D
     {
         var targets = AreaUse.Pick(State.Map, AreaTiles());
         Session.AutoWalk.Stop();
-        var queued = State.UseQueue.QueueArea(targets, State.Player.Target);
+        var queued = Session.UseQueue.QueueArea(targets, State.Player.Target);
         if (queued > 0)
         {
             PlayClick();
@@ -306,6 +306,7 @@ public partial class WorldView : Node2D
             ? MapAction.Nothing
             : MapActions.Decide(
                 State,
+                Session,
                 PointUnder(GetViewport().GetMousePosition()),
                 HeldKeys.Current(),
                 MapButton.None,
@@ -358,7 +359,7 @@ public partial class WorldView : Node2D
         var keys = (click.ShiftPressed ? MapKeys.Shift : MapKeys.None)
             | (click.CtrlPressed ? MapKeys.Ctrl : MapKeys.None)
             | (click.AltPressed ? MapKeys.Alt : MapKeys.None);
-        var action = MapActions.Decide(State, PointUnder(click.Position), keys, button, SelectedCharacter);
+        var action = MapActions.Decide(State, Session, PointUnder(click.Position), keys, button, SelectedCharacter);
         if (action.Command != null || action.NewSelection != null)
         {
             Session.AutoWalk.Stop();
@@ -366,7 +367,7 @@ public partial class WorldView : Node2D
 
         if (action.GivesMore)
         {
-            State.GiveMore.Gave(State.Player.HeldItem);
+            Session.GiveMore.Gave(State.Player.HeldItem);
         }
 
         if (action.Command is { } command)
@@ -377,7 +378,7 @@ public partial class WorldView : Node2D
 
         if (action.QueuedUse is { } queuedUse)
         {
-            if (State.UseQueue.Add(queuedUse.X, queuedUse.Y, State.Player.Target) == UseQueueAdd.Queued)
+            if (Session.UseQueue.Add(queuedUse.X, queuedUse.Y, State.Player.Target) == UseQueueAdd.Queued)
             {
                 PlayClick();
             }
@@ -400,9 +401,9 @@ public partial class WorldView : Node2D
         charactersShown.Clear();
         var target = State.Player.Target;
         var markerTiles = new MarkerTiles(NoTile, NoTile, NoTile, NoTile, 0);
-        if (queuedTiles.Length != State.UseQueue.Count)
+        if (queuedTiles.Length != Session.UseQueue.Count)
         {
-            queuedTiles = new int[State.UseQueue.Count];
+            queuedTiles = new int[Session.UseQueue.Count];
         }
 
         Array.Fill(queuedTiles, NoTile);
@@ -802,13 +803,13 @@ public partial class WorldView : Node2D
 
     private void FindQueuedUse(int tileIndex)
     {
-        if (State.UseQueue.Count == 0)
+        if (Session.UseQueue.Count == 0)
         {
             return;
         }
 
         ref readonly var tile = ref State.Map.Tiles[tileIndex];
-        var position = State.UseQueue.PositionOf(tile.X, tile.Y);
+        var position = Session.UseQueue.PositionOf(tile.X, tile.Y);
         if (position > 0 && !MapSpriteRules.HidesObjectsAndCharacters(
             tile,
             tileIndex % WorldMap.Size,

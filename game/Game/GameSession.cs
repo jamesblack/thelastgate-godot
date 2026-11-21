@@ -15,10 +15,11 @@ public sealed class GameSession
         this.state = state;
         TextWindows = new TextWindows(Pause);
         WaypointWindow = new WaypointWindow(Pause);
+        UseQueue = new UseQueue(state.Chat);
         state.MessageOfTheDay.LineAdded += MessageOfTheDayLines.Add;
         state.TickEnded += EndTheTick;
-        state.TargetChanged += state.UseQueue.TargetChanged;
-        state.HeldItemChanged += () => state.GiveMore.HeldItemChanged(state.Player);
+        state.TargetChanged += UseQueue.TargetChanged;
+        state.HeldItemChanged += () => GiveMore.HeldItemChanged(state.Player);
         state.ShopOpened += _ => CloseTheWindowsAShopReplaces();
         state.ShopClosedByServer += Pause.Start;
         state.WaypointsOffered += WaypointWindow.Open;
@@ -47,9 +48,9 @@ public sealed class GameSession
 
     public AutoWalk AutoWalk { get; } = new();
 
-    public UseQueue UseQueue => state.UseQueue;
+    public UseQueue UseQueue { get; }
 
-    public GiveMore GiveMore => state.GiveMore;
+    public GiveMore GiveMore { get; } = new();
 
     public bool CloseShop()
     {
