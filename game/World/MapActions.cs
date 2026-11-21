@@ -6,8 +6,6 @@ namespace TheLastGate.World;
 
 public static class MapActions
 {
-    private const int BuildItem = 46;
-
     public static MapAction Decide(
         GameState state,
         (float Column, float Row)? point,
@@ -22,13 +20,13 @@ public static class MapActions
 
         var mouseTile = (int)mouse.Column + (int)mouse.Row * WorldMap.Size;
         var heldItem = state.Player.HeldItem.Sprite;
-        if (heldItem == BuildItem)
+        if (MapIntents.HoldsBuildItem(state.Player))
         {
             return new MapAction(
                 mouseTile,
                 MapLayer.Floor,
                 MouseCursor.None,
-                ForTile(state.Map, mouseTile, button, ClientCommand.PickUp, ClientCommand.Drop),
+                OnTile(state.Map, mouseTile, button, MapIntents.PickUp, MapIntents.Drop),
                 null);
         }
 
@@ -38,10 +36,10 @@ public static class MapActions
                 mouseTile,
                 MapLayer.Floor,
                 MouseCursor.Walk,
-                ForTile(state.Map, mouseTile, button, ClientCommand.Move, ClientCommand.Turn),
+                OnTile(state.Map, mouseTile, button, MapIntents.Walk, MapIntents.Turn),
                 null),
             MapKeys.Shift => ItemAction(state.Map, mouse, mouseTile, heldItem != 0, button),
-            MapKeys.Ctrl => CharacterAction(state.Map, mouse, mouseTile, heldItem != 0, button),
+            MapKeys.Ctrl => CharacterAction(state, mouse, mouseTile, button),
             MapKeys.Alt => SelectAction(state.Map, mouse, mouseTile, button, selectedCharacter),
             MapKeys.Shift | MapKeys.Ctrl when state.GiveMore.Enabled && heldItem != 0 =>
                 GiveMoreAction(state.Map, mouse, mouseTile, button),
@@ -83,8 +81,8 @@ public static class MapActions
         {
             var command = button switch
             {
-                MapButton.Left => ForTile(map, tileIndex, usable ? ClientCommand.Use : ClientCommand.PickUp),
-                MapButton.Right => ForTile(map, tileIndex, ClientCommand.LookItem),
+                MapButton.Left => MapIntents.TakeOrUse(map.Tiles[tileIndex]),
+                MapButton.Right => MapIntents.LookAtItem(map.Tiles[tileIndex]),
                 _ => null,
             };
             return new MapAction(
@@ -97,7 +95,7 @@ public static class MapActions
 
         if (holdingItem)
         {
-            var command = button == MapButton.Left ? ForTile(map, tileIndex, ClientCommand.Drop) : null;
+            var command = button == MapButton.Left ? MapIntents.Drop(map.Tiles[tileIndex]) : null;
             return new MapAction(tileIndex, MapLayer.Floor, cursor, command, null);
         }
 
@@ -150,31 +148,27 @@ public static class MapActions
         }
 
         var gives = button == MapButton.Left;
-        var command = gives
-            ? MapCommandPackets.ForCharacter(ClientCommand.Give, map.Tiles[tileIndex].CharacterNumber)
-            : null;
+        var command = gives ? MapIntents.Give(map.Tiles[tileIndex].CharacterNumber) : null;
         return new MapAction(tileIndex, MapLayer.Character, MouseCursor.Give, command, null) { GivesMore = gives };
     }
 
     private static MapAction CharacterAction(
-        WorldMap map,
+        GameState state,
         (float Column, float Row) mouse,
         int mouseTile,
-        bool holdingItem,
         MapButton button)
     {
-        if (CharacterNear(map, mouse, mouseTile) is not { } tileIndex)
+        if (CharacterNear(state.Map, mouse, mouseTile) is not { } tileIndex)
         {
             return MapAction.Nothing;
         }
 
-        var number = map.Tiles[tileIndex].CharacterNumber;
+        var holdingItem = state.Player.HeldItem.Sprite != 0;
+        var number = state.Map.Tiles[tileIndex].CharacterNumber;
         var command = button switch
         {
-            MapButton.Left => MapCommandPackets.ForCharacter(
-                holdingItem ? ClientCommand.Give : ClientCommand.Attack,
-                number),
-            MapButton.Right => MapCommandPackets.ForCharacter(ClientCommand.Look, number),
+            MapButton.Left => MapIntents.AttackOrGive(state.Player, number),
+            MapButton.Right => MapIntents.LookAt(number),
             _ => null,
         };
         return new MapAction(
@@ -210,7 +204,7 @@ public static class MapActions
                 tileIndex,
                 MapLayer.Character,
                 MouseCursor.Select,
-                MapCommandPackets.ForCharacter(ClientCommand.Look, number),
+                MapIntents.LookAt(number),
                 null),
             _ => new MapAction(tileIndex, MapLayer.Character, MouseCursor.Select, null, null),
         };
@@ -228,22 +222,18 @@ public static class MapActions
             : null;
     }
 
-    private static byte[]? ForTile(
+    private static byte[]? OnTile(
         WorldMap map,
         int tileIndex,
         MapButton button,
-        ClientCommand onLeft,
-        ClientCommand onRight) =>
+        TileIntent onLeft,
+        TileIntent onRight) =>
         button switch
         {
-            MapButton.Left => ForTile(map, tileIndex, onLeft),
-            MapButton.Right => ForTile(map, tileIndex, onRight),
+            MapButton.Left => onLeft(map.Tiles[tileIndex]),
+            MapButton.Right => onRight(map.Tiles[tileIndex]),
             _ => null,
         };
 
-    private static byte[] ForTile(WorldMap map, int tileIndex, ClientCommand command)
-    {
-        ref readonly var tile = ref map.Tiles[tileIndex];
-        return MapCommandPackets.ForTile(command, tile.X, tile.Y);
-    }
+    private delegate byte[] TileIntent(in MapTile tile);
 }
