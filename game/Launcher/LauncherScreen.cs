@@ -79,7 +79,7 @@ public partial class LauncherScreen : Control
         ApplyWindowMode();
         ShowOptions();
 
-        record = CharacterStore.Load() ?? CharacterRecord.CreateNew();
+        record = CharacterStore.Load() ?? CharacterRecords.CreateNew();
         CharacterStore.Save(record);
         selectableClassCount = classOption.ItemCount;
         selectableGameModeCount = gameModeOption.ItemCount;
@@ -456,7 +456,7 @@ public partial class LauncherScreen : Control
     {
         try
         {
-            record = CharacterRecord.Read(filePath);
+            record = CharacterRecords.Read(filePath);
 
             // As in the current client, a character picked from a file sends its name and description again.
             record.Changed = true;

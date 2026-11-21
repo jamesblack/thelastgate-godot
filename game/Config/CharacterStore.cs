@@ -20,7 +20,7 @@ public static class CharacterStore
 
         try
         {
-            return CharacterRecord.Read(GlobalPath);
+            return CharacterRecords.Read(GlobalPath);
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException
             or InvalidDataException)

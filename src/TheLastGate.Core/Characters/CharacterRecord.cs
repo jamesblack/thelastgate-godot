@@ -47,24 +47,18 @@ public sealed class CharacterRecord
         set => bytes[LoginKey.Size + ChangedOffset] = (byte)(value ? 1 : 0);
     }
 
-    public bool SettingsRead => throw new NotImplementedException();
+    public bool SettingsRead { get; private set; }
 
-    public Span<byte> SettingsBlock => throw new NotImplementedException();
-
-    public CharacterSettings Settings() => CharacterSettings.Parse(bytes.AsSpan(LoginKey.Size));
-
-    public void Store(CharacterSettings settings) => settings.Write(bytes.AsSpan(LoginKey.Size));
+    public Span<byte> SettingsBlock => bytes.AsSpan(LoginKey.Size, SettingsSize);
 
     public static CharacterRecord CreateNew()
     {
         var record = new CharacterRecord();
         record.StartNewAccount();
-        record.Store(new CharacterSettings());
         return record;
     }
 
-    // A file that isn't exactly one record long keeps only its key and gets default settings,
-    // as the current client does.
+    // A file that isn't exactly one record long keeps only its key, and its settings count as unread.
     public static CharacterRecord Read(string filePath)
     {
         var fileBytes = File.ReadAllBytes(filePath);
@@ -77,11 +71,11 @@ public sealed class CharacterRecord
         if (fileBytes.Length == Size)
         {
             fileBytes.CopyTo(record.bytes, 0);
+            record.SettingsRead = true;
         }
         else
         {
             fileBytes.AsSpan(0, LoginKey.Size).CopyTo(record.bytes);
-            record.Store(new CharacterSettings());
         }
 
         return record;
