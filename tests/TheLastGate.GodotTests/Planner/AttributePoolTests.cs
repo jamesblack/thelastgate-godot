@@ -20,7 +20,7 @@ public class AttributePoolTests
         var pick = AttributePool.Cheapest(costs, 5);
 
         AssertThat(pick).IsNotNull();
-        AssertThat(pick.TotalCost).IsEqual(90);
+        AssertThat(pick!.TotalCost).IsEqual(90);
         AssertThat(pick.Points).ContainsExactly(2, 0, 0, 3, 0);
     }
 
@@ -33,7 +33,7 @@ public class AttributePoolTests
         var pick = AttributePool.Cheapest(costs, 5);
 
         AssertThat(pick).IsNotNull();
-        AssertThat(pick.Points[0]).IsEqual(0);
+        AssertThat(pick!.Points[0]).IsEqual(0);
         AssertThat(pick.TotalCost).IsEqual(50);
     }
 

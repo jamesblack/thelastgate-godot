@@ -267,7 +267,7 @@ public class BuffFocusTests
     private static void AssertSingle(FocusRoute? route, int raiseIndex, int points, int cost)
     {
         AssertThat(route).IsNotNull();
-        AssertThat(route.TotalCost).IsEqual(cost);
+        AssertThat(route!.TotalCost).IsEqual(cost);
         AssertThat(route.Raises).ContainsExactly(new FocusRaise(raiseIndex, points, cost));
     }
 }
