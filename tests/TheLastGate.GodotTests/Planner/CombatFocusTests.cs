@@ -1,5 +1,6 @@
 using GdUnit4;
 using TheLastGate.Planner;
+using TheLastGate.Rules;
 using TheLastGate.State;
 using static GdUnit4.Assertions;
 

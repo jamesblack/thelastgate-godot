@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using TheLastGate.State;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 internal enum EffectField
 {

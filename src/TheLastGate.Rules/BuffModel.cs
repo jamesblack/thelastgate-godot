@@ -5,7 +5,7 @@ using System.Linq;
 using TheLastGate.Buffs;
 using TheLastGate.State;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 public enum SkillScale
 {

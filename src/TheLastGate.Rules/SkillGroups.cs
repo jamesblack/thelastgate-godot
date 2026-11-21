@@ -1,6 +1,6 @@
 using System;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 [Flags]
 public enum SkillGroups

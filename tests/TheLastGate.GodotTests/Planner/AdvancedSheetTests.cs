@@ -1,6 +1,7 @@
 using GdUnit4;
 using TheLastGate.Buffs;
 using TheLastGate.Planner;
+using TheLastGate.Rules;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Planner;

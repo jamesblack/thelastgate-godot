@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheLastGate.State;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 public enum TreeClass
 {

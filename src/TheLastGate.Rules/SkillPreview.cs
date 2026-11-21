@@ -1,6 +1,6 @@
 using System;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 // A skill gains (the sum of its three attributes) / divisor from them, truncated, so a planned attribute raise only
 // shows on the skill once the sum crosses a multiple of the divisor.

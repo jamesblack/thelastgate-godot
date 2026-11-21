@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using TheLastGate.State;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 // In the order the Advanced window lists them.
 public enum Enchant

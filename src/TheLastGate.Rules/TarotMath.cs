@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 // A card's number is its bit in a tarot set; only these cards change anything the planner shows.
 public enum TarotCard

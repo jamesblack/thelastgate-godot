@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using TheLastGate.Rules;
 using TheLastGate.Stats;
 using TheLastGate.Windows;
 using OptionButton = Godot.OptionButton;

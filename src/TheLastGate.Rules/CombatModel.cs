@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.Rules;
 
 public enum CombatSkill
 {

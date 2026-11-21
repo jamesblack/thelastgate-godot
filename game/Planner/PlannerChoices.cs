@@ -3,6 +3,7 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using TheLastGate.Buffs;
+using TheLastGate.Rules;
 
 namespace TheLastGate.Planner;
 
