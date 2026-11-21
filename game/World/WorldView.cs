@@ -45,6 +45,7 @@ public partial class WorldView : Node2D
     private readonly Dictionary<MagicGlow, ShaderMaterial> glowMaterials = [];
     private readonly Dictionary<int, Nameplate> nameplatesByCharacter = [];
     private readonly SpriteLayer objects = new();
+    private readonly Dictionary<Node, Node> placedUnder = [];
     private readonly List<Sprite2D> queuedNumberMarkers = [];
     private readonly List<Sprite2D> queuedUseMarkers = [];
     private readonly Sprite2D[] shadowNodes = new Sprite2D[TileCount];
@@ -150,6 +151,9 @@ public partial class WorldView : Node2D
         GetTree().Root.SizeChanged += FitWorldCanvasToWindow;
         floorLayer = AddLayer();
         objectLayer = AddLayer();
+        floors.Holder = floorLayer;
+        objects.Holder = objectLayer;
+        characters.Holder = objectLayer;
         for (var row = WorldMap.Size - 1; row >= 0; row--)
         {
             for (var column = 0; column < WorldMap.Size; column++)
@@ -164,7 +168,7 @@ public partial class WorldView : Node2D
 
         foreach (var marker in (Sprite2D[])[walkMarker, attackMarker, giveMarker, actionMarker])
         {
-            floorLayer.AddChild(marker);
+            PutUnder(marker, floorLayer);
         }
     }
 
@@ -612,11 +616,7 @@ public partial class WorldView : Node2D
         }
 
         var characterNode = characters.Nodes[tileIndex];
-        if (nameplate.GetParent() != characterNode)
-        {
-            nameplate.GetParent()?.RemoveChild(nameplate);
-            characterNode.AddChild(nameplate);
-        }
+        PutUnder(nameplate, characterNode);
 
         charactersShown.Add(tile.CharacterNumber);
         nameplate.ZIndex = tileIndex == WorldMap.PlayerTile ? PlayerNameplateLayer : 0;
@@ -781,10 +781,10 @@ public partial class WorldView : Node2D
         {
             var useMarker = new Sprite2D { Centered = false, Visible = false };
             useMarker.Material = TintMaterial(SpriteTint.None, false, true);
-            floorLayer.AddChild(useMarker);
+            PutUnder(useMarker, floorLayer);
             queuedUseMarkers.Add(useMarker);
             var numberMarker = new Sprite2D { Centered = false, Visible = false };
-            floorLayer.AddChild(numberMarker);
+            PutUnder(numberMarker, floorLayer);
             queuedNumberMarkers.Add(numberMarker);
         }
 
@@ -825,13 +825,8 @@ public partial class WorldView : Node2D
         }
 
         var anchor = after.Nodes[tileIndex];
-        if (marker.GetParent() != anchor.GetParent())
-        {
-            marker.GetParent()?.RemoveChild(marker);
-            anchor.GetParent().AddChild(marker);
-        }
-
-        anchor.GetParent().MoveChild(marker, anchor.GetIndex() + (marker.GetIndex() < anchor.GetIndex() ? 0 : 1));
+        PutUnder(marker, after.Holder);
+        after.Holder.MoveChild(marker, anchor.GetIndex() + (marker.GetIndex() < anchor.GetIndex() ? 0 : 1));
         var (x, y) = IsometricProjection.TilePosition(tileIndex % WorldMap.Size, tileIndex / WorldMap.Size);
         var (offsetX, offsetY) = IsometricProjection.SpriteOffset(texture.GetWidth(), texture.GetHeight());
         marker.Texture = texture;
@@ -850,11 +845,7 @@ public partial class WorldView : Node2D
         }
 
         var characterNode = characters.Nodes[tileIndex];
-        if (marker.GetParent() != characterNode)
-        {
-            marker.GetParent()?.RemoveChild(marker);
-            characterNode.AddChild(marker);
-        }
+        PutUnder(marker, characterNode);
 
         characterNode.MoveChild(marker, childIndex);
         var (offsetX, offsetY) = IsometricProjection.SpriteOffset(texture.GetWidth(), texture.GetHeight());
@@ -882,9 +873,34 @@ public partial class WorldView : Node2D
                 continue;
             }
 
-            nameplate.GetParent()?.RemoveChild(nameplate);
+            TakeOut(nameplate);
             nameplatesByCharacter.Remove(characterNumber);
             freeNameplates.Push(nameplate);
+        }
+    }
+
+    // Nameplates and markers move between parents, and this view keeps track of where it put each one.
+    private void PutUnder(Node node, Node parent)
+    {
+        if (placedUnder.TryGetValue(node, out var current))
+        {
+            if (current == parent)
+            {
+                return;
+            }
+
+            current.RemoveChild(node);
+        }
+
+        parent.AddChild(node);
+        placedUnder[node] = parent;
+    }
+
+    private void TakeOut(Node node)
+    {
+        if (placedUnder.Remove(node, out var current))
+        {
+            current.RemoveChild(node);
         }
     }
 
@@ -1070,6 +1086,8 @@ public partial class WorldView : Node2D
 
     private sealed class SpriteLayer
     {
+        public Node2D Holder { get; set; } = null!;
+
         public Sprite2D[] Nodes { get; } = new Sprite2D[TileCount];
         public int[] ShownSprites { get; } = new int[TileCount];
         public int[] ShownEffects { get; } = new int[TileCount];

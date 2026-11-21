@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Characters;
@@ -614,7 +615,9 @@ public partial class LauncherScreen : Control
 
     private static void KeepButtonsTogether(ConfirmationDialog dialog)
     {
-        var buttonRow = (HBoxContainer)dialog.GetOkButton().GetParent();
+        var buttonRow = dialog.GetChildren(true)
+            .OfType<HBoxContainer>()
+            .First(row => row.IsAncestorOf(dialog.GetOkButton()));
         buttonRow.AddThemeConstantOverride("separation", DialogButtonGap);
         var okIndex = dialog.GetOkButton().GetIndex();
         var cancelIndex = dialog.GetCancelButton().GetIndex();

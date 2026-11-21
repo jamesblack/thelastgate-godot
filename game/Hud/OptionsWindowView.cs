@@ -35,6 +35,7 @@ public partial class OptionsWindowView : Panel, IHudContextUser
 
     private readonly Dictionary<string, Button> keyButtons = [];
     private readonly Dictionary<string, Label> keyWarnings = [];
+    private readonly Dictionary<HSlider, Label> valueLabels = [];
     private string? capturing;
     private IReadOnlyList<KeybindRow> shownKeybindRows = [];
     private SpriteLoader? sprites;
@@ -429,6 +430,18 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private void ShowCursorScale(float scale) =>
         ShowValue(CursorScale, scale.ToString("0.0", CultureInfo.InvariantCulture) + "x");
 
-    private static void ShowValue(HSlider slider, string text) =>
-        slider.GetParent().GetNode<Label>("Value").Text = text;
+    private void ShowValue(HSlider slider, string text) => ValueLabel(slider).Text = text;
+
+    // Each slider shares a line with the label that shows its value.
+    private Label ValueLabel(HSlider slider)
+    {
+        if (!valueLabels.TryGetValue(slider, out var label))
+        {
+            var line = FindChildren("Line", "", true, false).First(line => line.IsAncestorOf(slider));
+            label = line.GetNode<Label>("Value");
+            valueLabels[slider] = label;
+        }
+
+        return label;
+    }
 }

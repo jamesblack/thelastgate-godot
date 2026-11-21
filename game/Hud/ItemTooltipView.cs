@@ -23,15 +23,6 @@ public partial class ItemTooltipView : PanelContainer
     private ItemTooltipRequest? shown;
     private Func<ItemTooltipRequest?>? source;
 
-    public override void _EnterTree()
-    {
-        // Godot wraps a custom tooltip in a panel of its own; this tooltip draws its own background and border.
-        if (GetParent() is PopupPanel popup)
-        {
-            popup.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
-        }
-    }
-
     public override void _Process(double delta) => Update();
 
     public void Watch(Func<ItemTooltipRequest?> tooltipSource, IFontSet fontSet)
