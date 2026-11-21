@@ -48,6 +48,8 @@ public sealed class GameSession
 
     public AutoWalk AutoWalk { get; } = new();
 
+    public MapFrames MapFrames { get; } = new();
+
     public UseQueue UseQueue { get; }
 
     public GiveMore GiveMore { get; } = new();

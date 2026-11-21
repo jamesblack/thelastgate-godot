@@ -530,4 +530,23 @@ public class GameSessionTests
     ];
 
     private void Process(params TestCommand[] commands) => processor.Process(TestCommand.Payload(commands));
+
+    [TestCase]
+    public void EachTick_CountsTheTickAndWorksOutTheItemFrames()
+    {
+        const byte absoluteSetMap = 0x80;
+        const byte itemSpriteAndStatus = 0b0001_1000;
+        const int itemTile = 10 * WorldMap.Size + 10;
+        const int firstLoopStatus = 2;
+
+        Process(
+            TestCommand.Of(absoluteSetMap)
+                .Byte(itemSpriteAndStatus)
+                .UInt16(itemTile)
+                .UInt16(Potion)
+                .Byte(firstLoopStatus));
+
+        AssertThat(session.MapFrames.TickCount).IsEqual(2);
+        AssertThat(session.MapFrames.ItemSprite(itemTile)).IsEqual(Potion + 2);
+    }
 }
