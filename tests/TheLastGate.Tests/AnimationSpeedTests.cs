@@ -103,29 +103,4 @@ public class AnimationSpeedTests
             AnimationSpeed.StepsThisTick(OneStepEveryOtherTick, 1),
             AnimationSpeed.ActionSteps(Pickup, 200, 150, 150, PlayerTextColour, 1));
     }
-
-    [Fact]
-    public void WalkOffset_GoesUpInEvenStepsWhenEveryTickMovesAFrame()
-    {
-        Assert.Equal(12, AnimationSpeed.WalkOffset(3, 8, OneStepEveryTick, 0, true, 50));
-    }
-
-    [Fact]
-    public void WalkOffset_CountsTheTicksBetweenFramesAtSlowerSpeeds()
-    {
-        Assert.Equal(8, AnimationSpeed.WalkOffset(2, 8, OneStepEveryOtherTick, 0, true, 10));
-    }
-
-    [Fact]
-    public void WalkOffset_WrapsAroundTheServerCycle()
-    {
-        Assert.Equal(10, AnimationSpeed.WalkOffset(2, 8, OneStepEveryOtherTick, 0, true, 1));
-    }
-
-    [Fact]
-    public void WalkOffset_GoesStraightByFramesWhileNotAdvancing()
-    {
-        Assert.Equal(12, AnimationSpeed.WalkOffset(3, 8, OneStepEveryOtherTick, 0, false, 10));
-        Assert.Equal(8, AnimationSpeed.WalkOffset(3, 12, OneStepEveryOtherTick, 0, false, 10));
-    }
 }

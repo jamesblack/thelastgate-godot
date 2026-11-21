@@ -16,6 +16,10 @@ public sealed class MapFrames
 
     public int ItemSprite(int tileIndex) => itemSprites[tileIndex];
 
+    public int CharacterSprite(int tileIndex) => throw new NotImplementedException();
+
+    public (int X, int Y) CharacterOffset(int tileIndex) => throw new NotImplementedException();
+
     public void EndOfTick(WorldMap map)
     {
         TickCount++;
