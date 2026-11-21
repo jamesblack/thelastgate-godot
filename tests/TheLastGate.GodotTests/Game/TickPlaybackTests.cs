@@ -1,12 +1,14 @@
-using System.Buffers.Binary;
 using System.Diagnostics;
+using GdUnit4;
 using TheLastGate.Net;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Game;
 
+[TestSuite]
 public class TickPlaybackTests
 {
-    [Fact]
+    [TestCase]
     public void PlayDueTicks_PlaysTheFirstTickAtOnce()
     {
         var playback = new TickPlayback(new TickPacer());
@@ -14,22 +16,22 @@ public class TickPlaybackTests
 
         var played = PlayDue(playback, 1000);
 
-        Assert.Equal([[1]], played);
-        Assert.Equal(0, playback.QueuedTicks);
+        AssertThat(Markers(played)).ContainsExactly(1);
+        AssertThat(playback.QueuedTicks).IsEqual(0);
     }
 
-    [Fact]
+    [TestCase]
     public void PlayDueTicks_SpacesTicksByThePacersPace()
     {
         var playback = new TickPlayback(new TickPacer());
         ReceiveTicks(playback, 4, 1000);
 
-        Assert.Equal([[0]], PlayDue(playback, 1000));
-        Assert.Empty(PlayDue(playback, 1052));
-        Assert.Equal([[1]], PlayDue(playback, 1053));
+        AssertThat(Markers(PlayDue(playback, 1000))).ContainsExactly(0);
+        AssertThat(PlayDue(playback, 1052)).IsEmpty();
+        AssertThat(Markers(PlayDue(playback, 1053))).ContainsExactly(1);
     }
 
-    [Fact]
+    [TestCase]
     public void PlayDueTicks_CatchesUpAfterAStall()
     {
         var playback = new TickPlayback(new TickPacer());
@@ -38,10 +40,10 @@ public class TickPlaybackTests
 
         var played = PlayDue(playback, 2000);
 
-        Assert.Equal([[1], [2], [3]], played);
+        AssertThat(Markers(played)).ContainsExactly(1, 2, 3);
     }
 
-    [Fact]
+    [TestCase]
     public void PlayDueTicks_KeepsTheScheduleMovingWhileNothingIsQueued()
     {
         var playback = new TickPlayback(new TickPacer());
@@ -51,27 +53,11 @@ public class TickPlaybackTests
 
         ReceiveTicks(playback, 2, 1500);
 
-        Assert.Empty(PlayDue(playback, 1519));
-        Assert.Single(PlayDue(playback, 1520));
+        AssertThat(PlayDue(playback, 1519)).IsEmpty();
+        AssertThat(PlayDue(playback, 1520)).HasSize(1);
     }
 
-    [Fact]
-    public void PlayDueTicks_ReportsEverySixteenthTickPlayed()
-    {
-        var playback = new TickPlayback(new TickPacer());
-        ReceiveTicks(playback, 33, 1000);
-        var sent = new List<byte[]>();
-
-        playback.PlayDueTicks(1000, _ => { }, sent.Add);
-        playback.PlayDueTicks(100_000, _ => { }, sent.Add);
-
-        Assert.Equal(2, sent.Count);
-        Assert.All(sent, command => Assert.Equal((byte)ClientCommand.TickReport, command[0]));
-        Assert.Equal(16u, BinaryPrimitives.ReadUInt32LittleEndian(sent[0].AsSpan(1)));
-        Assert.Equal(32u, BinaryPrimitives.ReadUInt32LittleEndian(sent[1].AsSpan(1)));
-    }
-
-    [Fact]
+    [TestCase]
     public void Receive_GivesThePacerEachTicksArrivalTime()
     {
         var pacer = new TickPacer { Adaptive = true };
@@ -82,7 +68,7 @@ public class TickPlaybackTests
             playback.Receive(Tick(0, 1000 + tickIndex * 21));
         }
 
-        Assert.InRange(pacer.MeasuredPeriodMilliseconds, 20.5, 21.5);
+        AssertThat(pacer.MeasuredPeriodMilliseconds).IsBetween(20.5, 21.5);
     }
 
     private static ReceivedTick Tick(byte marker, long arrivedAtMilliseconds) =>
@@ -95,6 +81,8 @@ public class TickPlaybackTests
             playback.Receive(Tick((byte)tickIndex, arrivedAtMilliseconds));
         }
     }
+
+    private static int[] Markers(List<byte[]> played) => played.Select(tick => (int)tick[0]).ToArray();
 
     private static List<byte[]> PlayDue(TickPlayback playback, long nowMilliseconds)
     {

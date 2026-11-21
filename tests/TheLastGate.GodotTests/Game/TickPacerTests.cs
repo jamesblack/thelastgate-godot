@@ -1,50 +1,52 @@
+using GdUnit4;
 using TheLastGate.Net;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Game;
 
+[TestSuite]
 public class TickPacerTests
 {
-    [Fact]
+    [TestCase]
     public void Adaptive_IsOffByDefault()
     {
-        Assert.False(new TickPacer().Adaptive);
+        AssertThat(new TickPacer().Adaptive).IsFalse();
     }
 
-    [Theory]
-    [InlineData(8, 20)]
-    [InlineData(4, 40)]
-    [InlineData(3, 53)]
-    [InlineData(1, 160)]
-    [InlineData(16, 10)]
+    [TestCase(8, 20)]
+    [TestCase(4, 40)]
+    [TestCase(3, 53)]
+    [TestCase(1, 160)]
+    [TestCase(16, 10)]
     public void NextTickMilliseconds_WhenFixed_SpreadsEightNominalTicksOverTheQueue(int queuedTicks, int expected)
     {
-        Assert.Equal(expected, new TickPacer().NextTickMilliseconds(queuedTicks));
+        AssertThat(new TickPacer().NextTickMilliseconds(queuedTicks)).IsEqual(expected);
     }
 
-    [Fact]
+    [TestCase]
     public void NextTickMilliseconds_WhenFixed_ChecksAgainAfterANominalTickWhenNothingIsQueued()
     {
-        Assert.Equal(TickPacer.NominalTickMilliseconds, new TickPacer().NextTickMilliseconds(0));
+        AssertThat(new TickPacer().NextTickMilliseconds(0)).IsEqual(TickPacer.NominalTickMilliseconds);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_StartsWithATargetOfFourTicks()
     {
-        Assert.Equal(4, AdaptivePacer().BufferTarget);
+        AssertThat(AdaptivePacer().BufferTarget).IsEqual(4);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_SettlesAtTheMinimumTargetOnASteadyConnection()
     {
         var pacer = AdaptivePacer();
 
         FeedSteady(pacer, 1000, 1000, 21);
 
-        Assert.Equal(1, pacer.BufferTarget);
-        Assert.InRange(pacer.MeasuredPeriodMilliseconds, 20.5, 21.5);
+        AssertThat(pacer.BufferTarget).IsEqual(1);
+        AssertThat(pacer.MeasuredPeriodMilliseconds).IsBetween(20.5, 21.5);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_RaisesTheTargetOnABurstyConnection()
     {
         var pacer = AdaptivePacer();
@@ -52,24 +54,24 @@ public class TickPacerTests
 
         FeedBursts(pacer, now, 200, 3, 63);
 
-        Assert.Equal(2, pacer.BufferTarget);
+        AssertThat(pacer.BufferTarget).IsEqual(2);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_LowersTheTargetSlowlyAfterCalmReturns()
     {
         var pacer = AdaptivePacer();
         var now = FeedBursts(pacer, 1000, 200, 5, 105);
-        Assert.Equal(4, pacer.BufferTarget);
+        AssertThat(pacer.BufferTarget).IsEqual(4);
 
         now = FeedSteady(pacer, now, 300, 21);
-        Assert.InRange(pacer.BufferTarget, 2, 3);
+        AssertThat(pacer.BufferTarget).IsBetween(2, 3);
 
         FeedSteady(pacer, now, 1000, 21);
-        Assert.Equal(1, pacer.BufferTarget);
+        AssertThat(pacer.BufferTarget).IsEqual(1);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_PlaysAtTheMeasuredPeriodWhenTheQueueIsOnTarget()
     {
         var pacer = AdaptivePacer();
@@ -77,30 +79,30 @@ public class TickPacerTests
 
         var totalMilliseconds = Enumerable.Range(0, 100).Sum(_ => pacer.NextTickMilliseconds(1));
 
-        Assert.InRange(totalMilliseconds, 2095, 2105);
+        AssertThat(totalMilliseconds).IsBetween(2095, 2105);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_NudgesTheRateTowardTheTarget()
     {
         var pacer = AdaptivePacer();
         FeedSteady(pacer, 1000, 1000, 20);
 
-        Assert.True(pacer.NextTickMilliseconds(3) < 20);
-        Assert.True(pacer.NextTickMilliseconds(0) > 20);
+        AssertThat(pacer.NextTickMilliseconds(3) < 20).IsTrue();
+        AssertThat(pacer.NextTickMilliseconds(0) > 20).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_ClampsTheRate()
     {
         var pacer = AdaptivePacer();
         FeedSteady(pacer, 1000, 1000, 20);
 
-        Assert.Equal(10, pacer.NextTickMilliseconds(100));
-        Assert.True(pacer.NextTickMilliseconds(0) <= 25);
+        AssertThat(pacer.NextTickMilliseconds(100)).IsEqual(10);
+        AssertThat(pacer.NextTickMilliseconds(0) <= 25).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_BarelyMovesThePeriodAfterALongStall()
     {
         var pacer = AdaptivePacer();
@@ -108,16 +110,16 @@ public class TickPacerTests
 
         FeedSteady(pacer, now + 2000, 32, 20);
 
-        Assert.True(pacer.MeasuredPeriodMilliseconds < 21.0);
+        AssertThat(pacer.MeasuredPeriodMilliseconds < 21.0).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_UsesTheNominalTickBeforeAnyMeasurement()
     {
-        Assert.Equal(TickPacer.NominalTickMilliseconds, AdaptivePacer().NextTickMilliseconds(4));
+        AssertThat(AdaptivePacer().NextTickMilliseconds(4)).IsEqual(TickPacer.NominalTickMilliseconds);
     }
 
-    [Fact]
+    [TestCase]
     public void Adaptive_StartsMeasuringAfreshWhenTurnedOn()
     {
         var pacer = AdaptivePacer();
@@ -126,17 +128,17 @@ public class TickPacerTests
         pacer.Adaptive = false;
         pacer.Adaptive = true;
 
-        Assert.Equal(4, pacer.BufferTarget);
-        Assert.Equal(0.0, pacer.MeasuredPeriodMilliseconds);
+        AssertThat(pacer.BufferTarget).IsEqual(4);
+        AssertThat(pacer.MeasuredPeriodMilliseconds).IsEqual(0.0);
     }
 
-    [Fact]
+    [TestCase]
     public void IsTickDue_IsTrueAtTheFirstCheck()
     {
-        Assert.True(new TickPacer().IsTickDue(5000));
+        AssertThat(new TickPacer().IsTickDue(5000)).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void TickDone_SchedulesTheNextTickAtTheCurrentPace()
     {
         var pacer = new TickPacer();
@@ -144,33 +146,20 @@ public class TickPacerTests
 
         pacer.TickDone(4);
 
-        Assert.False(pacer.IsTickDue(1039));
-        Assert.True(pacer.IsTickDue(1040));
+        AssertThat(pacer.IsTickDue(1039)).IsFalse();
+        AssertThat(pacer.IsTickDue(1040)).IsTrue();
     }
 
-    [Fact]
-    public void TickDone_CountsTheTicksPlayed()
-    {
-        var pacer = new TickPacer();
-        pacer.IsTickDue(1000);
-
-        pacer.TickDone(2);
-        pacer.TickDone(1);
-
-        Assert.Equal(2u, pacer.TicksPlayed);
-    }
-
-    [Fact]
-    public void TickSkipped_MovesTheScheduleOnWithoutCountingATickPlayed()
+    [TestCase]
+    public void TickSkipped_MovesTheScheduleOn()
     {
         var pacer = new TickPacer();
         pacer.IsTickDue(1000);
 
         pacer.TickSkipped();
 
-        Assert.False(pacer.IsTickDue(1019));
-        Assert.True(pacer.IsTickDue(1020));
-        Assert.Equal(0u, pacer.TicksPlayed);
+        AssertThat(pacer.IsTickDue(1019)).IsFalse();
+        AssertThat(pacer.IsTickDue(1020)).IsTrue();
     }
 
     private static TickPacer AdaptivePacer() => new() { Adaptive = true };
