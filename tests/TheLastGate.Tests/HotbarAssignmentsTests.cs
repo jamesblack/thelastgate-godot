@@ -2,7 +2,6 @@ using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.Hotbar;
 using TheLastGate.State;
-using TheLastGate.Stats;
 
 namespace TheLastGate.Tests;
 

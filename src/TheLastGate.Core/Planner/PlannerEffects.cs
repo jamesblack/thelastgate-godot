@@ -1,3 +1,5 @@
+using TheLastGate.State;
+
 namespace TheLastGate.Planner;
 
 // Everything the class tree, corruptors, enchants and gear add to the planner's maths. Each amount is the total over

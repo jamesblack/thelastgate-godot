@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TheLastGate.Buffs;
+using TheLastGate.State;
 using TheLastGate.Stats;
 
 namespace TheLastGate.Planner;

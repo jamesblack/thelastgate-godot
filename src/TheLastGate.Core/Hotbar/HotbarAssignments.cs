@@ -3,7 +3,6 @@ using System.Linq;
 using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.State;
-using TheLastGate.Stats;
 
 namespace TheLastGate.Hotbar;
 

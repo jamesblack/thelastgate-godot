@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace TheLastGate.Planner;
+namespace TheLastGate.State;
 
 // The server's order for the five attributes.
 public enum AttributeSlot

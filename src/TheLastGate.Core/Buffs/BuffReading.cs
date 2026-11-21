@@ -1,5 +1,5 @@
 using System;
-using TheLastGate.Planner;
+using TheLastGate.State;
 
 namespace TheLastGate.Buffs;
 

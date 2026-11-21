@@ -1,4 +1,4 @@
-namespace TheLastGate.Stats;
+namespace TheLastGate.State;
 
 public static class Kindred
 {

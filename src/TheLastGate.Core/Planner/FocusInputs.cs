@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TheLastGate.Buffs;
+using TheLastGate.State;
 using TheLastGate.Stats;
 
 namespace TheLastGate.Planner;

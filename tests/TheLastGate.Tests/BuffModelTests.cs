@@ -1,5 +1,6 @@
 using TheLastGate.Buffs;
 using TheLastGate.Planner;
+using TheLastGate.State;
 
 namespace TheLastGate.Tests;
 
