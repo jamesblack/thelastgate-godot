@@ -4,7 +4,7 @@ using TheLastGate.State;
 
 namespace TheLastGate.Tests;
 
-public class ItemTooltipWiringTests
+public class ItemLookWiringTests
 {
     private const int ChunkLength = 15;
     private const ushort Sword = 100;
@@ -13,9 +13,9 @@ public class ItemTooltipWiringTests
     private readonly List<byte[]> sent = [];
     private readonly GameState state = new();
 
-    public ItemTooltipWiringTests()
+    public ItemLookWiringTests()
     {
-        state.Tooltips.SendLook = sent.Add;
+        state.ItemLooks.SendLook = sent.Add;
         processor = new TickProcessor(state);
     }
 
@@ -43,7 +43,7 @@ public class ItemTooltipWiringTests
     }
 
     [Fact]
-    public void TheAnswer_IsKeptOutOfTheChatLogAndBecomesTheTooltip()
+    public void TheAnswer_IsKeptOutOfTheChatLogAndBecomesTheSlotsLook()
     {
         FetchSlotFive();
 
@@ -58,7 +58,7 @@ public class ItemTooltipWiringTests
         Assert.Empty(state.Chat.Lines);
         Assert.Equal(
             [new LogLine("Steel Sword:", 6), new LogLine("A sword.", 1), new LogLine("", 1)],
-            state.Tooltips.For(TooltipSlotKind.Inventory, 5)?.Lines);
+            state.ItemLooks.For(ItemSlotKind.Inventory, 5)?.Lines);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class ItemTooltipWiringTests
     }
 
     [Fact]
-    public void TheLoginTick_ForgetsEveryTooltip()
+    public void TheLoginTick_ForgetsEveryLook()
     {
         FetchSlotFive();
         Process(
@@ -85,7 +85,7 @@ public class ItemTooltipWiringTests
 
         Process(TestCommand.Of(ServerCommand.Tick).Byte(0));
 
-        Assert.Null(state.Tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Null(state.ItemLooks.For(ItemSlotKind.Inventory, 5));
     }
 
     private static TestCommand InventoryItem(uint slot, ushort sprite) =>

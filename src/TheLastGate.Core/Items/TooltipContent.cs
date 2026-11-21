@@ -58,9 +58,9 @@ public static class TooltipContent
     private static readonly string[] ConditionLabels =
         ["Perfect condition", "Showing signs of age", "Fairly old", "Old", "Very old and battered"];
 
-    public static IReadOnlyList<TooltipPart> For(ItemTooltip tooltip) => Body(tooltip, null);
+    public static IReadOnlyList<TooltipPart> For(ItemLook look) => Body(look, null);
 
-    public static IReadOnlyList<TooltipPart> Comparing(ItemTooltip equipped, ItemDetails? held)
+    public static IReadOnlyList<TooltipPart> Comparing(ItemLook equipped, ItemDetails? held)
     {
         var parts = new List<TooltipPart> { Line("Equipped", TextColour.Dim) };
         parts.AddRange(Body(equipped, held));
@@ -84,10 +84,10 @@ public static class TooltipContent
     }
 
     // `held` is the item that would replace this one, when comparing.
-    private static List<TooltipPart> Body(ItemTooltip tooltip, ItemDetails? held)
+    private static List<TooltipPart> Body(ItemLook look, ItemDetails? held)
     {
-        var lines = tooltip.Lines;
-        var details = tooltip.Details;
+        var lines = look.Lines;
+        var details = look.Details;
         var parts = new List<TooltipPart> { new TooltipLine(new TooltipText(details.Name, Colour(lines[0]))) };
         if (details.DescriptionLine is { } description && lines[description].Text.Length > 0)
         {

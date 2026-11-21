@@ -262,7 +262,7 @@ public class TooltipContentTests
     }
 
     private static IReadOnlyList<TooltipPart> Content(params LogLine[] lines) =>
-        TooltipContent.For(new ItemTooltip(lines, ItemDetailsParser.Parse(lines)));
+        TooltipContent.For(new ItemLook(lines, ItemDetailsParser.Parse(lines)));
 
     private static TooltipTable Table(IReadOnlyList<TooltipPart> parts) => Assert.Single(parts.OfType<TooltipTable>());
 

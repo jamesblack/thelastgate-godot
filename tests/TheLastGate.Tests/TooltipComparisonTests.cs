@@ -179,16 +179,16 @@ public class TooltipComparisonTests
         Assert.Equivalent(new TooltipPart[] { heading }, parts, true);
     }
 
-    private static IReadOnlyList<TooltipPart> Compare(ItemTooltip equipped, ItemTooltip held) =>
+    private static IReadOnlyList<TooltipPart> Compare(ItemLook equipped, ItemLook held) =>
         TooltipContent.Comparing(equipped, held.Details);
 
-    private static IReadOnlyList<TooltipPart> Compare(ItemTooltip equipped, ItemDetails held) =>
+    private static IReadOnlyList<TooltipPart> Compare(ItemLook equipped, ItemDetails held) =>
         TooltipContent.Comparing(equipped, held);
 
-    private static ItemTooltip Item(params string[] rows)
+    private static ItemLook Item(params string[] rows)
     {
         var lines = Lines(rows);
-        return new ItemTooltip(lines, ItemDetailsParser.Parse(lines));
+        return new ItemLook(lines, ItemDetailsParser.Parse(lines));
     }
 
     private static ItemDetails Details(params string[] rows) => ItemDetailsParser.Parse(Lines(rows));

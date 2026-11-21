@@ -57,10 +57,10 @@ public sealed class TickProcessor(GameState state)
                 case ServerCommand.SetCharacterItem
                     or ServerCommand.SetCharacterWorn
                     or ServerCommand.SetCharacterSpell:
-                    ItemCommands.Apply(state.Player, state.Tooltips, state.BuffWatch, command);
+                    ItemCommands.Apply(state.Player, state.ItemLooks, state.BuffWatch, command);
                     break;
                 case ServerCommand.SetCharacterHeldItem:
-                    ItemCommands.Apply(state.Player, state.Tooltips, state.BuffWatch, command);
+                    ItemCommands.Apply(state.Player, state.ItemLooks, state.BuffWatch, command);
                     state.ReportHeldItemChanged();
                     break;
                 case ServerCommand.SetMap3
@@ -83,7 +83,7 @@ public sealed class TickProcessor(GameState state)
                         state.Chat,
                         command,
                         command[0] - (byte)ServerCommand.Log0,
-                        line => state.BuffWatch.Capture(line) || state.Tooltips.Offer(line));
+                        line => state.BuffWatch.Capture(line) || state.ItemLooks.Offer(line));
                     break;
                 case >= ServerCommand.MessageOfTheDay0 and <= ServerCommand.MessageOfTheDay3:
                     LogCommands.Apply(
@@ -123,7 +123,7 @@ public sealed class TickProcessor(GameState state)
                     tickReader.Skip(1);
                     state.ServerTick = tickReader.ReadByte();
                     // The server only sends Tick when a login starts the tick stream.
-                    state.Tooltips.Reset();
+                    state.ItemLooks.Reset();
                     state.BuffWatch.Reset();
                     break;
                 default:
@@ -131,7 +131,7 @@ public sealed class TickProcessor(GameState state)
             }
         }
 
-        state.Tooltips.EndOfTick();
+        state.ItemLooks.EndOfTick();
         state.BuffWatch.EndOfTick();
         state.WatchViewCentre();
         state.NameRequests.EndOfTick(state.Map, state.Names);

@@ -6,17 +6,17 @@ using TheLastGate.State;
 
 namespace TheLastGate.Items;
 
-public enum TooltipSlotKind
+public enum ItemSlotKind
 {
     Inventory,
     Worn,
 }
 
-public sealed record ItemTooltip(IReadOnlyList<LogLine> Lines, ItemDetails Details);
+public sealed record ItemLook(IReadOnlyList<LogLine> Lines, ItemDetails Details);
 
 // Keeps the look text of every inventory and worn slot, fetched quietly in the background whenever a slot changes,
 // so a tooltip can show the moment the mouse rests on an item.
-public sealed class ItemTooltips
+public sealed class ItemLooks
 {
     private const int DebounceTicks = 4;
     private const int RefetchTicks = 40;
@@ -27,7 +27,7 @@ public sealed class ItemTooltips
     private const int MaxHandoffs = 8;
     private const int ActionOffset = 1;
 
-    private readonly List<(TooltipSlotKind Kind, int Index, int Sprite)> arrivals = [];
+    private readonly List<(ItemSlotKind Kind, int Index, int Sprite)> arrivals = [];
     private readonly LookCapture capture;
     private readonly TextLog chat;
     private readonly HashSet<int> headerless = [];
@@ -38,11 +38,11 @@ public sealed class ItemTooltips
     private int handoffTick;
     private Slot held = new();
     private int heldSprite;
-    private (TooltipSlotKind Kind, int Index)? hovered;
     private int pauseUntil;
+    private (ItemSlotKind Kind, int Index)? preferred;
     private int tick;
 
-    public ItemTooltips(TextLog chat)
+    public ItemLooks(TextLog chat)
     {
         this.chat = chat;
         capture = new LookCapture(Resolve);
@@ -53,7 +53,7 @@ public sealed class ItemTooltips
 
     public bool Enabled { get; set; } = true;
 
-    public ItemTooltip? Held => heldSprite != 0 && held.Sprite == heldSprite ? held.Text : null;
+    public ItemLook? Held => heldSprite != 0 && held.Sprite == heldSprite ? held.Text : null;
 
     public static bool IsManualLook(byte[] packet) =>
         packet.Length > ActionOffset + sizeof(int)
@@ -79,7 +79,7 @@ public sealed class ItemTooltips
         pauseUntil = 0;
     }
 
-    public void SlotChanged(TooltipSlotKind kind, int index, int sprite)
+    public void SlotChanged(ItemSlotKind kind, int index, int sprite)
     {
         if (SlotFor(kind, index) is not { } slot)
         {
@@ -194,11 +194,11 @@ public sealed class ItemTooltips
         FetchNext();
     }
 
-    public void SetHovered(TooltipSlotKind kind, int index) => hovered = (kind, index);
+    public void Prefer(ItemSlotKind kind, int index) => preferred = (kind, index);
 
-    public void ClearHovered() => hovered = null;
+    public void ClearPreference() => preferred = null;
 
-    public ItemTooltip? For(TooltipSlotKind kind, int index) =>
+    public ItemLook? For(ItemSlotKind kind, int index) =>
         SlotFor(kind, index) is { State: not SlotState.Empty } slot ? slot.Text : null;
 
     private static void Refill(Slot[] slots)
@@ -209,9 +209,9 @@ public sealed class ItemTooltips
         }
     }
 
-    private Slot? SlotFor(TooltipSlotKind kind, int index)
+    private Slot? SlotFor(ItemSlotKind kind, int index)
     {
-        var slots = kind == TooltipSlotKind.Worn ? worn : inventory;
+        var slots = kind == ItemSlotKind.Worn ? worn : inventory;
         return index >= 0 && index < slots.Length ? slots[index] : null;
     }
 
@@ -233,7 +233,7 @@ public sealed class ItemTooltips
         {
             if (reply.Shared.Count > 0)
             {
-                slot.Text = new ItemTooltip(reply.Shared, ItemDetailsParser.Parse(reply.Shared));
+                slot.Text = new ItemLook(reply.Shared, ItemDetailsParser.Parse(reply.Shared));
                 slot.State = SlotState.Ready;
                 slot.Failures = 0;
             }
@@ -306,7 +306,7 @@ public sealed class ItemTooltips
             return;
         }
 
-        if (hovered is { } hover && SlotFor(hover.Kind, hover.Index) is { } hoveredSlot && ReadyToFetch(hoveredSlot))
+        if (preferred is { } hover && SlotFor(hover.Kind, hover.Index) is { } hoveredSlot && ReadyToFetch(hoveredSlot))
         {
             StartFetch(hover.Kind, hover.Index, hoveredSlot);
             return;
@@ -314,13 +314,13 @@ public sealed class ItemTooltips
 
         if (FirstReady(worn) is { } wornIndex)
         {
-            StartFetch(TooltipSlotKind.Worn, wornIndex, worn[wornIndex]);
+            StartFetch(ItemSlotKind.Worn, wornIndex, worn[wornIndex]);
             return;
         }
 
         if (FirstReady(inventory) is { } inventoryIndex)
         {
-            StartFetch(TooltipSlotKind.Inventory, inventoryIndex, inventory[inventoryIndex]);
+            StartFetch(ItemSlotKind.Inventory, inventoryIndex, inventory[inventoryIndex]);
         }
     }
 
@@ -334,11 +334,11 @@ public sealed class ItemTooltips
         slot.State == SlotState.Dirty && tick - slot.DirtyTick >= DebounceTicks
         && tick - slot.LastFetchTick >= RefetchTicks;
 
-    private void StartFetch(TooltipSlotKind kind, int index, Slot slot)
+    private void StartFetch(ItemSlotKind kind, int index, Slot slot)
     {
         flight = new Flight(kind, index, tick);
         slot.LastFetchTick = tick;
-        var action = kind == TooltipSlotKind.Worn ? InventoryAction.LookAtGear : InventoryAction.LookAtItem;
+        var action = kind == ItemSlotKind.Worn ? InventoryAction.LookAtGear : InventoryAction.LookAtItem;
         SendLook(InventoryPackets.For(action, index, 0));
         SendLook(InventoryPackets.For(action, index, 0));
         capture.ExpectFetch(tick);
@@ -352,9 +352,9 @@ public sealed class ItemTooltips
         Failed,
     }
 
-    private sealed class Flight(TooltipSlotKind kind, int index, int sentTick)
+    private sealed class Flight(ItemSlotKind kind, int index, int sentTick)
     {
-        public TooltipSlotKind Kind { get; } = kind;
+        public ItemSlotKind Kind { get; } = kind;
         public int Index { get; } = index;
         public int SentTick { get; } = sentTick;
         public bool Stale { get; set; }
@@ -364,7 +364,7 @@ public sealed class ItemTooltips
     {
         public SlotState State { get; set; }
         public int Sprite { get; set; }
-        public ItemTooltip? Text { get; set; }
+        public ItemLook? Text { get; set; }
         public int DirtyTick { get; set; }
         public int LastFetchTick { get; set; }
         public int Failures { get; set; }

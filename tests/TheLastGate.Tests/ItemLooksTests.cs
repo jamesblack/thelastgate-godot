@@ -5,7 +5,7 @@ using TheLastGate.State;
 
 namespace TheLastGate.Tests;
 
-public class ItemTooltipsTests
+public class ItemLooksTests
 {
     private const int Sword = 100;
     private const int Shield = 200;
@@ -16,15 +16,15 @@ public class ItemTooltipsTests
     private static readonly LogLine Chatter = new("Bob: hello", (int)TextColour.Blue);
 
     private readonly TextLog chat = new();
+    private readonly ItemLooks looks;
     private readonly List<byte[]> sent = [];
-    private readonly ItemTooltips tooltips;
 
-    public ItemTooltipsTests() => tooltips = new ItemTooltips(chat) { SendLook = sent.Add };
+    public ItemLooksTests() => looks = new ItemLooks(chat) { SendLook = sent.Add };
 
     [Fact]
     public void SlotChanged_FetchesTheSlotQuietlyOnceItsUpdatesSettle()
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
         Ticks(3);
         Assert.Empty(sent);
@@ -33,24 +33,24 @@ public class ItemTooltipsTests
     }
 
     [Fact]
-    public void For_ShowsTheAnsweredLookAsTheSlotsTooltip()
+    public void For_KeepsTheAnsweredLookForTheSlot()
     {
         FetchInventorySlot(5, Sword);
 
         Answer(Header, Description);
 
-        var tooltip = tooltips.For(TooltipSlotKind.Inventory, 5);
-        Assert.NotNull(tooltip);
-        Assert.Equal([Header, Description], tooltip.Lines);
-        Assert.Equal("Steel Sword", tooltip.Details.Name);
+        var look = looks.For(ItemSlotKind.Inventory, 5);
+        Assert.NotNull(look);
+        Assert.Equal([Header, Description], look.Lines);
+        Assert.Equal("Steel Sword", look.Details.Name);
         Assert.Empty(chat.Lines);
     }
 
     [Fact]
     public void EndOfTick_FetchesWornSlotsBeforeTheInventory()
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 0, Sword);
-        tooltips.SlotChanged(TooltipSlotKind.Worn, 8, Shield);
+        looks.SlotChanged(ItemSlotKind.Inventory, 0, Sword);
+        looks.SlotChanged(ItemSlotKind.Worn, 8, Shield);
 
         Ticks(4);
 
@@ -58,11 +58,11 @@ public class ItemTooltipsTests
     }
 
     [Fact]
-    public void EndOfTick_FetchesTheHoveredSlotFirst()
+    public void EndOfTick_FetchesThePreferredSlotFirst()
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 3, Sword);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 9, Shield);
-        tooltips.SetHovered(TooltipSlotKind.Inventory, 9);
+        looks.SlotChanged(ItemSlotKind.Inventory, 3, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 9, Shield);
+        looks.Prefer(ItemSlotKind.Inventory, 9);
 
         Ticks(4);
 
@@ -72,8 +72,8 @@ public class ItemTooltipsTests
     [Fact]
     public void EndOfTick_FetchesOneSlotAtATime()
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 3, Sword);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 9, Shield);
+        looks.SlotChanged(ItemSlotKind.Inventory, 3, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 9, Shield);
 
         Ticks(20);
 
@@ -83,13 +83,13 @@ public class ItemTooltipsTests
     [Fact]
     public void EndOfTick_FetchesNothingWhileAnItemIsHeld()
     {
-        tooltips.HeldItemChanged(Shield);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.HeldItemChanged(Shield);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
         Ticks(20);
         Assert.Empty(sent);
 
-        tooltips.HeldItemChanged(0);
+        looks.HeldItemChanged(0);
         Ticks(1);
         Assert.Equal([ItemLook(5), ItemLook(5)], sent);
     }
@@ -97,8 +97,8 @@ public class ItemTooltipsTests
     [Fact]
     public void EndOfTick_FetchesNothingWhenTooltipsAreTurnedOff()
     {
-        tooltips.Enabled = false;
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.Enabled = false;
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
         Ticks(20);
 
@@ -110,7 +110,7 @@ public class ItemTooltipsTests
     {
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
         sent.Clear();
 
         Ticks(38);
@@ -125,9 +125,9 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
-        Assert.NotNull(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.NotNull(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Fact]
@@ -136,9 +136,9 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Shield);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Shield);
 
-        Assert.Null(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Fact]
@@ -147,9 +147,9 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, 0);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
 
-        Assert.Null(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Fact]
@@ -158,7 +158,7 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
 
         Ticks(31);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 8, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 8, Sword);
         Ticks(100);
 
         Assert.Equal(2, sent.Count);
@@ -183,12 +183,12 @@ public class ItemTooltipsTests
     {
         FetchInventorySlot(5, Sword);
 
-        tooltips.Offer(Header);
-        tooltips.Offer(Description);
-        tooltips.Offer(Chatter);
-        tooltips.Offer(Header);
-        tooltips.Offer(Description);
-        tooltips.EndOfTick();
+        looks.Offer(Header);
+        looks.Offer(Description);
+        looks.Offer(Chatter);
+        looks.Offer(Header);
+        looks.Offer(Description);
+        looks.EndOfTick();
 
         Assert.Equal([Chatter], chat.Lines);
     }
@@ -198,7 +198,7 @@ public class ItemTooltipsTests
     {
         FetchInventorySlot(5, Sword);
 
-        tooltips.Offer(Header);
+        looks.Offer(Header);
         Ticks(31);
 
         Assert.Equal([Header], chat.Lines);
@@ -209,20 +209,20 @@ public class ItemTooltipsTests
     {
         FetchInventorySlot(5, Sword);
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Shield);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Shield);
         Answer(Header, Description);
 
-        Assert.Null(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Fact]
     public void ManualLookSent_LetsTheReplyThroughAndPausesFetching()
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
-        tooltips.ManualLookSent();
+        looks.ManualLookSent();
 
-        Assert.False(tooltips.Offer(Header));
+        Assert.False(looks.Offer(Header));
         Ticks(19);
         Assert.Empty(sent);
         Ticks(1);
@@ -235,11 +235,11 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, 0);
-        tooltips.HeldItemChanged(Sword);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
+        looks.HeldItemChanged(Sword);
 
-        Assert.Equal([Header, Description], tooltips.Held?.Lines);
-        Assert.Null(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Equal([Header, Description], looks.Held?.Lines);
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Fact]
@@ -247,15 +247,15 @@ public class ItemTooltipsTests
     {
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 5, 0);
-        tooltips.HeldItemChanged(Sword);
-        tooltips.EndOfTick();
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
+        looks.HeldItemChanged(Sword);
+        looks.EndOfTick();
 
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, 7, Sword);
-        tooltips.HeldItemChanged(0);
+        looks.SlotChanged(ItemSlotKind.Inventory, 7, Sword);
+        looks.HeldItemChanged(0);
 
-        Assert.Equal([Header, Description], tooltips.For(TooltipSlotKind.Inventory, 7)?.Lines);
-        Assert.Null(tooltips.Held);
+        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Inventory, 7)?.Lines);
+        Assert.Null(looks.Held);
     }
 
     [Fact]
@@ -264,16 +264,16 @@ public class ItemTooltipsTests
         FetchInventorySlot(5, Sword);
         Answer(Header, Description);
 
-        tooltips.Reset();
+        looks.Reset();
 
-        Assert.Null(tooltips.For(TooltipSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
     }
 
     [Theory]
     [MemberData(nameof(Packets))]
     public void IsManualLook_SpotsTheLooksAPlayerAsksFor(byte[] packet, bool manualLook)
     {
-        Assert.Equal(manualLook, ItemTooltips.IsManualLook(packet));
+        Assert.Equal(manualLook, ItemLooks.IsManualLook(packet));
     }
 
     public static TheoryData<byte[], bool> Packets() => new()
@@ -292,13 +292,13 @@ public class ItemTooltipsTests
     {
         for (var tick = 0; tick < count; tick++)
         {
-            tooltips.EndOfTick();
+            looks.EndOfTick();
         }
     }
 
     private void FetchInventorySlot(int slot, int sprite)
     {
-        tooltips.SlotChanged(TooltipSlotKind.Inventory, slot, sprite);
+        looks.SlotChanged(ItemSlotKind.Inventory, slot, sprite);
         Ticks(4);
     }
 
@@ -306,16 +306,16 @@ public class ItemTooltipsTests
     {
         foreach (var line in reply.Concat(reply))
         {
-            tooltips.Offer(line);
+            looks.Offer(line);
         }
 
-        tooltips.EndOfTick();
+        looks.EndOfTick();
     }
 
     private void AnswerDifferently()
     {
-        tooltips.Offer(Header);
-        tooltips.Offer(OtherHeader);
-        tooltips.EndOfTick();
+        looks.Offer(Header);
+        looks.Offer(OtherHeader);
+        looks.EndOfTick();
     }
 }

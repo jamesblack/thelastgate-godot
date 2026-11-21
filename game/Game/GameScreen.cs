@@ -173,7 +173,7 @@ public partial class GameScreen : Control
         soundEffects.Enabled = settings.SoundEnabled;
         soundEffects.Volume = settings.SoundVolume;
         CursorShapes.Register(settings.CursorScale);
-        gameState.Tooltips.Enabled = settings.ItemTooltips;
+        gameState.ItemLooks.Enabled = settings.ItemTooltips;
         gameSession.UseQueue.Enabled = settings.UseQueue;
         gameSession.GiveMore.Enabled = settings.GiveMore;
         pacer.Adaptive = settings.AdaptivePacing;
@@ -257,8 +257,8 @@ public partial class GameScreen : Control
         hudView.Show(gameState, gameSession, fonts, SendAction);
         soundEffects.Start(DataPaths.Root(), clientSettings.SoundEnabled, clientSettings.SoundVolume);
         gameState.SoundRequested += soundEffects.PlayServerSound;
-        gameState.Tooltips.SendLook = connection.SendCommand;
-        gameState.Tooltips.Enabled = clientSettings.ItemTooltips;
+        gameState.ItemLooks.SendLook = connection.SendCommand;
+        gameState.ItemLooks.Enabled = clientSettings.ItemTooltips;
         gameSession.UseQueue.Enabled = clientSettings.UseQueue;
 
         // A queued use has already clicked when it was queued.
@@ -309,9 +309,9 @@ public partial class GameScreen : Control
     {
         soundEffects.PlayClickFor(packet);
         gameSession.UseQueue.Sent(packet);
-        if (ItemTooltips.IsManualLook(packet))
+        if (ItemLooks.IsManualLook(packet))
         {
-            gameState.Tooltips.ManualLookSent();
+            gameState.ItemLooks.ManualLookSent();
         }
 
         // Using or looking at something lets the next window the server opens stay open.

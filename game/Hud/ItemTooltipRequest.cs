@@ -12,7 +12,7 @@ public enum ItemTooltipMode
 }
 
 // What a slot's tooltip shows right now; the tooltip rebuilds itself whenever this changes.
-public sealed record ItemTooltipRequest(ItemTooltipMode Mode, ItemTooltip? Item, ItemTooltip? Held)
+public sealed record ItemTooltipRequest(ItemTooltipMode Mode, ItemLook? Item, ItemLook? Held)
 {
     private const string FetchingText = "Fetching item details...";
 

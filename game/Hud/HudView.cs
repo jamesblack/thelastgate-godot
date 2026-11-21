@@ -198,8 +198,8 @@ public partial class HudView : Control
             var wornView = GetNode<ItemSlotView>("%" + slot);
             wornView.Released += button => ClickWorn(clickedSlot, button);
             wornView.TooltipRequest = () => WornTooltip(clickedSlot);
-            wornView.MouseEntered += () => state?.Tooltips.SetHovered(TooltipSlotKind.Worn, (int)clickedSlot);
-            wornView.MouseExited += () => state?.Tooltips.ClearHovered();
+            wornView.MouseEntered += () => state?.ItemLooks.Prefer(ItemSlotKind.Worn, (int)clickedSlot);
+            wornView.MouseExited += () => state?.ItemLooks.ClearPreference();
         }
 
         GetNode<ClickArea>("%SwapSetButton").Released += ClickSwapSet;
@@ -246,8 +246,8 @@ public partial class HudView : Control
             var cellView = inventory.GetChild<ItemSlotView>(cell);
             cellView.TooltipRequest = () => InventoryTooltip(inventory.SlotShownIn(clickedCell));
             cellView.MouseEntered += () =>
-                state?.Tooltips.SetHovered(TooltipSlotKind.Inventory, inventory.SlotShownIn(clickedCell));
-            cellView.MouseExited += () => state?.Tooltips.ClearHovered();
+                state?.ItemLooks.Prefer(ItemSlotKind.Inventory, inventory.SlotShownIn(clickedCell));
+            cellView.MouseExited += () => state?.ItemLooks.ClearPreference();
             cellView.Released +=
                 button => ClickInventory(inventory.SlotShownIn(clickedCell), button);
         }
@@ -1588,29 +1588,29 @@ public partial class HudView : Control
 
     private ItemTooltipRequest? InventoryTooltip(int slot)
     {
-        if (!itemTooltipsShown || state is not { Tooltips.Enabled: true } shown || shown.Player.HeldItem.Sprite != 0
+        if (!itemTooltipsShown || state is not { ItemLooks.Enabled: true } shown || shown.Player.HeldItem.Sprite != 0
             || shown.Player.Inventory[slot].Sprite == 0)
         {
             return null;
         }
 
-        return new ItemTooltipRequest(ItemTooltipMode.Plain, shown.Tooltips.For(TooltipSlotKind.Inventory, slot), null);
+        return new ItemTooltipRequest(ItemTooltipMode.Plain, shown.ItemLooks.For(ItemSlotKind.Inventory, slot), null);
     }
 
     // Holding an item over gear it fits compares the two; gear it doesn't fit shows its usual tooltip.
     private ItemTooltipRequest? WornTooltip(WornSlot slot)
     {
-        if (!itemTooltipsShown || state is not { Tooltips.Enabled: true } shown)
+        if (!itemTooltipsShown || state is not { ItemLooks.Enabled: true } shown)
         {
             return null;
         }
 
         var player = shown.Player;
         var filled = player.Worn[(int)slot].Sprite != 0;
-        var worn = shown.Tooltips.For(TooltipSlotKind.Worn, (int)slot);
+        var worn = shown.ItemLooks.For(ItemSlotKind.Worn, (int)slot);
         if (player.HeldItem.Sprite != 0 && !Equipment.BlockedSlots(player.HeldItem, player.Worn).Contains(slot))
         {
-            var held = shown.Tooltips.Held;
+            var held = shown.ItemLooks.Held;
             if (filled)
             {
                 return new ItemTooltipRequest(ItemTooltipMode.Comparing, worn, held);

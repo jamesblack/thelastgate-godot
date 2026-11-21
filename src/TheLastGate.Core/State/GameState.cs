@@ -14,7 +14,7 @@ public sealed class GameState
 
     public GameState()
     {
-        Tooltips = new ItemTooltips(Chat);
+        ItemLooks = new ItemLooks(Chat);
         BuffWatch = new BuffWatch(Player);
         Chat.LineAdded += line => WatchSpectating(() => spectateWatch.LogLine(line.Text, ViewCentreCharacter));
     }
@@ -25,7 +25,7 @@ public sealed class GameState
     public TextLog MessageOfTheDay { get; } = new();
     public Terminology Terminology { get; } = new();
     public CharacterNames Names { get; } = new();
-    public ItemTooltips Tooltips { get; }
+    public ItemLooks ItemLooks { get; }
     public StatPlan StatPlan { get; } = new();
     public BuffWatch BuffWatch { get; }
     public ShopRefresh ShopRefresh { get; } = new();
