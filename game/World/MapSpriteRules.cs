@@ -69,8 +69,8 @@ public static class MapSpriteRules
             : itemSprite;
     }
 
-    public static int CharacterSprite(in MapTile tile, int column, int row) =>
-        HidesObjectsAndCharacters(tile, column, row) ? 0 : tile.AnimatedCharacterSprite;
+    public static int CharacterSprite(in MapTile tile, int characterSprite, int column, int row) =>
+        HidesObjectsAndCharacters(tile, column, row) ? 0 : characterSprite;
 
     public static SpriteTint EnvironmentTint(in MapTile tile)
     {

@@ -29,7 +29,7 @@ public static class MapEffects
     public static int DeathSprite(in MapTile tile) =>
         Step(tile.Flags, MapFlags.Death, DeathShift) is var step and not 0 ? FirstDeath + step - 1 : 0;
 
-    public static bool DeathFollowsCharacter(in MapTile tile) => tile.AnimatedCharacterSprite != 0;
+    public static bool DeathFollowsCharacter(int characterSprite) => characterSprite != 0;
 
     public static int TombSprite(in MapTile tile) =>
         Step(tile.Flags, MapFlags.Tomb, TombShift) is var step and not 0 ? FirstTomb + step - 1 : 0;

@@ -457,7 +457,7 @@ public partial class HudView : Control
         }
         else
         {
-            ShowPortrait(player, state.Map.Tiles[WorldMap.PlayerTile].AnimatedCharacterSprite);
+            ShowPortrait(player, gameSession.MapFrames.CharacterSprite(WorldMap.PlayerTile));
         }
 
         foreach (var node in GetNode("%OptionButtons").GetChildren())

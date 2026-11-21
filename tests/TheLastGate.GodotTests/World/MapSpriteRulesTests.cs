@@ -181,7 +181,9 @@ public class MapSpriteRulesTests
     {
         var (tile, _) = Tile(BehindThePlayer, character: 3021);
 
-        AssertThat(MapSpriteRules.CharacterSprite(tile, BehindThePlayer.Column, BehindThePlayer.Row)).IsEqual(3021);
+        AssertThat(
+                MapSpriteRules.CharacterSprite(tile, tile.CharacterSprite, BehindThePlayer.Column, BehindThePlayer.Row))
+            .IsEqual(3021);
     }
 
     [TestCase]
@@ -190,8 +192,20 @@ public class MapSpriteRulesTests
         var (invisible, _) = Tile(BehindThePlayer, flags: MapFlags.Invisible, character: 3021);
         var (cornered, _) = Tile(HiddenCorner, character: 3021);
 
-        AssertThat(MapSpriteRules.CharacterSprite(invisible, BehindThePlayer.Column, BehindThePlayer.Row)).IsEqual(0);
-        AssertThat(MapSpriteRules.CharacterSprite(cornered, HiddenCorner.Column, HiddenCorner.Row)).IsEqual(0);
+        AssertThat(
+                MapSpriteRules.CharacterSprite(
+                    invisible,
+                    invisible.CharacterSprite,
+                    BehindThePlayer.Column,
+                    BehindThePlayer.Row))
+            .IsEqual(0);
+        AssertThat(
+                MapSpriteRules.CharacterSprite(
+                    cornered,
+                    cornered.CharacterSprite,
+                    HiddenCorner.Column,
+                    HiddenCorner.Row))
+            .IsEqual(0);
     }
 
     private static int ObjectAt(

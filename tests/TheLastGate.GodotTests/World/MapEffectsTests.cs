@@ -37,8 +37,8 @@ public class MapEffectsTests
     [TestCase]
     public void DeathFollowsCharacter_OnlyWhileACharacterIsDrawnThere()
     {
-        AssertThat(MapEffects.DeathFollowsCharacter(Tile(MapFlags.None, 3000))).IsTrue();
-        AssertThat(MapEffects.DeathFollowsCharacter(Tile(MapFlags.None))).IsFalse();
+        AssertThat(MapEffects.DeathFollowsCharacter(3000)).IsTrue();
+        AssertThat(MapEffects.DeathFollowsCharacter(0)).IsFalse();
     }
 
     [TestCase(1u, 240)]

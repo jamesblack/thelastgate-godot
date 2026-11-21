@@ -1,8 +1,8 @@
-using TheLastGate.World;
+using TheLastGate.State;
 
 namespace TheLastGate.Tests;
 
-public class AnimationSpeedTests
+public class StatusSpeedTests
 {
     private const int Attack = 0;
     private const int Pickup = 1;
@@ -20,12 +20,12 @@ public class AnimationSpeedTests
     public void StepsThisTick_SpreadsTheStepsOfASpeedEvenlyOverTheCycle(int speed)
     {
         var total = 0;
-        for (var serverTick = 0; serverTick < AnimationSpeed.CycleLength; serverTick++)
+        for (var serverTick = 0; serverTick < StatusSpeed.CycleLength; serverTick++)
         {
-            total += AnimationSpeed.StepsThisTick(speed, serverTick);
+            total += StatusSpeed.StepsThisTick(speed, serverTick);
         }
 
-        Assert.Equal(AnimationSpeed.SpeedMax - speed, total);
+        Assert.Equal(StatusSpeed.SpeedMax - speed, total);
     }
 
     [Theory]
@@ -37,7 +37,7 @@ public class AnimationSpeedTests
     [InlineData(0, 1, 2)]
     public void StepsThisTick_RoundsLikeTheCurrentClient(int speed, int serverTick, int steps)
     {
-        Assert.Equal(steps, AnimationSpeed.StepsThisTick(speed, serverTick));
+        Assert.Equal(steps, StatusSpeed.StepsThisTick(speed, serverTick));
     }
 
     [Theory]
@@ -51,8 +51,8 @@ public class AnimationSpeedTests
     public void StepsThisTick_AddsTheInstantCastBonusToFastCasts(int speed, int bonus)
     {
         Assert.Equal(
-            AnimationSpeed.StepsThisTick(speed, 3) + bonus,
-            AnimationSpeed.StepsThisTick(speed, 3, true));
+            StatusSpeed.StepsThisTick(speed, 3) + bonus,
+            StatusSpeed.StepsThisTick(speed, 3, true));
     }
 
     [Theory]
@@ -64,8 +64,8 @@ public class AnimationSpeedTests
         for (var serverTick = 0; serverTick < 4; serverTick++)
         {
             Assert.Equal(
-                AnimationSpeed.StepsThisTick(effectiveSpeed, serverTick),
-                AnimationSpeed.MoveSteps(speed, moveSpeed, serverTick));
+                StatusSpeed.StepsThisTick(effectiveSpeed, serverTick),
+                StatusSpeed.MoveSteps(speed, moveSpeed, serverTick));
         }
     }
 
@@ -75,32 +75,32 @@ public class AnimationSpeedTests
     public void ActionSteps_AttacksUseTheSpeedLessTheAttackSpeed(int action)
     {
         Assert.Equal(
-            AnimationSpeed.StepsThisTick(OneStepEveryOtherTick, 1),
-            AnimationSpeed.ActionSteps(action, 250, 50, 999, 0, 1));
+            StatusSpeed.StepsThisTick(OneStepEveryOtherTick, 1),
+            StatusSpeed.ActionSteps(action, 250, 50, 999, 0, 1));
     }
 
     [Fact]
     public void ActionSteps_CastsUseTwiceTheSpeedLessTwiceTheCastSpeed()
     {
         Assert.Equal(
-            AnimationSpeed.StepsThisTick(OneStepEveryTick, 1),
-            AnimationSpeed.ActionSteps(Cast, 100, 999, 50, 0, 1));
+            StatusSpeed.StepsThisTick(OneStepEveryTick, 1),
+            StatusSpeed.ActionSteps(Cast, 100, 999, 50, 0, 1));
     }
 
     [Fact]
     public void ActionSteps_GivesOnlyPlayersTheInstantCastBonus()
     {
         Assert.Equal(
-            AnimationSpeed.StepsThisTick(0, 1, true),
-            AnimationSpeed.ActionSteps(Cast, 50, 0, 50, PlayerTextColour, 1));
-        Assert.Equal(AnimationSpeed.StepsThisTick(0, 1), AnimationSpeed.ActionSteps(Cast, 50, 0, 50, 0, 1));
+            StatusSpeed.StepsThisTick(0, 1, true),
+            StatusSpeed.ActionSteps(Cast, 50, 0, 50, PlayerTextColour, 1));
+        Assert.Equal(StatusSpeed.StepsThisTick(0, 1), StatusSpeed.ActionSteps(Cast, 50, 0, 50, 0, 1));
     }
 
     [Fact]
     public void ActionSteps_OtherActionsUseTheSpeedAlone()
     {
         Assert.Equal(
-            AnimationSpeed.StepsThisTick(OneStepEveryOtherTick, 1),
-            AnimationSpeed.ActionSteps(Pickup, 200, 150, 150, PlayerTextColour, 1));
+            StatusSpeed.StepsThisTick(OneStepEveryOtherTick, 1),
+            StatusSpeed.ActionSteps(Pickup, 200, 150, 150, PlayerTextColour, 1));
     }
 }

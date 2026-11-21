@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using TheLastGate.Net.Handlers;
 using TheLastGate.State;
-using TheLastGate.World;
 
 namespace TheLastGate.Net;
 
@@ -141,7 +140,7 @@ public sealed class TickProcessor(GameState state)
         var tiles = state.Map.Tiles;
         for (var tileIndex = 0; tileIndex < tiles.Length; tileIndex++)
         {
-            CharacterAnimation.Advance(ref tiles[tileIndex], state.ServerTick, reportUnusualData);
+            CharacterStatuses.Advance(ref tiles[tileIndex], state.ServerTick, reportUnusualData);
         }
     }
 }

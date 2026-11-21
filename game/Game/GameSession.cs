@@ -116,7 +116,7 @@ public sealed class GameSession
         }
 
         Pause.EndOfTick();
-        MapFrames.EndOfTick(state.Map);
+        MapFrames.EndOfTick(state.Map, state.ServerTick);
         AutoWalk.EndOfTick(state.Map);
     }
 }

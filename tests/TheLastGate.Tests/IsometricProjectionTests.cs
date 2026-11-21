@@ -1,4 +1,3 @@
-using TheLastGate.Net;
 using TheLastGate.State;
 using TheLastGate.World;
 
@@ -7,8 +6,6 @@ namespace TheLastGate.Tests;
 public class IsometricProjectionTests
 {
     private const int Centre = WorldMap.Size / 2;
-    private const byte AbsoluteSetMap = 0x80;
-    private const byte CharacterLookAndSpeed = 0b0110_0000;
 
     [Fact]
     public void TilePosition_PutsTheFirstTileWhereTheCurrentClientDoes()
@@ -46,29 +43,12 @@ public class IsometricProjectionTests
     [Fact]
     public void MapShift_StaysPutWhileThePlayerStandsStill()
     {
-        Assert.Equal((IsometricProjection.BaseMapShiftX, 0), IsometricProjection.MapShift(MapWithPlayer(1)));
+        Assert.Equal((IsometricProjection.BaseMapShiftX, 0), IsometricProjection.MapShift((0, 0)));
     }
 
     [Fact]
     public void MapShift_SlidesTheMapAgainstThePlayersWalk()
     {
-        Assert.Equal((IsometricProjection.BaseMapShiftX + 6, -3), IsometricProjection.MapShift(MapWithPlayer(19)));
-    }
-
-    private static WorldMap MapWithPlayer(int status)
-    {
-        var state = new GameState();
-        new TickProcessor(state).Process(
-            TestCommand.Payload(
-                TestCommand.Of(AbsoluteSetMap)
-                    .Byte(CharacterLookAndSpeed)
-                    .UInt16(Centre * WorldMap.Size + Centre)
-                    .UInt16(2000)
-                    .Bytes((byte)status, 0)
-                    .UInt16(1)
-                    .UInt16(1)
-                    .UInt16(100),
-                TestCommand.Of(ServerCommand.Tick).Byte(50)));
-        return state.Map;
+        Assert.Equal((IsometricProjection.BaseMapShiftX + 6, -3), IsometricProjection.MapShift((-6, 3)));
     }
 }

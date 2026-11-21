@@ -23,9 +23,6 @@ public static class IsometricProjection
     public static (int X, int Y) SpriteOffset(int width, int height) =>
         (-(width / TileSize) * HalfTile, -(height / TileSize) * TileSize);
 
-    public static (int X, int Y) MapShift(WorldMap map)
-    {
-        ref readonly var player = ref map.Tiles[WorldMap.PlayerTile];
-        return (BaseMapShiftX - player.CharacterOffsetX, -player.CharacterOffsetY);
-    }
+    public static (int X, int Y) MapShift((int X, int Y) playerOffset) =>
+        (BaseMapShiftX - playerOffset.X, -playerOffset.Y);
 }

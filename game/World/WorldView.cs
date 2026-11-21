@@ -414,7 +414,7 @@ public partial class WorldView : Node2D
             FindQueuedUse(tileIndex);
             ShowEffects(tileIndex);
             ref readonly var tile = ref State.Map.Tiles[tileIndex];
-            PlaceCharacter(tileIndex, new Vector2I(tile.CharacterOffsetX, tile.CharacterOffsetY));
+            PlaceCharacter(tileIndex, DrawnOffset(tileIndex));
             ShowNameplate(tileIndex);
         }
 
@@ -454,11 +454,11 @@ public partial class WorldView : Node2D
             ref readonly var tile = ref State.Map.Tiles[tileIndex];
             if (characters.ShownSprites[tileIndex] != 0)
             {
-                glidePoints[tile.CharacterNumber] = SnappedPoint(tile);
+                glidePoints[tile.CharacterNumber] = SnappedPoint(tileIndex);
             }
         }
 
-        var player = SnappedPoint(State.Map.Tiles[WorldMap.PlayerTile]);
+        var player = SnappedPoint(WorldMap.PlayerTile);
         glide.Record(player, glidePoints, (long)Time.GetTicksMsec(), ticks, tickMilliseconds);
         glideRecorded = true;
     }
@@ -557,7 +557,7 @@ public partial class WorldView : Node2D
                 environmentTint,
                 IsHighlighted(tileIndex, MapLayer.Object) || areaGlows.Contains(tileIndex),
                 false));
-        var character = MapSpriteRules.CharacterSprite(tile, column, row);
+        var character = MapSpriteRules.CharacterSprite(tile, Session.MapFrames.CharacterSprite(tileIndex), column, row);
         var selected = character != 0 && SelectedCharacter != 0 && tile.CharacterNumber == SelectedCharacter;
         Show(
             characters,
@@ -663,9 +663,10 @@ public partial class WorldView : Node2D
         }
 
         ShowBuilderMarkers(effects.BuilderMarkers, builderMarkers);
-        var characterOffset = new Vector2(tile.CharacterOffsetX, tile.CharacterOffsetY);
+        Vector2 characterOffset = DrawnOffset(tileIndex);
         ShowEffect(effects.Injury, injury, characterOffset);
-        ShowEffect(effects.Death, death, MapEffects.DeathFollowsCharacter(tile) ? characterOffset : Vector2.Zero);
+        var deathFollows = MapEffects.DeathFollowsCharacter(Session.MapFrames.CharacterSprite(tileIndex));
+        ShowEffect(effects.Death, death, deathFollows ? characterOffset : Vector2.Zero);
         ShowEffect(effects.Tomb, tomb, Vector2.Zero);
         var brightness = SpriteLighting.Brightness(tile.Light, WorldGamma);
         effects.Tomb.SelfModulate = new Color(brightness, brightness, brightness);
@@ -902,13 +903,23 @@ public partial class WorldView : Node2D
         characters.Nodes[tileIndex].Position = new Vector2(x + offset.X, y + offset.Y);
     }
 
-    private static GlidePoint SnappedPoint(in MapTile tile) =>
-        MovementGlide.WorldPoint(tile.X, tile.Y, tile.CharacterOffsetX, tile.CharacterOffsetY);
+    private Vector2I DrawnOffset(int tileIndex)
+    {
+        var (x, y) = Session.MapFrames.CharacterOffset(tileIndex);
+        return new Vector2I(x, y);
+    }
+
+    private GlidePoint SnappedPoint(int tileIndex)
+    {
+        ref readonly var tile = ref State.Map.Tiles[tileIndex];
+        var (offsetX, offsetY) = Session.MapFrames.CharacterOffset(tileIndex);
+        return MovementGlide.WorldPoint(tile.X, tile.Y, offsetX, offsetY);
+    }
 
     // How far behind its latest position something is drawn. Left unrounded, so steps stay smooth on big windows.
-    private static Vector2 Lag(GlidePoint shown, in MapTile tile)
+    private Vector2 Lag(GlidePoint shown, int tileIndex)
     {
-        var lag = shown - SnappedPoint(tile);
+        var lag = shown - SnappedPoint(tileIndex);
         return new Vector2(lag.X, lag.Y);
     }
 
@@ -931,7 +942,7 @@ public partial class WorldView : Node2D
     private void PlaceGlided()
     {
         var now = (long)Time.GetTicksMsec();
-        var shift = new Vector2(mapShift.X, mapShift.Y) - Lag(glide.Player(now), State.Map.Tiles[WorldMap.PlayerTile]);
+        var shift = new Vector2(mapShift.X, mapShift.Y) - Lag(glide.Player(now), WorldMap.PlayerTile);
         floorLayer.Position = shift;
         objectLayer.Position = shift;
 
@@ -943,9 +954,9 @@ public partial class WorldView : Node2D
                 continue;
             }
 
-            var lag = Lag(shown, tile);
+            var lag = Lag(shown, tileIndex);
             var (x, y) = IsometricProjection.TilePosition(tileIndex % WorldMap.Size, tileIndex / WorldMap.Size);
-            var snapped = new Vector2(x + tile.CharacterOffsetX, y + tile.CharacterOffsetY);
+            var snapped = new Vector2(x, y) + DrawnOffset(tileIndex);
             characters.Nodes[tileIndex].Position = snapped + lag;
             if (tileEffects[tileIndex] is { } effects)
             {
@@ -956,7 +967,7 @@ public partial class WorldView : Node2D
 
     private void ShiftMapUnderPlayer()
     {
-        var (x, y) = IsometricProjection.MapShift(State.Map);
+        var (x, y) = IsometricProjection.MapShift(Session.MapFrames.CharacterOffset(WorldMap.PlayerTile));
         var offset = new Vector2I(x, y);
         if (offset == mapShift)
         {
