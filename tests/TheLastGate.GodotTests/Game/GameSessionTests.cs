@@ -159,10 +159,10 @@ public class GameSessionTests
     [TestCase]
     public void TheServersSetTarget_ReachesTheUseQueue()
     {
-        state.UseQueue.Enabled = true;
-        state.UseQueue.Send = sent.Add;
-        state.UseQueue.Add(10, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
-        state.UseQueue.Add(11, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
+        session.UseQueue.Enabled = true;
+        session.UseQueue.Send = sent.Add;
+        session.UseQueue.Add(10, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
+        session.UseQueue.Add(11, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
 
         Process(SetTarget(Using, 1, 1));
         Process(SetTarget(Idle, 0, 0));
@@ -177,7 +177,7 @@ public class GameSessionTests
         GiveMore();
         Process(InventoryItem(4, Bread, Plain), InventoryItem(7, Potion, Enchanted), InventoryItem(9, Potion, Plain));
         Hold(Potion, Plain);
-        state.GiveMore.Gave(state.Player.HeldItem);
+        session.GiveMore.Gave(state.Player.HeldItem);
 
         Hold(0, 0);
 
@@ -191,7 +191,7 @@ public class GameSessionTests
         GiveMore();
         Process(InventoryItem(9, Potion, Plain));
         Hold(Potion, Plain);
-        state.GiveMore.Gave(state.Player.HeldItem);
+        session.GiveMore.Gave(state.Player.HeldItem);
         Hold(0, 0);
         Hold(Bread, Plain);
 
@@ -206,7 +206,7 @@ public class GameSessionTests
         GiveMore();
         Process(InventoryItem(4, Bread, Plain));
         Hold(Potion, Plain);
-        state.GiveMore.Gave(state.Player.HeldItem);
+        session.GiveMore.Gave(state.Player.HeldItem);
 
         Hold(0, 0);
 
@@ -219,7 +219,7 @@ public class GameSessionTests
         GiveMore();
         Process(InventoryItem(9, Potion, Plain));
         Hold(Potion, Plain);
-        state.GiveMore.Gave(state.Player.HeldItem);
+        session.GiveMore.Gave(state.Player.HeldItem);
 
         Hold(Bread, Plain);
 
@@ -232,10 +232,10 @@ public class GameSessionTests
         GiveMore();
         Process(InventoryItem(9, Potion, Plain));
         Hold(Potion, Plain);
-        state.GiveMore.Gave(state.Player.HeldItem);
+        session.GiveMore.Gave(state.Player.HeldItem);
 
-        state.GiveMore.Enabled = false;
-        state.GiveMore.Enabled = true;
+        session.GiveMore.Enabled = false;
+        session.GiveMore.Enabled = true;
         Hold(0, 0);
 
         AssertThat(sent).IsEmpty();
@@ -482,8 +482,8 @@ public class GameSessionTests
 
     private void GiveMore()
     {
-        state.GiveMore.Enabled = true;
-        state.GiveMore.Send = sent.Add;
+        session.GiveMore.Enabled = true;
+        session.GiveMore.Send = sent.Add;
     }
 
     private void Hold(int sprite, int properties) =>

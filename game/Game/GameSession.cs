@@ -1,3 +1,4 @@
+using TheLastGate.Items;
 using TheLastGate.Session;
 using TheLastGate.State;
 using TheLastGate.Windows;
@@ -45,6 +46,10 @@ public sealed class GameSession
     public bool SessionStatsOpen { get; set; }
 
     public AutoWalk AutoWalk { get; } = new();
+
+    public UseQueue UseQueue => state.UseQueue;
+
+    public GiveMore GiveMore => state.GiveMore;
 
     public bool CloseShop()
     {
