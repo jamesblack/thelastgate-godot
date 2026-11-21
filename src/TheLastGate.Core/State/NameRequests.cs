@@ -1,7 +1,7 @@
+using System;
 using TheLastGate.Net;
-using TheLastGate.State;
 
-namespace TheLastGate.World;
+namespace TheLastGate.State;
 
 public sealed class NameRequests
 {
@@ -10,6 +10,8 @@ public sealed class NameRequests
     private int pendingId;
     private int pendingNumber;
     private int ticksSinceRequest;
+
+    public Action<byte[]> Send { get; set; } = _ => { };
 
     public void NoteUnknown(int characterNumber, int characterId) =>
         (pendingNumber, pendingId) = (characterNumber, characterId);

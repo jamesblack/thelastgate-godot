@@ -29,6 +29,7 @@ public sealed class GameState
     public StatPlan StatPlan { get; } = new();
     public BuffWatch BuffWatch { get; }
     public ShopRefresh ShopRefresh { get; } = new();
+    public NameRequests NameRequests { get; } = new();
     public CharacterLook? Look { get; internal set; }
     public CharacterLook Shop { get; internal set; } = new();
     public ShopKind? OpenShop { get; internal set; }
