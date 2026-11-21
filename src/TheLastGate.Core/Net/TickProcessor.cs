@@ -134,6 +134,7 @@ public sealed class TickProcessor(GameState state)
         state.Tooltips.EndOfTick();
         state.BuffWatch.EndOfTick();
         state.WatchViewCentre();
+        state.NameRequests.EndOfTick(state.Map, state.Names);
         // Before the shop refresh: the end of a paused tick can close the shop, and a closed shop isn't refreshed.
         state.ReportTickEnded();
         state.ShopRefresh.EndOfTick(state.OpenShop, state.Shop.Number);

@@ -43,7 +43,6 @@ public partial class WorldView : Node2D
     private readonly Sprite2D giveMarker = new() { Centered = false, Visible = false };
     private readonly Dictionary<int, GlidePoint> glidePoints = [];
     private readonly Dictionary<MagicGlow, ShaderMaterial> glowMaterials = [];
-    private readonly NameRequests nameRequests = new();
     private readonly Dictionary<int, Nameplate> nameplatesByCharacter = [];
     private readonly SpriteLayer objects = new();
     private readonly List<Sprite2D> queuedNumberMarkers = [];
@@ -421,11 +420,6 @@ public partial class WorldView : Node2D
 
         ReleaseUnusedNameplates();
         PlaceMarkers(markerTiles);
-        if (nameRequests.Tick(State.Names) is { } request)
-        {
-            SendCommand(request);
-        }
-
         if (!selectedIsShown)
         {
             SelectedCharacter = 0;
@@ -605,11 +599,6 @@ public partial class WorldView : Node2D
         }
 
         var name = State.Names.NameOf(tile.CharacterNumber, tile.CharacterId);
-        if (showText && name.Length == 0)
-        {
-            nameRequests.NoteUnknown(tile.CharacterNumber, tile.CharacterId);
-        }
-
         if (!nameplatesByCharacter.TryGetValue(tile.CharacterNumber, out var nameplate))
         {
             nameplate = freeNameplates.Count > 0 ? freeNameplates.Pop() : nameplateScene.Instantiate<Nameplate>();

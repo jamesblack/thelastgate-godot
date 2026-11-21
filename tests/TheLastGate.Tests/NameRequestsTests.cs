@@ -47,7 +47,7 @@ public class NameRequestsTests
     public void AnUnansweredRequest_IsAskedAgainAfterAnotherWait()
     {
         Process(Character(Guard, Centre + 3, Centre));
-        PassTheWait();
+        Wait(NameRequests.TicksBetweenRequests);
         sent.Clear();
 
         Wait(NameRequests.TicksBetweenRequests);
