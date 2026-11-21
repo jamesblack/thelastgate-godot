@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using TheLastGate.Assets;
 using TheLastGate.Buffs;
+using TheLastGate.Hud;
 using TheLastGate.Rules;
 
 namespace TheLastGate.Planner;
@@ -10,16 +12,25 @@ namespace TheLastGate.Planner;
 // The skill planner's Advanced window: which spells, tarot cards, corruptors, enchantments and gear the planner's
 // numbers count, and the skill tree's rows it counts already. The HUD tells it what to show and saves what is changed.
 [Tool]
-public partial class PlannerAdvancedWindowView : Panel
+public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
 {
     private const string RowScenePath = "res://Planner/planner_advanced_row.tscn";
     private const int CardsPerColumn = 5;
 
     private PackedScene? rowScene;
+    private SpriteLoader? sprites;
+
+    public PlannerAdvancedWindowView() => AddToGroup(HudContext.Group);
 
     private Container Spells => GetNode<Container>("Body/Sections/Spells");
 
     private Container TreeRows => GetNode<Container>("Body/Sections/TreeRows");
+
+    public void ShowContext(HudContext context)
+    {
+        sprites = context.Sprites;
+        PlannerLook.ApplyFrameSprite(this, sprites);
+    }
 
     public event Action? ClosePressed;
 
@@ -28,7 +39,7 @@ public partial class PlannerAdvancedWindowView : Panel
 
     public override void _Ready()
     {
-        ApplyFrameSprite();
+        PlannerLook.ApplyFrameSprite(this, sprites);
         rowScene = GD.Load<PackedScene>(RowScenePath);
         AddSpellRows();
         AddCardRows();
@@ -90,8 +101,6 @@ public partial class PlannerAdvancedWindowView : Panel
             gears[gear].Show(ItemEffects.Gears[gear].Name, (choices.GearTicks & (1u << gear)) != 0, true);
         }
     }
-
-    public void ApplyFrameSprite() => PlannerLook.ApplyFrameSprite(this);
 
     private PlannerAdvancedRow[] Rows(string path) =>
         GetNode<Container>(path).GetChildren().OfType<PlannerAdvancedRow>().ToArray();

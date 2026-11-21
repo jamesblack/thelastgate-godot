@@ -9,7 +9,7 @@ namespace TheLastGate.Hud;
 // Godot's LineEdit does the typing and editing; its own text is hidden and drawn here with the current client's
 // scrolling and cursor glyph.
 [Tool]
-public partial class ChatLine : LineEdit
+public partial class ChatLine : LineEdit, IHudContextUser
 {
     private const string CursorGlyph = "\u007f";
 
@@ -18,6 +18,7 @@ public partial class ChatLine : LineEdit
     private readonly ChatMode mode = new();
     private readonly ChatLineView view = new();
     private GameFont? font;
+    public ChatLine() => AddToGroup(HudContext.Group);
 
     [Export] public string PreviewText { get; set; } = "";
 
@@ -37,6 +38,19 @@ public partial class ChatLine : LineEdit
     public bool TakesTyping => mode.TakesTyping;
 
     public bool RunsHotkeys => mode.RunsHotkeys;
+
+    public void ShowContext(HudContext context)
+    {
+        if (context.Fonts is not { } fonts)
+        {
+            return;
+        }
+
+        font = fonts.For(TextColour.Yellow);
+        AddThemeFontOverride("font", font.Value.Font);
+        AddThemeFontSizeOverride("font_size", font.Value.Size);
+        AddThemeColorOverride("font_color", Colors.Transparent);
+    }
 
     public event Action<string>? LineSent;
 
@@ -60,8 +74,6 @@ public partial class ChatLine : LineEdit
             GetViewport().GuiFocusChanged -= TakeFocusFrom;
         }
     }
-
-    public override void _EnterTree() => ApplyFont();
 
     public override void _Process(double delta) => QueueRedraw();
 
@@ -137,19 +149,6 @@ public partial class ChatLine : LineEdit
 
         FollowMode();
         return true;
-    }
-
-    public void ApplyFont()
-    {
-        if (!IsInsideTree() || HudView.Containing(this)?.Fonts is not { } fonts)
-        {
-            return;
-        }
-
-        font = fonts.For(TextColour.Yellow);
-        AddThemeFontOverride("font", font.Value.Font);
-        AddThemeFontSizeOverride("font_size", font.Value.Size);
-        AddThemeColorOverride("font_color", Colors.Transparent);
     }
 
     public override void _Draw()

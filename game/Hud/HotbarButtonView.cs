@@ -1,4 +1,5 @@
 using Godot;
+using TheLastGate.Hotkeys;
 
 namespace TheLastGate.Hud;
 
@@ -26,7 +27,7 @@ public partial class HotbarButtonView : ClickArea
     {
         if (IsInsideTree())
         {
-            GetNode<Label>("Key").Text = HudView.HotbarKeyName(slot);
+            GetNode<Label>("Key").Text = BindingRules.HotbarKeyName(slot);
         }
     }
 }

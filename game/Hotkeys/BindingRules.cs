@@ -86,6 +86,8 @@ public static class BindingRules
 
     public static string ShortName(KeyChord? chord) => chord?.ShortName ?? "";
 
+    public static string HotbarKeyName(int slot) => ShortName(BindingActions.For(Bindings.SpellId(slot)));
+
     private static bool IsPlainCharacter(KeyChord chord) =>
         (chord.Modifiers & (MapKeys.Ctrl | MapKeys.Alt)) == MapKeys.None
         && (chord.Key.Length == 1 || chord.Key == "Space"

@@ -1,6 +1,6 @@
 using System.Linq;
 using Godot;
-using TheLastGate.Hud;
+using TheLastGate.Assets;
 
 namespace TheLastGate.Planner;
 
@@ -15,10 +15,9 @@ public static class PlannerLook
     public static void ShowBackground(Control window, bool darkMode) =>
         ((StyleBoxFlat)window.GetThemeStylebox("panel")).BgColor = darkMode ? DarkBackground : LightBackground;
 
-    // The window sprite lives in the sprite archives, so it is put on when the HUD has them.
-    public static void ApplyFrameSprite(Control window)
+    public static void ApplyFrameSprite(Control window, SpriteLoader? sprites)
     {
-        if (HudView.Containing(window)?.Sprites?.GetTexture(FrameSprite) is not { } texture)
+        if (sprites?.GetTexture(FrameSprite) is not { } texture)
         {
             return;
         }

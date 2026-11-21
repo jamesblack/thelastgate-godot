@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using TheLastGate.Assets;
+using TheLastGate.Hud;
 using TheLastGate.Rules;
 using TheLastGate.State;
 using TheLastGate.Windows;
@@ -13,7 +15,7 @@ namespace TheLastGate.Planner;
 // the points left and planned, Commit, Reset and Close, the stat rows and the skills list. The HUD tells it what to
 // show and does what its buttons ask.
 [Tool]
-public partial class PlannerWindowView : Panel
+public partial class PlannerWindowView : Panel, IHudContextUser
 {
     private const string StatRowScenePath = "res://Planner/planner_stat_row.tscn";
     private const string FocusLineScenePath = "res://Planner/planner_focus_line.tscn";
@@ -36,8 +38,11 @@ public partial class PlannerWindowView : Panel
     ];
 
     private PackedScene? focusLineScene;
+    private SpriteLoader? sprites;
 
     private PackedScene? statRowScene;
+
+    public PlannerWindowView() => AddToGroup(HudContext.Group);
 
     private Container SkillRows => GetNode<Container>("Right/SkillScroll/SkillRows");
 
@@ -50,6 +55,12 @@ public partial class PlannerWindowView : Panel
     private Container FocusLines => GetNode<Container>("Left/FocusLines");
 
     private Button PlanIt => GetNode<Button>("Left/PlanRow/PlanIt");
+
+    public void ShowContext(HudContext context)
+    {
+        sprites = context.Sprites;
+        PlannerLook.ApplyFrameSprite(this, sprites);
+    }
 
     public event Action? CommitPressed;
 
@@ -72,7 +83,7 @@ public partial class PlannerWindowView : Panel
 
     public override void _Ready()
     {
-        ApplyFrameSprite();
+        PlannerLook.ApplyFrameSprite(this, sprites);
         statRowScene = GD.Load<PackedScene>(StatRowScenePath);
         focusLineScene = GD.Load<PackedScene>(FocusLineScenePath);
         if (Engine.IsEditorHint())
@@ -264,6 +275,4 @@ public partial class PlannerWindowView : Panel
             skillRows.AddChild(row);
         }
     }
-
-    public void ApplyFrameSprite() => PlannerLook.ApplyFrameSprite(this);
 }

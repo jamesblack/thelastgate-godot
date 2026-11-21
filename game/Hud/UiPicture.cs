@@ -4,10 +4,13 @@ using Godot.Collections;
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class UiPicture : TextureRect
+public partial class UiPicture : TextureRect, IHudContextUser
 {
+    private HudContext? context;
     private int darkPictureNumber;
     private int pictureNumber;
+
+    public UiPicture() => AddToGroup(HudContext.Group);
 
     [Export]
     public int PictureNumber
@@ -31,7 +34,11 @@ public partial class UiPicture : TextureRect
         }
     }
 
-    public override void _EnterTree() => LoadPicture();
+    public void ShowContext(HudContext shown)
+    {
+        context = shown;
+        LoadPicture();
+    }
 
     public override void _ValidateProperty(Dictionary property)
     {
@@ -44,13 +51,13 @@ public partial class UiPicture : TextureRect
         property["usage"] = (int)(usage | PropertyUsageFlags.ReadOnly);
     }
 
-    public void LoadPicture()
+    private void LoadPicture()
     {
-        if (!IsInsideTree() || HudView.Containing(this) is not { Sprites: { } sprites } hud)
+        if (context is not { Sprites: { } sprites } shown)
         {
             return;
         }
 
-        Texture = sprites.GetUiPicture(hud.DarkMode && darkPictureNumber != 0 ? darkPictureNumber : pictureNumber);
+        Texture = sprites.GetUiPicture(shown.DarkMode && darkPictureNumber != 0 ? darkPictureNumber : pictureNumber);
     }
 }

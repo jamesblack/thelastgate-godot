@@ -6,20 +6,16 @@ using TheLastGate.Characters;
 
 namespace TheLastGate.Hud;
 
-public partial class HotbarMenu : PopupMenu
+public partial class HotbarMenu : PopupMenu, IHudContextUser
 {
     private readonly List<int> shownSkills = [];
     private int slot;
 
-    public event Action<int, int?>? SkillChosen;
+    public HotbarMenu() => AddToGroup(HudContext.Group);
 
-    public override void _EnterTree() => ApplyFont();
-
-    public override void _Ready() => IndexPressed += Choose;
-
-    public void ApplyFont()
+    public void ShowContext(HudContext context)
     {
-        if (HudView.Containing(this)?.Fonts is not { } fonts)
+        if (context.Fonts is not { } fonts)
         {
             return;
         }
@@ -30,6 +26,10 @@ public partial class HotbarMenu : PopupMenu
         AddThemeColorOverride("font_color", font.Tint);
         AddThemeColorOverride("font_hover_color", font.Tint);
     }
+
+    public event Action<int, int?>? SkillChosen;
+
+    public override void _Ready() => IndexPressed += Choose;
 
     public void Open(int hotbarSlot, IEnumerable<(int Number, string Name)> skills, Vector2 position)
     {

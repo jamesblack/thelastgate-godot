@@ -1,18 +1,23 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using TheLastGate.Assets;
+using TheLastGate.Hotkeys;
 using TheLastGate.Items;
 using TheLastGate.State;
 
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class ItemSlotView : ClickArea
+public partial class ItemSlotView : ClickArea, IHudContextUser
 {
     private const float HighlightBrightness = 2f;
     private const string TooltipScenePath = "res://Hud/item_tooltip.tscn";
+    private IFontSet? fonts;
 
     private int previewSprite;
+
+    public ItemSlotView() => AddToGroup(HudContext.Group);
 
     [Export]
     public int PreviewSprite
@@ -27,11 +32,13 @@ public partial class ItemSlotView : ClickArea
 
     public Func<ItemTooltipRequest?>? TooltipRequest { get; set; }
 
+    public void ShowContext(HudContext context) => fonts = context.Fonts;
+
     public override string _GetTooltip(Vector2 atPosition) => TooltipRequest?.Invoke() != null ? "item" : "";
 
     public override GodotObject? _MakeCustomTooltip(string forText)
     {
-        if (TooltipRequest == null || HudView.Containing(this)?.Fonts is not { } fonts)
+        if (TooltipRequest == null || this.fonts is not { } fonts)
         {
             return null;
         }
@@ -77,7 +84,7 @@ public partial class ItemSlotView : ClickArea
         hotbarKey.Visible = button != null;
         if (button is { } slot)
         {
-            hotbarKey.Text = HudView.HotbarKeyName(slot);
+            hotbarKey.Text = BindingRules.HotbarKeyName(slot);
         }
     }
 

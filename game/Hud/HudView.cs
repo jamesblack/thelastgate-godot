@@ -104,7 +104,7 @@ public partial class HudView : Control
         set
         {
             darkMode = value;
-            Reload(this);
+            ShowContext();
         }
     }
 
@@ -114,7 +114,7 @@ public partial class HudView : Control
         set
         {
             sprites = value;
-            Reload(this);
+            ShowContext();
         }
     }
 
@@ -126,7 +126,7 @@ public partial class HudView : Control
         set
         {
             clientSettings = value;
-            FadeBackgrounds(this);
+            ShowContext();
         }
     }
 
@@ -139,7 +139,7 @@ public partial class HudView : Control
         {
             fonts = value;
             ApplyWindowFonts(this);
-            Reload(this);
+            ShowContext();
         }
     }
 
@@ -167,24 +167,13 @@ public partial class HudView : Control
 
     private bool PlannerEnabled => ClientSettings?.SkillPlanner == true;
 
+    private HudContext Context => new(fonts, sprites, clientSettings, darkMode);
+
     public event Action? SettingsChanged;
 
     public event Action? LeaveRequested;
 
     public event Action? ClientSettingsChanged;
-
-    public static HudView? Containing(Node node)
-    {
-        for (var parent = node.GetParent(); parent != null; parent = parent.GetParent())
-        {
-            if (parent is HudView hud)
-            {
-                return hud;
-            }
-        }
-
-        return null;
-    }
 
     public void Show(GameState shownState, GameSession shownSession, IFontSet fontSet, Action<byte[]> sendToServer)
     {
@@ -567,8 +556,6 @@ public partial class HudView : Control
         _ => null,
     };
 
-    public static string HotbarKeyName(int slot) => BindingRules.ShortName(BindingActions.For(Bindings.SpellId(slot)));
-
     public override void _Process(double delta)
     {
         if (state == null)
@@ -636,6 +623,7 @@ public partial class HudView : Control
 
     public override void _EnterTree()
     {
+        GetTree().NodeAdded += ShowContextToNewNode;
         if (!Engine.IsEditorHint())
         {
             ChildEnteredTree += ApplyWindowFonts;
@@ -657,6 +645,7 @@ public partial class HudView : Control
 
     public override void _ExitTree()
     {
+        GetTree().NodeAdded -= ShowContextToNewNode;
         ChildEnteredTree -= ApplyWindowFonts;
         if (editorSprites == null)
         {
@@ -689,58 +678,28 @@ public partial class HudView : Control
         WindowFonts.Apply(node, font.Font, font.Size);
     }
 
-    private static void Reload(Node parent)
+    private void ShowContext()
     {
-        foreach (var child in parent.GetChildren())
+        if (!IsInsideTree())
         {
-            switch (child)
-            {
-                case ArchiveSprite archiveSprite:
-                    archiveSprite.LoadSprite();
-                    break;
-                case ChatLine chatLine:
-                    chatLine.ApplyFont();
-                    break;
-                case HudLabel label:
-                    label.ApplyFont();
-                    break;
-                case UiPicture picture:
-                    picture.LoadPicture();
-                    break;
-                case DarkModeShift shift:
-                    shift.ApplyDarkMode();
-                    break;
-                case HotbarMenu menu:
-                    menu.ApplyFont();
-                    break;
-                case OptionsWindowView options:
-                    options.ApplySprites();
-                    break;
-                case PlannerWindowView planner:
-                    planner.ApplyFrameSprite();
-                    break;
-                case PlannerAdvancedWindowView advanced:
-                    advanced.ApplyFrameSprite();
-                    break;
-                case SessionStatsWindowView sessionStats:
-                    sessionStats.ApplyCloseSprite();
-                    break;
-            }
+            return;
+        }
 
-            Reload(child);
+        var context = Context;
+        foreach (var node in GetTree().GetNodesInGroup(HudContext.Group))
+        {
+            if (node is IHudContextUser user && IsAncestorOf(node))
+            {
+                user.ShowContext(context);
+            }
         }
     }
 
-    private static void FadeBackgrounds(Node parent)
+    private void ShowContextToNewNode(Node node)
     {
-        foreach (var child in parent.GetChildren())
+        if (node is IHudContextUser user && node.IsInGroup(HudContext.Group) && IsAncestorOf(node))
         {
-            if (child is ArchiveSprite archiveSprite)
-            {
-                archiveSprite.ApplyFade();
-            }
-
-            FadeBackgrounds(child);
+            user.ShowContext(Context);
         }
     }
 
@@ -1484,7 +1443,7 @@ public partial class HudView : Control
         ClientSettings.Save();
         ShowQuickStatsLayout();
         GetNode<ChatLine>("%ChatLine").EnterToTalk = ClientSettings.EnterToTalk;
-        FadeBackgrounds(this);
+        ShowContext();
         ClientSettingsChanged?.Invoke();
     }
 
@@ -1676,7 +1635,7 @@ public partial class HudView : Control
         var name = action < HotbarButtons.FirstInventoryAction
             ? state!.Terminology.Skills[action].Name
             : HotbarButtons.ItemName(action);
-        var keyName = HotbarKeyName(slot);
+        var keyName = BindingRules.HotbarKeyName(slot);
         state!.Chat.Add(HotbarAssignments.Assign(Settings, slot, action, name, keyName));
         HotbarChanged();
     }

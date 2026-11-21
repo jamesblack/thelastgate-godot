@@ -4,9 +4,12 @@ using Godot.Collections;
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class DarkModeShift : Control
+public partial class DarkModeShift : Control, IHudContextUser
 {
+    private bool darkMode;
     private Vector2 shift;
+
+    public DarkModeShift() => AddToGroup(HudContext.Group);
 
     [Export]
     public Vector2 Shift
@@ -19,7 +22,11 @@ public partial class DarkModeShift : Control
         }
     }
 
-    public override void _EnterTree() => ApplyDarkMode();
+    public void ShowContext(HudContext context)
+    {
+        darkMode = context.DarkMode;
+        ApplyDarkMode();
+    }
 
     // The position is never saved, so a dark-mode preview in the editor can't end up stored in the scene.
     public override void _ValidateProperty(Dictionary property)
@@ -31,11 +38,5 @@ public partial class DarkModeShift : Control
         }
     }
 
-    public void ApplyDarkMode()
-    {
-        if (IsInsideTree())
-        {
-            Position = HudView.Containing(this) is { DarkMode: true } ? shift : Vector2.Zero;
-        }
-    }
+    private void ApplyDarkMode() => Position = darkMode ? shift : Vector2.Zero;
 }

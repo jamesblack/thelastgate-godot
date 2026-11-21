@@ -5,9 +5,12 @@ using TheLastGate.Assets;
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class HudLabel : Label
+public partial class HudLabel : Label, IHudContextUser
 {
     private TextColour colour = TextColour.Yellow;
+    private IFontSet? fonts;
+
+    public HudLabel() => AddToGroup(HudContext.Group);
 
     [Export]
     public TextColour Colour
@@ -20,7 +23,11 @@ public partial class HudLabel : Label
         }
     }
 
-    public override void _EnterTree() => ApplyFont();
+    public void ShowContext(HudContext context)
+    {
+        fonts = context.Fonts;
+        ApplyFont();
+    }
 
     public override void _ValidateProperty(Dictionary property)
     {
@@ -34,9 +41,9 @@ public partial class HudLabel : Label
         property["usage"] = (int)(property["usage"].As<PropertyUsageFlags>() & ~PropertyUsageFlags.Storage);
     }
 
-    public void ApplyFont()
+    private void ApplyFont()
     {
-        if (!IsInsideTree() || HudView.Containing(this)?.Fonts is not { } fonts)
+        if (fonts == null)
         {
             return;
         }

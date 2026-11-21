@@ -8,7 +8,7 @@ using TheLastGate.Session;
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class SessionStatsWindowView : CenterContainer
+public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
 {
     private const string SessionGroup = "This session";
     private const string HourGroup = "Per hour";
@@ -39,8 +39,18 @@ public partial class SessionStatsWindowView : CenterContainer
     ];
 
     private TimeSpan? shownElapsed;
+    public SessionStatsWindowView() => AddToGroup(HudContext.Group);
 
     private DataTable Table => GetNode<DataTable>("Window/Frame/Layout/Body/Table");
+
+    public void ShowContext(HudContext context)
+    {
+        if (context.Sprites?.GetTexture(CloseSprite) is { } sheet)
+        {
+            GetNode<TextureButton>("Window/Close").TextureNormal =
+                new AtlasTexture { Atlas = sheet, Region = CloseRegion };
+        }
+    }
 
     public event Action? ResetPressed;
 
@@ -49,7 +59,6 @@ public partial class SessionStatsWindowView : CenterContainer
     public override void _Ready()
     {
         Table.SetColumns(Columns);
-        ApplyCloseSprite();
         if (Engine.IsEditorHint())
         {
             ShowTallies(PreviewTallies, TimeSpan.FromMinutes(90));
@@ -106,15 +115,6 @@ public partial class SessionStatsWindowView : CenterContainer
         < 0 => CellTone.Negative,
         _ => CellTone.Zero,
     };
-
-    public void ApplyCloseSprite()
-    {
-        if (HudView.Containing(this)?.Sprites?.GetTexture(CloseSprite) is { } sheet)
-        {
-            GetNode<TextureButton>("Window/Close").TextureNormal =
-                new AtlasTexture { Atlas = sheet, Region = CloseRegion };
-        }
-    }
 
     private static string CurrencyName(Currency currency) => currency switch
     {

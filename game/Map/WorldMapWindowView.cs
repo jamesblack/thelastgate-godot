@@ -13,7 +13,7 @@ namespace TheLastGate.Map;
 // player, the edited note's name and the tile under the cursor. Its own clicks change its own state; the HUD only
 // opens it and tells it what to show. Every change to the notes is handed straight back to be saved.
 [Tool]
-public partial class WorldMapWindowView : Panel
+public partial class WorldMapWindowView : Panel, IHudContextUser
 {
     private const int FrameSprite = 18128;
     private const float TitleBottom = 30;
@@ -30,6 +30,7 @@ public partial class WorldMapWindowView : Panel
     private Vector2 titleGrab;
     private bool titleHeld;
     private WorldMapWindow? window;
+    public WorldMapWindowView() => AddToGroup(HudContext.Group);
 
     private WorldMapCanvas Canvas => GetNode<WorldMapCanvas>("Rows/Body/MapFrame/Canvas");
 
@@ -57,11 +58,24 @@ public partial class WorldMapWindowView : Panel
 
     private static double Now => Time.GetTicksMsec() / 1000.0;
 
+    // The window and its inner panels are framed by the game's window sprite, which lives in the sprite archives.
+    public void ShowContext(HudContext context)
+    {
+        if (context.Sprites?.GetTexture(FrameSprite) is not { } texture)
+        {
+            return;
+        }
+
+        foreach (var frame in FindChildren("Frame", nameof(NinePatchRect), true, false).Cast<NinePatchRect>())
+        {
+            frame.Texture = texture;
+        }
+    }
+
     public event Action? NotesChanged;
 
     public override void _Ready()
     {
-        ApplyFrameSprite();
         AddHelpLines();
         if (Engine.IsEditorHint())
         {
@@ -192,20 +206,6 @@ public partial class WorldMapWindowView : Panel
             NoteMenu.Hide();
             DeletePrompt.Visible = false;
             CategoryColumn.CloseAll();
-        }
-    }
-
-    // The window and its inner panels are framed by the game's window sprite, which lives in the sprite archives.
-    public void ApplyFrameSprite()
-    {
-        if (HudView.Containing(this)?.Sprites?.GetTexture(FrameSprite) is not { } texture)
-        {
-            return;
-        }
-
-        foreach (var frame in FindChildren("Frame", nameof(NinePatchRect), true, false).Cast<NinePatchRect>())
-        {
-            frame.Texture = texture;
         }
     }
 

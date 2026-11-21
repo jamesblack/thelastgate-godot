@@ -5,10 +5,13 @@ using TheLastGate.Windows;
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class ArchiveSprite : TextureRect
+public partial class ArchiveSprite : TextureRect, IHudContextUser
 {
+    private HudContext? context;
     private int darkSpriteNumber;
     private int spriteNumber;
+
+    public ArchiveSprite() => AddToGroup(HudContext.Group);
 
     [Export]
     public int SpriteNumber
@@ -34,7 +37,11 @@ public partial class ArchiveSprite : TextureRect
 
     [Export] public WindowBackground FadesAs { get; set; }
 
-    public override void _EnterTree() => LoadSprite();
+    public void ShowContext(HudContext shown)
+    {
+        context = shown;
+        LoadSprite();
+    }
 
     public override void _ValidateProperty(Dictionary property)
     {
@@ -49,18 +56,18 @@ public partial class ArchiveSprite : TextureRect
 
     public void LoadSprite()
     {
-        if (!IsInsideTree() || HudView.Containing(this) is not { Sprites: { } sprites } hud)
+        if (context is not { Sprites: { } sprites } shown)
         {
             return;
         }
 
-        Texture = sprites.GetTexture(hud.DarkMode && darkSpriteNumber != 0 ? darkSpriteNumber : spriteNumber);
+        Texture = sprites.GetTexture(shown.DarkMode && darkSpriteNumber != 0 ? darkSpriteNumber : spriteNumber);
         ApplyFade();
     }
 
     public void ApplyFade()
     {
-        if (FadesAs == WindowBackground.None || HudView.Containing(this)?.ClientSettings is not { } settings)
+        if (FadesAs == WindowBackground.None || context?.ClientSettings is not { } settings)
         {
             return;
         }
