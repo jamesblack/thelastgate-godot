@@ -79,6 +79,7 @@ public partial class HudView : Control
     private IFontSet? fonts;
     private GameSession? gameSession;
     private int? hoveredShopCell;
+    private (ClickArea Area, Func<MouseCursor> Cursor)? hoveredSlot;
     private bool itemTooltipsShown = true;
     private NoteSet? mapNotes;
     private int mapNotesStamp;
@@ -167,7 +168,30 @@ public partial class HudView : Control
 
     private bool PlannerEnabled => ClientSettings?.SkillPlanner == true;
 
+    private PlayerState Player => state!.Player;
+
+    private bool HoldingItem => Player.HeldItem.Sprite != 0;
+
     private HudContext Context => new(fonts, sprites, clientSettings, darkMode);
+
+    // Each slot says it is hovered through its own mouse signals, so the HUD never works it out from the tree.
+    private void WatchCursor(ClickArea area, Func<MouseCursor> cursor)
+    {
+        area.MouseEntered += () => hoveredSlot = (area, cursor);
+        area.MouseExited += () =>
+        {
+            if (hoveredSlot?.Area == area)
+            {
+                hoveredSlot = null;
+            }
+        };
+    }
+
+    private MouseCursor ShopCursor(int slot)
+    {
+        var items = state!.Shop.ShopItems;
+        return ShopClicks.Cursor(slot < items.Length && items[slot].Sprite != 0, HoldingItem);
+    }
 
     public event Action? SettingsChanged;
 
@@ -189,10 +213,18 @@ public partial class HudView : Control
             wornView.TooltipRequest = () => WornTooltip(clickedSlot);
             wornView.MouseEntered += () => state?.ItemLooks.Prefer(ItemSlotKind.Worn, (int)clickedSlot);
             wornView.MouseExited += () => state?.ItemLooks.ClearPreference();
+            WatchCursor(
+                wornView,
+                () => EquipmentClicks.Cursor(
+                    Player.Worn[(int)clickedSlot].Sprite != 0,
+                    HoldingItem,
+                    HeldKeys.Current()));
         }
 
         GetNode<ClickArea>("%SwapSetButton").Released += ClickSwapSet;
-        GetNode<ClickArea>("%" + TrashCanName).Released += ClickTrashCan;
+        var trashCan = GetNode<ClickArea>("%" + TrashCanName);
+        trashCan.Released += ClickTrashCan;
+        WatchCursor(trashCan, () => TrashCan.Cursor(HoldingItem));
         foreach (var node in GetNode("%OptionButtons").GetChildren())
         {
             var optionButton = (OptionButtonView)node;
@@ -239,6 +271,12 @@ public partial class HudView : Control
             cellView.MouseExited += () => state?.ItemLooks.ClearPreference();
             cellView.Released +=
                 button => ClickInventory(inventory.SlotShownIn(clickedCell), button);
+            WatchCursor(
+                cellView,
+                () => InventoryClicks.Cursor(
+                    Player.Inventory[inventory.SlotShownIn(clickedCell)],
+                    HoldingItem,
+                    HeldKeys.Current()));
         }
 
         state.LookShown += ShowLook;
@@ -256,6 +294,7 @@ public partial class HudView : Control
             shopCell.Released += button => ClickShop(cell, button);
             shopCell.MouseEntered += () => hoveredShopCell = cell;
             shopCell.MouseExited += () => hoveredShopCell = null;
+            WatchCursor(shopCell, () => ShopCursor(ShopClicks.SlotFor(cell)));
         }
 
         var depotWindow = GetNode<DepotWindowView>("%DepotWindow");
@@ -266,6 +305,9 @@ public partial class HudView : Control
             var depotCell = (ItemSlotView)node;
             var cell = depotCell.GetIndex();
             depotCell.Released += button => ClickDepot(cell, button);
+            WatchCursor(
+                depotCell,
+                () => ShopClicks.Cursor(state.Shop.Depot[depotPage.Current][cell].Sprite != 0, HoldingItem));
         }
 
         for (var page = 0; page < DepotPackets.Pages; page++)
@@ -576,44 +618,14 @@ public partial class HudView : Control
         ShowTreeButton();
         var buyingTen = Input.IsKeyPressed(Key.Ctrl) || Input.IsKeyPressed(Key.Alt);
         GetNode<ShopWindowView>("%ShopWindow").ShowText(state, hoveredShopCell, buyingTen);
-        if (GetViewport().GuiGetHoveredControl() is not ClickArea hovered)
+        if (hoveredSlot is not { } hover)
         {
             return;
         }
 
-        var player = state.Player;
-        var holdingItem = player.HeldItem.Sprite != 0;
-        MouseCursor cursor;
-        if (hovered.Name == TrashCanName)
-        {
-            cursor = TrashCan.Cursor(holdingItem);
-        }
-        else if (hovered.GetParent() is InventoryGrid inventory)
-        {
-            var item = player.Inventory[inventory.SlotShownIn(hovered.GetIndex())];
-            cursor = InventoryClicks.Cursor(item, holdingItem, HeldKeys.Current());
-        }
-        else if (hovered.Owner is DepotWindowView)
-        {
-            var item = state.Shop.Depot[depotPage.Current][hovered.GetIndex()];
-            cursor = ShopClicks.Cursor(item.Sprite != 0, holdingItem);
-        }
-        else if (hovered.Owner is ShopWindowView)
-        {
-            var slot = ShopClicks.SlotFor(hovered.GetIndex());
-            var items = state.Shop.ShopItems;
-            cursor = ShopClicks.Cursor(slot < items.Length && items[slot].Sprite != 0, holdingItem);
-        }
-        else if (Enum.TryParse<WornSlot>(hovered.Name, out var slot))
-        {
-            cursor = EquipmentClicks.Cursor(player.Worn[(int)slot].Sprite != 0, holdingItem, HeldKeys.Current());
-        }
-        else
-        {
-            return;
-        }
+        var (hovered, cursorFor) = hover;
 
-        var shape = (CursorShape)CursorShapes.For(cursor);
+        var shape = (CursorShape)CursorShapes.For(cursorFor());
         if (hovered.MouseDefaultCursorShape != shape)
         {
             hovered.MouseDefaultCursorShape = shape;
