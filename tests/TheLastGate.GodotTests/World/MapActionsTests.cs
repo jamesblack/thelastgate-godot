@@ -1,10 +1,13 @@
+using GdUnit4;
 using TheLastGate.Cursors;
 using TheLastGate.Net;
 using TheLastGate.State;
 using TheLastGate.World;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.World;
 
+[TestSuite]
 public class MapActionsTests
 {
     private const byte AbsoluteSetMap = 0x80;
@@ -20,172 +23,155 @@ public class MapActionsTests
     private static readonly (float Column, float Row) OnPlayerTile = (27.5f, 27.5f);
     private static readonly (float Column, float Row) NearTheNextTile = (27.9f, 27.5f);
 
-    [Fact]
+    [TestCase]
     public void NoKeys_HighlightsTheFloorWithTheWalkCursor()
     {
         var action = Decide(new GameState(), OnPlayerTile, MapKeys.None, MapButton.None);
 
-        Assert.Equal(new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.Walk, null, null), action);
+        AssertThat(action).IsEqual(new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.Walk, null, null));
     }
 
-    [Fact]
+    [TestCase]
     public void NoKeys_WalksOnLeftAndTurnsOnRight()
     {
         var state = State();
 
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.Move, OriginX + 27, OriginY + 27),
-            Decide(state, OnPlayerTile, MapKeys.None, MapButton.Left).Command);
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.Turn, OriginX + 27, OriginY + 27),
-            Decide(state, OnPlayerTile, MapKeys.None, MapButton.Right).Command);
+        AssertThat(Decide(state, OnPlayerTile, MapKeys.None, MapButton.Left).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.Move, OriginX + 27, OriginY + 27));
+        AssertThat(Decide(state, OnPlayerTile, MapKeys.None, MapButton.Right).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.Turn, OriginX + 27, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void AwayFromTheMap_DoesNothing()
     {
-        Assert.Equal(MapAction.Nothing, Decide(State(), null, MapKeys.None, MapButton.Left));
+        AssertThat(Decide(State(), null, MapKeys.None, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
-    [Fact]
+    [TestCase]
     public void BuildMode_PicksUpOnLeftAndDropsOnRightAtTheFloorTile()
     {
         var state = State(HeldItem(BuildItem));
 
         var hover = Decide(state, OnPlayerTile, MapKeys.Shift, MapButton.None);
-        Assert.Equal(new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.None, null, null), hover);
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.PickUp, OriginX + 27, OriginY + 27),
-            Decide(state, OnPlayerTile, MapKeys.None, MapButton.Left).Command);
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.Drop, OriginX + 27, OriginY + 27),
-            Decide(state, OnPlayerTile, MapKeys.Ctrl, MapButton.Right).Command);
+        AssertThat(hover).IsEqual(new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.None, null, null));
+        AssertThat(Decide(state, OnPlayerTile, MapKeys.None, MapButton.Left).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.PickUp, OriginX + 27, OriginY + 27));
+        AssertThat(Decide(state, OnPlayerTile, MapKeys.Ctrl, MapButton.Right).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.Drop, OriginX + 27, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_HighlightsTheNearestItemWithTheTakeCursor()
     {
         var action = Decide(State(Item(28, 27)), NearTheNextTile, MapKeys.Shift, MapButton.None);
 
-        Assert.Equal(new MapAction(Tile(28, 27), MapLayer.Object, MouseCursor.Take, null, null), action);
+        AssertThat(action).IsEqual(new MapAction(Tile(28, 27), MapLayer.Object, MouseCursor.Take, null, null));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_PicksUpAnItemOnLeftAndLooksAtItOnRight()
     {
         var state = State(Item(28, 27));
 
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.PickUp, OriginX + 28, OriginY + 27),
-            Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Left).Command);
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.LookItem, OriginX + 28, OriginY + 27),
-            Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Right).Command);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Left).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.PickUp, OriginX + 28, OriginY + 27));
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Right).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.LookItem, OriginX + 28, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_UsesAUsableItemWithTheUseCursor()
     {
         var state = State(Item(28, 27, MapFlags.IsUsable));
 
-        Assert.Equal(MouseCursor.Use, Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.None).Cursor);
-        Assert.Equal(
-            MapCommandPackets.ForTile(ClientCommand.Use, OriginX + 28, OriginY + 27),
-            Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Left).Command);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.None).Cursor).IsEqual(MouseCursor.Use);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Shift, MapButton.Left).Command)
+            .IsEqual(MapCommandPackets.ForTile(ClientCommand.Use, OriginX + 28, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_DropsAHeldItemOnEmptyFloor()
     {
         var state = State(HeldItem(Candle));
 
         var action = Decide(state, OnPlayerTile, MapKeys.Shift, MapButton.Left);
 
-        Assert.Equal(
-            (Tile(27, 27), MapLayer.Floor, MouseCursor.Drop),
-            (action.HighlightedTile, action.HighlightedLayer, action.Cursor));
-        Assert.Equal(MapCommandPackets.ForTile(ClientCommand.Drop, OriginX + 27, OriginY + 27), action.Command);
+        AssertThat((action.HighlightedTile, action.HighlightedLayer, action.Cursor))
+            .IsEqual((Tile(27, 27), MapLayer.Floor, MouseCursor.Drop));
+        AssertThat(action.Command).IsEqual(MapCommandPackets.ForTile(ClientCommand.Drop, OriginX + 27, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_WithAHeldItemOverAnItemShowsTheUseCursorOnlyForUsableItems()
     {
-        Assert.Equal(
-            MouseCursor.None,
-            Decide(State(HeldItem(Candle), Item(27, 27)), OnPlayerTile, MapKeys.Shift, MapButton.None).Cursor);
-        Assert.Equal(
-            MouseCursor.Use,
-            Decide(
-                    State(HeldItem(Candle), Item(27, 27, MapFlags.IsUsable)),
-                    OnPlayerTile,
-                    MapKeys.Shift,
-                    MapButton.None)
-                .Cursor);
+        var plain = State(HeldItem(Candle), Item(27, 27));
+        var usable = State(HeldItem(Candle), Item(27, 27, MapFlags.IsUsable));
+
+        AssertThat(Decide(plain, OnPlayerTile, MapKeys.Shift, MapButton.None).Cursor).IsEqual(MouseCursor.None);
+        AssertThat(Decide(usable, OnPlayerTile, MapKeys.Shift, MapButton.None).Cursor).IsEqual(MouseCursor.Use);
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_QueuesAUseOfTheNearestUsableItem()
     {
         var state = QueueState(Item(28, 27, MapFlags.IsUsable));
 
-        Assert.Equal(
-            new MapAction(Tile(28, 27), MapLayer.Object, MouseCursor.Use, null, null),
-            Decide(state, NearTheNextTile, QueueKeys, MapButton.None));
+        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.None))
+            .IsEqual(new MapAction(Tile(28, 27), MapLayer.Object, MouseCursor.Use, null, null));
         var click = Decide(state, NearTheNextTile, QueueKeys, MapButton.Left);
-        Assert.Equal((OriginX + 28, OriginY + 27), click.QueuedUse);
-        Assert.Null(click.Command);
+        AssertThat(click.QueuedUse.GetValueOrDefault()).IsEqual((OriginX + 28, OriginY + 27));
+        AssertThat(click.Command).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_WithAHeldItemGivesItToTheNearestCharacterAndRemembersIt()
     {
         var state = GiveMoreState(HeldItem(Candle), Character(28, 27));
 
-        Assert.Equal(
-            new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Give, null, null),
-            Decide(state, NearTheNextTile, QueueKeys, MapButton.None));
+        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.None))
+            .IsEqual(new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Give, null, null));
         var click = Decide(state, NearTheNextTile, QueueKeys, MapButton.Left);
-        Assert.Equal(MapCommandPackets.ForCharacter(ClientCommand.Give, GuardNumber), click.Command);
-        Assert.True(click.GivesMore);
+        AssertThat(click.Command).IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Give, GuardNumber));
+        AssertThat(click.GivesMore).IsTrue();
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_GivingMoreWithNoCharacterNearDoesNothing()
     {
         var state = GiveMoreState(HeldItem(Candle));
         state.UseQueue.Enabled = true;
 
-        Assert.Equal(MapAction.Nothing, Decide(state, OnPlayerTile, QueueKeys, MapButton.Left));
+        AssertThat(Decide(state, OnPlayerTile, QueueKeys, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_WithAnEmptyHandStillQueuesUses()
     {
         var state = GiveMoreState(Item(28, 27, MapFlags.IsUsable));
         state.UseQueue.Enabled = true;
 
-        Assert.Equal(
-            (OriginX + 28, OriginY + 27),
-            Decide(state, NearTheNextTile, QueueKeys, MapButton.Left).QueuedUse);
+        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.Left).QueuedUse.GetValueOrDefault())
+            .IsEqual((OriginX + 28, OriginY + 27));
     }
 
-    [Fact]
+    [TestCase]
     public void Ctrl_GivingAsUsualDoesNotRememberTheGift()
     {
         var state = GiveMoreState(HeldItem(Candle), Character(28, 27));
 
-        Assert.False(Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left).GivesMore);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left).GivesMore).IsFalse();
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_WithTheQueueOffDoesNothing()
     {
         var state = State(Item(28, 27, MapFlags.IsUsable));
 
-        Assert.Equal(MapAction.Nothing, Decide(state, NearTheNextTile, QueueKeys, MapButton.Left));
+        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_OnlyQueuesUsableItemsThatCanBeSeen()
     {
         var plain = Decide(QueueState(Item(28, 27)), NearTheNextTile, QueueKeys, MapButton.Left);
@@ -195,99 +181,95 @@ public class MapActionsTests
             QueueKeys,
             MapButton.Left);
 
-        Assert.Equal((MouseCursor.Take, null), (plain.Cursor, plain.QueuedUse));
-        Assert.Null(hidden.QueuedUse);
+        AssertThat(plain.Cursor).IsEqual(MouseCursor.Take);
+        AssertThat(plain.QueuedUse).IsNull();
+        AssertThat(hidden.QueuedUse).IsNull();
     }
 
-    [Fact]
+    [TestCase]
     public void CtrlShift_WithAHeldItemShowsTheDropCursorOverEmptyFloor()
     {
         var action = Decide(QueueState(HeldItem(Candle)), OnPlayerTile, QueueKeys, MapButton.Left);
 
-        Assert.Equal(
-            new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.Drop, null, null),
-            action);
+        AssertThat(action)
+            .IsEqual(new MapAction(Tile(27, 27), MapLayer.Floor, MouseCursor.Drop, null, null));
     }
 
-    [Fact]
+    [TestCase]
     public void Shift_WithNothingNearDoesNothing()
     {
-        Assert.Equal(MapAction.Nothing, Decide(State(), OnPlayerTile, MapKeys.Shift, MapButton.Left));
+        AssertThat(Decide(State(), OnPlayerTile, MapKeys.Shift, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
-    [Fact]
+    [TestCase]
     public void Ctrl_HighlightsTheNearestCharacterWithTheHitCursor()
     {
         var action = Decide(State(Character(28, 27)), NearTheNextTile, MapKeys.Ctrl, MapButton.None);
 
-        Assert.Equal(new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Hit, null, null), action);
+        AssertThat(action).IsEqual(new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Hit, null, null));
     }
 
-    [Fact]
+    [TestCase]
     public void Ctrl_AttacksOnLeftAndLooksOnRight()
     {
         var state = State(Character(28, 27));
 
-        Assert.Equal(
-            MapCommandPackets.ForCharacter(ClientCommand.Attack, GuardNumber),
-            Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left).Command);
-        Assert.Equal(
-            MapCommandPackets.ForCharacter(ClientCommand.Look, GuardNumber),
-            Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Right).Command);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left).Command)
+            .IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Attack, GuardNumber));
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Right).Command)
+            .IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Look, GuardNumber));
     }
 
-    [Fact]
+    [TestCase]
     public void Ctrl_GivesTheHeldItemWithTheGiveCursor()
     {
         var state = State(HeldItem(Candle), Character(28, 27));
 
         var action = Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left);
 
-        Assert.Equal(MouseCursor.Give, action.Cursor);
-        Assert.Equal(MapCommandPackets.ForCharacter(ClientCommand.Give, GuardNumber), action.Command);
+        AssertThat(action.Cursor).IsEqual(MouseCursor.Give);
+        AssertThat(action.Command).IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Give, GuardNumber));
     }
 
-    [Fact]
+    [TestCase]
     public void Ctrl_WithNobodyNearDoesNothing()
     {
-        Assert.Equal(MapAction.Nothing, Decide(State(), OnPlayerTile, MapKeys.Ctrl, MapButton.Left));
+        AssertThat(Decide(State(), OnPlayerTile, MapKeys.Ctrl, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
-    [Fact]
+    [TestCase]
     public void Alt_HighlightsTheNearestCharacterWithTheSelectCursor()
     {
         var action = Decide(State(Character(28, 27)), NearTheNextTile, MapKeys.Alt, MapButton.None);
 
-        Assert.Equal(new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Select, null, null), action);
+        AssertThat(action).IsEqual(new MapAction(Tile(28, 27), MapLayer.Character, MouseCursor.Select, null, null));
     }
 
-    [Fact]
+    [TestCase]
     public void Alt_SelectsOnLeftThenDeselectsAndLooksOnRight()
     {
         var state = State(Character(28, 27));
 
-        Assert.Equal(GuardNumber, Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Left).NewSelection);
-        Assert.Equal(0, Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Left, GuardNumber).NewSelection);
-        Assert.Equal(
-            MapCommandPackets.ForCharacter(ClientCommand.Look, GuardNumber),
-            Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Right).Command);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Left).NewSelection).IsEqual(GuardNumber);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Left, GuardNumber).NewSelection).IsEqual(0);
+        AssertThat(Decide(state, NearTheNextTile, MapKeys.Alt, MapButton.Right).Command)
+            .IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Look, GuardNumber));
     }
 
-    [Fact]
+    [TestCase]
     public void Alt_ClickingWithNobodyNearClearsTheSelection()
     {
-        Assert.Equal(0, Decide(State(), OnPlayerTile, MapKeys.Alt, MapButton.Left, GuardNumber).NewSelection);
+        AssertThat(Decide(State(), OnPlayerTile, MapKeys.Alt, MapButton.Left, GuardNumber).NewSelection).IsEqual(0);
     }
 
-    [Theory]
-    [InlineData(MapKeys.Shift | MapKeys.Ctrl)]
-    [InlineData(MapKeys.Ctrl | MapKeys.Alt)]
-    [InlineData(MapKeys.Shift | MapKeys.Ctrl | MapKeys.Alt)]
+    [TestCase(MapKeys.Shift | MapKeys.Ctrl)]
+    [TestCase(MapKeys.Ctrl | MapKeys.Alt)]
+    [TestCase(MapKeys.Shift | MapKeys.Ctrl | MapKeys.Alt)]
     public void OtherKeyCombinations_DoNothingYet(MapKeys keys)
     {
         var state = State(Item(27, 27), Character(27, 27));
 
-        Assert.Equal(MapAction.Nothing, Decide(state, OnPlayerTile, keys, MapButton.Left));
+        AssertThat(Decide(state, OnPlayerTile, keys, MapButton.Left)).IsEqual(MapAction.Nothing);
     }
 
     private static int Tile(int column, int row) => column + row * WorldMap.Size;
