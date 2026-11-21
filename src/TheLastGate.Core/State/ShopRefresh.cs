@@ -1,8 +1,7 @@
 using System;
 using TheLastGate.Net;
-using TheLastGate.State;
 
-namespace TheLastGate.Windows;
+namespace TheLastGate.State;
 
 // While a shop is open its contents are asked for again every few ticks, so prices and stock stay current.
 public sealed class ShopRefresh

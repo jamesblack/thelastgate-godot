@@ -1,17 +1,16 @@
 using TheLastGate.Net;
 using TheLastGate.State;
-using TheLastGate.Windows;
 
 namespace TheLastGate.Tests;
 
-public class ShopWindowTests
+public class ShopStateTests
 {
     private const int ShopNumber = 1201;
     private readonly TickProcessor processor;
 
     private readonly GameState state = new();
 
-    public ShopWindowTests() => processor = new TickProcessor(state);
+    public ShopStateTests() => processor = new TickProcessor(state);
 
     [Fact]
     public void CloseShop_ClosesTheShopWithoutSayingTheServerDid()

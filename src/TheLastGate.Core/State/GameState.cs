@@ -3,7 +3,6 @@ using TheLastGate.Buffs;
 using TheLastGate.Items;
 using TheLastGate.Net;
 using TheLastGate.Stats;
-using TheLastGate.Windows;
 
 namespace TheLastGate.State;
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace TheLastGate.Map;
+namespace TheLastGate.State;
 
 // Spectating shows someone else's view, which must not be recorded as explored. The server only says so in chat, and
 // players hidden from the who list leave without a goodbye, so the view centre moving back to our own character

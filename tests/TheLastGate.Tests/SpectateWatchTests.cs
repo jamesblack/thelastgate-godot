@@ -1,4 +1,4 @@
-using TheLastGate.Map;
+using TheLastGate.State;
 
 namespace TheLastGate.Tests;
 
