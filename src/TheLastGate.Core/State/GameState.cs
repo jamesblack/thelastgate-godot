@@ -35,6 +35,8 @@ public sealed class GameState
 
     internal CharacterLook PendingLook { get; } = new();
 
+    public bool Spectating => throw new NotImplementedException();
+
     public event Action<CharacterLook>? LookShown;
     public event Action<ShopKind>? ShopOpened;
     public event Action? ShopClosedByServer;
@@ -48,6 +50,8 @@ public sealed class GameState
     public event Action<PlayerTarget, PlayerTarget>? TargetChanged;
     public event Action? HeldItemChanged;
     public event Action? WaypointsOffered;
+    public event Action? SpectatingStarted;
+    public event Action? SpectatingStopped;
 
     public bool CloseShop()
     {
