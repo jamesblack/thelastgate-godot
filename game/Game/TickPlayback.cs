@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TheLastGate.Net;
 
-namespace TheLastGate.Net;
+namespace TheLastGate.Game;
 
 public sealed class TickPlayback(TickPacer pacer)
 {
@@ -16,7 +17,7 @@ public sealed class TickPlayback(TickPacer pacer)
         pacer.OnArrival(tick.ReceivedAtTimestamp * 1000 / Stopwatch.Frequency);
     }
 
-    public void PlayDueTicks(long nowMilliseconds, Action<byte[]> playTick, Action<byte[]> sendCommand)
+    public void PlayDueTicks(long nowMilliseconds, Action<byte[]> playTick)
     {
         while (pacer.IsTickDue(nowMilliseconds))
         {
@@ -28,10 +29,6 @@ public sealed class TickPlayback(TickPacer pacer)
 
             playTick(payload);
             pacer.TickDone(queue.Count);
-            if (TickReport.IsDue(pacer.TicksPlayed))
-            {
-                sendCommand(TickReport.Create(pacer.TicksPlayed));
-            }
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace TheLastGate.Net;
+namespace TheLastGate.Game;
 
 public sealed class TickPacer
 {
@@ -50,8 +50,6 @@ public sealed class TickPacer
     public int BufferTarget { get; private set; } = TargetStart;
 
     public double MeasuredPeriodMilliseconds { get; private set; }
-
-    public uint TicksPlayed { get; private set; }
 
     public void OnArrival(long nowMilliseconds)
     {
@@ -112,7 +110,6 @@ public sealed class TickPacer
     public void TickDone(int ticksStillQueued)
     {
         nextTickAt = ScheduledTick() + NextTickMilliseconds(ticksStillQueued);
-        TicksPlayed++;
     }
 
     public void TickSkipped() => nextTickAt = ScheduledTick() + NextTickMilliseconds(0);

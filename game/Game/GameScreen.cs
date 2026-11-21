@@ -114,8 +114,7 @@ public partial class GameScreen : Control
                     gameSession.SessionCurrencies.Observe(gameState.Player, sessionClock.Elapsed);
                     ticksPlayed++;
                     SendUserData();
-                },
-                connection.SendCommand);
+                });
             if (ticksPlayed > 0)
             {
                 if (sprites != null)
@@ -268,6 +267,7 @@ public partial class GameScreen : Control
         pacer.Adaptive = clientSettings.AdaptivePacing;
         gameSession.GiveMore.Send = SendAction;
         gameState.ShopRefresh.Send = connection.SendCommand;
+        gameState.TickReports.Send = connection.SendCommand;
         gameState.NameRequests.Send = connection.SendCommand;
         gameSession.AutoWalk.Send = connection.SendCommand;
         gameState.BuffWatch.Say = text =>

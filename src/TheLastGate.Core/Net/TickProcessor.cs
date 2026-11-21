@@ -142,5 +142,7 @@ public sealed class TickProcessor(GameState state)
         {
             CharacterStatuses.Advance(ref tiles[tileIndex], state.ServerTick, reportUnusualData);
         }
+
+        state.TickReports.TickPlayed();
     }
 }

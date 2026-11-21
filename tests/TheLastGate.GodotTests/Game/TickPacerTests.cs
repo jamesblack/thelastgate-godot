@@ -1,5 +1,5 @@
 using GdUnit4;
-using TheLastGate.Net;
+using TheLastGate.Game;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Game;

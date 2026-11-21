@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using GdUnit4;
+using TheLastGate.Game;
 using TheLastGate.Net;
 using static GdUnit4.Assertions;
 
@@ -87,7 +88,7 @@ public class TickPlaybackTests
     private static List<byte[]> PlayDue(TickPlayback playback, long nowMilliseconds)
     {
         var played = new List<byte[]>();
-        playback.PlayDueTicks(nowMilliseconds, played.Add, _ => { });
+        playback.PlayDueTicks(nowMilliseconds, played.Add);
         return played;
     }
 }
