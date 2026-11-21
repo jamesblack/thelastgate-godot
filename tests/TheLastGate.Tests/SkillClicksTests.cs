@@ -6,25 +6,6 @@ namespace TheLastGate.Tests;
 
 public class SkillClicksTests
 {
-    [Theory]
-    [InlineData(3, true, 0u, true)]
-    [InlineData(3, false, 0u, false)]
-    [InlineData(50, false, 0u, true)]
-    [InlineData(51, false, 0u, true)]
-    [InlineData(52, false, 0u, false)]
-    [InlineData(52, false, Kindred.KnowsIdentify, true)]
-    [InlineData(53, false, 0u, false)]
-    [InlineData(53, false, Kindred.Lycanthrope, true)]
-    [InlineData(54, false, Kindred.Lycanthrope, true)]
-    public void IsKnown_CountsLearntSkillsAndTheClassSkillsTheCharacterHas(
-        int skillNumber,
-        bool learnt,
-        uint kindred,
-        bool known)
-    {
-        Assert.Equal(known, SkillClicks.IsKnown(skillNumber, learnt, kindred));
-    }
-
     [Fact]
     public void Help_ShowsTheNameTheDescriptionAndTheAttributesThatAffectTheSkill()
     {
@@ -53,8 +34,8 @@ public class SkillClicksTests
         4,
         "Strength improves most combat skills. It also improves your movement speed and the damage dealt by your "
         + "attacks.")]
-    [InlineData(StatPlan.HitPointsSlot, "Your Hitpoints.")]
-    [InlineData(StatPlan.ManaSlot, "Your Mana.")]
+    [InlineData(StatSlots.HitPoints, "Your Hitpoints.")]
+    [InlineData(StatSlots.Mana, "Your Mana.")]
     public void StatHelp_DescribesEachStat(int slot, string text)
     {
         Assert.Equal(new LogLine(text, (int)TextColour.Yellow), SkillClicks.StatHelp(slot));

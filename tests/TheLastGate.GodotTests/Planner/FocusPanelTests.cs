@@ -2,7 +2,6 @@ using GdUnit4;
 using TheLastGate.Planner;
 using TheLastGate.Rules;
 using TheLastGate.State;
-using TheLastGate.Stats;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Planner;
@@ -15,7 +14,7 @@ public class FocusPanelTests
     private const int UnlearnedSkill = 7;
     private const int Agility = (int)AttributeSlot.Agility;
 
-    private static readonly int SwordSlot = StatPlan.SkillSlot(SwordSkill);
+    private static readonly int SwordSlot = StatSlots.Skill(SwordSkill);
     private FocusCache cache = new();
 
     private PlannerGame game = null!;
@@ -149,7 +148,7 @@ public class FocusPanelTests
 
         foreach (var (line, raise) in panel.Lines.Where(line => line.Indented).Zip(panel.Plan))
         {
-            var skill = raise.RaiseIndex >= StatPlan.FirstSkillSlot;
+            var skill = raise.RaiseIndex >= StatSlots.FirstSkill;
             AssertThat(line.Tone).IsEqual(skill ? FocusTone.SkillRaise : FocusTone.AttributeRaise);
         }
     }

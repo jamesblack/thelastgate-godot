@@ -61,7 +61,7 @@ public partial class SkillList : VBoxContainer
             var number = order[Panel.Skills.PositionShownIn(row)];
             var text = terminology.Skills[number];
             var line = StatLines.Skill(number, text.Name, text.Show, player.Skills[number], plan, player.Points);
-            GetChild<StatRow>(row).Show(line, StatPlan.SkillSlot(number), showBase);
+            GetChild<StatRow>(row).Show(line, StatSlots.Skill(number), showBase);
         }
     }
 

@@ -5,7 +5,6 @@ using System.Linq;
 using TheLastGate.Buffs;
 using TheLastGate.Rules;
 using TheLastGate.State;
-using TheLastGate.Stats;
 
 namespace TheLastGate.Planner;
 
@@ -32,7 +31,7 @@ public static class FocusInputs
         var input = new SkillFocusInput
         {
             Divisor = SkillPreview.AttributeDivisor(game.HardMode),
-            DirectCost = CostAfter(game, StatPlan.SkillSlot(skill), 0),
+            DirectCost = CostAfter(game, StatSlots.Skill(skill), 0),
             FoolReversed = TarotMath.Has(game.Choices.TarotCards, TarotCard.FoolReversed),
         };
         var attributes = game.SkillTexts[skill].Attributes;
@@ -72,7 +71,7 @@ public static class FocusInputs
         {
             Model = model,
             Focused = sheet.ModelSkill(skill, true),
-            FocusedRaiseIndex = StatPlan.SkillSlot(skill),
+            FocusedRaiseIndex = StatSlots.Skill(skill),
         };
         SpellRaiseIndexes(model).CopyTo(input.SpellRaiseIndex, 0);
         if (ArmorFeeds(model.Effects, skill) && sheet.Combat is { } combat)
@@ -223,14 +222,14 @@ public static class FocusInputs
     private static int[] SpellRaiseIndexes(BuffModelInput model) =>
         Enumerable.Range(0, BuffModelInput.BuffCount)
             .Select(kind => model.SpellKnown[kind]
-                ? StatPlan.SkillSlot(PlannerSheet.SpellSkillNumbers[kind])
+                ? StatSlots.Skill(PlannerSheet.SpellSkillNumbers[kind])
                 : BuffFocus.NoSlot)
             .ToArray();
 
     private static int[] CombatRaiseIndexes(CombatModelInput combat) =>
         Enumerable.Range(0, CombatModel.SkillCount)
             .Select(skill => combat.Known[skill]
-                ? StatPlan.SkillSlot(PlannerSheet.CombatSkillNumbers[skill])
+                ? StatSlots.Skill(PlannerSheet.CombatSkillNumbers[skill])
                 : BuffFocus.NoSlot)
             .ToArray();
 
@@ -299,7 +298,7 @@ public static class FocusInputs
             return;
         }
 
-        candidates.Add(StatPlan.SkillSlot(PlannerSheet.SpellSkillNumbers[(int)kind]), FocusSearch.MostPoints);
+        candidates.Add(StatSlots.Skill(PlannerSheet.SpellSkillNumbers[(int)kind]), FocusSearch.MostPoints);
         if (attributePool)
         {
             return;

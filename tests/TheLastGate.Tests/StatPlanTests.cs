@@ -21,8 +21,8 @@ public class StatPlanTests
     }
 
     [Theory]
-    [InlineData(StatPlan.HitPointsSlot)]
-    [InlineData(StatPlan.ManaSlot)]
+    [InlineData(StatSlots.HitPoints)]
+    [InlineData(StatSlots.Mana)]
     public void NextCost_OfHitPointsAndManaIsLinear(int slot)
     {
         Assert.Equal(400, new StatPlan().NextCost(slot, [100, 0, 500, 4, 0, 1250]));
@@ -31,7 +31,7 @@ public class StatPlanTests
     [Fact]
     public void NextCost_OfASkillIsAtLeastItsValue()
     {
-        Assert.Equal(3, new StatPlan().NextCost(StatPlan.SkillSlot(Dagger), [3, 0, 50, 1, 0, 3]));
+        Assert.Equal(3, new StatPlan().NextCost(StatSlots.Skill(Dagger), [3, 0, 50, 1, 0, 3]));
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class StatPlanTests
     [Fact]
     public void NextCost_IsNullForAnUnlearntSkill()
     {
-        Assert.Null(new StatPlan().NextCost(StatPlan.SkillSlot(Dagger), [0, 0, 50, 2, 0, 6]));
+        Assert.Null(new StatPlan().NextCost(StatSlots.Skill(Dagger), [0, 0, 50, 2, 0, 6]));
     }
 
     [Fact]
@@ -114,15 +114,15 @@ public class StatPlanTests
     public void Commit_SendsOneStatCommandPerPlannedSlotInSlotOrder()
     {
         var plan = new StatPlan();
-        plan.Raise(StatPlan.SkillSlot(Dagger), [10, 0, 50, 2, 0, 20], Plenty, 1);
-        plan.Raise(StatPlan.ManaSlot, [60, 0, 500, 3, 0, 900], Plenty, 3);
+        plan.Raise(StatSlots.Skill(Dagger), [10, 0, 50, 2, 0, 20], Plenty, 1);
+        plan.Raise(StatSlots.Mana, [60, 0, 500, 3, 0, 900], Plenty, 3);
         plan.Raise(2, [10, 0, 50, 3, 0, 12], Plenty, 2);
 
         Assert.Equal(
             [
                 ClientPackets.ShortAndInt(ClientCommand.Stat, 2, 2),
-                ClientPackets.ShortAndInt(ClientCommand.Stat, StatPlan.ManaSlot, 3),
-                ClientPackets.ShortAndInt(ClientCommand.Stat, StatPlan.FirstSkillSlot + Dagger, 1),
+                ClientPackets.ShortAndInt(ClientCommand.Stat, StatSlots.Mana, 3),
+                ClientPackets.ShortAndInt(ClientCommand.Stat, StatSlots.FirstSkill + Dagger, 1),
             ],
             plan.Commit());
     }
@@ -131,12 +131,12 @@ public class StatPlanTests
     public void Commit_SplitsSkillRaisesIntoAmountsTheServerAccepts()
     {
         var plan = new StatPlan();
-        plan.Raise(StatPlan.SkillSlot(Dagger), [1, 0, 300, 0, 0, 1], Plenty, 200);
+        plan.Raise(StatSlots.Skill(Dagger), [1, 0, 300, 0, 0, 1], Plenty, 200);
 
         Assert.Equal(
             [
-                ClientPackets.ShortAndInt(ClientCommand.Stat, StatPlan.SkillSlot(Dagger), 135),
-                ClientPackets.ShortAndInt(ClientCommand.Stat, StatPlan.SkillSlot(Dagger), 65),
+                ClientPackets.ShortAndInt(ClientCommand.Stat, StatSlots.Skill(Dagger), 135),
+                ClientPackets.ShortAndInt(ClientCommand.Stat, StatSlots.Skill(Dagger), 65),
             ],
             plan.Commit());
     }
@@ -153,17 +153,6 @@ public class StatPlanTests
         Assert.Equal(0, plan.Raised(0));
         Assert.Equal(0, plan.PointsUsed);
         Assert.Empty(plan.Commit());
-    }
-
-    [Fact]
-    public void Values_FindsTheServerValuesForEachSlot()
-    {
-        var player = new PlayerState();
-
-        Assert.Same(player.Attributes[2], StatPlan.Values(player, 2));
-        Assert.Same(player.HitPoints, StatPlan.Values(player, StatPlan.HitPointsSlot));
-        Assert.Same(player.Mana, StatPlan.Values(player, StatPlan.ManaSlot));
-        Assert.Same(player.Skills[Dagger], StatPlan.Values(player, StatPlan.SkillSlot(Dagger)));
     }
 
     [Theory]

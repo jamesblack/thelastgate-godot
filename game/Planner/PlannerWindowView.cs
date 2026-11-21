@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using TheLastGate.Rules;
-using TheLastGate.Stats;
+using TheLastGate.State;
 using TheLastGate.Windows;
 using OptionButton = Godot.OptionButton;
 
@@ -115,7 +115,7 @@ public partial class PlannerWindowView : Panel
     // The gold outline marks the focused skill or combat stat.
     public void ShowFocus(PlannerFocus? focus, FocusPanel panel)
     {
-        var focusedSlot = focus?.Skill is { } skill ? StatPlan.SkillSlot(skill) : (int?)null;
+        var focusedSlot = focus?.Skill is { } skill ? StatSlots.Skill(skill) : (int?)null;
         foreach (var row in SkillRows.GetChildren().Cast<PlannerStatRow>())
         {
             row.ShowOutline(row.Visible && row.Slot == focusedSlot);
@@ -258,7 +258,7 @@ public partial class PlannerWindowView : Panel
             {
                 statRow.GlyphClicked += (slot, raise) => RowClicked?.Invoke(slot, raise);
                 statRow.NameClicked += slot =>
-                    FocusClicked?.Invoke(PlannerFocus.OnSkill(slot - StatPlan.FirstSkillSlot));
+                    FocusClicked?.Invoke(PlannerFocus.OnSkill(slot - StatSlots.FirstSkill));
             }
 
             skillRows.AddChild(row);

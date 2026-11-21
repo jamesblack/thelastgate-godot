@@ -1215,9 +1215,9 @@ public partial class HudView : Control
         }
 
         var hitPoints = StatLines.HitPoints(player.HitPoints, statPlan, player.Points);
-        rows.GetChild<StatRow>(HitPointsRow).Show(hitPoints, StatPlan.HitPointsSlot, showBase);
+        rows.GetChild<StatRow>(HitPointsRow).Show(hitPoints, StatSlots.HitPoints, showBase);
         var mana = StatLines.Mana(player.Mana, statPlan, player.Points);
-        rows.GetChild<StatRow>(ManaRow).Show(mana, StatPlan.ManaSlot, showBase);
+        rows.GetChild<StatRow>(ManaRow).Show(mana, StatSlots.Mana, showBase);
     }
 
     private void ShowTopMeta(StatPanel panel)
@@ -1716,7 +1716,7 @@ public partial class HudView : Control
             return;
         }
 
-        if (row.Slot < StatPlan.FirstSkillSlot)
+        if (row.Slot < StatSlots.FirstSkill)
         {
             if (button == MapButton.Right)
             {
@@ -1727,14 +1727,14 @@ public partial class HudView : Control
         }
 
         var player = state.Player;
-        var number = row.Slot - StatPlan.FirstSkillSlot;
+        var number = row.Slot - StatSlots.FirstSkill;
         var text = state.Terminology.Skills[number];
         var learnt = player.Skills[number][0] != 0;
         if (button == MapButton.Left)
         {
             sendCommand(SkillPackets.Use(number, selectedCharacter));
         }
-        else if (button == MapButton.Right && SkillClicks.IsKnown(number, learnt, player.Kindred))
+        else if (button == MapButton.Right && Kindred.IsKnown(number, learnt, player.Kindred))
         {
             foreach (var line in SkillClicks.Help(text.Name, text.Description, text.Attributes))
             {
@@ -1777,7 +1777,7 @@ public partial class HudView : Control
 
         var ctrlOrAlt = Input.IsKeyPressed(Key.Ctrl) || Input.IsKeyPressed(Key.Alt);
         var times = StatPlan.ClickTimes(Input.IsKeyPressed(Key.Shift), ctrlOrAlt);
-        var values = StatPlan.Values(state.Player, slot);
+        var values = StatSlots.Values(state.Player, slot);
         if (raise)
         {
             statPlan.Raise(slot, values, state.Player.Points, times);
@@ -1848,7 +1848,7 @@ public partial class HudView : Control
         if (panel.Affordable
             && statPlan.RaiseAll(
                 panel.Plan.Select(raise => (raise.RaiseIndex, raise.Points)).ToArray(),
-                slot => StatPlan.Values(player, slot),
+                slot => StatSlots.Values(player, slot),
                 player.Points))
         {
             ShowStats(player);

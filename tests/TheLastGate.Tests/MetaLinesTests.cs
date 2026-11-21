@@ -7,23 +7,6 @@ namespace TheLastGate.Tests;
 public class MetaLinesTests
 {
     [Theory]
-    [InlineData(1234, false, "1234")]
-    [InlineData(0, false, "0")]
-    [InlineData(1234, true, "12.34")]
-    [InlineData(1205, true, "12.05")]
-    [InlineData(7, true, "0.07")]
-    public void Value_PrintsWholeNumbersOrHundredths(int value, bool hundredths, string text)
-    {
-        Assert.Equal(text, MetaLines.Value(value, hundredths));
-    }
-
-    [Fact]
-    public void Value_LeavesTheUnsetValueBlank()
-    {
-        Assert.Equal("", MetaLines.Value(65535, false));
-    }
-
-    [Theory]
     [InlineData(0, TextColour.Red)]
     [InlineData(1, TextColour.Yellow)]
     [InlineData(7, TextColour.Teal)]

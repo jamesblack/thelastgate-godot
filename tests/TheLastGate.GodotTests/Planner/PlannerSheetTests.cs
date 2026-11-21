@@ -80,7 +80,7 @@ public class PlannerSheetTests
         var skills = PlannerSheet.For(game).Skills;
 
         AssertThat(skills.Select(row => row.Name)).ContainsExactly("Bless", "Staff");
-        AssertThat(skills[0].Slot).IsEqual(StatPlan.SkillSlot(BlessSkill));
+        AssertThat(skills[0].Slot).IsEqual(StatSlots.Skill(BlessSkill));
     }
 
     [TestCase]
@@ -146,7 +146,7 @@ public class PlannerSheetTests
         var vitals = PlannerSheet.For(game).Vitals;
 
         AssertThat(vitals.Select(row => (row.Name, row.Slot, row.Base, row.Current)))
-            .ContainsExactly(("Hitpoints", StatPlan.HitPointsSlot, 120, 300), ("Mana", StatPlan.ManaSlot, 80, 150));
+            .ContainsExactly(("Hitpoints", StatSlots.HitPoints, 120, 300), ("Mana", StatSlots.Mana, 80, 150));
     }
 
     [TestCase(1u << 4, 75)]
@@ -236,7 +236,7 @@ public class PlannerSheetTests
         game.SkillTexts[SwordSkill] = new PlannerSkillText("Sword", [Braveness, Agility, Strength], 1);
         int[] sword = [40, 0, 200, 3, 0, 80];
         sword.CopyTo(game.Skills[SwordSkill], 0);
-        var slot = StatPlan.SkillSlot(SwordSkill);
+        var slot = StatSlots.Skill(SwordSkill);
         game.Plan.Raise(slot, game.ValuesFor(slot), game.Points, 10);
 
         var sheet = PlannerSheet.For(game);

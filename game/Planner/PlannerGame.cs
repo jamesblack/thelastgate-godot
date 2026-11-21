@@ -129,9 +129,9 @@ public sealed class PlannerGame
     public int[] ValuesFor(int slot) => slot switch
     {
         < PlayerState.AttributeCount => Attributes[slot],
-        StatPlan.HitPointsSlot => HitPoints,
-        StatPlan.ManaSlot => Mana,
-        _ => Skills[slot - StatPlan.FirstSkillSlot],
+        StatSlots.HitPoints => HitPoints,
+        StatSlots.Mana => Mana,
+        _ => Skills[slot - StatSlots.FirstSkill],
     };
 
     public static int Score(int[] values) => (values[ScoreHigh] << 8) | values[ScoreLow];

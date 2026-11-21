@@ -1,4 +1,5 @@
 using TheLastGate.Assets;
+using TheLastGate.State;
 using TheLastGate.Stats;
 
 namespace TheLastGate.Tests;
@@ -141,7 +142,7 @@ public class StatLinesTests
     {
         int[] values = [100, 0, 500, 4, 0, 1250];
         var plan = new StatPlan();
-        plan.Raise(StatPlan.HitPointsSlot, values, Plenty, 1);
+        plan.Raise(StatSlots.HitPoints, values, Plenty, 1);
 
         var line = StatLines.HitPoints(values, plan, Plenty);
 
@@ -153,7 +154,7 @@ public class StatLinesTests
     {
         int[] values = [60, 0, 500, 3, 0, 900];
         var plan = new StatPlan();
-        plan.Raise(StatPlan.ManaSlot, values, Plenty, 1);
+        plan.Raise(StatSlots.Mana, values, Plenty, 1);
 
         var line = StatLines.Mana(values, plan, Plenty);
 
@@ -165,7 +166,7 @@ public class StatLinesTests
     {
         int[] values = [10, 0, 50, 2, 0, 20];
         var plan = new StatPlan();
-        plan.Raise(StatPlan.SkillSlot(Dagger), values, Plenty, 1);
+        plan.Raise(StatSlots.Skill(Dagger), values, Plenty, 1);
 
         var line = StatLines.Skill(Dagger, "Dagger", 1, values, plan, Plenty);
 

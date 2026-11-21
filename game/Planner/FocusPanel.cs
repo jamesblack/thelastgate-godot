@@ -4,7 +4,6 @@ using System.Linq;
 using TheLastGate.Buffs;
 using TheLastGate.Rules;
 using TheLastGate.State;
-using TheLastGate.Stats;
 
 namespace TheLastGate.Planner;
 
@@ -54,7 +53,7 @@ public sealed class FocusPanel
         }
 
         if (!Focusable(sheet.Game, skill)
-            || sheet.Skills.FirstOrDefault(row => row.Slot == StatPlan.SkillSlot(skill)) is not { } row)
+            || sheet.Skills.FirstOrDefault(row => row.Slot == StatSlots.Skill(skill)) is not { } row)
         {
             return Lost();
         }
@@ -100,10 +99,10 @@ public sealed class FocusPanel
 
     private static string RaiseName(PlannerGame game, int raiseIndex) => raiseIndex switch
     {
-        < AttributeAmounts.Count => StatLines.AttributeNames[raiseIndex],
-        StatPlan.HitPointsSlot => "Hitpoints",
-        StatPlan.ManaSlot => "Mana",
-        _ => game.SkillTexts[raiseIndex - StatPlan.FirstSkillSlot].Name,
+        < AttributeAmounts.Count => StatSlots.AttributeNames[raiseIndex],
+        StatSlots.HitPoints => "Hitpoints",
+        StatSlots.Mana => "Mana",
+        _ => game.SkillTexts[raiseIndex - StatSlots.FirstSkill].Name,
     };
 
     private static IEnumerable<FocusLine> RouteLines(PlannerGame game, IEnumerable<FocusRaise> raises) =>
@@ -111,7 +110,7 @@ public sealed class FocusPanel
             $"+{raise.Points} {RaiseName(game, raise.RaiseIndex)}",
             raise.Cost.ToString(),
             true,
-            raise.RaiseIndex >= StatPlan.FirstSkillSlot ? FocusTone.SkillRaise : FocusTone.AttributeRaise));
+            raise.RaiseIndex >= StatSlots.FirstSkill ? FocusTone.SkillRaise : FocusTone.AttributeRaise));
 
     private static FocusPanel WithRoute(PlannerGame game, IEnumerable<FocusLine> lines, FocusRoute route) => new()
     {

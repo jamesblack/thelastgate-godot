@@ -7,31 +7,17 @@ namespace TheLastGate.Stats;
 
 public sealed class StatPlan
 {
-    public const int HitPointsSlot = 5;
-    public const int ManaSlot = 7;
-    public const int FirstSkillSlot = StatPackets.FirstSkillSlot;
     public const string UpdateHelp = "Make the changes permanent";
 
-    private const int SlotCount = FirstSkillSlot + PlayerState.SkillSlots;
     private const int BaseValue = 0;
     private const int Limit = 2;
     private const int Difficulty = 3;
     private const int ShiftClickTimes = 10;
     private const int CtrlClickTimes = 90;
 
-    private readonly int[] raised = new int[SlotCount];
+    private readonly int[] raised = new int[StatSlots.Count];
 
     public int PointsUsed { get; private set; }
-
-    public static int SkillSlot(int skillNumber) => FirstSkillSlot + skillNumber;
-
-    public static int[] Values(PlayerState player, int slot) => slot switch
-    {
-        < PlayerState.AttributeCount => player.Attributes[slot],
-        HitPointsSlot => player.HitPoints,
-        ManaSlot => player.Mana,
-        _ => player.Skills[slot - FirstSkillSlot],
-    };
 
     public static int ClickTimes(bool shift, bool ctrlOrAlt) =>
         ctrlOrAlt ? CtrlClickTimes : shift ? ShiftClickTimes : 1;
@@ -97,7 +83,7 @@ public sealed class StatPlan
     public IReadOnlyList<byte[]> Commit()
     {
         var packets = new List<byte[]>();
-        for (var slot = 0; slot < SlotCount; slot++)
+        for (var slot = 0; slot < StatSlots.Count; slot++)
         {
             packets.AddRange(StatPackets.Raise(slot, raised[slot]));
         }
@@ -131,7 +117,7 @@ public sealed class StatPlan
         return slot switch
         {
             < PlayerState.AttributeCount => value * value * value * difficulty / 20,
-            HitPointsSlot or ManaSlot => value * difficulty,
+            StatSlots.HitPoints or StatSlots.Mana => value * difficulty,
             _ => Math.Max(value, value * value * value * difficulty / 40),
         };
     }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using TheLastGate.Assets;
 using TheLastGate.State;
 
@@ -11,8 +10,6 @@ public static class MetaLines
 {
     private const int NameWidth = 20;
     private const int AffixWidth = 7;
-    private const int UnsetValue = 65535;
-    private const int Hundredths = 100;
 
     private static readonly HashSet<string> Headings = ["  Passive Stats:", "  Active Stats:"];
 
@@ -22,15 +19,8 @@ public static class MetaLines
             : new MetaLine(
                 Clip(stat.Name, NameWidth),
                 Colour(stat.Font),
-                Value(stat.Value, stat.Flag != 0),
+                MetaStat.ValueText(stat.Value, stat.Flag != 0),
                 Clip(stat.Affix, AffixWidth));
-
-    public static string Value(int value, bool hundredths) =>
-        hundredths
-            ? string.Create(CultureInfo.InvariantCulture, $"{value / Hundredths}.{value % Hundredths:00}")
-            : value == UnsetValue
-                ? ""
-                : value.ToString(CultureInfo.InvariantCulture);
 
     public static TextColour Colour(int font) =>
         font is >= (int)TextColour.Red and <= (int)TextColour.White ? (TextColour)font : TextColour.Yellow;

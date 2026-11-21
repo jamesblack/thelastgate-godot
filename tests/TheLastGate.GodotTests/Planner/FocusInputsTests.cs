@@ -3,7 +3,6 @@ using TheLastGate.Buffs;
 using TheLastGate.Planner;
 using TheLastGate.Rules;
 using TheLastGate.State;
-using TheLastGate.Stats;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Planner;
@@ -20,8 +19,8 @@ public class FocusInputsTests
     private const int Strength = (int)AttributeSlot.Strength;
     private const int NoCost = SkillFocus.NoCost;
 
-    private static readonly int SwordSlot = StatPlan.SkillSlot(SwordSkill);
-    private static readonly int BlessSlot = StatPlan.SkillSlot(BlessSkill);
+    private static readonly int SwordSlot = StatSlots.Skill(SwordSkill);
+    private static readonly int BlessSlot = StatSlots.Skill(BlessSkill);
 
     private PlannerGame game = null!;
 

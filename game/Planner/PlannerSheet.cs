@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TheLastGate.Rules;
 using TheLastGate.State;
-using TheLastGate.Stats;
 
 namespace TheLastGate.Planner;
 
@@ -125,8 +124,8 @@ public sealed class PlannerSheet
         sheet.Attributes = Enumerable.Range(0, AttributeAmounts.Count).Select(sheet.AttributeRow).ToArray();
         sheet.Vitals =
         [
-            sheet.VitalRow("Hitpoints", game.HitPoints, StatPlan.HitPointsSlot),
-            sheet.VitalRow("Mana", game.Mana, StatPlan.ManaSlot),
+            sheet.VitalRow("Hitpoints", game.HitPoints, StatSlots.HitPoints),
+            sheet.VitalRow("Mana", game.Mana, StatSlots.Mana),
         ];
         sheet.Skills = game.SkillOrder
             .Where(number => number < game.SkillTexts.Length && game.SkillTexts[number].Show == ShownSkill)
@@ -231,9 +230,9 @@ public sealed class PlannerSheet
             TarotCards = choices.TarotCards,
             Effects = ItemEffects.Compute(TreeInput(), ItemInput()),
             UncappedHitpoints = Game.HitPoints[UncappedValue],
-            PlannedHitpoints = Game.Plan.Raised(StatPlan.HitPointsSlot),
+            PlannedHitpoints = Game.Plan.Raised(StatSlots.HitPoints),
             UncappedMana = Game.Mana[UncappedValue],
-            PlannedMana = Game.Plan.Raised(StatPlan.ManaSlot),
+            PlannedMana = Game.Plan.Raised(StatSlots.Mana),
         };
         foreach (var attribute in Enum.GetValues<AttributeSlot>())
         {
@@ -443,7 +442,7 @@ public sealed class PlannerSheet
     internal BuffModelSkill ModelSkill(int number, bool withPlan) => new()
     {
         ServerTotal = PlannerGame.Score(Game.Skills[number]),
-        Planned = withPlan ? Game.Plan.Raised(StatPlan.SkillSlot(number)) : 0,
+        Planned = withPlan ? Game.Plan.Raised(StatSlots.Skill(number)) : 0,
         Attributes = SkillAttributes(number).Select(attribute => (AttributeSlot)attribute).ToArray(),
         Scale = number switch
         {
@@ -479,7 +478,7 @@ public sealed class PlannerSheet
     private PlannerRow AttributeRow(int attribute)
     {
         var values = Game.Attributes[attribute];
-        var row = RaisableRow(StatLines.AttributeNames[attribute], attribute, values[0], PlannerGame.Score(values));
+        var row = RaisableRow(StatSlots.AttributeNames[attribute], attribute, values[0], PlannerGame.Score(values));
         if (Planned == null || unplanned == null)
         {
             return row;
@@ -501,7 +500,7 @@ public sealed class PlannerSheet
         var skillValues = Game.Skills[number];
         var row = RaisableRow(
             Game.SkillTexts[number].Name,
-            StatPlan.SkillSlot(number),
+            StatSlots.Skill(number),
             skillValues[0],
             PlannerGame.Score(skillValues));
         var attributes = SkillAttributes(number).ToArray();

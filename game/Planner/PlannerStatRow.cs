@@ -1,6 +1,6 @@
 using System;
 using Godot;
-using TheLastGate.Stats;
+using TheLastGate.State;
 
 namespace TheLastGate.Planner;
 
@@ -58,7 +58,7 @@ public partial class PlannerStatRow : Control
 
         // Only skills can be focused.
         GetNode<Control>("NameClick").MouseFilter =
-            row.Slot >= StatPlan.FirstSkillSlot ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
+            row.Slot >= StatSlots.FirstSkill ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
     }
 
     private void ShowPart(string path, int amount, string text)
