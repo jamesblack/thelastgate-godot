@@ -1,10 +1,13 @@
+using GdUnit4;
 using TheLastGate.Assets;
 using TheLastGate.State;
 using TheLastGate.Stats;
 using TheLastGate.World;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Stats;
 
+[TestSuite]
 public class SkillShortcutTests
 {
     private const int Dagger = 3;
@@ -13,18 +16,18 @@ public class SkillShortcutTests
     private const string ShortcutKeysHint =
         " Right-click on one of the shortcut keys in the bottom right to set a shortcut.";
 
-    [Fact]
+    [TestCase]
     public void Toggle_SelectsTheSkillForAShortcut()
     {
         var shortcut = new SkillShortcut();
 
         var line = shortcut.Toggle(Dagger, "Dagger", 0);
 
-        Assert.Equal(Dagger, shortcut.Selected);
-        Assert.Equal(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime), line);
+        AssertThat(shortcut.Selected).IsEqual(Dagger);
+        AssertThat(line).IsEqual(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void Toggle_OnTheSelectedSkillUnselectsIt()
     {
         var shortcut = new SkillShortcut();
@@ -32,11 +35,11 @@ public class SkillShortcutTests
 
         var line = shortcut.Toggle(Dagger, "Dagger", 0);
 
-        Assert.Null(shortcut.Selected);
-        Assert.Equal(new LogLine("Dagger no longer selected for shortcut.", (int)TextColour.Lime), line);
+        AssertThat(shortcut.Selected).IsNull();
+        AssertThat(line).IsEqual(new LogLine("Dagger no longer selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void Toggle_OnAnotherSkillSelectsThatOne()
     {
         var shortcut = new SkillShortcut();
@@ -44,14 +47,13 @@ public class SkillShortcutTests
 
         var line = shortcut.Toggle(Sword, "Sword", 0);
 
-        Assert.Equal(Sword, shortcut.Selected);
-        Assert.Equal(new LogLine("Sword selected for shortcut.", (int)TextColour.Lime), line);
+        AssertThat(shortcut.Selected).IsEqual(Sword);
+        AssertThat(line).IsEqual(new LogLine("Sword selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Theory]
-    [InlineData(Kindred.Mercenary)]
-    [InlineData(Kindred.Templar)]
-    [InlineData(Kindred.Harakim)]
+    [TestCase(Kindred.Mercenary)]
+    [TestCase(Kindred.Templar)]
+    [TestCase(Kindred.Harakim)]
     public void Toggle_ExplainsTheShortcutKeysToMercenariesTemplarsAndHarakimTheFirstTime(uint kindred)
     {
         var shortcut = new SkillShortcut();
@@ -60,43 +62,43 @@ public class SkillShortcutTests
         shortcut.Toggle(Dagger, "Dagger", kindred);
         var second = shortcut.Toggle(Dagger, "Dagger", kindred);
 
-        Assert.Equal(new LogLine("Dagger selected for shortcut." + ShortcutKeysHint, (int)TextColour.Lime), first);
-        Assert.Equal(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime), second);
+        AssertThat(first)
+            .IsEqual(new LogLine("Dagger selected for shortcut." + ShortcutKeysHint, (int)TextColour.Lime));
+        AssertThat(second).IsEqual(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void Toggle_DoesNotExplainTheShortcutKeysToOtherClasses()
     {
         var line = new SkillShortcut().Toggle(Dagger, "Dagger", Kindred.SeyanDu);
 
-        Assert.Equal(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime), line);
+        AssertThat(line).IsEqual(new LogLine("Dagger selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Theory]
-    [InlineData(MapButton.Right, MapKeys.Ctrl, true)]
-    [InlineData(MapButton.Right, MapKeys.Alt, true)]
-    [InlineData(MapButton.Right, MapKeys.Ctrl | MapKeys.Shift, true)]
-    [InlineData(MapButton.Right, MapKeys.None, false)]
-    [InlineData(MapButton.Right, MapKeys.Shift, false)]
-    [InlineData(MapButton.Left, MapKeys.Ctrl, false)]
+    [TestCase(MapButton.Right, MapKeys.Ctrl, true)]
+    [TestCase(MapButton.Right, MapKeys.Alt, true)]
+    [TestCase(MapButton.Right, MapKeys.Ctrl | MapKeys.Shift, true)]
+    [TestCase(MapButton.Right, MapKeys.None, false)]
+    [TestCase(MapButton.Right, MapKeys.Shift, false)]
+    [TestCase(MapButton.Left, MapKeys.Ctrl, false)]
     public void SelectsItem_IsARightClickWithControlOrAlt(MapButton button, MapKeys keys, bool selects)
     {
-        Assert.Equal(selects, SkillShortcut.SelectsItem(button, keys));
+        AssertThat(SkillShortcut.SelectsItem(button, keys)).IsEqual(selects);
     }
 
-    [Fact]
+    [TestCase]
     public void ToggleInventory_SelectsTheSlotAndExplainsTheShortcutKeysTheFirstTime()
     {
         var shortcut = new SkillShortcut();
 
         var first = shortcut.ToggleInventory(5);
 
-        Assert.Equal(105, shortcut.Selected);
+        AssertThat(shortcut.Selected).IsEqual(105);
         var text = "Inventory slot 5 selected for shortcut." + ShortcutKeysHint;
-        Assert.Equal(new LogLine(text, (int)TextColour.Lime), first);
+        AssertThat(first).IsEqual(new LogLine(text, (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void ToggleInventory_OnTheSelectedSlotUnselectsItAndThenSelectsItWithoutTheHint()
     {
         var shortcut = new SkillShortcut();
@@ -106,23 +108,23 @@ public class SkillShortcutTests
         var selected = shortcut.ToggleInventory(5);
 
         var unselectedText = "Inventory slot 5 no longer selected for shortcut.";
-        Assert.Equal(new LogLine(unselectedText, (int)TextColour.Lime), unselected);
-        Assert.Equal(new LogLine("Inventory slot 5 selected for shortcut.", (int)TextColour.Lime), selected);
+        AssertThat(unselected).IsEqual(new LogLine(unselectedText, (int)TextColour.Lime));
+        AssertThat(selected).IsEqual(new LogLine("Inventory slot 5 selected for shortcut.", (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void ToggleEquipment_SelectsTheGearSlotAndExplainsTheShortcutKeysTheFirstTime()
     {
         var shortcut = new SkillShortcut();
 
         var first = shortcut.ToggleEquipment(WornSlot.Head);
 
-        Assert.Equal(200, shortcut.Selected);
+        AssertThat(shortcut.Selected).IsEqual(200);
         var text = "*Helmet equipment slot selected for shortcut." + ShortcutKeysHint;
-        Assert.Equal(new LogLine(text, (int)TextColour.Lime), first);
+        AssertThat(first).IsEqual(new LogLine(text, (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void ToggleEquipment_OnTheSelectedSlotUnselectsIt()
     {
         var shortcut = new SkillShortcut();
@@ -130,12 +132,12 @@ public class SkillShortcutTests
 
         var line = shortcut.ToggleEquipment(WornSlot.MainHand);
 
-        Assert.Null(shortcut.Selected);
+        AssertThat(shortcut.Selected).IsNull();
         var text = "*Weapon equipment slot no longer selected for shortcut.";
-        Assert.Equal(new LogLine(text, (int)TextColour.Lime), line);
+        AssertThat(line).IsEqual(new LogLine(text, (int)TextColour.Lime));
     }
 
-    [Fact]
+    [TestCase]
     public void Toggles_ExplainTheShortcutKeysOnceForSkillsInventoryAndEquipmentEach()
     {
         var shortcut = new SkillShortcut();
@@ -144,10 +146,10 @@ public class SkillShortcutTests
 
         var line = shortcut.ToggleEquipment(WornSlot.Head);
 
-        Assert.EndsWith(ShortcutKeysHint, line.Text);
+        AssertThat(line.Text).EndsWith(ShortcutKeysHint);
     }
 
-    [Fact]
+    [TestCase]
     public void Toggle_OnASkillReplacesASelectedItem()
     {
         var shortcut = new SkillShortcut();
@@ -155,6 +157,6 @@ public class SkillShortcutTests
 
         shortcut.Toggle(Dagger, "Dagger", 0);
 
-        Assert.Equal(Dagger, shortcut.Selected);
+        AssertThat(shortcut.Selected).IsEqual(Dagger);
     }
 }

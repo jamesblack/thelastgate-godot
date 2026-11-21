@@ -1,43 +1,45 @@
+using GdUnit4;
 using TheLastGate.Stats;
+using static GdUnit4.Assertions;
 
-namespace TheLastGate.Tests;
+namespace TheLastGate.GodotTests.Stats;
 
+[TestSuite]
 public class SkillScrollTests
 {
-    [Fact]
+    [TestCase]
     public void LastRow_LeavesTenOfTheFiftyFiveSkillsInView()
     {
-        Assert.Equal(45, SkillScroll.LastRow);
+        AssertThat(SkillScroll.LastRow).IsEqual(45);
     }
 
-    [Theory]
-    [InlineData(-5, 0)]
-    [InlineData(3, 3)]
-    [InlineData(60, 45)]
+    [TestCase(-5, 0)]
+    [TestCase(3, 3)]
+    [TestCase(60, 45)]
     public void ScrollTo_StaysWithinTheList(int row, int shownRow)
     {
         var scroll = new SkillScroll();
         scroll.ScrollTo(row);
 
-        Assert.Equal(shownRow, scroll.Row);
+        AssertThat(scroll.Row).IsEqual(shownRow);
     }
 
-    [Fact]
+    [TestCase]
     public void ScrollBy_MovesFromTheCurrentRow()
     {
         var scroll = new SkillScroll();
         scroll.ScrollTo(10);
         scroll.ScrollBy(-1);
 
-        Assert.Equal(9, scroll.Row);
+        AssertThat(scroll.Row).IsEqual(9);
     }
 
-    [Fact]
+    [TestCase]
     public void PositionShownIn_CountsFromTheTopRow()
     {
         var scroll = new SkillScroll();
         scroll.ScrollTo(4);
 
-        Assert.Equal(6, scroll.PositionShownIn(2));
+        AssertThat(scroll.PositionShownIn(2)).IsEqual(6);
     }
 }
