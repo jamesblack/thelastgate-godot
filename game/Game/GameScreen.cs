@@ -148,8 +148,8 @@ public partial class GameScreen : Control
     {
         var keeper = new ExploredMapKeeper(login.Server);
         gameState.MinimapBoxCleared += keeper.Recorder.ClearBox;
-        gameState.Chat.LineAdded += line =>
-            keeper.Recorder.NoteLogLine(line.Text, ExploredMapKeeper.ViewCentreCharacter(gameState.Map));
+        gameState.SpectatingStarted += () => keeper.Recorder.Paused = true;
+        gameState.SpectatingStopped += () => keeper.Recorder.Paused = false;
         exploredMap = keeper;
         mapNotes = new MapNotesKeeper(login.Server);
     }

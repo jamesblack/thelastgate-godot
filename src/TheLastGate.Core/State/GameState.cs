@@ -10,10 +10,13 @@ public sealed class GameState
 {
     public const int ServerTickCycle = 200;
 
+    private readonly SpectateWatch spectateWatch = new();
+
     public GameState()
     {
         Tooltips = new ItemTooltips(Chat);
         BuffWatch = new BuffWatch(Player);
+        Chat.LineAdded += line => WatchSpectating(() => spectateWatch.LogLine(line.Text, ViewCentreCharacter));
     }
 
     public PlayerState Player { get; } = new();
@@ -35,7 +38,9 @@ public sealed class GameState
 
     internal CharacterLook PendingLook { get; } = new();
 
-    public bool Spectating => throw new NotImplementedException();
+    public bool Spectating => spectateWatch.Active;
+
+    private int ViewCentreCharacter => Map.Tiles[WorldMap.PlayerTile].CharacterNumber;
 
     public event Action<CharacterLook>? LookShown;
     public event Action<ShopKind>? ShopOpened;
@@ -95,4 +100,16 @@ public sealed class GameState
     internal void ReportHeldItemChanged() => HeldItemChanged?.Invoke();
 
     internal void ReportWaypointsOffered() => WaypointsOffered?.Invoke();
+
+    internal void WatchViewCentre() => WatchSpectating(() => spectateWatch.ViewCentre(ViewCentreCharacter));
+
+    private void WatchSpectating(Action note)
+    {
+        var wasSpectating = Spectating;
+        note();
+        if (Spectating != wasSpectating)
+        {
+            (Spectating ? SpectatingStarted : SpectatingStopped)?.Invoke();
+        }
+    }
 }

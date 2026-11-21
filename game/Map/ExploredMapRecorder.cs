@@ -6,9 +6,7 @@ public sealed class ExploredMapRecorder(ExploredMap map)
 {
     public const int EmptyFloorSprite = 999;
 
-    private readonly SpectateWatch spectating = new();
-
-    public bool Paused => spectating.Active;
+    public bool Paused { get; set; }
 
     public ExploredMap Map => map;
 
@@ -38,8 +36,4 @@ public sealed class ExploredMapRecorder(ExploredMap map)
             map.ClearBox(box.Left, box.Top, box.Width, box.Height);
         }
     }
-
-    public void NoteLogLine(string line, int centreCharacter) => spectating.LogLine(line, centreCharacter);
-
-    public void NoteViewCentre(int centreCharacter) => spectating.ViewCentre(centreCharacter);
 }

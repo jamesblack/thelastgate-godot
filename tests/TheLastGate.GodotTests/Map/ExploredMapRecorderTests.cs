@@ -10,8 +10,6 @@ public class ExploredMapRecorderTests
 {
     private const int Floor = 1100;
     private const int Item = 2200;
-    private const int Own = 11;
-    private const int Target = 22;
 
     private ExploredMap map = new(64, 64);
     private ExploredMapRecorder recorder = new(new ExploredMap(64, 64));
@@ -65,26 +63,23 @@ public class ExploredMapRecorderTests
     public void WhileSpectating_NothingIsRecordedOrCleared()
     {
         recorder.See(5, 5, 0x0505);
-        recorder.NoteLogLine("Now spectating Bob. Use /spectate self to return.", Own);
+        recorder.Paused = true;
 
         recorder.See(6, 6, 0x0606);
         recorder.ClearBox(new MinimapBox(4, 4, 2, 2));
 
-        AssertThat(recorder.Paused).IsTrue();
         AssertThat(map.ColourAt(6, 6)).IsEqual(0u);
         AssertThat(map.ColourAt(5, 5)).IsEqual(0x0505u);
     }
 
     [TestCase]
-    public void ComingBackToTheOwnCharacter_ResumesRecording()
+    public void Unpausing_ResumesRecording()
     {
-        recorder.NoteLogLine("Now spectating Bob. Use /spectate self to return.", Own);
-        recorder.NoteViewCentre(Target);
+        recorder.Paused = true;
 
-        recorder.NoteViewCentre(Own);
+        recorder.Paused = false;
         recorder.See(6, 6, 0x0606);
 
-        AssertThat(recorder.Paused).IsFalse();
         AssertThat(map.ColourAt(6, 6)).IsEqual(0x0606u);
     }
 }

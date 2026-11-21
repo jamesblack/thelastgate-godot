@@ -27,15 +27,11 @@ public sealed class ExploredMapKeeper
 
     public ExploredMapRecorder Recorder { get; }
 
-    public static int ViewCentreCharacter(WorldMap view) => view.Tiles[WorldMap.PlayerTile].CharacterNumber;
-
     // Forgets every area explored on the server, by every character; the notes are kept.
     public static bool ClearSaved(ServerAddress server) => ExploredMap.ClearSaved(OwnPath(server));
 
-    // The view centre goes first, so a view that has just moved to someone being spectated is never recorded.
     public void See(WorldMap view, SpriteLoader sprites)
     {
-        Recorder.NoteViewCentre(ViewCentreCharacter(view));
         foreach (var tile in view.Tiles)
         {
             if (ExploredMapRecorder.SpriteToAverage(tile.Flags, tile.BackgroundSprite, tile.AnimatedItemSprite) is
