@@ -9,4 +9,5 @@ public enum SpriteTint
     Grey = 1 << 0,
     Infrared = 1 << 1,
     Underwater = 1 << 2,
+    Bloody = 1 << 3,
 }

@@ -22,12 +22,12 @@ public partial class SpriteProbeView : PanelContainer
 
     public override void _Process(double delta)
     {
-        var sprites = World.SpritesUnder(GetViewport().GetMousePosition());
-        Visible = sprites != null;
-        if (sprites is { } shown)
+        var probed = World.ProbeUnder(GetViewport().GetMousePosition());
+        Visible = probed != null;
+        if (probed is { } tile)
         {
-            readout.Text = $"floor {Number(shown.Floor)}   object {Number(shown.Object)}   "
-                + $"character {Number(shown.Character)}";
+            readout.Text = $"floor {Number(tile.Floor)}   object {Number(tile.Object)}   "
+                + $"character {Number(tile.Character)}   light {tile.Light}";
         }
     }
 

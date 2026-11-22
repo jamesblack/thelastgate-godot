@@ -1,9 +1,10 @@
 shader_type canvas_item;
 
-// The current client's tints, applied after the light has darkened the sprite through its modulate colour, and its
+// The tints, applied after the light has darkened the sprite through its modulate colour, and its
 // highlight, which doubles the brightness after the tints, and the selected character's green.
 uniform bool grey = false;
 uniform bool infrared = false;
+uniform bool bloody = false;
 uniform bool underwater = false;
 uniform bool highlight = false;
 uniform bool selected = false;
@@ -14,9 +15,12 @@ void fragment() {
 		float average = (color.r + color.g + color.b) / 3.0 * 0.5;
 		color.rgb = vec3(average);
 	}
-	if (infrared) {
+	if (bloody) {
 		float average = (color.r + color.g + color.b) / 3.0;
 		color.rgb = vec3(average, 0.0, 0.0);
+	} else if (infrared) {
+		float average = (color.r + color.g + color.b) / 3.0;
+		color.rgb = average * vec3(0.95, 0.6, 0.55);
 	}
 	if (underwater) {
 		float average = (color.r + color.g + color.b) / 3.0;

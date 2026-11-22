@@ -59,10 +59,11 @@ public class MapSpriteRulesTests
 
     [TestCase(MapFlags.None, SpriteTint.None)]
     [TestCase(MapFlags.Stoned, SpriteTint.Grey)]
-    [TestCase(MapFlags.Bloody, SpriteTint.Infrared)]
+    [TestCase(MapFlags.Bloody, SpriteTint.Bloody)]
     [TestCase(MapFlags.Infrared, SpriteTint.Infrared)]
     [TestCase(MapFlags.Underwater, SpriteTint.Underwater)]
     [TestCase(MapFlags.Stoned | MapFlags.Underwater, SpriteTint.Grey | SpriteTint.Underwater)]
+    [TestCase(MapFlags.Infrared | MapFlags.Bloody, SpriteTint.Infrared | SpriteTint.Bloody)]
     public void CharacterTint_AlsoGreysStonedAndReddensBloodyCharacters(MapFlags flags, SpriteTint tint)
     {
         var (tile, _) = Tile(BehindThePlayer, flags: flags, character: 3021);
@@ -71,8 +72,8 @@ public class MapSpriteRulesTests
     }
 
     [TestCase(MapFlags.Infrared, SpriteTint.None)]
-    [TestCase(MapFlags.Bloody, SpriteTint.Infrared)]
-    [TestCase(MapFlags.Infrared | MapFlags.Bloody, SpriteTint.Infrared)]
+    [TestCase(MapFlags.Bloody, SpriteTint.Bloody)]
+    [TestCase(MapFlags.Infrared | MapFlags.Bloody, SpriteTint.Bloody)]
     public void CharacterTint_WithPlainInfravisionStillReddensBloodyCharacters(MapFlags flags, SpriteTint tint)
     {
         var (tile, _) = Tile(BehindThePlayer, flags: flags, character: 3021);

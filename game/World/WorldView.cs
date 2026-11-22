@@ -484,7 +484,7 @@ public partial class WorldView : Node2D
         glideRecorded = true;
     }
 
-    public TileSprites? SpritesUnder(Vector2 screenPosition)
+    public ProbedTile? ProbeUnder(Vector2 screenPosition)
     {
         if (PointUnder(screenPosition) is not var (column, row))
         {
@@ -492,10 +492,11 @@ public partial class WorldView : Node2D
         }
 
         var tileIndex = (int)column + (int)row * WorldMap.Size;
-        return new TileSprites(
+        return new ProbedTile(
             floors.ShownSprites[tileIndex],
             objects.ShownSprites[tileIndex],
-            characters.ShownSprites[tileIndex]);
+            characters.ShownSprites[tileIndex],
+            State.Map.Tiles[tileIndex].Light);
     }
 
     private static Sprite2D AddSpriteNode(Node2D layer, int column, int row)
@@ -1060,6 +1061,7 @@ public partial class WorldView : Node2D
         material = new ShaderMaterial { Shader = tintShader };
         material.SetShaderParameter("grey", tint.HasFlag(SpriteTint.Grey));
         material.SetShaderParameter("infrared", tint.HasFlag(SpriteTint.Infrared));
+        material.SetShaderParameter("bloody", tint.HasFlag(SpriteTint.Bloody));
         material.SetShaderParameter("underwater", tint.HasFlag(SpriteTint.Underwater));
         material.SetShaderParameter("highlight", highlighted);
         material.SetShaderParameter("selected", selected);

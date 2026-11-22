@@ -2068,6 +2068,7 @@ public partial class HudView : Control
         var material = (ShaderMaterial)GetNode<CanvasItem>("%Portrait").Material;
         material.SetShaderParameter("grey", tint.HasFlag(SpriteTint.Grey));
         material.SetShaderParameter("infrared", tint.HasFlag(SpriteTint.Infrared));
+        material.SetShaderParameter("bloody", tint.HasFlag(SpriteTint.Bloody));
     }
 
     private void ShowEquipment(PlayerState player)

@@ -57,8 +57,8 @@ public class LookPanelTests
     [TestCase(LookFlags.None, SpriteTint.None)]
     [TestCase(LookFlags.Shop, SpriteTint.None)]
     [TestCase(LookFlags.Shadow, SpriteTint.Grey)]
-    [TestCase(LookFlags.Bloody, SpriteTint.Infrared)]
-    [TestCase(LookFlags.Shadow | LookFlags.Bloody, SpriteTint.Grey | SpriteTint.Infrared)]
+    [TestCase(LookFlags.Bloody, SpriteTint.Bloody)]
+    [TestCase(LookFlags.Shadow | LookFlags.Bloody, SpriteTint.Grey | SpriteTint.Bloody)]
     public void PortraitTint_GreysShadowsAndReddensTheBloody(LookFlags flags, SpriteTint tint)
     {
         AssertThat(LookPanel.PortraitTint(flags)).IsEqual(tint);

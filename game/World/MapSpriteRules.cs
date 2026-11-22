@@ -84,7 +84,7 @@ public static class MapSpriteRules
         var flags = (MapFlags)tile.Flags;
         return EnvironmentTint(tile, plainInfravision)
             | (flags.HasFlag(MapFlags.Stoned) ? SpriteTint.Grey : SpriteTint.None)
-            | (flags.HasFlag(MapFlags.Bloody) ? SpriteTint.Infrared : SpriteTint.None);
+            | (flags.HasFlag(MapFlags.Bloody) ? SpriteTint.Bloody : SpriteTint.None);
     }
 
     public static bool HidesObjectsAndCharacters(in MapTile tile, int column, int row) =>

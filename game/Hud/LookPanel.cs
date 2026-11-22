@@ -14,7 +14,7 @@ public sealed class LookPanel
 
     public static SpriteTint PortraitTint(LookFlags flags) =>
         (flags.HasFlag(LookFlags.Shadow) ? SpriteTint.Grey : SpriteTint.None)
-        | (flags.HasFlag(LookFlags.Bloody) ? SpriteTint.Infrared : SpriteTint.None);
+        | (flags.HasFlag(LookFlags.Bloody) ? SpriteTint.Bloody : SpriteTint.None);
 
     public void Show(CharacterLook look)
     {
