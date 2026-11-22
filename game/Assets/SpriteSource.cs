@@ -4,6 +4,5 @@ public enum SpriteSource
 {
     None,
     Override,
-    PngLibrary,
-    BmpLibrary,
+    Resource,
 }

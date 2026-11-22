@@ -59,6 +59,7 @@ if ! ls -d "$app"/data_TheLastGate_* > /dev/null 2>&1; then
 fi
 
 cp -r "$repo/data" "$app/data"
+"$godot" --headless --path "$repo/game" --script "$repo/tools/pack_sprites.gd" -- "$app/data/sprites.pck"
 
 dotnet publish "$repo/src/TheLastGate.Starter" -c Release -r "$runtime" -o "$starter_out"
 cp "$starter_out/$starter" "$app/"

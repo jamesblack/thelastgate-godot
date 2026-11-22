@@ -10,35 +10,20 @@ namespace TheLastGate.Assets;
 
 public sealed class SpriteLoader : IDisposable
 {
+    private const string SpriteFolder = "res://sprites/";
+
     private readonly Dictionary<int, uint> averageColours = [];
-    private readonly BmpLibrary bmpLibrary;
     private readonly SpriteCache<Texture2D> cache;
     private readonly IReadOnlyDictionary<int, string> overrides;
-    private readonly PngLibrary pngLibrary;
     private readonly string uiFolder;
     private readonly Dictionary<int, Texture2D?> uiPictures = [];
 
     public SpriteLoader(string dataPath, long cacheBudgetBytes)
     {
+        SpritePack.Mount(dataPath);
         overrides = SpriteOverrides.Find(Path.Combine(dataPath, DataLayout.Overrides), DataPaths.PlayerOverrides());
         uiFolder = Path.Combine(dataPath, DataLayout.Ui);
-        var archiveFolder = Path.Combine(dataPath, DataLayout.Archives);
-        pngLibrary = new PngLibrary(
-            Path.Combine(archiveFolder, DataLayout.PngIndexFile),
-            Path.Combine(archiveFolder, DataLayout.PngDataFile));
-        try
-        {
-            bmpLibrary = new BmpLibrary(
-                Path.Combine(archiveFolder, DataLayout.BmpIndexFile),
-                Path.Combine(archiveFolder, DataLayout.BmpDataFile));
-        }
-        catch
-        {
-            pngLibrary.Dispose();
-            throw;
-        }
-
-        cache = new SpriteCache<Texture2D>(cacheBudgetBytes, texture => texture.Dispose());
+        cache = new SpriteCache<Texture2D>(cacheBudgetBytes, ReleaseTexture);
     }
 
     public IReadOnlyDictionary<int, int> Swaps { get; set; } = new Dictionary<int, int>();
@@ -52,11 +37,9 @@ public sealed class SpriteLoader : IDisposable
         }
 
         uiPictures.Clear();
-        pngLibrary.Dispose();
-        bmpLibrary.Dispose();
     }
 
-    // A loose override comes first, then pnglib, then bmplib, as in the current client.
+    // A loose override comes first, then the sprite resource.
     public SpriteSource FindSource(int spriteNumber)
     {
         if (overrides.ContainsKey(spriteNumber))
@@ -64,12 +47,7 @@ public sealed class SpriteLoader : IDisposable
             return SpriteSource.Override;
         }
 
-        if (pngLibrary.Contains(spriteNumber))
-        {
-            return SpriteSource.PngLibrary;
-        }
-
-        return bmpLibrary.Contains(spriteNumber) ? SpriteSource.BmpLibrary : SpriteSource.None;
+        return ResourceLoader.Exists(ResourcePath(spriteNumber)) ? SpriteSource.Resource : SpriteSource.None;
     }
 
     public Texture2D? GetTexture(int shownNumber)
@@ -80,14 +58,20 @@ public sealed class SpriteLoader : IDisposable
             return cachedTexture;
         }
 
-        var image = LoadImage(spriteNumber);
-        if (image == null)
+        var texture = FindSource(spriteNumber) == SpriteSource.Resource
+            ? ResourceLoader.Load<Texture2D>(ResourcePath(spriteNumber))
+            : LoadImage(spriteNumber) is { } image
+                ? ImageTexture.CreateFromImage(image)
+                : null;
+        if (texture == null)
         {
             return null;
         }
 
-        var texture = ImageTexture.CreateFromImage(image);
-        cache.Add(spriteNumber, texture, (long)image.GetWidth() * image.GetHeight() * SpritePixels.Rgba8BytesPerPixel);
+        cache.Add(
+            spriteNumber,
+            texture,
+            (long)texture.GetWidth() * texture.GetHeight() * SpritePixels.Rgba8BytesPerPixel);
         return texture;
     }
 
@@ -134,8 +118,7 @@ public sealed class SpriteLoader : IDisposable
             return FindSource(spriteNumber) switch
             {
                 SpriteSource.Override => DecodeOverride(spriteNumber, overrides[spriteNumber]),
-                SpriteSource.PngLibrary => DecodePng(spriteNumber, pngLibrary.ReadPng(spriteNumber)!),
-                SpriteSource.BmpLibrary => ToImage(bmpLibrary.Read(spriteNumber)!),
+                SpriteSource.Resource => ResourceImage(spriteNumber),
                 _ => null,
             };
         }
@@ -143,6 +126,25 @@ public sealed class SpriteLoader : IDisposable
         {
             GD.PushError($"Sprite {spriteNumber} couldn't be read: {exception.Message}");
             return null;
+        }
+    }
+
+    private static string ResourcePath(int spriteNumber) =>
+        SpriteFolder + spriteNumber.ToString("00000", CultureInfo.InvariantCulture) + ".png";
+
+    private static Image? ResourceImage(int spriteNumber)
+    {
+        var image = ResourceLoader.Load<Texture2D>(ResourcePath(spriteNumber))?.GetImage();
+        image?.Convert(Image.Format.Rgba8);
+        return image;
+    }
+
+    // A resource texture is shared with Godot's own resource cache, so only textures made here are disposed.
+    private static void ReleaseTexture(Texture2D texture)
+    {
+        if (texture is ImageTexture)
+        {
+            texture.Dispose();
         }
     }
 
@@ -172,7 +174,4 @@ public sealed class SpriteLoader : IDisposable
         SpritePixels.ApplyMagentaKey(pixels);
         return Image.CreateFromData(image.GetWidth(), image.GetHeight(), false, Image.Format.Rgba8, pixels);
     }
-
-    private static Image ToImage(DecodedSprite sprite) =>
-        Image.CreateFromData(sprite.Width, sprite.Height, false, Image.Format.Rgba8, sprite.Rgba);
 }

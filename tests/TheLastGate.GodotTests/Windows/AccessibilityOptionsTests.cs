@@ -1,5 +1,5 @@
+using System.Globalization;
 using GdUnit4;
-using TheLastGate.Assets;
 using TheLastGate.Windows;
 using static GdUnit4.Assertions;
 
@@ -63,19 +63,14 @@ public class AccessibilityOptionsTests
     }
 
     [TestCase]
-    public void Rows_SwapOnlyToSpritesTheArchivesHold()
+    public void Rows_SwapOnlyToSpritesTheGameHas()
     {
-        var archives = Path.Combine(RepositoryFolder.Find(), "data", DataLayout.Archives);
-        using var bmpLibrary = new BmpLibrary(
-            Path.Combine(archives, DataLayout.BmpIndexFile),
-            Path.Combine(archives, DataLayout.BmpDataFile));
-        using var pngLibrary = new PngLibrary(
-            Path.Combine(archives, DataLayout.PngIndexFile),
-            Path.Combine(archives, DataLayout.PngDataFile));
+        var sprites = Path.Combine(RepositoryFolder.Find(), "game", "sprites");
 
         var missing = AccessibilityOptions.Rows
             .SelectMany(row => row.Sprites.Values)
-            .Where(sprite => !bmpLibrary.Contains(sprite) && !pngLibrary.Contains(sprite));
+            .Where(sprite => !File.Exists(
+                Path.Combine(sprites, sprite.ToString("00000", CultureInfo.InvariantCulture) + ".png")));
 
         AssertThat(missing).IsEmpty();
     }

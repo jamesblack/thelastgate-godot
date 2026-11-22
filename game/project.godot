@@ -17,10 +17,6 @@ config/custom_user_dir_name="TheLastGateGodot"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 config/icon="res://images/app-icon.png"
 
-[audio]
-
-buses/default_bus_layout="uid://cxpbqj7e2h0f"
-
 [autoload]
 
 MCPRuntimeServer="*res://addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd"
@@ -43,6 +39,15 @@ enabled=PackedStringArray("res://addons/godot_mcp_toolkit/plugin.cfg")
 [gui]
 
 timers/tooltip_delay_sec=0.3
+
+[importer_defaults]
+
+texture={
+"compress/mode": 0,
+"detect_3d/compress_to": 0,
+"mipmaps/generate": false,
+"process/fix_alpha_border": false
+}
 
 [input]
 

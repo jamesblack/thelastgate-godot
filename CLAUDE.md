@@ -20,13 +20,11 @@ Everything is laid out for a 1280×720 virtual resolution (`viewport_width`/`vie
 |---|---|
 | `game/` | The Godot project: `project.godot`, `TheLastGate.csproj` and Godot's own `TheLastGate.sln`. Godot can't see anything outside this folder. |
 | `src/TheLastGate.Core/` | Everything a headless client needs: the protocol, the game state, and the file formats those use |
-| `src/TheLastGate.Assets/` | The sprite archive format and how archives and sprite overrides are read, shared by the game and the SpriteCompiler. It references nothing else here. |
+| `src/TheLastGate.Assets/` | Plain C# for the game's data folder: its layout, finding sprite overrides, and keying magenta in override files. It references nothing else here. |
 | `src/TheLastGate.Rules/` | Copies of the server's formulas, for client state the server doesn't send, such as the planner's raise costs, tarot steps and buff powers. It references Core, and Core never references it. |
 | `src/TheLastGate.Starter/` | The small executable Velopack installs as the app's entry point. It answers Velopack's install and update hooks without starting Godot, then starts the game. Ships with every build. |
-| `tools/SpriteCompiler/` | Console tool that builds the sprite archives. Never referenced by the game. |
 | `tests/TheLastGate.Tests/` | xUnit tests for Core, Assets and the tools; they run without the engine |
 | `tests/TheLastGate.GodotTests/` | GdUnit4 tests for code in `game/`. It is a Godot project of its own that references the game, so tests can run engine behaviour (input, nodes, scenes) as well as plain C# |
-| `art/` | Source art the build turns into game data. Not shipped. |
 | `data/` | Game data the client reads at run time. Everything here ships. |
 
 The root `TheLastGate.sln` holds every project and is the one to open in Rider. Godot builds `game/TheLastGate.sln`, which only lists the game, so failing tests never stop the game from running.
@@ -37,21 +35,19 @@ The root `TheLastGate.sln` holds every project and is the one to open in Rider. 
 
 **SDL client:** `C:\Code\thelastgate-sdl\Source\Client` is no longer a reference for this client's behaviour or code. Don't consult or copy it unless a task says to. Features that read its files on the player's machine to migrate them (`unique.dat`, `TLGCharacters.dat`, the explored map and notes) are features of this client and stay.
 
-**Where the game data came from:** the SDL repo's `Resources\Packaged Files\` and `Resources\Gfx Compiler\gfx\`. They were copied once into `art/` and `data/` and are now reference only.
+**Where the game data came from:** the SDL repo's `Resources\Packaged Files\` and `Resources\Gfx Compiler\gfx\`. They were copied once into `data/` and the sprites into `game/sprites/`, and are now reference only.
 
-## Game data and art (in Git LFS)
+## Sprites and game data (in Git LFS)
 
-Everything under `art/` and `data/` is stored in Git LFS, so run `git lfs pull` after cloning. Each folder has a README listing what it holds. File names are lower case.
+`game/sprites/` and `data/` are stored in Git LFS, so run `git lfs pull` after cloning. File names are lower case.
 
-- `art/sprites/` holds the source sprites `NNNNN.bmp` and `NNNNN.png`. They are never shipped.
-- `data/archives/` holds `bmplib` (built from the BMPs, stored as RGB565) and `pnglib` (the PNGs, stored unchanged).
+- `game/sprites/NNNNN.png` are the game's sprites, as ordinary Godot texture resources: 32-bit, with transparency baked in rather than keyed from magenta. `SpriteLoader` loads `res://sprites/NNNNN.png` on first use into a size-limited cache.
+- They import lossless, without mipmaps and without alpha-border fixing, from the `[importer_defaults]` in `project.godot`. `SpriteImportTests` fails if a sprite's `.import` file says otherwise.
+- They don't ship inside the game's main pack. Both export presets exclude `sprites/*`, and `tools/pack_sprites.gd` packs them into `data/sprites.pck`, which `SpritePack` mounts before the first sprite loads. A code-only update leaves that pack unchanged.
+- Sprite overrides are loose files read at run time: `data/overrides/`, then the player's `user://overrides`, both ahead of the sprite resources. Those keep the old magenta key.
+- `data/` holds everything else that ships beside the game, listed in its README.
 
-**Adding or changing art:**
-1. Put the file in `art/sprites/`.
-2. Run `dotnet run --project tools/SpriteCompiler` and read its report. It lists any file it skipped and why.
-3. Commit the source and the rebuilt archives together.
-
-`ArchiveEquivalenceTests` fails if the archives don't match a fresh compile.
+**Adding or changing a sprite:** put the `NNNNN.png` in `game/sprites/`, open the editor or run `godot --headless --path game --import`, and commit the PNG with its `.import` file. A fresh checkout imports all ~19,000 sprites on first open, which takes a few minutes.
 
 While the SDL client is still live, new art is also added to the SDL repo by hand. Nothing here writes to that repo.
 
@@ -63,7 +59,6 @@ dotnet test tests/TheLastGate.Tests
 dotnet test tests/TheLastGate.GodotTests
 sh tools/check-code-cleanup.sh
 sh tools/check-godot-files.sh
-dotnet run --project tools/SpriteCompiler
 powershell -ExecutionPolicy Bypass -File tools/view-sprites.ps1
 godot --path game --editor
 godot --path game -- --start-as=<character name>
@@ -93,10 +88,10 @@ bash tools/package-release.sh <win|linux> <version> <channel> <notes-file> <rele
 - **Core holds only what a headless client needs.** A headless client logs in, keeps the game state from the ticks, and sends commands, with no screen. If it wouldn't use something, that code belongs in `game/` beside the nodes that use it. Core mirrors as much client state as it can, including state it has to ask the server for, such as buff readings and item looks.
 - **Testability is not a reason to put code in Core.** Engine behaviour is tested with GdUnit4 (`tests/TheLastGate.GodotTests`), which can also run plain C# tests on code in `game/` without starting Godot.
 - **Protocol and file-format code is plain C#** over `ReadOnlySpan<byte>` / `BinaryPrimitives` (little-endian).
-- **The game references Core, Assets and Rules, never the tools.** Code only the build needs (the sprite compiler, the archive writers and its image decoding) stays in `tools/`, so it never ships to players.
+- **The game references Core, Assets and Rules, never the tools.** Code and scripts only the build needs (packaging, the sprite pack) stay in `tools/`, so they never ship to players.
 - **All packet reads go through a bounds-checked `PacketReader`.** Every command type needs an exact length, because one wrong length loses the client's place in the tick stream.
 - **One inflater for the whole session,** started after login succeeds. Decompressing each frame on its own fails from the second frame on.
-- Sprites load on first use into a size-limited cache. Never import the archives as Godot resources.
+- Sprites load on first use into a size-limited cache, from the sprite resources or an override file. Scenes may use a sprite resource directly, for UI; the world's sprites go through `SpriteLoader` so the cache budget holds.
 - Networking runs off the main thread. The game state is updated once per tick on the main thread.
 - **Call down, signal up.** A parent calls methods on its children and sets their properties. A child tells its parent something only through a signal or event, and never reaches up to it (`GetParent`, walking the tree for an ancestor). Core works the same way: it raises events, and the game decides what to do with them.
 - The main screen recreates the classic sprite HUD. Overlay windows (options, world map, planner) are styled Godot Controls. Layout lives in scenes and containers, not in computed coordinates, and `[Tool]` scripts give runtime content a preview in the editor.

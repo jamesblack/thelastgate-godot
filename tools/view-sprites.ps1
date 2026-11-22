@@ -1,4 +1,4 @@
-# Opens the sprite viewer on the archives in data/.
+# Opens the sprite viewer on the game's sprites and the overrides in data/.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File tools/view-sprites.ps1 [-GodotPath <path to the Godot executable>]
 # The Godot path can also come from the GODOT environment variable.
