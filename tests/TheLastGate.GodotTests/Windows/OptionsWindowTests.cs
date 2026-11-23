@@ -26,6 +26,7 @@ public class OptionsWindowTests
     [TestCase(OptionsTab.Audio)]
     [TestCase(OptionsTab.Display)]
     [TestCase(OptionsTab.Keybinds)]
+    [TestCase(OptionsTab.Experimental)]
     public void Show_SwitchesTab(OptionsTab tab)
     {
         window.Toggle();
@@ -36,10 +37,15 @@ public class OptionsWindowTests
     }
 
     [TestCase]
-    public void Tabs_KeepTheCurrentClientsThreeThenTheGodotDisplayTab()
+    public void Tabs_KeepTheCurrentClientsThreeThenTheGodotDisplayAndExperimentalTabs()
     {
         AssertThat(Enum.GetValues<OptionsTab>())
-            .ContainsExactly(OptionsTab.General, OptionsTab.Audio, OptionsTab.Keybinds, OptionsTab.Display);
+            .ContainsExactly(
+                OptionsTab.General,
+                OptionsTab.Audio,
+                OptionsTab.Keybinds,
+                OptionsTab.Display,
+                OptionsTab.Experimental);
     }
 
     [TestCase]

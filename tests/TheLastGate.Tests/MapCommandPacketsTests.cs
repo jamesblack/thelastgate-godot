@@ -21,6 +21,14 @@ public class MapCommandPacketsTests
     }
 
     [Fact]
+    public void TileOf_ReadsBackWhatForTilePutIn()
+    {
+        Assert.Equal(
+            (1234, 70000),
+            MapCommandPackets.TileOf(MapCommandPackets.ForTile(ClientCommand.Use, 1234, 70000)));
+    }
+
+    [Fact]
     public void ForCharacter_PutsTheCharactersNumberAfterTheCommand()
     {
         byte[] expected = [(byte)ClientCommand.Look, 0xC1, 0x16, 0x00, 0x00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

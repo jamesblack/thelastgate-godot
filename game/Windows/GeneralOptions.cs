@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TheLastGate.World;
 
 namespace TheLastGate.Windows;
 
@@ -16,9 +17,17 @@ public enum GeneralOption
     ItemTooltipsAlways,
     GlideMovement,
     PickTileDrawnUnderMouse,
+    StubbornUse,
 }
 
-public sealed record OptionRow(GeneralOption Option, string Label, bool Default, bool GodotOnly)
+public enum OptionSection
+{
+    Classic,
+    Godot,
+    Experimental,
+}
+
+public sealed record OptionRow(GeneralOption Option, string Label, bool Default, OptionSection Section)
 {
     public GeneralOption? Under { get; init; }
 }
@@ -30,45 +39,66 @@ public static class GeneralOptions
 
     public static IReadOnlyList<OptionRow> Rows { get; } =
     [
-        new(GeneralOption.EscapeClosesWindowsFirst, "Escape closes windows before canceling movement.", true, false),
+        new(
+            GeneralOption.EscapeClosesWindowsFirst,
+            "Escape closes windows before canceling movement.",
+            true,
+            OptionSection.Classic),
         new(
             GeneralOption.GiveMore,
             "Holding Ctrl+Shift when giving an item will attempt to reload that item.",
             false,
-            false),
-        new(GeneralOption.UseQueue, "Holding Ctrl+Shift when using an item queues that use. Limit 5.", false, false),
+            OptionSection.Classic),
+        new(
+            GeneralOption.UseQueue,
+            "Holding Ctrl+Shift when using an item queues that use. Limit 5.",
+            false,
+            OptionSection.Classic),
         new(
             GeneralOption.EnterToTalk,
             "Press Enter to activate chat mode before typing. Press Enter again to send, or ESC to cancel.",
             false,
-            false),
-        new(GeneralOption.ExpandedQuickStats, "Show Hit/Parry Score with Weapon/Armor value.", true, false),
+            OptionSection.Classic),
+        new(
+            GeneralOption.ExpandedQuickStats,
+            "Show Hit/Parry Score with Weapon/Armor value.",
+            true,
+            OptionSection.Classic),
         new(
             GeneralOption.SkillPlanner,
             "Enable the skill planner: the Planner button below the skill list and its hotkey.",
             false,
-            false),
+            OptionSection.Classic),
         new(
             GeneralOption.AdaptivePacing,
             "Adaptive network smoothing: lower delay on steady connections, more buffering when the connection is uneven.",
             false,
-            false),
-        new(GeneralOption.ItemTooltips, "Show item tooltips for inventory and equipped gear.", true, false),
+            OptionSection.Classic),
+        new(
+            GeneralOption.ItemTooltips,
+            "Show item tooltips for inventory and equipped gear.",
+            true,
+            OptionSection.Classic),
         new(
             GeneralOption.ItemTooltipsAlways,
             "Always show tooltips on hover. When off, hold the Item Tooltip hotkey to show them.",
             true,
-            false) { Under = GeneralOption.ItemTooltips },
+            OptionSection.Classic) { Under = GeneralOption.ItemTooltips },
         new(
             GeneralOption.GlideMovement,
             "Interpolate character/map movement for smoothness",
             false,
-            true),
+            OptionSection.Godot),
         new(
             GeneralOption.PickTileDrawnUnderMouse,
             "When walking, click the tile drawn under the mouse rather than where the map was.",
             false,
-            true),
+            OptionSection.Godot),
+        new(
+            GeneralOption.StubbornUse,
+            $"Keep retrying a use that doesn't go through, up to {StubbornUse.MostFailures} times (Stubborn use).",
+            false,
+            OptionSection.Experimental),
     ];
 
     public static bool IsShown(OptionRow row, Func<GeneralOption, bool> isOn) =>

@@ -14,6 +14,10 @@ public static class MapCommandPackets
         return packet;
     }
 
+    public static (int X, int Y) TileOf(byte[] packet) =>
+        (BinaryPrimitives.ReadUInt16LittleEndian(packet.AsSpan(1)),
+            (int)BinaryPrimitives.ReadUInt32LittleEndian(packet.AsSpan(3)));
+
     public static byte[] ForCharacter(ClientCommand command, int characterNumber)
     {
         var packet = new byte[Protocol.PacketSize];

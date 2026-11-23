@@ -16,6 +16,7 @@ public enum OptionsTab
     Audio,
     Keybinds,
     Display,
+    Experimental,
 }
 
 // Nothing but its own button, its hotkey and Escape opens or closes it; the tab is remembered while it's shut.
@@ -111,6 +112,7 @@ public sealed class OptionsWindow
         OptionsTab.Audio => "Audio settings have",
         OptionsTab.Keybinds => "Keybinds have",
         OptionsTab.Display => "Display settings have",
+        OptionsTab.Experimental => "Experimental options have",
         _ => throw new UnreachableException(),
     };
 

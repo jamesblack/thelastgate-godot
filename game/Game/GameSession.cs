@@ -16,7 +16,9 @@ public sealed class GameSession
         this.state = state;
         TextWindows = new TextWindows(Pause);
         WaypointWindow = new WaypointWindow(Pause);
-        UseQueue = new UseQueue(state.Chat);
+        StubbornUse = new StubbornUse(state.Chat);
+        UseQueue = new UseQueue(state.Chat) { WaitsForUse = () => StubbornUse.IsPending };
+        StubbornUse.Settled += UseQueue.UseSettled;
         state.MessageOfTheDay.LineAdded += MessageOfTheDayLines.Add;
         state.TickEnded += EndTheTick;
         state.TargetChanged += UseQueue.TargetChanged;
@@ -54,6 +56,8 @@ public sealed class GameSession
     public StatPlan StatPlan { get; } = new();
 
     public UseQueue UseQueue { get; }
+
+    public StubbornUse StubbornUse { get; }
 
     public GiveMore GiveMore { get; } = new();
 
@@ -121,5 +125,6 @@ public sealed class GameSession
         Pause.EndOfTick();
         MapFrames.EndOfTick(state.Map, state.ServerTick);
         AutoWalk.EndOfTick(state.Map);
+        StubbornUse.EndOfTick(state.Player.Target, UseSight.From(state.Map, StubbornUse.Tile));
     }
 }

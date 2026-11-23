@@ -87,6 +87,14 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_tabs")
 text = "Display"
 
+[node name="ExperimentalTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=1592637410]
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"OptionsTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tabs")
+text = "Experimental"
+
 [node name="Pages" type="TabContainer" parent="Window/Frame/Layout/Body/Content" unique_id=1045340498]
 unique_name_in_owner = true
 layout_mode = 2
@@ -331,6 +339,27 @@ theme_type_variation = &"OptionsCaption"
 text = "Window Backgrounds"
 
 [node name="BackgroundOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1164028873]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Experimental" type="ScrollContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=1307751926]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 4
+
+[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Experimental" unique_id=1846029153]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ExperimentalHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Experimental/Rows" unique_id=1729384056]
+layout_mode = 2
+theme_type_variation = &"OptionsCaption"
+text = "Experimental"
+
+[node name="ExperimentalOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Experimental/Rows" unique_id=1418273645]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0

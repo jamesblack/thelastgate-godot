@@ -15,7 +15,7 @@ public enum UseQueueAdd
 
 // Uses queued with Ctrl+Shift, or uses and pickups queued for an area, done one after another: the first is sent at
 // once when the player is idle, and the next when the server says the action before it has ended. A queued action
-// stays first until the server starts it.
+// stays first until the server starts it, or with stubborn use on, until that use settles.
 public sealed class UseQueue(TextLog chat)
 {
     public const int MostQueued = 5;
@@ -39,6 +39,8 @@ public sealed class UseQueue(TextLog chat)
     }
 
     public Action<byte[]> Send { get; set; } = _ => { };
+
+    public Func<bool> WaitsForUse { get; set; } = () => false;
 
     public int Count => queued.Count;
 
@@ -79,7 +81,7 @@ public sealed class UseQueue(TextLog chat)
         }
 
         queued.Add((x, y, command));
-        if (target.MiscAction == MiscActions.Idle && queued.Count == 1)
+        if (target.MiscAction == MiscActions.Idle && queued.Count == 1 && !WaitsForUse())
         {
             SendNext();
         }
@@ -89,6 +91,11 @@ public sealed class UseQueue(TextLog chat)
 
     public void TargetChanged(PlayerTarget previous, PlayerTarget now)
     {
+        if (WaitsForUse())
+        {
+            return;
+        }
+
         if (IsBusy(previous))
         {
             if (!IsBusy(now))
@@ -103,16 +110,22 @@ public sealed class UseQueue(TextLog chat)
         }
     }
 
-    // The commands the current client sends through its cmd(): those aimed at a tile, a shop or the smith, the
-    // fighting mode, Escape's reset and stat raises.
     public void Sent(byte[] packet)
     {
-        if ((ClientCommand)packet[0] is ClientCommand.Move or ClientCommand.Turn or ClientCommand.PickUp
-            or ClientCommand.Drop or ClientCommand.Use or ClientCommand.LookItem or ClientCommand.Shop
-            or ClientCommand.Smith or ClientCommand.Mode or ClientCommand.Reset or ClientCommand.Stat)
+        if (ActionCommands.CancelsPendingActions(packet))
         {
             queued.Clear();
         }
+    }
+
+    public void UseSettled(int x, int y)
+    {
+        if (queued.Count > 0 && (queued[0].X, queued[0].Y) == (x, y))
+        {
+            queued.RemoveAt(0);
+        }
+
+        SendNext();
     }
 
     private void SendNext()

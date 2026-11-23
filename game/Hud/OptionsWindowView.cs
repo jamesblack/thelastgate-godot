@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Godot;
@@ -274,7 +275,7 @@ public partial class OptionsWindowView : Panel, IHudContextUser
                 rowNode.GetNode<Label>("Line/Warning").Visible = true;
             }
 
-            GetNode(row.GodotOnly ? "%GodotOptions" : "%ClientOptions").AddChild(rowNode);
+            SectionRows(row.Section).AddChild(rowNode);
         }
 
         foreach (var row in AccessibilityOptions.Rows)
@@ -415,8 +416,16 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private Control OptionRow(GeneralOption option)
     {
         var row = GeneralOptions.Rows.First(row => row.Option == option);
-        return GetNode(row.GodotOnly ? "%GodotOptions" : "%ClientOptions").GetNode<Control>(option.ToString());
+        return SectionRows(row.Section).GetNode<Control>(option.ToString());
     }
+
+    private Node SectionRows(OptionSection section) => section switch
+    {
+        OptionSection.Classic => GetNode("%ClientOptions"),
+        OptionSection.Godot => GetNode("%GodotOptions"),
+        OptionSection.Experimental => GetNode("%ExperimentalOptions"),
+        _ => throw new UnreachableException(),
+    };
 
     private CheckBox OptionBox(GeneralOption option) => OptionRow(option).GetNode<CheckBox>("Line/Box");
 

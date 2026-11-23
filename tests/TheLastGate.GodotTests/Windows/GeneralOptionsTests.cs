@@ -8,7 +8,7 @@ namespace TheLastGate.GodotTests.Windows;
 public class GeneralOptionsTests
 {
     [TestCase]
-    public void Rows_ListTheCurrentClientsOptionsFirstThenTheGodotOnes()
+    public void Rows_ListTheCurrentClientsOptionsFirstThenTheGodotOnesThenTheExperimentalOnes()
     {
         AssertThat(GeneralOptions.Rows.Select(row => row.Option))
             .ContainsExactly(
@@ -22,9 +22,22 @@ public class GeneralOptionsTests
                 GeneralOption.ItemTooltips,
                 GeneralOption.ItemTooltipsAlways,
                 GeneralOption.GlideMovement,
-                GeneralOption.PickTileDrawnUnderMouse);
-        AssertThat(GeneralOptions.Rows.Select(row => row.GodotOnly))
-            .ContainsExactly(false, false, false, false, false, false, false, false, false, true, true);
+                GeneralOption.PickTileDrawnUnderMouse,
+                GeneralOption.StubbornUse);
+        AssertThat(GeneralOptions.Rows.Select(row => row.Section))
+            .ContainsExactly(
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Classic,
+                OptionSection.Godot,
+                OptionSection.Godot,
+                OptionSection.Experimental);
     }
 
     [TestCase(GeneralOption.EscapeClosesWindowsFirst, "Escape closes windows before canceling movement.", true)]
@@ -57,12 +70,20 @@ public class GeneralOptionsTests
 
     [TestCase(GeneralOption.GlideMovement)]
     [TestCase(GeneralOption.PickTileDrawnUnderMouse)]
+    [TestCase(GeneralOption.StubbornUse)]
     public void Rows_LeaveTheGodotOptionsOffToBehaveLikeTheCurrentClient(GeneralOption option)
     {
         var row = GeneralOptions.Rows.Single(row => row.Option == option);
 
         AssertThat(row.Default).IsFalse();
         AssertThat(row.Label).IsNotEmpty();
+    }
+
+    [TestCase]
+    public void Rows_SayHowLongAStubbornUseKeepsTrying()
+    {
+        AssertThat(GeneralOptions.Rows.Single(row => row.Option == GeneralOption.StubbornUse).Label)
+            .IsEqual("Keep retrying a use that doesn't go through, up to 8 times (Stubborn use).");
     }
 
     [TestCase]
@@ -113,7 +134,7 @@ public class GeneralOptionsTests
         AssertThat(row.Label)
             .IsEqual("Enable the skill planner: the Planner button below the skill list and its hotkey.");
         AssertThat(row.Default).IsFalse();
-        AssertThat(row.GodotOnly).IsFalse();
+        AssertThat(row.Section).IsEqual(OptionSection.Classic);
         AssertThat(rows.IndexOf(GeneralOption.SkillPlanner))
             .IsEqual(rows.IndexOf(GeneralOption.ExpandedQuickStats) + 1);
     }

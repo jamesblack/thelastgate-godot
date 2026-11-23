@@ -50,6 +50,7 @@ public partial class WorldView : Node2D
     private readonly List<Sprite2D> queuedUseMarkers = [];
     private readonly Sprite2D[] shadowNodes = new Sprite2D[TileCount];
     private readonly int[] shownShadows = new int[TileCount];
+    private readonly Sprite2D stubbornUseMarker = new() { Centered = false, Visible = false };
     private readonly TileEffects?[] tileEffects = new TileEffects?[TileCount];
     private readonly Dictionary<(SpriteTint Tint, bool Highlighted, bool Selected), ShaderMaterial> tintMaterials = [];
     private readonly Sprite2D walkMarker = new() { Centered = false, Visible = false };
@@ -184,10 +185,12 @@ public partial class WorldView : Node2D
             }
         }
 
-        foreach (var marker in (Sprite2D[])[walkMarker, attackMarker, giveMarker, actionMarker])
+        foreach (var marker in (Sprite2D[])[walkMarker, attackMarker, giveMarker, actionMarker, stubbornUseMarker])
         {
             PutUnder(marker, floorLayer);
         }
+
+        stubbornUseMarker.Material = TintMaterial(SpriteTint.Bloody, false, false);
     }
 
     public override void _Input(InputEvent inputEvent)
@@ -421,7 +424,7 @@ public partial class WorldView : Node2D
         var selectedIsShown = false;
         charactersShown.Clear();
         var target = State.Player.Target;
-        var markerTiles = new MarkerTiles(NoTile, NoTile, NoTile, NoTile, 0);
+        var markerTiles = new MarkerTiles(NoTile, NoTile, NoTile, NoTile, 0, NoTile);
         if (queuedTiles.Length != Session.UseQueue.Count)
         {
             queuedTiles = new int[Session.UseQueue.Count];
@@ -779,6 +782,11 @@ public partial class WorldView : Node2D
             found = found with { ActionTile = tileIndex, ActionSprite = actionSprite };
         }
 
+        if (Session.StubbornUse.IsWaitingToRetry && (tile.X, tile.Y) == Session.StubbornUse.Tile)
+        {
+            found = found with { StubbornUseTile = tileIndex };
+        }
+
         return found;
     }
 
@@ -792,9 +800,10 @@ public partial class WorldView : Node2D
             found.GiveTile,
             found.GiveTile == found.AttackTile ? 2 : 1);
         PlaceOnGround(actionMarker, found.ActionSprite, found.ActionTile, characters);
+        PlaceOnGround(stubbornUseMarker, QueuedUseSprite, found.StubbornUseTile, characters);
 
         // The use in progress shows its own marker. Each number goes in before its green use marker, which then sits
-        // between the tile and the number.
+        // between the tile and the number. A use waiting to retry keeps its number under its red marker.
         while (queuedUseMarkers.Count < queuedTiles.Length)
         {
             var useMarker = new Sprite2D { Centered = false, Visible = false };
@@ -811,7 +820,11 @@ public partial class WorldView : Node2D
             var tileIndex = position >= queuedTiles.Length ? NoTile
                 : queuedTiles[position] == found.ActionTile ? NoTile : queuedTiles[position];
             PlaceOnGround(queuedNumberMarkers[position], QueuedNumberSprites + position + 1, tileIndex, characters);
-            PlaceOnGround(queuedUseMarkers[position], QueuedUseSprite, tileIndex, characters);
+            PlaceOnGround(
+                queuedUseMarkers[position],
+                QueuedUseSprite,
+                tileIndex == found.StubbornUseTile ? NoTile : tileIndex,
+                characters);
         }
     }
 
@@ -1074,7 +1087,8 @@ public partial class WorldView : Node2D
         int AttackTile,
         int GiveTile,
         int ActionTile,
-        int ActionSprite);
+        int ActionSprite,
+        int StubbornUseTile);
 
     private readonly record struct SpriteLook(int Light, SpriteTint Tint, bool Highlighted, bool Selected);
 

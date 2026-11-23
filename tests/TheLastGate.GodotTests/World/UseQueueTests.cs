@@ -161,6 +161,54 @@ public class UseQueueTests
         AssertThat(queue.Count).IsEqual(0);
     }
 
+    [TestCase]
+    public void WhileAUseIsPending_TheQueueDoesNotMoveOn()
+    {
+        var pending = false;
+        queue.WaitsForUse = () => pending;
+        queue.Add(10, 20, Target(Idle));
+        pending = true;
+
+        queue.Add(11, 20, Target(Using, 10, 20));
+        queue.TargetChanged(Target(Idle), Target(Using, 10, 20));
+        queue.TargetChanged(Target(Using, 10, 20), Target(Idle));
+
+        AssertThat(sent).HasSize(1);
+        AssertThat((queue.PositionOf(10, 20), queue.PositionOf(11, 20))).IsEqual((1, 2));
+    }
+
+    [TestCase]
+    public void ASettledUse_LetsTheQueueMoveOn()
+    {
+        var pending = true;
+        queue.WaitsForUse = () => pending;
+        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(11, 20, Target(Using, 1, 1));
+        pending = false;
+
+        queue.UseSettled(10, 20);
+
+        AssertThat(sent).HasSize(1);
+        AssertThat(sent[0]).ContainsExactly(Use(11, 20));
+        AssertThat((queue.PositionOf(10, 20), queue.PositionOf(11, 20))).IsEqual((0, 1));
+    }
+
+    [TestCase]
+    public void AUseQueuedWhileAClickIsPending_WaitsForIt()
+    {
+        var pending = true;
+        queue.WaitsForUse = () => pending;
+
+        queue.Add(10, 20, Target(Idle));
+        AssertThat(sent).IsEmpty();
+        pending = false;
+        queue.UseSettled(5, 5);
+
+        AssertThat(sent).HasSize(1);
+        AssertThat(sent[0]).ContainsExactly(Use(10, 20));
+        AssertThat(queue.PositionOf(10, 20)).IsEqual(1);
+    }
+
     private static PlayerTarget Target(int action, int x = 0, int y = 0) => new(0, 0, 0, action, x, y);
 
     private static byte[] Use(int x, int y) => MapCommandPackets.ForTile(ClientCommand.Use, x, y);

@@ -185,6 +185,7 @@ public partial class GameScreen : Control
         CursorShapes.Register(settings.CursorScale);
         gameState.ItemLooks.Enabled = settings.ItemTooltips;
         gameSession.UseQueue.Enabled = settings.UseQueue;
+        gameSession.StubbornUse.Enabled = settings.StubbornUse;
         gameSession.GiveMore.Enabled = settings.GiveMore;
         pacer.Adaptive = settings.AdaptivePacing;
         screenGamma?.ShowGamma(settings.ScreenGamma);
@@ -285,9 +286,11 @@ public partial class GameScreen : Control
         gameState.ItemLooks.SendLook = Counted("ItemLooks", connection.SendCommand);
         gameState.ItemLooks.Enabled = clientSettings.ItemTooltips;
         gameSession.UseQueue.Enabled = clientSettings.UseQueue;
+        gameSession.StubbornUse.Enabled = clientSettings.StubbornUse;
+        gameSession.StubbornUse.Send = Counted("StubbornUse", connection.SendCommand);
 
         // A queued use has already clicked when it was queued.
-        gameSession.UseQueue.Send = Counted("UseQueue", connection.SendCommand);
+        gameSession.UseQueue.Send = Counted("UseQueue", SendQueued);
         gameSession.GiveMore.Enabled = clientSettings.GiveMore;
         pacer.Adaptive = clientSettings.AdaptivePacing;
         gameSession.GiveMore.Send = Counted("GiveMore", SendAction);
@@ -334,10 +337,17 @@ public partial class GameScreen : Control
 
     private Action<byte[]> Counted(string sender, Action<byte[]> send) => CountedSend.For(packetCounter, sender, send);
 
+    private void SendQueued(byte[] packet)
+    {
+        connection.SendCommand(packet);
+        gameSession.StubbornUse.Sent(packet);
+    }
+
     private void SendAction(byte[] packet)
     {
         soundEffects.PlayClickFor(packet);
         gameSession.UseQueue.Sent(packet);
+        gameSession.StubbornUse.Sent(packet);
         if (ItemLooks.IsManualLook(packet))
         {
             gameState.ItemLooks.ManualLookSent();

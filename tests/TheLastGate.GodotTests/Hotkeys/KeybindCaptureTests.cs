@@ -192,6 +192,7 @@ public class KeybindCaptureTests
     [TestCase(OptionsTab.Audio, "Audio settings have been set to their defaults.")]
     [TestCase(OptionsTab.Keybinds, "Keybinds have been set to their defaults.")]
     [TestCase(OptionsTab.Display, "Display settings have been set to their defaults.")]
+    [TestCase(OptionsTab.Experimental, "Experimental options have been set to their defaults.")]
     public void ChooseReset_Twice_ResetsTheTabAndSaysSoInGreen(OptionsTab tab, string said)
     {
         window.Show(tab);

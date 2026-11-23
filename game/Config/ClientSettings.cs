@@ -65,6 +65,7 @@ public sealed class ClientSettings
         ItemTooltipsAlways = file.GetValue(GeneralSection, "item_tooltips_always", true).AsBool();
         PickTileDrawnUnderMouse = file.GetValue(WorldSection, "pick_tile_drawn_under_mouse", false).AsBool();
         GlideMovement = file.GetValue(WorldSection, "glide_movement", false).AsBool();
+        StubbornUse = file.GetValue(GeneralSection, "stubborn_use", false).AsBool();
         LoadKeyBindings(file);
         CursorScale = Math.Clamp(
             file.GetValue(DisplaySection, "cursor_scale", DefaultCursorScale).AsSingle(),
@@ -103,6 +104,7 @@ public sealed class ClientSettings
     public bool ItemTooltipsAlways { get; set; }
     public bool PickTileDrawnUnderMouse { get; set; }
     public bool GlideMovement { get; set; }
+    public bool StubbornUse { get; set; }
     public float CursorScale { get; set; }
     public float ScreenGamma { get; set; }
     public float WorldGamma { get; set; }
@@ -124,6 +126,7 @@ public sealed class ClientSettings
             GeneralOption.ItemTooltipsAlways => ItemTooltipsAlways,
             GeneralOption.GlideMovement => GlideMovement,
             GeneralOption.PickTileDrawnUnderMouse => PickTileDrawnUnderMouse,
+            GeneralOption.StubbornUse => StubbornUse,
             _ => throw new UnreachableException(),
         };
         set
@@ -163,9 +166,20 @@ public sealed class ClientSettings
                 case GeneralOption.PickTileDrawnUnderMouse:
                     PickTileDrawnUnderMouse = value;
                     break;
+                case GeneralOption.StubbornUse:
+                    StubbornUse = value;
+                    break;
                 default:
                     throw new UnreachableException();
             }
+        }
+    }
+
+    private void ResetRows(Func<OptionRow, bool> inTab)
+    {
+        foreach (var row in GeneralOptions.Rows.Where(inTab))
+        {
+            this[row.Option] = row.Default;
         }
     }
 
@@ -174,11 +188,7 @@ public sealed class ClientSettings
         switch (tab)
         {
             case OptionsTab.General:
-                foreach (var row in GeneralOptions.Rows)
-                {
-                    this[row.Option] = row.Default;
-                }
-
+                ResetRows(row => row.Section != OptionSection.Experimental);
                 CursorScale = DefaultCursorScale;
                 break;
             case OptionsTab.Audio:
@@ -187,6 +197,9 @@ public sealed class ClientSettings
                 break;
             case OptionsTab.Keybinds:
                 BindingActions.ResetAll();
+                break;
+            case OptionsTab.Experimental:
+                ResetRows(row => row.Section == OptionSection.Experimental);
                 break;
             case OptionsTab.Display:
                 ScreenGamma = Gamma.Normal;
@@ -241,6 +254,7 @@ public sealed class ClientSettings
         file.SetValue(GeneralSection, "item_tooltips_always", ItemTooltipsAlways);
         file.SetValue(WorldSection, "pick_tile_drawn_under_mouse", PickTileDrawnUnderMouse);
         file.SetValue(WorldSection, "glide_movement", GlideMovement);
+        file.SetValue(GeneralSection, "stubborn_use", StubbornUse);
         file.SetValue(
             LauncherSection,
             "character_names",
