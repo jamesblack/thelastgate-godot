@@ -5,7 +5,7 @@ using TheLastGate.State;
 namespace TheLastGate.Buffs;
 
 // Keeps the power of the player's active Bless, Enhance and Protect. The client only sees buff icons, so whenever one
-// of those three appears, goes, is refreshed or recast, "#buffs" is sent in the background and its reply is taken out
+// of those three appears, is refreshed or recast, "#buffs" is sent in the background and its reply is taken out
 // of the chat and read. A reply nobody asked for, because the player typed the command, is left for the chat.
 public sealed class BuffWatch
 {
@@ -19,13 +19,14 @@ public sealed class BuffWatch
     private const int MissingGapTicks = 40;
     private const int RefreshGapTicks = 100;
 
+    // The server sends a cast's slot on its next character update, at most 16 ticks after the cast message.
+    private const int CastSlotDelayTicks = 16;
+
     // Further tries after a lost or refused request.
     private const int RetryLimit = 2;
 
+    private readonly int[] castTick = new int[Enum.GetValues<BuffKind>().Length];
     private readonly PlayerState player;
-
-    // The tick of each slot's last packet; some slots are resent unchanged every tick, which isn't a recast.
-    private readonly int[] slotPacketTick = new int[PlayerState.BuffSlots];
 
     private bool capturing;
     private bool fetchPending;
@@ -66,32 +67,23 @@ public sealed class BuffWatch
         lastSendTick = -RefreshGapTicks;
         retriesLeft = RetryLimit;
         newBuffTick = -1;
-        Array.Clear(slotPacketTick);
+        Array.Fill(castTick, -CastSlotDelayTicks - 1);
     }
 
     // A refresh or recast keeps showing the last reading while a new one is fetched; a new buff has none yet.
     public void SpellPacket(int slot, BuffSlot old, BuffSlot updated)
     {
-        var unchanged = old == updated;
-        var resentEveryTick = false;
-        if (slot is >= 0 and < PlayerState.BuffSlots)
-        {
-            resentEveryTick = slotPacketTick[slot] > 0 && tickNow - slotPacketTick[slot] <= 1;
-            slotPacketTick[slot] = tickNow + 1;
-        }
-
-        if ((unchanged && resentEveryTick)
-            || !BuffList.SlotNeedsFetch(old.Sprite, old.Active, updated.Sprite, updated.Active))
+        if (!BuffList.SlotNeedsFetch(old.Sprite, old.Active, updated.Sprite, updated.Active)
+            || BuffList.SpriteKind(updated.Sprite) is not { } kind
+            || tickNow - castTick[(int)kind] <= CastSlotDelayTicks)
         {
             return;
         }
 
-        fetchPending = true;
-        retriesLeft = RetryLimit;
-        if (updated.Sprite != old.Sprite && BuffList.SpriteKind(updated.Sprite) != null)
+        FetchSoon();
+        if (updated.Sprite != old.Sprite)
         {
-            readingsFresh = false;
-            newBuffTick = tickNow;
+            MarkNewBuff();
         }
     }
 
@@ -106,6 +98,18 @@ public sealed class BuffWatch
             }
 
             return true;
+        }
+
+        if (BuffList.CastKind(line.Text) is { } cast)
+        {
+            castTick[(int)cast] = tickNow;
+            if (!IsActive(cast))
+            {
+                MarkNewBuff();
+            }
+
+            FetchSoon();
+            return false;
         }
 
         if (requestInFlight && BuffList.IsHeader(line.Text))
@@ -161,6 +165,18 @@ public sealed class BuffWatch
     {
         var reading = stored.Readings[(int)kind];
         return readingsFresh && IsActive(kind) && reading.Known ? reading : null;
+    }
+
+    private void MarkNewBuff()
+    {
+        readingsFresh = false;
+        newBuffTick = tickNow;
+    }
+
+    private void FetchSoon()
+    {
+        fetchPending = true;
+        retriesLeft = RetryLimit;
     }
 
     private void RequestFailed()

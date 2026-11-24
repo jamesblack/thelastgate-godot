@@ -12,6 +12,13 @@ public static class BuffList
     public const int EnhanceSprite = 87;
     public const int BlessSprite = 88;
 
+    // In BuffKind order. The sensed messages follow the caster's name.
+    private static readonly string[] SelfCastMessages =
+        ["You have been blessed.", "Your weapon feels stronger.", "You feel protected."];
+
+    private static readonly string[] SensedCastMessages =
+        [" cast bless on you.", " cast enhance weapon on you.", " cast protect on you."];
+
     public static BuffKind? SpriteKind(int sprite) => sprite switch
     {
         BlessSprite => BuffKind.Bless,
@@ -22,16 +29,24 @@ public static class BuffList
 
     public static bool IsHeader(string text) => text == Header;
 
-    // One of the three buffs appeared, went, was refreshed or recast; a slot only counting down needs nothing.
-    public static bool SlotNeedsFetch(int oldSprite, int oldActive, int newSprite, int newActive)
+    public static BuffKind? CastKind(string text)
     {
-        if (SpriteKind(oldSprite) == null && SpriteKind(newSprite) == null)
+        foreach (var kind in Enum.GetValues<BuffKind>())
         {
-            return false;
+            if (text == SelfCastMessages[(int)kind]
+                || text.EndsWith(SensedCastMessages[(int)kind], StringComparison.Ordinal))
+            {
+                return kind;
+            }
         }
 
-        return oldSprite != newSprite || newActive >= oldActive;
+        return null;
     }
+
+    // An equal slot isn't a recast: the server resends slots unchanged, so a recast still at 15/16 shows only in the chat.
+    // A buff going needs nothing, as its reading is only shown while its icon is.
+    public static bool SlotNeedsFetch(int oldSprite, int oldActive, int newSprite, int newActive) =>
+        SpriteKind(newSprite) != null && (oldSprite != newSprite || newActive > oldActive);
 }
 
 // Reads one reply line at a time; only Bless, Enhance and Protect are kept.

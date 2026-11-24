@@ -46,16 +46,70 @@ public class BuffWatchTests
     }
 
     [Fact]
-    public void ABuffGoing_ClearsItsReading()
+    public void ABuffGoing_ClearsItsReadingWithoutARequest()
     {
         player.Buffs[0] = Bless16;
         watch.SpellPacket(0, Empty, Bless16);
         watch.EndOfTick();
         DeliverBlessReply("Bless power of 142 for 4m 10s");
+        RunTicks(120);
 
         player.Buffs[0] = Empty;
         watch.SpellPacket(0, Bless16, Empty);
+        RunTicks(200);
 
+        Assert.Null(watch.Reading(BuffKind.Bless));
+        Assert.Single(said);
+    }
+
+    // The server writes the cast message straight away but sends the slot on its next character update, a few ticks on.
+    [Fact]
+    public void ACastMessageThenItsSlotPacket_SendsOneRequest()
+    {
+        Assert.False(watch.Capture(Line("You have been blessed.")));
+        watch.EndOfTick();
+        DeliverBlessReply("Bless power of 60 for 4m 10s");
+        RunTicks(5);
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+        RunTicks(200);
+
+        Assert.Single(said);
+        Assert.Equal(60, watch.Reading(BuffKind.Bless)?.Power);
+    }
+
+    [Fact]
+    public void ARecastLongAfterItsCastMessage_FetchesAgain()
+    {
+        Assert.False(watch.Capture(Line("You have been blessed.")));
+        watch.EndOfTick();
+        DeliverBlessReply("Bless power of 60 for 4m 10s");
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+        RunTicks(120);
+
+        watch.SpellPacket(0, new BuffSlot(BuffList.BlessSprite, 10), Bless16);
+        RunTicks(2);
+
+        Assert.Equal(2, said.Count);
+    }
+
+    [Fact]
+    public void ACastMessageForABuffThatHadGone_HidesItsOldReading()
+    {
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+        watch.EndOfTick();
+        DeliverBlessReply("Bless power of 142 for 4m 10s");
+        player.Buffs[0] = Empty;
+        watch.SpellPacket(0, Bless16, Empty);
+        RunTicks(120);
+
+        Assert.False(watch.Capture(Line("You have been blessed.")));
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+
+        Assert.True(watch.Waiting);
         Assert.Null(watch.Reading(BuffKind.Bless));
     }
 
@@ -67,7 +121,7 @@ public class BuffWatchTests
 
         // The recast lands a few ticks later, while the first request is still unanswered.
         RunTicks(5);
-        watch.SpellPacket(0, Bless16, Bless16);
+        Assert.False(watch.Capture(Line("You have been blessed.")));
         DeliverBlessReply("Bless power of 60 for 4m 10s");
         RunTicks(105);
 
@@ -104,31 +158,55 @@ public class BuffWatchTests
         Assert.NotNull(watch.Reading(BuffKind.Bless));
     }
 
-    // Some buff slots are resent unchanged every tick; only the first such resend can be a recast.
+    // The server resends a slot unchanged every 16 ticks when its buff number is 32768 or higher.
     [Fact]
-    public void ASlotResentEveryTick_FetchesOnce()
+    public void AnUnchangedResend_NeverFetches()
+    {
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+        watch.EndOfTick();
+        DeliverBlessReply("Bless power of 60 for 4m 10s");
+
+        for (var tick = 0; tick < 2000; tick++)
+        {
+            if (tick % 16 == 0)
+            {
+                watch.SpellPacket(0, Bless16, Bless16);
+            }
+
+            watch.EndOfTick();
+        }
+
+        Assert.Single(said);
+    }
+
+    [Fact]
+    public void ACastMessage_FetchesAndStaysInTheChat()
     {
         player.Buffs[0] = Bless16;
         watch.SpellPacket(0, Empty, Bless16);
         watch.EndOfTick();
         DeliverBlessReply("Bless power of 60 for 4m 10s");
         RunTicks(120);
-        Assert.Single(said);
 
-        for (var tick = 0; tick < 200; tick++)
-        {
-            watch.SpellPacket(0, Bless16, Bless16);
-            if (tick == 1)
-            {
-                DeliverBlessReply("Bless power of 66 for 4m 10s");
-            }
-
-            watch.EndOfTick();
-        }
+        Assert.False(watch.Capture(Line("Ishtar cast bless on you.")));
+        RunTicks(2);
 
         Assert.Equal(2, said.Count);
         Assert.False(watch.Waiting);
-        Assert.Equal(66, watch.Reading(BuffKind.Bless)?.Power);
+    }
+
+    [Fact]
+    public void ACastMessageWithItsSlotPacket_SendsOneRequest()
+    {
+        player.Buffs[0] = Bless16;
+        watch.SpellPacket(0, Empty, Bless16);
+        Assert.False(watch.Capture(Line("You have been blessed.")));
+        watch.EndOfTick();
+        DeliverBlessReply("Bless power of 60 for 4m 10s");
+        RunTicks(200);
+
+        Assert.Single(said);
     }
 
     [Fact]
@@ -162,7 +240,7 @@ public class BuffWatchTests
         DeliverBlessReply("Bless power of 60 for 4m 10s");
         RunTicks(5);
 
-        watch.SpellPacket(0, Bless16, Bless16);
+        Assert.False(watch.Capture(Line("You have been blessed.")));
         RunTicks(10);
         Assert.Single(said);
 

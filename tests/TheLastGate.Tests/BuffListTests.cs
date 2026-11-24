@@ -96,15 +96,16 @@ public class BuffListTests
 
     [Theory]
     [InlineData(0, 0, 88, 16, true)]
-    [InlineData(88, 16, 0, 0, true)]
+    [InlineData(88, 16, 0, 0, false)]
     [InlineData(88, 10, 88, 16, true)]
-    [InlineData(88, 16, 88, 16, true)]
+    [InlineData(88, 16, 88, 16, false)]
+    [InlineData(88, 15, 88, 15, false)]
     [InlineData(88, 10, 87, 16, true)]
     [InlineData(88, 16, 88, 15, false)]
     [InlineData(500, 4, 500, 4, false)]
     [InlineData(0, 0, 500, 16, false)]
     [InlineData(0, 0, 0, 0, false)]
-    public void SlotNeedsFetch_WhenOneOfTheThreeBuffsAppearsGoesOrIsRecast(
+    public void SlotNeedsFetch_WhenOneOfTheThreeBuffsAppearsOrIsRecast(
         int oldSprite,
         int oldActive,
         int newSprite,
@@ -112,6 +113,29 @@ public class BuffListTests
         bool needsFetch)
     {
         Assert.Equal(needsFetch, BuffList.SlotNeedsFetch(oldSprite, oldActive, newSprite, newActive));
+    }
+
+    [Theory]
+    [InlineData("You have been blessed.", BuffKind.Bless)]
+    [InlineData("Your weapon feels stronger.", BuffKind.Enhance)]
+    [InlineData("You feel protected.", BuffKind.Protect)]
+    [InlineData("Ishtar cast bless on you.", BuffKind.Bless)]
+    [InlineData("Ishtar cast enhance weapon on you.", BuffKind.Enhance)]
+    [InlineData("Ishtar cast protect on you.", BuffKind.Protect)]
+    public void CastKind_WhenBlessEnhanceOrProtectLandsOnThePlayer(string text, BuffKind kind)
+    {
+        Assert.Equal(kind, BuffList.CastKind(text));
+    }
+
+    [Theory]
+    [InlineData("Ishtar was blessed.")]
+    [InlineData("Ishtar's weapon is now stronger.")]
+    [InlineData("Ishtar is now protected.")]
+    [InlineData("Ishtar cast curse on you.")]
+    [InlineData("Ishtar: \"cast bless on you.\"")]
+    public void CastKind_IsNoneForOtherLines(string text)
+    {
+        Assert.Null(BuffList.CastKind(text));
     }
 
     private void StartReply() => parser.Feed(" ");
