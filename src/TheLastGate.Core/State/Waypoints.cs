@@ -22,7 +22,7 @@ public static class Waypoints
         new(20, "Lizard Temple, South", "\"Where reptiles implore.\""),
         new(7, "Lizard Temple, North", "\"The Beryl Jungle.\""),
         new(21, "Lizard Settlement, East", "\"Betwixt emerald and magma.\""),
-        new(22, "The Emerald Cavern, East", "\"A feudal audience.\""),
+        new(22, "The Emerald Cavern, West", "\"A feudal audience.\""),
         new(8, "Temple of Osiris", "\"Gods toy with greed.\""),
         new(23, "The Tower", "\"Sky-piercing obelisk.\""),
         new(9, "Neiseer, West", "\"The Basalt Desert.\""),

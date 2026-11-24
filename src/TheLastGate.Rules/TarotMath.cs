@@ -29,15 +29,15 @@ public static class TarotMath
 
     private const int PercentBase = 100;
     private const int FoolBonusDivisor = 20;
-    private const int StrengthReversedHitNumerator = 4;
-    private const int StrengthReversedHitDenominator = 5;
+    private const int StrengthReversedHitNumerator = 9;
+    private const int StrengthReversedHitDenominator = 10;
     private const int StrengthReversedWeaponNumerator = 6;
     private const int StrengthReversedWeaponDenominator = 5;
-    private const int HermitArmorNumerator = 23;
-    private const int HermitArmorDenominator = 20;
+    private const int HermitArmorNumerator = 6;
+    private const int HermitArmorDenominator = 5;
     private const int ArmorEnchantNumerator = 11;
     private const int ArmorEnchantDenominator = 10;
-    private const int HangedReversedWeaponPercent = 85;
+    private const int HangedReversedWeaponPercent = 90;
     private const int TemperanceReversedPercentPerStack = 10;
 
     private static readonly string[] UprightNames =

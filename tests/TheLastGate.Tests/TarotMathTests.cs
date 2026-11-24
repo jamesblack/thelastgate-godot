@@ -98,15 +98,24 @@ public class TarotMathTests
             new CombatValues(10, 0, 10, 0));
 
         Assert.Equal(72, shown.Weapon);
-        Assert.Equal(108, shown.Hit);
+        Assert.Equal(109, shown.Hit);
         Assert.Equal(100, shown.Parry);
+    }
+
+    [Fact]
+    public void HangedReversed_LowersWeaponValue()
+    {
+        Assert.Equal(
+            118,
+            Shown(Cards(TarotCard.HangedReversed), new CombatValues(0, 0, 100, 0), new CombatValues(0, 0, 20, 0))
+                .Weapon);
     }
 
     [Fact]
     public void TheHermit_RaisesArmorValue()
     {
         Assert.Equal(
-            138,
+            139,
             Shown(Cards(TarotCard.Hermit), new CombatValues(0, 0, 0, 115), new CombatValues(0, 0, 0, 20)).Armor);
     }
 
@@ -141,10 +150,10 @@ public class TarotMathTests
             Cards(TarotCard.LoversReversed, TarotCard.StrengthReversed),
             effects,
             new CombatValues(100, 100, 0, 0),
-            new CombatValues(10, 0, 0, 0));
+            new CombatValues(18, 0, 0, 0));
 
-        Assert.Equal(104, shown.Hit);
-        Assert.Equal(105, shown.Parry);
+        Assert.Equal(109, shown.Hit);
+        Assert.Equal(109, shown.Parry);
     }
 
     [Fact]
@@ -156,9 +165,9 @@ public class TarotMathTests
             Cards(TarotCard.Hermit),
             effects,
             new CombatValues(0, 0, 0, 115),
-            new CombatValues(0, 0, 0, 20));
+            new CombatValues(0, 0, 0, 22));
 
-        Assert.Equal(140, shown.Armor);
+        Assert.Equal(144, shown.Armor);
     }
 
     [Fact]
@@ -192,10 +201,10 @@ public class TarotMathTests
             Cards(TarotCard.StrengthReversed),
             effects,
             new CombatValues(80, 102, 0, 0),
-            new CombatValues(25, 0, 0, 0));
+            new CombatValues(20, 0, 0, 0));
 
-        Assert.Equal(100, shown.Hit);
-        Assert.Equal(103, shown.Parry);
+        Assert.Equal(98, shown.Hit);
+        Assert.Equal(102, shown.Parry);
     }
 
     [Fact]
@@ -207,10 +216,10 @@ public class TarotMathTests
             Cards(TarotCard.Hermit),
             effects,
             new CombatValues(0, 0, 0, 138),
-            new CombatValues(0, 0, 0, 20));
+            new CombatValues(0, 0, 0, 19));
 
-        // The Hermit makes the 20 into 23, the enchant makes that 25 and the percent makes it 28.
-        Assert.Equal(166, shown.Armor);
+        // The Hermit makes the 19 into 22, the enchant makes that 24 and the percent makes it 26.
+        Assert.Equal(164, shown.Armor);
     }
 
     [Fact]
