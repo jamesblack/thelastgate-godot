@@ -38,7 +38,7 @@ public class ItemLooksTests
 
         Answer(Header, Description);
 
-        var look = looks.For(ItemSlotKind.Inventory, 5);
+        var look = looks.For(ItemSlotKind.Inventory, 5, Sword);
         Assert.NotNull(look);
         Assert.Equal([Header, Description], look.Lines);
         Assert.Equal("Steel Sword", look.Details.Name);
@@ -126,7 +126,7 @@ public class ItemLooksTests
 
         looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
-        Assert.NotNull(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.NotNull(looks.For(ItemSlotKind.Inventory, 5, Sword));
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class ItemLooksTests
 
         looks.SlotChanged(ItemSlotKind.Inventory, 5, Shield);
 
-        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, Shield));
     }
 
     [Fact]
@@ -148,7 +148,7 @@ public class ItemLooksTests
 
         looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
 
-        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, 0));
     }
 
     [Fact]
@@ -211,7 +211,7 @@ public class ItemLooksTests
         looks.SlotChanged(ItemSlotKind.Inventory, 5, Shield);
         Answer(Header, Description);
 
-        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, Shield));
     }
 
     [Fact]
@@ -237,8 +237,8 @@ public class ItemLooksTests
         looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
         looks.HeldItemChanged(Sword);
 
-        Assert.Equal([Header, Description], looks.Held?.Lines);
-        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.Equal([Header, Description], looks.Held(Sword)?.Lines);
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, 0));
     }
 
     [Fact]
@@ -253,8 +253,82 @@ public class ItemLooksTests
         looks.SlotChanged(ItemSlotKind.Inventory, 7, Sword);
         looks.HeldItemChanged(0);
 
-        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Inventory, 7)?.Lines);
-        Assert.Null(looks.Held);
+        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Inventory, 7, Sword)?.Lines);
+        Assert.Null(looks.Held(Sword));
+    }
+
+    [Fact]
+    public void HeldItemChanged_SendsNoLookForAMovedItemWhoseLookIsKnown()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+        sent.Clear();
+
+        MoveThroughTheHand(5, ItemSlotKind.Worn, 4, Sword);
+        Ticks(100);
+
+        Assert.Empty(sent);
+        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Worn, 4, Sword)?.Lines);
+    }
+
+    [Fact]
+    public void HeldItemChanged_StillFetchesAMovedItemWhoseLookWasDueAgain()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
+        Ticks(1);
+        sent.Clear();
+
+        MoveThroughTheHand(5, ItemSlotKind.Worn, 4, Sword);
+        Ticks(100);
+
+        Assert.Equal([GearLook(4), GearLook(4)], sent);
+    }
+
+    [Fact]
+    public void For_ShowsALongLookWholeAndKeepsItOutOfTheChat()
+    {
+        const int rainbowBeltLines = 35;
+        var reply = Enumerable.Range(0, rainbowBeltLines)
+            .Select(line => line == 0 ? Header : new LogLine($"Row {line}", (int)LogFont.Yellow))
+            .ToArray();
+        FetchInventorySlot(5, Sword);
+
+        Answer(reply);
+
+        Assert.Equal(reply, looks.For(ItemSlotKind.Inventory, 5, Sword)?.Lines);
+        Assert.Empty(chat.Lines);
+    }
+
+    [Theory]
+    [InlineData(ItemSlotKind.Inventory, 5)]
+    [InlineData(ItemSlotKind.Worn, 4)]
+    public void For_ShowsNothingAndFetchesAgainWhenTheSlotHoldsAnotherItem(ItemSlotKind kind, int index)
+    {
+        looks.SlotChanged(kind, index, Sword);
+        Ticks(4);
+        Answer(Header, Description);
+        sent.Clear();
+
+        Assert.Null(looks.For(kind, index, Shield));
+        Assert.Null(looks.For(kind, index, Shield));
+        Ticks(40);
+
+        var look = kind == ItemSlotKind.Worn ? GearLook(index) : ItemLook(index);
+        Assert.Equal([look, look], sent);
+    }
+
+    [Fact]
+    public void Held_ShowsNothingWhenTheHandHoldsAnotherItem()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
+        looks.HeldItemChanged(Sword);
+
+        Assert.Null(looks.Held(Shield));
+        Assert.Null(looks.Held(Sword));
     }
 
     [Fact]
@@ -265,7 +339,7 @@ public class ItemLooksTests
 
         looks.Reset();
 
-        Assert.Null(looks.For(ItemSlotKind.Inventory, 5));
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, Sword));
     }
 
     [Theory]
@@ -299,6 +373,15 @@ public class ItemLooksTests
     {
         looks.SlotChanged(ItemSlotKind.Inventory, slot, sprite);
         Ticks(4);
+    }
+
+    private void MoveThroughTheHand(int fromInventory, ItemSlotKind toKind, int toIndex, int sprite)
+    {
+        looks.SlotChanged(ItemSlotKind.Inventory, fromInventory, 0);
+        looks.HeldItemChanged(sprite);
+        Ticks(10);
+        looks.SlotChanged(toKind, toIndex, sprite);
+        looks.HeldItemChanged(0);
     }
 
     private void Answer(params LogLine[] reply)

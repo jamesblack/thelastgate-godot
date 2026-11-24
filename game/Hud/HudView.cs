@@ -1547,7 +1547,10 @@ public partial class HudView : Control
             return null;
         }
 
-        return new ItemTooltipRequest(ItemTooltipMode.Plain, shown.ItemLooks.For(ItemSlotKind.Inventory, slot), null);
+        return new ItemTooltipRequest(
+            ItemTooltipMode.Plain,
+            shown.ItemLooks.For(ItemSlotKind.Inventory, slot, shown.Player.Inventory[slot].Sprite),
+            null);
     }
 
     // Holding an item over gear it fits compares the two; gear it doesn't fit shows its usual tooltip.
@@ -1560,10 +1563,10 @@ public partial class HudView : Control
 
         var player = shown.Player;
         var filled = player.Worn[(int)slot].Sprite != 0;
-        var worn = shown.ItemLooks.For(ItemSlotKind.Worn, (int)slot);
+        var worn = shown.ItemLooks.For(ItemSlotKind.Worn, (int)slot, player.Worn[(int)slot].Sprite);
         if (player.HeldItem.Sprite != 0 && !Equipment.BlockedSlots(player.HeldItem, player.Worn).Contains(slot))
         {
-            var held = shown.ItemLooks.Held;
+            var held = shown.ItemLooks.Held(player.HeldItem.Sprite);
             if (filled)
             {
                 return new ItemTooltipRequest(ItemTooltipMode.Comparing, worn, held);

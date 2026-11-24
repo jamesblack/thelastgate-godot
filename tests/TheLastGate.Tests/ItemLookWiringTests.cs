@@ -58,7 +58,7 @@ public class ItemLookWiringTests
         Assert.Empty(state.Chat.Lines);
         Assert.Equal(
             [new LogLine("Steel Sword:", 6), new LogLine("A sword.", 1), new LogLine("", 1)],
-            state.ItemLooks.For(ItemSlotKind.Inventory, 5)?.Lines);
+            state.ItemLooks.For(ItemSlotKind.Inventory, 5, Sword)?.Lines);
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class ItemLookWiringTests
 
         Process(TestCommand.Of(ServerCommand.Tick).Byte(0));
 
-        Assert.Null(state.ItemLooks.For(ItemSlotKind.Inventory, 5));
+        Assert.Null(state.ItemLooks.For(ItemSlotKind.Inventory, 5, Sword));
     }
 
     private static TestCommand InventoryItem(uint slot, ushort sprite) =>

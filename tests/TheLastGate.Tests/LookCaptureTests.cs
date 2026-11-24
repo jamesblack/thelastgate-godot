@@ -99,16 +99,22 @@ public class LookCaptureTests
     }
 
     [Fact]
-    public void Offer_LetsLinesThroughOnceAReplyIsFull()
+    public void Offer_CapturesAReplyOfAnyLength()
     {
+        const int longReplyLines = 64;
+        var reply = Enumerable.Range(0, longReplyLines)
+            .Select(line => line == 0 ? Header : new LogLine($"Row {line}", (int)LogFont.Yellow))
+            .ToList();
         capture.ExpectFetch(0);
-        capture.Offer(Header);
-        for (var line = 1; line < LookCapture.MaxLines; line++)
+
+        foreach (var line in reply.Concat(reply))
         {
-            Assert.True(capture.Offer(Description));
+            Assert.True(capture.Offer(line));
         }
 
-        Assert.False(capture.Offer(Description));
+        capture.EndOfTick();
+
+        Assert.Equal(reply, Assert.Single(replies).Shared);
     }
 
     [Fact]

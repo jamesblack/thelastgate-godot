@@ -13,8 +13,6 @@ public sealed record LookReply(IReadOnlyList<LogLine> Shared, IReadOnlyList<LogL
 // the item's text: anything else caught with them was other chat from the same tick.
 public sealed class LookCapture
 {
-    public const int MaxLines = 32;
-
     private const int MaxQueued = 16;
 
     private readonly List<LogLine> fetch = [];
@@ -89,11 +87,6 @@ public sealed class LookCapture
 
     private static bool Append(List<LogLine> reply, LogLine line)
     {
-        if (reply.Count >= MaxLines)
-        {
-            return false;
-        }
-
         reply.Add(line);
         return true;
     }

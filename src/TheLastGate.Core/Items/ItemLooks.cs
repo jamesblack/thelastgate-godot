@@ -54,7 +54,15 @@ public sealed class ItemLooks
 
     public bool Enabled { get; set; } = true;
 
-    public ItemLook? Held => heldSprite != 0 && held.Sprite == heldSprite ? held.Text : null;
+    public ItemLook? Held(int sprite)
+    {
+        if (held.Sprite != sprite)
+        {
+            held = new Slot { Sprite = sprite };
+        }
+
+        return sprite != 0 ? held.Text : null;
+    }
 
     public static bool IsManualLook(byte[] packet) =>
         packet.Length > ActionOffset + sizeof(int)
@@ -87,10 +95,7 @@ public sealed class ItemLooks
             return;
         }
 
-        if (flight is { } current && current.Kind == kind && current.Index == index)
-        {
-            current.Stale = true;
-        }
+        MarkFlightStale(kind, index);
 
         // The item that was here may be heading for the hand, even if the new one looks the same.
         BeginHandoff();
@@ -104,6 +109,11 @@ public sealed class ItemLooks
             arrivals.Add((kind, index, sprite));
         }
 
+        Track(slot, sprite);
+    }
+
+    private void Track(Slot slot, int sprite)
+    {
         if (sprite == 0)
         {
             slot.Clear();
@@ -145,7 +155,7 @@ public sealed class ItemLooks
 
                 if (SlotFor(arrival.Kind, arrival.Index) is { } destination && destination.Sprite == arrival.Sprite)
                 {
-                    destination.Text = held.Text;
+                    destination.TakeOver(held);
                 }
 
                 break;
@@ -200,8 +210,22 @@ public sealed class ItemLooks
 
     public void ClearPreference() => preferred = null;
 
-    public ItemLook? For(ItemSlotKind kind, int index) =>
-        SlotFor(kind, index) is { State: not SlotState.Empty } slot ? slot.Text : null;
+    public ItemLook? For(ItemSlotKind kind, int index, int sprite)
+    {
+        if (SlotFor(kind, index) is not { } slot)
+        {
+            return null;
+        }
+
+        if (slot.Sprite != sprite)
+        {
+            MarkFlightStale(kind, index);
+            Track(slot, sprite);
+            return null;
+        }
+
+        return slot.State != SlotState.Empty ? slot.Text : null;
+    }
 
     private static void Refill(Slot[] slots)
     {
@@ -215,6 +239,14 @@ public sealed class ItemLooks
     {
         var slots = kind == ItemSlotKind.Worn ? worn : inventory;
         return index >= 0 && index < slots.Length ? slots[index] : null;
+    }
+
+    private void MarkFlightStale(ItemSlotKind kind, int index)
+    {
+        if (flight is { } current && current.Kind == kind && current.Index == index)
+        {
+            current.Stale = true;
+        }
     }
 
     private void BeginHandoff()
@@ -372,6 +404,15 @@ public sealed class ItemLooks
         public int Failures { get; set; }
 
         public Slot Copy() => (Slot)MemberwiseClone();
+
+        public void TakeOver(Slot origin)
+        {
+            State = origin.State;
+            Text = origin.Text;
+            DirtyTick = origin.DirtyTick;
+            LastFetchTick = origin.LastFetchTick;
+            Failures = origin.Failures;
+        }
 
         public void Clear()
         {
