@@ -11,6 +11,8 @@ namespace TheLastGate.GodotTests.World;
 public class StubbornUseTests
 {
     private const int UseAction = 4;
+    private const int Pentagram = 1000;
+    private const int ActivePentagram = 1001;
 
     private static readonly PlayerTarget Idle = new();
     private static readonly PlayerTarget Fighting = new(77, 0, 0, 0, 0, 0);
@@ -92,6 +94,52 @@ public class StubbornUseTests
         AssertThat(settled).IsEmpty();
         Tick(Idle, UseSight.None, StubbornUse.RetryDelayTicks(1));
         AssertThat(sent).HasSize(1);
+    }
+
+    [TestCase]
+    public void ACreatureSpawningOnTheChangedTile_Counts()
+    {
+        Tick(Idle, Animating(10, 20));
+        Tick(Idle, After(10, 20, true, ActivePentagram));
+
+        AssertThat(settled).ContainsExactly((10, 20));
+        Tick(Idle, UseSight.None, 200);
+        AssertThat(sent).IsEmpty();
+    }
+
+    [TestCase]
+    public void ATileThatChangesDuringTheAnimation_Counts()
+    {
+        Tick(Idle, Animating(10, 20));
+        Tick(Idle, Animating(10, 20, true, ActivePentagram));
+
+        AssertThat(settled).ContainsExactly((10, 20));
+        AssertThat(stubborn.IsWaitingToRetry).IsFalse();
+    }
+
+    [TestCase]
+    public void ATileSeenWhileTheServerWalksToIt_IsWhatTheChangeIsMeasuredFrom()
+    {
+        Tick(Using(10, 20), After(10, 20, false, ActivePentagram), 5);
+        Tick(Idle, Animating(10, 20, false, ActivePentagram));
+        Tick(Idle, After(10, 20, true, ActivePentagram));
+
+        AssertThat(settled).IsEmpty();
+        AssertThat(stubborn.IsWaitingToRetry).IsTrue();
+    }
+
+    [TestCase]
+    public void AnAttack_ClearsAPlannedRetry()
+    {
+        Tick(Idle, Animating(10, 20, true));
+        AssertThat(stubborn.IsWaitingToRetry).IsTrue();
+
+        stubborn.Sent(MapCommandPackets.ForCharacter(ClientCommand.Attack, 5));
+
+        AssertThat(stubborn.IsWaitingToRetry).IsFalse();
+        AssertThat(stubborn.IsPending).IsFalse();
+        Tick(Idle, UseSight.None, 200);
+        AssertThat(sent).IsEmpty();
     }
 
     [TestCase]
@@ -367,9 +415,11 @@ public class StubbornUseTests
 
     private static PlayerTarget Using(int x, int y) => new(0, 0, 0, UseAction, x, y);
 
-    private static UseSight Animating(int x, int y, bool occupied = false) => new(true, x, y, occupied);
+    private static UseSight Animating(int x, int y, bool occupied = false, int itemSprite = Pentagram) =>
+        new(true, x, y, occupied, itemSprite);
 
-    private static UseSight After(int x, int y, bool occupied = false) => new(false, x, y, occupied);
+    private static UseSight After(int x, int y, bool occupied = false, int itemSprite = Pentagram) =>
+        new(false, x, y, occupied, itemSprite);
 
     private static byte[] Use(int x, int y) => MapCommandPackets.ForTile(ClientCommand.Use, x, y);
 }

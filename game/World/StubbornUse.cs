@@ -6,7 +6,12 @@ using TheLastGate.State;
 
 namespace TheLastGate.World;
 
-public readonly record struct UseSight(bool PlayerIsUsing, int FacedX, int FacedY, bool TargetOccupied)
+public readonly record struct UseSight(
+    bool PlayerIsUsing,
+    int FacedX,
+    int FacedY,
+    bool TargetOccupied,
+    int TargetItemSprite)
 {
     private const int UseAnimation = 4;
     private const int FacingUp = 0;
@@ -14,31 +19,34 @@ public readonly record struct UseSight(bool PlayerIsUsing, int FacedX, int Faced
     private const int FacingLeft = 2;
     private const int FacingRight = 3;
 
-    public static UseSight None { get; } = new(false, -1, -1, false);
+    public static UseSight None { get; } = new(false, -1, -1, false, 0);
 
     public static UseSight From(WorldMap map, (int X, int Y) target)
     {
         ref readonly var player = ref map.Tiles[WorldMap.PlayerTile];
-        var occupied = HasCharacterAt(map, player, target);
+        var targetTile = TileIndexOf(player, target);
+        var occupied = targetTile is { } occupiedIndex && map.Tiles[occupiedIndex].CharacterSprite != 0;
+        var itemSprite = targetTile is { } itemIndex ? map.Tiles[itemIndex].ItemSprite : 0;
         var block = CharacterStatuses.BlockOf(player.CharacterStatus);
         if (block.Kind is not (CharacterStatusKind.Idle or CharacterStatusKind.Action)
             || FacedTileOffset(block.Direction) is not { } offset)
         {
-            return None with { TargetOccupied = occupied };
+            return None with { TargetOccupied = occupied, TargetItemSprite = itemSprite };
         }
 
         ref readonly var faced = ref map.Tiles[WorldMap.PlayerTile + offset];
         var isUsing = block.Kind == CharacterStatusKind.Action && player.CharacterStatusOffset == UseAnimation;
-        return new UseSight(isUsing, faced.X, faced.Y, occupied);
+        return new UseSight(isUsing, faced.X, faced.Y, occupied, itemSprite);
     }
 
-    // A target off the map, as after a teleporting use, has nobody on it as far as the client can tell.
-    private static bool HasCharacterAt(WorldMap map, in MapTile player, (int X, int Y) target)
+    // A target off the map, as after a teleporting use, has nobody and nothing on it as far as the client can tell.
+    private static int? TileIndexOf(in MapTile player, (int X, int Y) target)
     {
         var column = WorldMap.Size / 2 + target.X - player.X;
         var row = WorldMap.Size / 2 + target.Y - player.Y;
         return column is >= 0 and < WorldMap.Size && row is >= 0 and < WorldMap.Size
-            && map.Tiles[column + row * WorldMap.Size].CharacterSprite != 0;
+            ? column + row * WorldMap.Size
+            : null;
     }
 
     private static int? FacedTileOffset(int direction) => direction switch
@@ -53,6 +61,8 @@ public readonly record struct UseSight(bool PlayerIsUsing, int FacedX, int Faced
 
 // A use counts once the player's use animation, facing the tile, has played out with nobody on the tile, through the
 // tick after it ends: the server applies the use when the animation ends, and a pentagram won't activate under anyone.
+// A use that changed the item on the tile counts even with someone on it, since a pentagram's creatures appear there
+// as soon as it activates.
 public sealed class StubbornUse(TextLog chat)
 {
     public const int MostFailures = 8;
@@ -65,6 +75,7 @@ public sealed class StubbornUse(TextLog chat)
 
     private bool enabled;
     private int failures;
+    private int itemSpriteBefore;
     private Phase phase;
     private int quietTicks;
     private int ticksCounted;
@@ -153,7 +164,11 @@ public sealed class StubbornUse(TextLog chat)
 
     private void WhileAnimating(UseSight sight)
     {
-        if (sight.TargetOccupied)
+        if (ChangedTheTile(sight))
+        {
+            Settle();
+        }
+        else if (sight.TargetOccupied)
         {
             Fail();
         }
@@ -165,7 +180,7 @@ public sealed class StubbornUse(TextLog chat)
 
     private void AfterTheAnimation(UseSight sight)
     {
-        if (sight.TargetOccupied)
+        if (sight.TargetOccupied && !ChangedTheTile(sight))
         {
             Fail();
         }
@@ -192,6 +207,7 @@ public sealed class StubbornUse(TextLog chat)
     {
         if (ServerIsUsingTheTile(target))
         {
+            itemSpriteBefore = sight.TargetItemSprite;
             StartWaitingForTheServer();
             return true;
         }
@@ -201,6 +217,7 @@ public sealed class StubbornUse(TextLog chat)
             return false;
         }
 
+        itemSpriteBefore = sight.TargetItemSprite;
         phase = Phase.Animating;
         WhileAnimating(sight);
         return true;
@@ -245,6 +262,8 @@ public sealed class StubbornUse(TextLog chat)
         target.MiscAction == MiscActions.Use && (target.MiscTarget1, target.MiscTarget2) == tile;
 
     private bool Faces(UseSight sight) => (sight.FacedX, sight.FacedY) == tile;
+
+    private bool ChangedTheTile(UseSight sight) => sight.TargetItemSprite != itemSpriteBefore;
 
     private enum Phase
     {

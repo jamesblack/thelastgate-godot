@@ -112,7 +112,7 @@ public sealed class UseQueue(TextLog chat)
 
     public void Sent(byte[] packet)
     {
-        if (ActionCommands.CancelsPendingActions(packet))
+        if (ActionCommands.CancelsPendingActions(packet) || (ClientCommand)packet[0] == ClientCommand.Attack)
         {
             queued.Clear();
         }

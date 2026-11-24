@@ -129,6 +129,7 @@ public class UseQueueTests
     [TestCase(ClientCommand.Mode)]
     [TestCase(ClientCommand.Reset)]
     [TestCase(ClientCommand.Stat)]
+    [TestCase(ClientCommand.Attack)]
     public void AnOrdinaryCommand_ClearsTheQueue(ClientCommand command)
     {
         queue.Add(10, 20, Target(Using, 1, 1));
@@ -138,11 +139,10 @@ public class UseQueueTests
         AssertThat(queue.Count).IsEqual(0);
     }
 
-    [TestCase(ClientCommand.Attack)]
     [TestCase(ClientCommand.Give)]
     [TestCase(ClientCommand.Inventory)]
     [TestCase(ClientCommand.Skill)]
-    public void CharacterAndInventoryCommands_KeepTheQueue(ClientCommand command)
+    public void GiveInventoryAndSkillCommands_KeepTheQueue(ClientCommand command)
     {
         queue.Add(10, 20, Target(Using, 1, 1));
 
