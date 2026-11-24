@@ -1,0 +1,5 @@
+[submodule "reference/server"]
+	path = reference/server
+	url = https://github.com/ZarroTsu/TheLastGate.git
+	update = none
+	branch = master

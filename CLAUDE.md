@@ -26,12 +26,13 @@ Everything is laid out for a 1280×720 virtual resolution (`viewport_width`/`vie
 | `tests/TheLastGate.Tests/` | xUnit tests for Core, Assets and the tools; they run without the engine |
 | `tests/TheLastGate.GodotTests/` | GdUnit4 tests for code in `game/`. It is a Godot project of its own that references the game, so tests can run engine behaviour (input, nodes, scenes) as well as plain C# |
 | `data/` | Game data the client reads at run time. Everything here ships. |
+| `reference/server/` | A submodule of the server repo, pinned to the last server commit the client was checked against. It stays empty until the `server-changes` skill clones it. |
 
 The root `TheLastGate.sln` holds every project and is the one to open in Rider. Godot builds `game/TheLastGate.sln`, which only lists the game, so failing tests never stop the game from running.
 
 ## Reference code (read-only from here)
 
-**Server source:** the live server is `C:\Code\TheLastGateReal` (`ZarroTsu/TheLastGate` on GitHub). It is the only contract this client keeps: the protocol, packet lengths and what the server's data means. Protocol questions are answered from it. `C:\Code\thelastgate-sdl\Source\Server` is out of date, so don't rely on it.
+**Server source:** the live server is `C:\Code\TheLastGateReal` (`ZarroTsu/TheLastGate` on GitHub). It is the only contract this client keeps: the protocol, packet lengths and what the server's data means. Protocol questions are answered from it. `/server-changes` reviews the server commits since `reference/server`'s pin for changes the client has to follow. `C:\Code\thelastgate-sdl\Source\Server` is out of date, so don't rely on it.
 
 **SDL client:** `C:\Code\thelastgate-sdl\Source\Client` is no longer a reference for this client's behaviour or code. Don't consult or copy it unless a task says to. Features that read its files on the player's machine to migrate them (`unique.dat`, `TLGCharacters.dat`, the explored map and notes) are features of this client and stay.
 
