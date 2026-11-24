@@ -48,6 +48,11 @@ if [ -d "$vswhere_folder" ]; then
     PATH="$PATH:$vswhere_folder"
 fi
 
+# On Windows the MSBuild and compiler servers that the export's dotnet publish leaves running keep Godot's
+# console wrapper open until they time out, about 15 minutes later.
+export MSBUILDDISABLENODEREUSE=1
+export UseSharedCompilation=false
+
 rm -rf "$app" "$starter_out"
 mkdir -p "$app" "$releases"
 
