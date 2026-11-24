@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.4.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.3.0...v1.4.0) (2026-11-24)
+
+
+### Features
+
+* **display:** soften the infravision tint and keep the classic red for corrupted characters ([ff1464c](https://github.com/jamesblack/thelastgate-godot/commit/ff1464c4e230d55ae4d0b7e48bf9e8a08ed3aaba))
+* **windows:** add an Experimental tab to the options window ([82c5701](https://github.com/jamesblack/thelastgate-godot/commit/82c5701f2b9c9e986c9c2d9fd5ebcdeb473a8c66))
+* **windows:** fade only a window's background with the window background option, keeping its frame, lines and buttons solid ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** give the waypoint list a green scroll bar and scroll it with the wheel only over the list ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** keep the skill tree centred in a window wide enough for its longest description ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** label the smith's slots and its Smith, Grind, Hone and Sharpen buttons ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** light up window buttons and close buttons while the mouse is over them, and more while held ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** redraw the shop, depot, smith, waypoint, message and skill tree windows in a new dark style ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **windows:** show the depot's current page and the selected waypoint in steel blue ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **world:** keep retrying a use that doesn't go through, as an experimental option ([82c5701](https://github.com/jamesblack/thelastgate-godot/commit/82c5701f2b9c9e986c9c2d9fd5ebcdeb473a8c66))
+* **world:** mark a use that is waiting to be retried in red ([82c5701](https://github.com/jamesblack/thelastgate-godot/commit/82c5701f2b9c9e986c9c2d9fd5ebcdeb473a8c66))
+
+
+### Bug Fixes
+
+* **hud:** keep label colours inside themed windows and the classic fonts intact after a font swap ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+* **planner:** match the server's new Hermit, Strength Reversed and Hanged Man Reversed values ([e6b0ae8](https://github.com/jamesblack/thelastgate-godot/commit/e6b0ae8b59d86abc91936d2a6a0f29a1aef771a8)), closes [#41](https://github.com/jamesblack/thelastgate-godot/issues/41)
+* **windows:** call waypoint 22 The Emerald Cavern, West, as the server does ([e6b0ae8](https://github.com/jamesblack/thelastgate-godot/commit/e6b0ae8b59d86abc91936d2a6a0f29a1aef771a8))
+* **windows:** keep the new player welcome above a tutorial so its buttons do what they say ([68dbf13](https://github.com/jamesblack/thelastgate-godot/commit/68dbf1357cd0bb72882dbd4f29d5500858515974))
+
 ## [1.3.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.2.0...v1.3.0) (2026-11-21)
 
 
