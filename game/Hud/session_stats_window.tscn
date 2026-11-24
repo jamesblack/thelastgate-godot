@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://hqohkevjjn0f8"]
+[gd_scene format=3 uid="uid://dvalycyayg4oh"]
 
-[ext_resource type="Script" uid="uid://5obr5q32l04x0" path="res://Hud/SessionStatsWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://dmgo1dobnl0nn" path="res://Hud/SessionStatsWindowView.cs" id="1_view"]
 [ext_resource type="Theme" uid="uid://bxevvm0ssb2pb" path="res://themes/OptionsTheme.tres" id="2_theme"]
-[ext_resource type="Script" uid="uid://73lezprqfzqlh" path="res://Hud/DataTable.cs" id="3_table"]
+[ext_resource type="Script" uid="uid://b6cgbafpweqjd" path="res://Hud/DataTable.cs" id="3_table"]
 
 [node name="SessionStatsWindow" type="CenterContainer" unique_id=1150167463]
 layout_mode = 3
@@ -67,9 +67,10 @@ focus_mode = 0
 theme_type_variation = &"DarkButton"
 text = "Reset"
 
-[node name="Close" type="TextureButton" parent="Window" unique_id=345298505]
+[node name="Close" type="Button" parent="Window" unique_id=345298505]
 layout_mode = 2
 custom_minimum_size = Vector2(14, 14)
 size_flags_vertical = 0
 focus_mode = 0
 tooltip_text = "Close"
+theme_type_variation = &"DarkCloseButton"

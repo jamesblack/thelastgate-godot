@@ -1,0 +1,607 @@
+[gd_scene format=3 uid="uid://2fyap42scwhm"]
+
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="1_panel"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="2_click"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[node name="ProceduralBorders" type="Control" unique_id=1473158606]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 460.0
+mouse_filter = 2
+
+[node name="Windows" type="GridContainer" parent="." unique_id=339081663]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 640.0
+offset_bottom = 460.0
+mouse_filter = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
+
+[node name="ThickDoubled" type="HBoxContainer" parent="Windows" unique_id=153710184]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Windows/ThickDoubled" unique_id=1692467581]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/ThickDoubled/Frame" unique_id=690620971]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Content" type="Container" parent="Windows/ThickDoubled/Frame/Layout" unique_id=625901256]
+custom_minimum_size = Vector2(170, 90)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+FadesAs = 1
+
+[node name="Footer" type="Container" parent="Windows/ThickDoubled/Frame/Layout" unique_id=579341423]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Profile = "GBG"
+Padding = 2
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/ThickDoubled/Frame/Layout/Footer" unique_id=399655412]
+layout_mode = 2
+text = "Thick, footer all edges"
+script = ExtResource("3_label")
+
+[node name="CloseButton" type="Control" parent="Windows/ThickDoubled" unique_id=1681559892]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Close"
+script = ExtResource("2_click")
+
+[node name="Look" type="Container" parent="Windows/ThickDoubled/CloseButton" unique_id=320106707]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Shape = 2
+Profile = "G"
+
+[node name="ThickMerged" type="HBoxContainer" parent="Windows" unique_id=1553201078]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Windows/ThickMerged" unique_id=1690571865]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/ThickMerged/Frame" unique_id=1271165722]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Content" type="Container" parent="Windows/ThickMerged/Frame/Layout" unique_id=286699713]
+custom_minimum_size = Vector2(170, 90)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+FadesAs = 1
+
+[node name="Footer" type="Container" parent="Windows/ThickMerged/Frame/Layout" unique_id=1368073012]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Profile = "GBG"
+Edges = 1
+Padding = 2
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/ThickMerged/Frame/Layout/Footer" unique_id=1006070220]
+layout_mode = 2
+text = "Thick, footer top only"
+script = ExtResource("3_label")
+
+[node name="CloseButton" type="Control" parent="Windows/ThickMerged" unique_id=168252793]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Close"
+script = ExtResource("2_click")
+
+[node name="Look" type="Container" parent="Windows/ThickMerged/CloseButton" unique_id=163989047]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Shape = 2
+Profile = "G"
+
+[node name="ThinDoubled" type="HBoxContainer" parent="Windows" unique_id=301209005]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Windows/ThinDoubled" unique_id=569521477]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/ThinDoubled/Frame" unique_id=599635468]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Content" type="Container" parent="Windows/ThinDoubled/Frame/Layout" unique_id=1185242216]
+custom_minimum_size = Vector2(170, 90)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+FadesAs = 1
+
+[node name="Footer" type="Container" parent="Windows/ThinDoubled/Frame/Layout" unique_id=1392825378]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Profile = "GBG"
+Padding = 2
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/ThinDoubled/Frame/Layout/Footer" unique_id=156985561]
+layout_mode = 2
+text = "Thin, footer all edges"
+script = ExtResource("3_label")
+
+[node name="CloseButton" type="Control" parent="Windows/ThinDoubled" unique_id=1305264595]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Close"
+script = ExtResource("2_click")
+
+[node name="Look" type="Container" parent="Windows/ThinDoubled/CloseButton" unique_id=527000596]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Shape = 2
+Profile = "G"
+
+[node name="ThinMerged" type="HBoxContainer" parent="Windows" unique_id=1637640408]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Windows/ThinMerged" unique_id=1495616196]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/ThinMerged/Frame" unique_id=1606083910]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Content" type="Container" parent="Windows/ThinMerged/Frame/Layout" unique_id=1270252923]
+custom_minimum_size = Vector2(170, 90)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+FadesAs = 1
+
+[node name="Footer" type="Container" parent="Windows/ThinMerged/Frame/Layout" unique_id=1000911954]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Profile = "GBG"
+Edges = 1
+Padding = 2
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/ThinMerged/Frame/Layout/Footer" unique_id=573392624]
+layout_mode = 2
+text = "Thin, footer top only"
+script = ExtResource("3_label")
+
+[node name="CloseButton" type="Control" parent="Windows/ThinMerged" unique_id=1064669077]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Close"
+script = ExtResource("2_click")
+
+[node name="Look" type="Container" parent="Windows/ThinMerged/CloseButton" unique_id=1365438422]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Shape = 2
+Profile = "G"
+
+[node name="TableDoubled" type="Container" parent="Windows" unique_id=697409992]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/TableDoubled" unique_id=1838238661]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Cells" type="GridContainer" parent="Windows/TableDoubled/Layout" unique_id=1966808229]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 3
+
+[node name="Cell00" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=113955983]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell00" unique_id=1729526405]
+layout_mode = 2
+text = "1"
+script = ExtResource("3_label")
+
+[node name="Cell01" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=1830483678]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell01" unique_id=442865762]
+layout_mode = 2
+text = "55"
+script = ExtResource("3_label")
+
+[node name="Cell02" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=1599242941]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell02" unique_id=1007557512]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Cell10" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=830682427]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell10" unique_id=696724164]
+layout_mode = 2
+text = "94"
+script = ExtResource("3_label")
+
+[node name="Cell11" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=433889688]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell11" unique_id=562382781]
+layout_mode = 2
+text = "164"
+script = ExtResource("3_label")
+
+[node name="Cell12" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=1739591159]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell12" unique_id=822831292]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Cell20" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=319494902]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell20" unique_id=299170184]
+layout_mode = 2
+text = "80"
+script = ExtResource("3_label")
+
+[node name="Cell21" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=915887678]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell21" unique_id=307696843]
+layout_mode = 2
+text = "151"
+script = ExtResource("3_label")
+
+[node name="Cell22" type="Container" parent="Windows/TableDoubled/Layout/Cells" unique_id=870902343]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Cells/Cell22" unique_id=1919980297]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Update" type="Container" parent="Windows/TableDoubled/Layout" unique_id=838639288]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableDoubled/Layout/Update" unique_id=1396491777]
+layout_mode = 2
+text = "Doubled"
+script = ExtResource("3_label")
+
+[node name="TableMerged" type="Container" parent="Windows" unique_id=668054227]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="Layout" type="VBoxContainer" parent="Windows/TableMerged" unique_id=1833294783]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Cells" type="GridContainer" parent="Windows/TableMerged/Layout" unique_id=193309105]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 3
+
+[node name="Cell00" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=1667087080]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 6
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell00" unique_id=1086607411]
+layout_mode = 2
+text = "1"
+script = ExtResource("3_label")
+
+[node name="Cell01" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=1251541058]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 6
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell01" unique_id=368062140]
+layout_mode = 2
+text = "55"
+script = ExtResource("3_label")
+
+[node name="Cell02" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=912896393]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 4
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell02" unique_id=269222132]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Cell10" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=1285498232]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 6
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell10" unique_id=729595552]
+layout_mode = 2
+text = "94"
+script = ExtResource("3_label")
+
+[node name="Cell11" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=1881132953]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 6
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell11" unique_id=1449993687]
+layout_mode = 2
+text = "164"
+script = ExtResource("3_label")
+
+[node name="Cell12" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=1428261053]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 4
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell12" unique_id=1950501472]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Cell20" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=876605304]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 2
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell20" unique_id=1339854303]
+layout_mode = 2
+text = "80"
+script = ExtResource("3_label")
+
+[node name="Cell21" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=512936598]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 2
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell21" unique_id=1613056504]
+layout_mode = 2
+text = "151"
+script = ExtResource("3_label")
+
+[node name="Cell22" type="Container" parent="Windows/TableMerged/Layout/Cells" unique_id=249368553]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 0
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Cells/Cell22" unique_id=198407116]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Update" type="Container" parent="Windows/TableMerged/Layout" unique_id=1520052172]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "G"
+Edges = 1
+Padding = 1
+FadesAs = 1
+
+[node name="Caption" type="Label" parent="Windows/TableMerged/Layout/Update" unique_id=589407815]
+layout_mode = 2
+text = "Update"
+script = ExtResource("3_label")

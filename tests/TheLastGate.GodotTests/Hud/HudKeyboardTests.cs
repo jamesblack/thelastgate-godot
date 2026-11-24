@@ -46,7 +46,7 @@ public class HudKeyboardTests
         sentLines.Clear();
         hud = GD.Load<PackedScene>("res://Hud/hud_view.tscn").Instantiate<HudView>();
         Tree.Root.AddChild(hud);
-        hud.Show(state, session, new ClassicFonts(sprites), sentPackets.Add);
+        hud.Show(state, session, new ClassicFonts(), sentPackets.Add);
         Line.LineSent += sentLines.Add;
         await Frames(2);
     }

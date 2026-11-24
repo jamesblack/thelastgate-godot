@@ -237,7 +237,7 @@ public partial class GameScreen : Control
             return;
         }
 
-        var fonts = new ClassicFonts(sprites);
+        var fonts = new ClassicFonts();
         var characterSettings = login.Record.Settings();
         var clientSettings = ClientSettings.Load();
         worldView = new WorldView

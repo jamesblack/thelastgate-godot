@@ -17,7 +17,6 @@ namespace TheLastGate.Hud;
 [Tool]
 public partial class OptionsWindowView : Panel, IHudContextUser
 {
-    private const int CloseSprite = 18042;
     private const string OptionRowScenePath = "res://Hud/option_row.tscn";
     private const string SliderRowScenePath = "res://Hud/slider_row.tscn";
     private const string KeybindSectionScenePath = "res://Hud/keybind_section.tscn";
@@ -32,7 +31,6 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private const string HoveredRowVariation = "TableRowHover";
     private const string ScrollBarVariation = "OptionsScrollBar";
 
-    private static readonly Rect2 CloseRegion = new(283, 0, 14, 14);
 
     private readonly Dictionary<string, Button> keyButtons = [];
     private readonly Dictionary<string, Label> keyWarnings = [];
@@ -40,6 +38,7 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private string? capturing;
     private IReadOnlyList<KeybindRow> shownKeybindRows = [];
     private SpriteLoader? sprites;
+    private EditorThemePreview? themePreview;
 
     public OptionsWindowView() => AddToGroup(HudContext.Group);
 
@@ -97,6 +96,8 @@ public partial class OptionsWindowView : Panel, IHudContextUser
 
     public event Action<WindowBackground, int>? BackgroundOpacityChanged;
 
+    public override void _Notification(int what) => themePreview?.Notify(what);
+
     public override void _Ready()
     {
         ApplySprites();
@@ -109,6 +110,7 @@ public partial class OptionsWindowView : Panel, IHudContextUser
             new OptionsWindow());
         if (Engine.IsEditorHint())
         {
+            themePreview = EditorThemePreview.Show(this);
             return;
         }
 
@@ -255,11 +257,6 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         }
 
         ThemeSprites.Apply(Theme, sprites);
-        if (sprites.GetTexture(CloseSprite) is { } closeSheet)
-        {
-            GetNode<TextureButton>("%CloseButton").TextureNormal =
-                new AtlasTexture { Atlas = closeSheet, Region = CloseRegion };
-        }
     }
 
     // The rows come from the Core table so their wording is kept in one place; they are never saved into the scene.

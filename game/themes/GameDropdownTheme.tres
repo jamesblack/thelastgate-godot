@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://cutkkse75jg5"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_none"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
 content_margin_left = 4.0
 content_margin_top = 3.0
@@ -11,8 +13,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.462745, 0.384314, 0.0313726, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_none"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box_hover"]
 content_margin_left = 4.0

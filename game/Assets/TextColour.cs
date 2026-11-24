@@ -16,4 +16,5 @@ public enum TextColour
     White = LogFont.White,
     Grey,
     Dim,
+    Engraved,
 }

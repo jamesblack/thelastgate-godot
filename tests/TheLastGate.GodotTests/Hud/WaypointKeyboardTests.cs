@@ -4,6 +4,7 @@ using TheLastGate.Assets;
 using TheLastGate.Game;
 using TheLastGate.Hotkeys;
 using TheLastGate.Hud;
+using TheLastGate.Hud.Waypoints;
 using TheLastGate.Net;
 using TheLastGate.State;
 using static GdUnit4.Assertions;
@@ -37,7 +38,7 @@ public class WaypointKeyboardTests
         sentPackets.Clear();
         hud = GD.Load<PackedScene>("res://Hud/hud_view.tscn").Instantiate<HudView>();
         Tree.Root.AddChild(hud);
-        hud.Show(state, session, new ClassicFonts(sprites), sentPackets.Add);
+        hud.Show(state, session, new ClassicFonts(), sentPackets.Add);
         session.WaypointWindow.Open();
         hud.Refresh(0);
         await Frames(2);

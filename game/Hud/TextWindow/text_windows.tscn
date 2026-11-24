@@ -1,0 +1,284 @@
+[gd_scene format=3 uid="uid://c43vvk1g7qgns"]
+
+[ext_resource type="Script" uid="uid://bjlxiaewq21ev" path="res://Hud/TextWindow/TextWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://dns0wvx5gfo6b" path="res://Hud/ArchiveSprite.cs" id="4_sprite"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="5_button"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="6_close"]
+
+[node name="TextWindows" type="Control" unique_id=1376479816]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=1346380485]
+layout_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=1767109770]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+size_flags_vertical = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1377685364]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout" unique_id=1176689582]
+custom_minimum_size = Vector2(284, 277)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout/Content" unique_id=646321109]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 4
+FadesAs = 6
+
+[node name="Text" type="VBoxContainer" parent="Window/Frame/Layout/Content/Body" unique_id=517732141]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Message" type="VBoxContainer" parent="Window/Frame/Layout/Content/Body/Text" unique_id=1528764028]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Line0" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1442412101]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line1" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1481922249]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line2" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=441018966]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line3" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=528625886]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line4" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1983971758]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line5" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1658210048]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line6" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=608973222]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line7" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1168979770]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line8" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1521977031]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line9" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=449658719]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line10" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=831635001]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line11" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=160152659]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line12" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1115682609]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line13" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=952478646]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line14" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1229674255]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line15" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1668821363]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line16" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=119529828]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line17" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1087556538]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line18" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=948220735]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line19" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1885882341]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line20" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1227599163]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line21" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1817709415]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line22" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1048753100]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line23" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=385179230]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line24" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1341312689]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line25" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=1013263703]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line26" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Message" unique_id=823442627]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Tutorial" type="VBoxContainer" parent="Window/Frame/Layout/Content/Body/Text" unique_id=406446479]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Line0" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1375753008]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line1" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=165023827]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line2" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=314686233]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line3" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=679373297]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line4" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1544802297]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line5" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=120148046]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line6" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1241944079]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line7" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1403475531]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line8" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1714852735]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line9" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1094056387]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line10" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1091191181]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="Line11" type="Label" parent="Window/Frame/Layout/Content/Body/Text/Tutorial" unique_id=1385261678]
+layout_mode = 2
+script = ExtResource("3_label")
+
+[node name="PictureArea" type="Container" parent="Window/Frame/Layout/Content" unique_id=1117211569]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 2
+FadesAs = 6
+
+[node name="Picture" type="TextureRect" parent="Window/Frame/Layout/Content/PictureArea" unique_id=684329738]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("4_sprite")
+SpriteNumber = 18010
+TrimToDrawnArea = true
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1081687816]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Footer" unique_id=141015208]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LeftButton" parent="Window/Frame/Layout/Footer/Buttons" unique_id=1918139089 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LeftSpace" type="Control" parent="Window/Frame/Layout/Footer/Buttons" unique_id=1571703947]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="OkButton" parent="Window/Frame/Layout/Footer/Buttons" unique_id=1872042944 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RightSpace" type="Control" parent="Window/Frame/Layout/Footer/Buttons" unique_id=113424906]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RightButton" parent="Window/Frame/Layout/Footer/Buttons" unique_id=1473409858 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="CloseButton" parent="Window" unique_id=1462875568 instance=ExtResource("6_close")]
+unique_name_in_owner = true
+layout_mode = 2

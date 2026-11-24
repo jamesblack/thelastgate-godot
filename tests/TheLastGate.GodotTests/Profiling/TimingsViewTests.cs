@@ -32,7 +32,7 @@ public class TimingsViewTests
         packets = new PacketCounter();
         view = GD.Load<PackedScene>("res://Profiling/timings_view.tscn").Instantiate<TimingsView>();
         Tree.Root.AddChild(view);
-        view.Watch(recorder, packets, null, new ClassicFonts(sprites));
+        view.Watch(recorder, packets, null, new ClassicFonts());
     }
 
     [AfterTest]

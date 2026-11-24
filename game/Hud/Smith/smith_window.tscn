@@ -1,0 +1,206 @@
+[gd_scene format=3 uid="uid://bkd1i4cug6ojj"]
+
+[ext_resource type="Script" uid="uid://cw4sjrif8lr85" path="res://Hud/Smith/SmithWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://bydn5g2axrvh4" path="res://Hud/item_cell.tscn" id="4_cell"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="5_button"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="6_close"]
+
+[node name="SmithWindow" type="Control" unique_id=1869301121]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=472159959]
+layout_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=1550235050]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=107347862]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Bench" type="Container" parent="Window/Frame/Layout" unique_id=195625236]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+FadesAs = 3
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Bench" unique_id=1543371666]
+custom_minimum_size = Vector2(268, 144)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Row" type="HBoxContainer" parent="Window/Frame/Layout/Bench/Centre" unique_id=1810832538]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="Slot0" parent="Window/Frame/Layout/Bench/Centre/Row" unique_id=1585061076 instance=ExtResource("4_cell")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+Profile = "GBG"
+
+[node name="Caption" type="Control" parent="Window/Frame/Layout/Bench/Centre/Row/Slot0" unique_id=395921161]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row/Slot0/Caption" unique_id=1984411023]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Input"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Plus" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row" unique_id=1401540335]
+layout_mode = 2
+text = "+"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Middle" type="VBoxContainer" parent="Window/Frame/Layout/Bench/Centre/Row" unique_id=1098927944]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Slot1" parent="Window/Frame/Layout/Bench/Centre/Row/Middle" unique_id=1151415979 instance=ExtResource("4_cell")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+Profile = "GBG"
+
+[node name="Caption" type="Control" parent="Window/Frame/Layout/Bench/Centre/Row/Middle/Slot1" unique_id=449403507]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row/Middle/Slot1/Caption" unique_id=1731606427]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Stone"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="And" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row/Middle" unique_id=1041280343]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "&"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Slot2" parent="Window/Frame/Layout/Bench/Centre/Row/Middle" unique_id=1011719250 instance=ExtResource("4_cell")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+Profile = "GBG"
+
+[node name="Caption" type="Control" parent="Window/Frame/Layout/Bench/Centre/Row/Middle/Slot2" unique_id=1767658955]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row/Middle/Slot2/Caption" unique_id=1898857121]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Item"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Equals" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row" unique_id=1320943967]
+layout_mode = 2
+text = "="
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Slot3" parent="Window/Frame/Layout/Bench/Centre/Row" unique_id=628895128 instance=ExtResource("4_cell")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+Profile = "GBG"
+
+[node name="Caption" type="Control" parent="Window/Frame/Layout/Bench/Centre/Row/Slot3" unique_id=262776765]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Bench/Centre/Row/Slot3/Caption" unique_id=1816392788]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Out"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1656347872]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Footer" unique_id=102247802]
+custom_minimum_size = Vector2(268, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Footer/Centre" unique_id=1353101672]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+
+[node name="Button4" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1306269163 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Button5" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=224091412 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button6" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=404129571 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="CloseButton" parent="Window" unique_id=1470795098 instance=ExtResource("6_close")]
+unique_name_in_owner = true
+layout_mode = 2

@@ -1,0 +1,4095 @@
+[gd_scene format=3 uid="uid://dwin5gallery1"]
+
+[ext_resource type="Shader" uid="uid://bjfdfbrxseto" path="res://Demo/dark_procedural.gdshader" id="1_shader"]
+[ext_resource type="Script" uid="uid://14bl67f3fp3x" path="res://Demo/ProceduralDepotDemo.cs" id="2_demo"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 0)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 0)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_9"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_10"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_12"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 3
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 2, 2, 0, 0, 0, 0)
+shader_parameter/profile_width = 6
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 1
+shader_parameter/window_origin = Vector2(640, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 0
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_14"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_15"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 5
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 2, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_17"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_18"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_19"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 0)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_20"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 5
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 2, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_23"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_25"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(0, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_26"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_27"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 5
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_28"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 2, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_29"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_30"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_31"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(320, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_32"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_33"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 5
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_34"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 2, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_35"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_36"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_37"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(640, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_38"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 360)
+shader_parameter/profile = PackedInt32Array(0, 2, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 2
+shader_parameter/fill_kind = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_39"]
+shader = ExtResource("1_shader")
+shader_parameter/mode = 0
+shader_parameter/window_origin = Vector2(960, 360)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 1
+shader_parameter/fill_kind = 0
+
+[node name="ProceduralWindows" type="Control" unique_id=1156594837]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+script = ExtResource("2_demo")
+
+[node name="W18092" type="Control" parent="." unique_id=1560241127]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 320.0
+offset_bottom = 320.0
+mouse_filter = 2
+
+[node name="Cell63" type="ColorRect" parent="W18092" unique_id=1183081030]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 282.0
+offset_right = 280.0
+offset_bottom = 315.0
+
+[node name="Cell64" type="ColorRect" parent="W18092" unique_id=466655869]
+material = SubResource("ShaderMaterial_3")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 212.0
+offset_top = 247.0
+offset_right = 280.0
+offset_bottom = 281.0
+
+[node name="Cell0" type="ColorRect" parent="W18092" unique_id=748166977]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 36.0
+offset_bottom = 36.0
+
+[node name="Cell1" type="ColorRect" parent="W18092" unique_id=2138240631]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 1.0
+offset_right = 71.0
+offset_bottom = 36.0
+
+[node name="Cell2" type="ColorRect" parent="W18092" unique_id=1376898982]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 1.0
+offset_right = 106.0
+offset_bottom = 36.0
+
+[node name="Cell3" type="ColorRect" parent="W18092" unique_id=220694095]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 1.0
+offset_right = 141.0
+offset_bottom = 36.0
+
+[node name="Cell4" type="ColorRect" parent="W18092" unique_id=536463879]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 1.0
+offset_right = 176.0
+offset_bottom = 36.0
+
+[node name="Cell5" type="ColorRect" parent="W18092" unique_id=1875542331]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 1.0
+offset_right = 211.0
+offset_bottom = 36.0
+
+[node name="Cell6" type="ColorRect" parent="W18092" unique_id=486038076]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 1.0
+offset_right = 246.0
+offset_bottom = 36.0
+
+[node name="Cell7" type="ColorRect" parent="W18092" unique_id=775705878]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 1.0
+offset_right = 281.0
+offset_bottom = 36.0
+
+[node name="Cell9" type="ColorRect" parent="W18092" unique_id=329531992]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 36.0
+offset_right = 36.0
+offset_bottom = 71.0
+
+[node name="Cell10" type="ColorRect" parent="W18092" unique_id=1291423036]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 71.0
+offset_bottom = 71.0
+
+[node name="Cell11" type="ColorRect" parent="W18092" unique_id=1013808201]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 36.0
+offset_right = 106.0
+offset_bottom = 71.0
+
+[node name="Cell12" type="ColorRect" parent="W18092" unique_id=2050534717]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 36.0
+offset_right = 141.0
+offset_bottom = 71.0
+
+[node name="Cell13" type="ColorRect" parent="W18092" unique_id=1362063880]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 36.0
+offset_right = 176.0
+offset_bottom = 71.0
+
+[node name="Cell14" type="ColorRect" parent="W18092" unique_id=2025458539]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 36.0
+offset_right = 211.0
+offset_bottom = 71.0
+
+[node name="Cell15" type="ColorRect" parent="W18092" unique_id=2029358702]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 36.0
+offset_right = 246.0
+offset_bottom = 71.0
+
+[node name="Cell16" type="ColorRect" parent="W18092" unique_id=806108786]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 36.0
+offset_right = 281.0
+offset_bottom = 71.0
+
+[node name="Cell17" type="ColorRect" parent="W18092" unique_id=1704544418]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 71.0
+offset_right = 36.0
+offset_bottom = 106.0
+
+[node name="Cell18" type="ColorRect" parent="W18092" unique_id=819020769]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 71.0
+offset_right = 71.0
+offset_bottom = 106.0
+
+[node name="Cell19" type="ColorRect" parent="W18092" unique_id=426551386]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 71.0
+offset_right = 106.0
+offset_bottom = 106.0
+
+[node name="Cell20" type="ColorRect" parent="W18092" unique_id=114591871]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 71.0
+offset_right = 141.0
+offset_bottom = 106.0
+
+[node name="Cell21" type="ColorRect" parent="W18092" unique_id=273405050]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 71.0
+offset_right = 176.0
+offset_bottom = 106.0
+
+[node name="Cell22" type="ColorRect" parent="W18092" unique_id=692945323]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 71.0
+offset_right = 211.0
+offset_bottom = 106.0
+
+[node name="Cell23" type="ColorRect" parent="W18092" unique_id=1306568702]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 71.0
+offset_right = 246.0
+offset_bottom = 106.0
+
+[node name="Cell24" type="ColorRect" parent="W18092" unique_id=1163066043]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 71.0
+offset_right = 281.0
+offset_bottom = 106.0
+
+[node name="Cell25" type="ColorRect" parent="W18092" unique_id=1573747666]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 106.0
+offset_right = 36.0
+offset_bottom = 141.0
+
+[node name="Cell26" type="ColorRect" parent="W18092" unique_id=1453677992]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 106.0
+offset_right = 71.0
+offset_bottom = 141.0
+
+[node name="Cell27" type="ColorRect" parent="W18092" unique_id=502342111]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 106.0
+offset_right = 106.0
+offset_bottom = 141.0
+
+[node name="Cell28" type="ColorRect" parent="W18092" unique_id=1912280439]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 106.0
+offset_right = 141.0
+offset_bottom = 141.0
+
+[node name="Cell29" type="ColorRect" parent="W18092" unique_id=129620210]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 106.0
+offset_right = 176.0
+offset_bottom = 141.0
+
+[node name="Cell30" type="ColorRect" parent="W18092" unique_id=1581004138]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 106.0
+offset_right = 211.0
+offset_bottom = 141.0
+
+[node name="Cell31" type="ColorRect" parent="W18092" unique_id=433968888]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 106.0
+offset_right = 246.0
+offset_bottom = 141.0
+
+[node name="Cell32" type="ColorRect" parent="W18092" unique_id=1092811208]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 106.0
+offset_right = 281.0
+offset_bottom = 141.0
+
+[node name="Cell33" type="ColorRect" parent="W18092" unique_id=1719735103]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 141.0
+offset_right = 36.0
+offset_bottom = 176.0
+
+[node name="Cell34" type="ColorRect" parent="W18092" unique_id=482823301]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 141.0
+offset_right = 71.0
+offset_bottom = 176.0
+
+[node name="Cell35" type="ColorRect" parent="W18092" unique_id=1155021207]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 141.0
+offset_right = 106.0
+offset_bottom = 176.0
+
+[node name="Cell36" type="ColorRect" parent="W18092" unique_id=438603428]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 141.0
+offset_right = 141.0
+offset_bottom = 176.0
+
+[node name="Cell37" type="ColorRect" parent="W18092" unique_id=783113678]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 141.0
+offset_right = 176.0
+offset_bottom = 176.0
+
+[node name="Cell38" type="ColorRect" parent="W18092" unique_id=853869304]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 141.0
+offset_right = 211.0
+offset_bottom = 176.0
+
+[node name="Cell39" type="ColorRect" parent="W18092" unique_id=1949593242]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 141.0
+offset_right = 246.0
+offset_bottom = 176.0
+
+[node name="Cell40" type="ColorRect" parent="W18092" unique_id=506089143]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 141.0
+offset_right = 281.0
+offset_bottom = 176.0
+
+[node name="Cell41" type="ColorRect" parent="W18092" unique_id=809284623]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 176.0
+offset_right = 36.0
+offset_bottom = 211.0
+
+[node name="Cell42" type="ColorRect" parent="W18092" unique_id=1295970796]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 176.0
+offset_right = 71.0
+offset_bottom = 211.0
+
+[node name="Cell43" type="ColorRect" parent="W18092" unique_id=421724020]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 176.0
+offset_right = 106.0
+offset_bottom = 211.0
+
+[node name="Cell44" type="ColorRect" parent="W18092" unique_id=447714485]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 176.0
+offset_right = 141.0
+offset_bottom = 211.0
+
+[node name="Cell45" type="ColorRect" parent="W18092" unique_id=1824583492]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 176.0
+offset_right = 176.0
+offset_bottom = 211.0
+
+[node name="Cell46" type="ColorRect" parent="W18092" unique_id=1564310560]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 176.0
+offset_right = 211.0
+offset_bottom = 211.0
+
+[node name="Cell47" type="ColorRect" parent="W18092" unique_id=804420055]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 176.0
+offset_right = 246.0
+offset_bottom = 211.0
+
+[node name="Cell48" type="ColorRect" parent="W18092" unique_id=853103331]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 176.0
+offset_right = 281.0
+offset_bottom = 211.0
+
+[node name="Cell49" type="ColorRect" parent="W18092" unique_id=222873262]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 211.0
+offset_right = 36.0
+offset_bottom = 246.0
+
+[node name="Cell50" type="ColorRect" parent="W18092" unique_id=1952941062]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 211.0
+offset_right = 71.0
+offset_bottom = 246.0
+
+[node name="Cell51" type="ColorRect" parent="W18092" unique_id=1664052310]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 211.0
+offset_right = 106.0
+offset_bottom = 246.0
+
+[node name="Cell52" type="ColorRect" parent="W18092" unique_id=1022181671]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 211.0
+offset_right = 141.0
+offset_bottom = 246.0
+
+[node name="Cell53" type="ColorRect" parent="W18092" unique_id=502028623]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 211.0
+offset_right = 176.0
+offset_bottom = 246.0
+
+[node name="Cell54" type="ColorRect" parent="W18092" unique_id=1818239466]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 211.0
+offset_right = 211.0
+offset_bottom = 246.0
+
+[node name="Cell55" type="ColorRect" parent="W18092" unique_id=1041391360]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 211.0
+offset_top = 211.0
+offset_right = 246.0
+offset_bottom = 246.0
+
+[node name="Cell56" type="ColorRect" parent="W18092" unique_id=875848998]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 246.0
+offset_top = 211.0
+offset_right = 281.0
+offset_bottom = 246.0
+
+[node name="Cell57" type="ColorRect" parent="W18092" unique_id=1617875506]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 246.0
+offset_right = 36.0
+offset_bottom = 281.0
+
+[node name="Cell58" type="ColorRect" parent="W18092" unique_id=1666597075]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 36.0
+offset_top = 246.0
+offset_right = 71.0
+offset_bottom = 281.0
+
+[node name="Cell59" type="ColorRect" parent="W18092" unique_id=952401381]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 71.0
+offset_top = 246.0
+offset_right = 106.0
+offset_bottom = 281.0
+
+[node name="Cell60" type="ColorRect" parent="W18092" unique_id=266078264]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 106.0
+offset_top = 246.0
+offset_right = 141.0
+offset_bottom = 281.0
+
+[node name="Cell61" type="ColorRect" parent="W18092" unique_id=1194752628]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 141.0
+offset_top = 246.0
+offset_right = 176.0
+offset_bottom = 281.0
+
+[node name="Cell62" type="ColorRect" parent="W18092" unique_id=1186134323]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 176.0
+offset_top = 246.0
+offset_right = 211.0
+offset_bottom = 281.0
+
+[node name="Cell8" type="ColorRect" parent="W18092" unique_id=300674940]
+material = SubResource("ShaderMaterial_2")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 1.0
+offset_right = 296.0
+offset_bottom = 14.0
+
+[node name="Ring0" type="ColorRect" parent="W18092" unique_id=944999574]
+material = SubResource("ShaderMaterial_0")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 0.0
+offset_right = 297.0
+offset_bottom = 15.0
+
+[node name="Ring1" type="ColorRect" parent="W18092" unique_id=1124070379]
+material = SubResource("ShaderMaterial_0")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 282.0
+offset_bottom = 282.0
+
+[node name="Ring2" type="ColorRect" parent="W18092" unique_id=1539103028]
+material = SubResource("ShaderMaterial_1")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 280.0
+offset_right = 282.0
+offset_bottom = 317.0
+
+[node name="Ring3" type="ColorRect" parent="W18092" unique_id=2035081329]
+material = SubResource("ShaderMaterial_1")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 210.0
+offset_top = 245.0
+offset_right = 282.0
+offset_bottom = 283.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18092" unique_id=609152667]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 3.0
+offset_right = 287.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18092" unique_id=1104528166]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 3.0
+offset_right = 294.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18092" unique_id=2002407443]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 4.0
+offset_right = 288.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18092" unique_id=1752832408]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18092" unique_id=102164041]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18092" unique_id=2003836892]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 5.0
+offset_right = 293.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18092" unique_id=1789418705]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 6.0
+offset_right = 292.0
+offset_bottom = 7.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18092" unique_id=374044274]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 8.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18092" unique_id=1485246987]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 9.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18092" unique_id=620737488]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 9.0
+offset_right = 289.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18092" unique_id=223867499]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 9.0
+offset_right = 293.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18092" unique_id=107138522]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 10.0
+offset_right = 288.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18092" unique_id=210088015]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 10.0
+offset_right = 294.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18092" unique_id=1237323663]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 11.0
+offset_right = 287.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18092" unique_id=1670234356]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 11.0
+offset_right = 294.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="W18005" type="Control" parent="." unique_id=643820603]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 0.0
+offset_right = 640.0
+offset_bottom = 320.0
+mouse_filter = 2
+
+[node name="Cell20" type="ColorRect" parent="W18005" unique_id=2078070803]
+material = SubResource("ShaderMaterial_6")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 282.0
+offset_right = 280.0
+offset_bottom = 315.0
+
+[node name="Cell1" type="ColorRect" parent="W18005" unique_id=505057076]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 1.0
+offset_right = 268.0
+offset_bottom = 36.0
+
+[node name="Cell6" type="ColorRect" parent="W18005" unique_id=449917990]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 36.0
+offset_right = 268.0
+offset_bottom = 71.0
+
+[node name="Cell8" type="ColorRect" parent="W18005" unique_id=1365053611]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 71.0
+offset_right = 268.0
+offset_bottom = 106.0
+
+[node name="Cell10" type="ColorRect" parent="W18005" unique_id=2116425400]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 106.0
+offset_right = 268.0
+offset_bottom = 141.0
+
+[node name="Cell12" type="ColorRect" parent="W18005" unique_id=184962889]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 141.0
+offset_right = 268.0
+offset_bottom = 176.0
+
+[node name="Cell14" type="ColorRect" parent="W18005" unique_id=602912406]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 176.0
+offset_right = 268.0
+offset_bottom = 211.0
+
+[node name="Cell16" type="ColorRect" parent="W18005" unique_id=816694364]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 211.0
+offset_right = 268.0
+offset_bottom = 246.0
+
+[node name="Cell18" type="ColorRect" parent="W18005" unique_id=1525501108]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 69.0
+offset_top = 246.0
+offset_right = 268.0
+offset_bottom = 281.0
+
+[node name="Cell4" type="ColorRect" parent="W18005" unique_id=677020409]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 268.0
+offset_top = 35.0
+offset_right = 281.0
+offset_bottom = 247.0
+
+[node name="Cell0" type="ColorRect" parent="W18005" unique_id=463871667]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 69.0
+offset_bottom = 36.0
+
+[node name="Cell5" type="ColorRect" parent="W18005" unique_id=1989491985]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 36.0
+offset_right = 69.0
+offset_bottom = 71.0
+
+[node name="Cell7" type="ColorRect" parent="W18005" unique_id=1222100137]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 71.0
+offset_right = 69.0
+offset_bottom = 106.0
+
+[node name="Cell9" type="ColorRect" parent="W18005" unique_id=1400950035]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 106.0
+offset_right = 69.0
+offset_bottom = 141.0
+
+[node name="Cell11" type="ColorRect" parent="W18005" unique_id=2039795024]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 141.0
+offset_right = 69.0
+offset_bottom = 176.0
+
+[node name="Cell13" type="ColorRect" parent="W18005" unique_id=1025588966]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 176.0
+offset_right = 69.0
+offset_bottom = 211.0
+
+[node name="Cell15" type="ColorRect" parent="W18005" unique_id=198851894]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 211.0
+offset_right = 69.0
+offset_bottom = 246.0
+
+[node name="Cell17" type="ColorRect" parent="W18005" unique_id=861414191]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 1.0
+offset_top = 246.0
+offset_right = 69.0
+offset_bottom = 281.0
+
+[node name="Cell2" type="ColorRect" parent="W18005" unique_id=287306791]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 268.0
+offset_top = 1.0
+offset_right = 281.0
+offset_bottom = 36.0
+
+[node name="Cell19" type="ColorRect" parent="W18005" unique_id=1561570292]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 268.0
+offset_top = 246.0
+offset_right = 281.0
+offset_bottom = 281.0
+
+[node name="Cell3" type="ColorRect" parent="W18005" unique_id=1180653351]
+material = SubResource("ShaderMaterial_7")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 1.0
+offset_right = 296.0
+offset_bottom = 14.0
+
+[node name="Ring0" type="ColorRect" parent="W18005" unique_id=1828920452]
+material = SubResource("ShaderMaterial_4")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 0.0
+offset_right = 297.0
+offset_bottom = 15.0
+
+[node name="Ring1" type="ColorRect" parent="W18005" unique_id=315248872]
+material = SubResource("ShaderMaterial_4")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 282.0
+offset_bottom = 282.0
+
+[node name="Ring2" type="ColorRect" parent="W18005" unique_id=1848040770]
+material = SubResource("ShaderMaterial_5")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 280.0
+offset_right = 282.0
+offset_bottom = 317.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18005" unique_id=368256811]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 3.0
+offset_right = 287.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18005" unique_id=650740089]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 3.0
+offset_right = 294.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18005" unique_id=696113340]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 4.0
+offset_right = 288.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18005" unique_id=564369173]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18005" unique_id=2074260921]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18005" unique_id=1031745590]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 5.0
+offset_right = 293.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18005" unique_id=1997753265]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 6.0
+offset_right = 292.0
+offset_bottom = 7.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18005" unique_id=2120259278]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 8.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18005" unique_id=1392497267]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 9.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18005" unique_id=1448870787]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 9.0
+offset_right = 289.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18005" unique_id=218751080]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 9.0
+offset_right = 293.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18005" unique_id=745818204]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 10.0
+offset_right = 288.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18005" unique_id=1407228699]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 10.0
+offset_right = 294.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18005" unique_id=1094593363]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 11.0
+offset_right = 287.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18005" unique_id=220124555]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 11.0
+offset_right = 294.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark1_0" type="ColorRect" parent="W18005" unique_id=1276741896]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 9.0
+offset_right = 275.0
+offset_bottom = 10.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_1" type="ColorRect" parent="W18005" unique_id=1072743329]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 273.0
+offset_top = 10.0
+offset_right = 276.0
+offset_bottom = 11.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_2" type="ColorRect" parent="W18005" unique_id=1830712347]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 272.0
+offset_top = 11.0
+offset_right = 277.0
+offset_bottom = 12.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_3" type="ColorRect" parent="W18005" unique_id=2048372072]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 271.0
+offset_top = 12.0
+offset_right = 278.0
+offset_bottom = 13.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_4" type="ColorRect" parent="W18005" unique_id=2142540689]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 13.0
+offset_right = 275.0
+offset_bottom = 14.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_5" type="ColorRect" parent="W18005" unique_id=734792368]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 14.0
+offset_right = 275.0
+offset_bottom = 15.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_6" type="ColorRect" parent="W18005" unique_id=1783370579]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 15.0
+offset_right = 275.0
+offset_bottom = 16.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_7" type="ColorRect" parent="W18005" unique_id=363894761]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 16.0
+offset_right = 275.0
+offset_bottom = 17.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_8" type="ColorRect" parent="W18005" unique_id=378942877]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 17.0
+offset_right = 275.0
+offset_bottom = 18.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_9" type="ColorRect" parent="W18005" unique_id=1798186034]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 18.0
+offset_right = 275.0
+offset_bottom = 19.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_10" type="ColorRect" parent="W18005" unique_id=1032694086]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 19.0
+offset_right = 275.0
+offset_bottom = 20.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_11" type="ColorRect" parent="W18005" unique_id=699141677]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 20.0
+offset_right = 275.0
+offset_bottom = 21.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_12" type="ColorRect" parent="W18005" unique_id=1683563072]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 21.0
+offset_right = 275.0
+offset_bottom = 22.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_13" type="ColorRect" parent="W18005" unique_id=788192970]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 22.0
+offset_right = 275.0
+offset_bottom = 23.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_14" type="ColorRect" parent="W18005" unique_id=1275310961]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 23.0
+offset_right = 275.0
+offset_bottom = 24.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_15" type="ColorRect" parent="W18005" unique_id=1777594824]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 24.0
+offset_right = 275.0
+offset_bottom = 25.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_16" type="ColorRect" parent="W18005" unique_id=1310088640]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 25.0
+offset_right = 275.0
+offset_bottom = 26.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_17" type="ColorRect" parent="W18005" unique_id=2135563322]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 26.0
+offset_right = 275.0
+offset_bottom = 27.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark1_18" type="ColorRect" parent="W18005" unique_id=1608374773]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 27.0
+offset_right = 275.0
+offset_bottom = 28.0
+color = Color(0.329, 0.332, 0.295, 1)
+
+[node name="Mark2_0" type="ColorRect" parent="W18005" unique_id=1682351885]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 254.0
+offset_right = 275.0
+offset_bottom = 255.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_1" type="ColorRect" parent="W18005" unique_id=1672858615]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 255.0
+offset_right = 275.0
+offset_bottom = 256.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_2" type="ColorRect" parent="W18005" unique_id=855691712]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 256.0
+offset_right = 275.0
+offset_bottom = 257.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_3" type="ColorRect" parent="W18005" unique_id=263005252]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 257.0
+offset_right = 275.0
+offset_bottom = 258.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_4" type="ColorRect" parent="W18005" unique_id=453851907]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 258.0
+offset_right = 275.0
+offset_bottom = 259.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_5" type="ColorRect" parent="W18005" unique_id=1866520662]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 259.0
+offset_right = 275.0
+offset_bottom = 260.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_6" type="ColorRect" parent="W18005" unique_id=1494075890]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 260.0
+offset_right = 275.0
+offset_bottom = 261.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_7" type="ColorRect" parent="W18005" unique_id=1661081067]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 261.0
+offset_right = 275.0
+offset_bottom = 262.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_8" type="ColorRect" parent="W18005" unique_id=179308337]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 262.0
+offset_right = 275.0
+offset_bottom = 263.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_9" type="ColorRect" parent="W18005" unique_id=692128117]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 263.0
+offset_right = 275.0
+offset_bottom = 264.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_10" type="ColorRect" parent="W18005" unique_id=1914592717]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 264.0
+offset_right = 275.0
+offset_bottom = 265.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_11" type="ColorRect" parent="W18005" unique_id=983870844]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 265.0
+offset_right = 275.0
+offset_bottom = 266.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_12" type="ColorRect" parent="W18005" unique_id=169442055]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 266.0
+offset_right = 275.0
+offset_bottom = 267.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_13" type="ColorRect" parent="W18005" unique_id=966285656]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 267.0
+offset_right = 275.0
+offset_bottom = 268.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_14" type="ColorRect" parent="W18005" unique_id=632197922]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 268.0
+offset_right = 275.0
+offset_bottom = 269.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_15" type="ColorRect" parent="W18005" unique_id=473341299]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 271.0
+offset_top = 269.0
+offset_right = 278.0
+offset_bottom = 270.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_16" type="ColorRect" parent="W18005" unique_id=670616912]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 272.0
+offset_top = 270.0
+offset_right = 277.0
+offset_bottom = 271.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_17" type="ColorRect" parent="W18005" unique_id=953262300]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 273.0
+offset_top = 271.0
+offset_right = 276.0
+offset_bottom = 272.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="Mark2_18" type="ColorRect" parent="W18005" unique_id=822607447]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 274.0
+offset_top = 272.0
+offset_right = 275.0
+offset_bottom = 273.0
+color = Color(0.327, 0.329, 0.293, 1)
+
+[node name="W18007" type="Control" parent="." unique_id=547175392]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 0.0
+offset_right = 960.0
+offset_bottom = 320.0
+mouse_filter = 2
+
+[node name="Cell4" type="ColorRect" parent="W18007" unique_id=1591782904]
+material = SubResource("ShaderMaterial_10")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 280.0
+offset_bottom = 266.0
+
+[node name="Cell3" type="ColorRect" parent="W18007" unique_id=1773021160]
+material = SubResource("ShaderMaterial_11")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 267.0
+offset_right = 280.0
+offset_bottom = 315.0
+
+[node name="Cell1" type="ColorRect" parent="W18007" unique_id=691259811]
+material = SubResource("ShaderMaterial_11")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 199.0
+offset_top = 266.0
+offset_right = 257.0
+offset_bottom = 281.0
+
+[node name="Cell2" type="ColorRect" parent="W18007" unique_id=340920339]
+material = SubResource("ShaderMaterial_11")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 257.0
+offset_top = 266.0
+offset_right = 281.0
+offset_bottom = 281.0
+
+[node name="Cell0" type="ColorRect" parent="W18007" unique_id=1692442629]
+material = SubResource("ShaderMaterial_11")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 1.0
+offset_right = 296.0
+offset_bottom = 14.0
+
+[node name="Ring0" type="ColorRect" parent="W18007" unique_id=1394771204]
+material = SubResource("ShaderMaterial_8")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 0.0
+offset_right = 297.0
+offset_bottom = 15.0
+
+[node name="Ring1" type="ColorRect" parent="W18007" unique_id=1777772908]
+material = SubResource("ShaderMaterial_9")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 283.0
+offset_bottom = 317.0
+
+[node name="Circle0" type="ColorRect" parent="W18007" unique_id=259546613]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 122.0
+offset_top = 20.0
+offset_right = 160.0
+offset_bottom = 58.0
+
+[node name="Circle1" type="ColorRect" parent="W18007" unique_id=2026732107]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 78.0
+offset_top = 46.0
+offset_right = 116.0
+offset_bottom = 84.0
+
+[node name="Circle2" type="ColorRect" parent="W18007" unique_id=1711349634]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 166.0
+offset_top = 46.0
+offset_right = 204.0
+offset_bottom = 84.0
+
+[node name="Circle3" type="ColorRect" parent="W18007" unique_id=513568737]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 122.0
+offset_top = 71.0
+offset_right = 160.0
+offset_bottom = 109.0
+
+[node name="Circle4" type="ColorRect" parent="W18007" unique_id=1761988663]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 34.0
+offset_top = 122.0
+offset_right = 72.0
+offset_bottom = 160.0
+
+[node name="Circle5" type="ColorRect" parent="W18007" unique_id=1110350839]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 122.0
+offset_top = 122.0
+offset_right = 160.0
+offset_bottom = 160.0
+
+[node name="Circle6" type="ColorRect" parent="W18007" unique_id=370899650]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 210.0
+offset_top = 122.0
+offset_right = 248.0
+offset_bottom = 160.0
+
+[node name="Circle7" type="ColorRect" parent="W18007" unique_id=1571163662]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 78.0
+offset_top = 147.0
+offset_right = 116.0
+offset_bottom = 185.0
+
+[node name="Circle8" type="ColorRect" parent="W18007" unique_id=521677425]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 166.0
+offset_top = 147.0
+offset_right = 204.0
+offset_bottom = 185.0
+
+[node name="Circle9" type="ColorRect" parent="W18007" unique_id=354435809]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 34.0
+offset_top = 172.0
+offset_right = 72.0
+offset_bottom = 210.0
+
+[node name="Circle10" type="ColorRect" parent="W18007" unique_id=1955967724]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 210.0
+offset_top = 172.0
+offset_right = 248.0
+offset_bottom = 210.0
+
+[node name="Circle11" type="ColorRect" parent="W18007" unique_id=1199174021]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 78.0
+offset_top = 198.0
+offset_right = 116.0
+offset_bottom = 236.0
+
+[node name="Circle12" type="ColorRect" parent="W18007" unique_id=1890266980]
+material = SubResource("ShaderMaterial_12")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 166.0
+offset_top = 198.0
+offset_right = 204.0
+offset_bottom = 236.0
+
+[node name="Line0" type="Line2D" parent="W18007" unique_id=1475287567]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(141.0, 59.5, 141.0, 69.5)
+width = 2.0
+
+[node name="Line1" type="Line2D" parent="W18007" unique_id=1708918174]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(114.5, 75.4, 123.5, 79.6)
+width = 2.0
+
+[node name="Line2" type="Line2D" parent="W18007" unique_id=730931208]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(158.5, 79.6, 167.5, 75.4)
+width = 2.0
+
+[node name="Line3" type="Line2D" parent="W18007" unique_id=2072983676]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(141.0, 110.5, 141.0, 120.5)
+width = 2.0
+
+[node name="Line4" type="Line2D" parent="W18007" unique_id=623376129]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(70.5, 151.4, 79.5, 155.6)
+width = 2.0
+
+[node name="Line5" type="Line2D" parent="W18007" unique_id=296162689]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(114.5, 155.6, 123.5, 151.4)
+width = 2.0
+
+[node name="Line6" type="Line2D" parent="W18007" unique_id=971753001]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(158.5, 151.4, 167.5, 155.6)
+width = 2.0
+
+[node name="Line7" type="Line2D" parent="W18007" unique_id=705528037]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(202.5, 155.6, 211.5, 151.4)
+width = 2.0
+
+[node name="Line8" type="Line2D" parent="W18007" unique_id=665130300]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(70.5, 180.6, 79.5, 176.4)
+width = 2.0
+
+[node name="Line9" type="Line2D" parent="W18007" unique_id=2123605250]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(202.5, 176.4, 211.5, 180.6)
+width = 2.0
+
+[node name="Line10" type="Line2D" parent="W18007" unique_id=2022870637]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(97.0, 186.5, 97.0, 196.5)
+width = 2.0
+
+[node name="Line11" type="Line2D" parent="W18007" unique_id=1692352118]
+material = SubResource("ShaderMaterial_13")
+points = PackedVector2Array(185.0, 186.5, 185.0, 196.5)
+width = 2.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18007" unique_id=1979104737]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 3.0
+offset_right = 287.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18007" unique_id=1401031713]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 3.0
+offset_right = 294.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18007" unique_id=299420148]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 4.0
+offset_right = 288.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18007" unique_id=1224769321]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18007" unique_id=1006252369]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18007" unique_id=174990715]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 5.0
+offset_right = 293.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18007" unique_id=1325119894]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 6.0
+offset_right = 292.0
+offset_bottom = 7.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18007" unique_id=1391996391]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 8.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18007" unique_id=1411209673]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 9.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18007" unique_id=910640230]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 9.0
+offset_right = 289.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18007" unique_id=1368504847]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 9.0
+offset_right = 293.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18007" unique_id=1295391966]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 10.0
+offset_right = 288.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18007" unique_id=1140908470]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 10.0
+offset_right = 294.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18007" unique_id=1020178309]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 11.0
+offset_right = 287.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18007" unique_id=349884544]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 11.0
+offset_right = 294.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark1_0" type="ColorRect" parent="W18007" unique_id=1352311056]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 137.0
+offset_top = 124.0
+offset_right = 145.0
+offset_bottom = 125.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_1" type="ColorRect" parent="W18007" unique_id=1942306698]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 134.0
+offset_top = 125.0
+offset_right = 148.0
+offset_bottom = 126.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_2" type="ColorRect" parent="W18007" unique_id=1322588410]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 132.0
+offset_top = 126.0
+offset_right = 137.0
+offset_bottom = 127.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_3" type="ColorRect" parent="W18007" unique_id=1455376218]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 145.0
+offset_top = 126.0
+offset_right = 150.0
+offset_bottom = 127.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_4" type="ColorRect" parent="W18007" unique_id=1854114699]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 131.0
+offset_top = 127.0
+offset_right = 135.0
+offset_bottom = 128.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_5" type="ColorRect" parent="W18007" unique_id=1864889271]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 147.0
+offset_top = 127.0
+offset_right = 151.0
+offset_bottom = 128.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_6" type="ColorRect" parent="W18007" unique_id=2102290213]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 130.0
+offset_top = 128.0
+offset_right = 133.0
+offset_bottom = 129.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_7" type="ColorRect" parent="W18007" unique_id=1794311770]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 149.0
+offset_top = 128.0
+offset_right = 152.0
+offset_bottom = 129.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_8" type="ColorRect" parent="W18007" unique_id=1766273574]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 129.0
+offset_top = 129.0
+offset_right = 131.0
+offset_bottom = 130.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_9" type="ColorRect" parent="W18007" unique_id=1627839965]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 151.0
+offset_top = 129.0
+offset_right = 153.0
+offset_bottom = 130.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_10" type="ColorRect" parent="W18007" unique_id=1350789827]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 128.0
+offset_top = 130.0
+offset_right = 130.0
+offset_bottom = 131.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_11" type="ColorRect" parent="W18007" unique_id=1508314789]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 152.0
+offset_top = 130.0
+offset_right = 154.0
+offset_bottom = 131.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_12" type="ColorRect" parent="W18007" unique_id=331253239]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 127.0
+offset_top = 131.0
+offset_right = 129.0
+offset_bottom = 132.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_13" type="ColorRect" parent="W18007" unique_id=1595602673]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 153.0
+offset_top = 131.0
+offset_right = 155.0
+offset_bottom = 132.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_14" type="ColorRect" parent="W18007" unique_id=243029422]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 126.0
+offset_top = 132.0
+offset_right = 129.0
+offset_bottom = 133.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_15" type="ColorRect" parent="W18007" unique_id=778420211]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 153.0
+offset_top = 132.0
+offset_right = 156.0
+offset_bottom = 133.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_16" type="ColorRect" parent="W18007" unique_id=313430520]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 126.0
+offset_top = 133.0
+offset_right = 128.0
+offset_bottom = 134.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_17" type="ColorRect" parent="W18007" unique_id=2089958324]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 154.0
+offset_top = 133.0
+offset_right = 156.0
+offset_bottom = 134.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_18" type="ColorRect" parent="W18007" unique_id=502737647]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 134.0
+offset_right = 128.0
+offset_bottom = 135.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_19" type="ColorRect" parent="W18007" unique_id=1088117464]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 154.0
+offset_top = 134.0
+offset_right = 157.0
+offset_bottom = 135.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_20" type="ColorRect" parent="W18007" unique_id=291168086]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 135.0
+offset_right = 127.0
+offset_bottom = 136.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_21" type="ColorRect" parent="W18007" unique_id=364594574]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 155.0
+offset_top = 135.0
+offset_right = 157.0
+offset_bottom = 136.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_22" type="ColorRect" parent="W18007" unique_id=1936085589]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 136.0
+offset_right = 127.0
+offset_bottom = 137.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_23" type="ColorRect" parent="W18007" unique_id=1015630889]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 155.0
+offset_top = 136.0
+offset_right = 157.0
+offset_bottom = 137.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_24" type="ColorRect" parent="W18007" unique_id=964038797]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 137.0
+offset_right = 126.0
+offset_bottom = 138.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_25" type="ColorRect" parent="W18007" unique_id=1548092191]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 137.0
+offset_right = 158.0
+offset_bottom = 138.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_26" type="ColorRect" parent="W18007" unique_id=705675460]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 138.0
+offset_right = 126.0
+offset_bottom = 139.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_27" type="ColorRect" parent="W18007" unique_id=1220301708]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 138.0
+offset_right = 158.0
+offset_bottom = 139.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_28" type="ColorRect" parent="W18007" unique_id=355190786]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 139.0
+offset_right = 126.0
+offset_bottom = 140.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_29" type="ColorRect" parent="W18007" unique_id=931927452]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 139.0
+offset_right = 158.0
+offset_bottom = 140.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_30" type="ColorRect" parent="W18007" unique_id=413260579]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 140.0
+offset_right = 126.0
+offset_bottom = 141.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_31" type="ColorRect" parent="W18007" unique_id=895090899]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 140.0
+offset_right = 158.0
+offset_bottom = 141.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_32" type="ColorRect" parent="W18007" unique_id=1955072398]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 141.0
+offset_right = 126.0
+offset_bottom = 142.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_33" type="ColorRect" parent="W18007" unique_id=650486793]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 141.0
+offset_right = 158.0
+offset_bottom = 142.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_34" type="ColorRect" parent="W18007" unique_id=741969116]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 142.0
+offset_right = 126.0
+offset_bottom = 143.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_35" type="ColorRect" parent="W18007" unique_id=308885691]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 142.0
+offset_right = 158.0
+offset_bottom = 143.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_36" type="ColorRect" parent="W18007" unique_id=2027074838]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 143.0
+offset_right = 126.0
+offset_bottom = 144.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_37" type="ColorRect" parent="W18007" unique_id=2047349628]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 143.0
+offset_right = 158.0
+offset_bottom = 144.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_38" type="ColorRect" parent="W18007" unique_id=970622032]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 124.0
+offset_top = 144.0
+offset_right = 126.0
+offset_bottom = 145.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_39" type="ColorRect" parent="W18007" unique_id=981925698]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 156.0
+offset_top = 144.0
+offset_right = 158.0
+offset_bottom = 145.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_40" type="ColorRect" parent="W18007" unique_id=698886203]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 145.0
+offset_right = 127.0
+offset_bottom = 146.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_41" type="ColorRect" parent="W18007" unique_id=660103642]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 155.0
+offset_top = 145.0
+offset_right = 157.0
+offset_bottom = 146.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_42" type="ColorRect" parent="W18007" unique_id=2049408673]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 146.0
+offset_right = 127.0
+offset_bottom = 147.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_43" type="ColorRect" parent="W18007" unique_id=368453588]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 155.0
+offset_top = 146.0
+offset_right = 157.0
+offset_bottom = 147.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_44" type="ColorRect" parent="W18007" unique_id=1164782005]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 125.0
+offset_top = 147.0
+offset_right = 128.0
+offset_bottom = 148.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_45" type="ColorRect" parent="W18007" unique_id=569561641]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 154.0
+offset_top = 147.0
+offset_right = 157.0
+offset_bottom = 148.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_46" type="ColorRect" parent="W18007" unique_id=217368072]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 126.0
+offset_top = 148.0
+offset_right = 128.0
+offset_bottom = 149.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_47" type="ColorRect" parent="W18007" unique_id=933433924]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 154.0
+offset_top = 148.0
+offset_right = 156.0
+offset_bottom = 149.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_48" type="ColorRect" parent="W18007" unique_id=172824743]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 126.0
+offset_top = 149.0
+offset_right = 129.0
+offset_bottom = 150.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_49" type="ColorRect" parent="W18007" unique_id=844395224]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 153.0
+offset_top = 149.0
+offset_right = 156.0
+offset_bottom = 150.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_50" type="ColorRect" parent="W18007" unique_id=1042267736]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 127.0
+offset_top = 150.0
+offset_right = 129.0
+offset_bottom = 151.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_51" type="ColorRect" parent="W18007" unique_id=537113805]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 153.0
+offset_top = 150.0
+offset_right = 155.0
+offset_bottom = 151.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_52" type="ColorRect" parent="W18007" unique_id=1236055853]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 128.0
+offset_top = 151.0
+offset_right = 130.0
+offset_bottom = 152.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_53" type="ColorRect" parent="W18007" unique_id=1486634782]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 152.0
+offset_top = 151.0
+offset_right = 154.0
+offset_bottom = 152.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_54" type="ColorRect" parent="W18007" unique_id=1296530139]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 129.0
+offset_top = 152.0
+offset_right = 131.0
+offset_bottom = 153.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_55" type="ColorRect" parent="W18007" unique_id=269198833]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 151.0
+offset_top = 152.0
+offset_right = 153.0
+offset_bottom = 153.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_56" type="ColorRect" parent="W18007" unique_id=1861902288]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 130.0
+offset_top = 153.0
+offset_right = 133.0
+offset_bottom = 154.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_57" type="ColorRect" parent="W18007" unique_id=1304619617]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 149.0
+offset_top = 153.0
+offset_right = 152.0
+offset_bottom = 154.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_58" type="ColorRect" parent="W18007" unique_id=597585898]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 131.0
+offset_top = 154.0
+offset_right = 135.0
+offset_bottom = 155.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_59" type="ColorRect" parent="W18007" unique_id=1373997495]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 147.0
+offset_top = 154.0
+offset_right = 151.0
+offset_bottom = 155.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_60" type="ColorRect" parent="W18007" unique_id=140152035]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 132.0
+offset_top = 155.0
+offset_right = 137.0
+offset_bottom = 156.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_61" type="ColorRect" parent="W18007" unique_id=945067643]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 145.0
+offset_top = 155.0
+offset_right = 150.0
+offset_bottom = 156.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_62" type="ColorRect" parent="W18007" unique_id=1449978940]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 134.0
+offset_top = 156.0
+offset_right = 148.0
+offset_bottom = 157.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Mark1_63" type="ColorRect" parent="W18007" unique_id=1260572943]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 137.0
+offset_top = 157.0
+offset_right = 145.0
+offset_bottom = 158.0
+color = Color(0.819, 0.819, 0.819, 1)
+
+[node name="Text2" type="Label" parent="W18007" unique_id=1453546581]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 266.0
+offset_right = 260.0
+offset_bottom = 282.0
+mouse_filter = 2
+text = "Skill Points"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="W18042" type="Control" parent="." unique_id=1238884773]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 320.0
+mouse_filter = 2
+
+[node name="Cell1" type="ColorRect" parent="W18042" unique_id=1031852307]
+material = SubResource("ShaderMaterial_18")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+
+[node name="Cell3" type="ColorRect" parent="W18042" unique_id=1470279786]
+material = SubResource("ShaderMaterial_19")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 283.0
+offset_right = 280.0
+offset_bottom = 315.0
+
+[node name="Cell2" type="ColorRect" parent="W18042" unique_id=779181659]
+material = SubResource("ShaderMaterial_18")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 117.0
+offset_top = 291.0
+offset_right = 165.0
+offset_bottom = 306.0
+
+[node name="Cell0" type="ColorRect" parent="W18042" unique_id=679046543]
+material = SubResource("ShaderMaterial_18")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 1.0
+offset_right = 296.0
+offset_bottom = 14.0
+
+[node name="Ring0" type="ColorRect" parent="W18042" unique_id=538789101]
+material = SubResource("ShaderMaterial_14")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 0.0
+offset_right = 297.0
+offset_bottom = 15.0
+
+[node name="Ring1" type="ColorRect" parent="W18042" unique_id=1354265337]
+material = SubResource("ShaderMaterial_15")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 282.0
+offset_bottom = 282.0
+
+[node name="Ring2" type="ColorRect" parent="W18042" unique_id=143566684]
+material = SubResource("ShaderMaterial_16")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 115.0
+offset_top = 289.0
+offset_right = 167.0
+offset_bottom = 308.0
+
+[node name="Ring3" type="ColorRect" parent="W18042" unique_id=263264077]
+material = SubResource("ShaderMaterial_17")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 281.0
+offset_right = 282.0
+offset_bottom = 317.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18042" unique_id=528454816]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 3.0
+offset_right = 287.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18042" unique_id=2053769937]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 3.0
+offset_right = 294.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18042" unique_id=1356353315]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 4.0
+offset_right = 288.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18042" unique_id=1153678526]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18042" unique_id=475734223]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18042" unique_id=1318401237]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 5.0
+offset_right = 293.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18042" unique_id=1666882974]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 6.0
+offset_right = 292.0
+offset_bottom = 7.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18042" unique_id=1562488279]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 8.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18042" unique_id=1887804532]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 9.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18042" unique_id=1896683681]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 9.0
+offset_right = 289.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18042" unique_id=999111930]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 9.0
+offset_right = 293.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18042" unique_id=283238714]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 10.0
+offset_right = 288.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18042" unique_id=1052497465]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 10.0
+offset_right = 294.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18042" unique_id=1640969887]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 11.0
+offset_right = 287.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18042" unique_id=1232037730]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 11.0
+offset_right = 294.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Text1" type="Label" parent="W18042" unique_id=1665367148]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 291.0
+offset_right = 167.0
+offset_bottom = 307.0
+mouse_filter = 2
+text = "Let's Go!"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="W18118" type="Control" parent="." unique_id=897159563]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 360.0
+offset_right = 320.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="Cell1" type="ColorRect" parent="W18118" unique_id=1106158180]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 5.0
+offset_top = 85.0
+offset_right = 277.0
+offset_bottom = 197.0
+
+[node name="Cell6" type="ColorRect" parent="W18118" unique_id=1096902635]
+material = SubResource("ShaderMaterial_25")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 203.0
+offset_right = 280.0
+offset_bottom = 235.0
+
+[node name="Cell2" type="ColorRect" parent="W18118" unique_id=2142940618]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 44.0
+offset_top = 123.0
+offset_right = 80.0
+offset_bottom = 159.0
+
+[node name="Cell3" type="ColorRect" parent="W18118" unique_id=2040075699]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 123.0
+offset_top = 123.0
+offset_right = 159.0
+offset_bottom = 159.0
+
+[node name="Cell4" type="ColorRect" parent="W18118" unique_id=422290860]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 202.0
+offset_top = 123.0
+offset_right = 238.0
+offset_bottom = 159.0
+
+[node name="Cell5" type="ColorRect" parent="W18118" unique_id=944778564]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 117.0
+offset_top = 211.0
+offset_right = 165.0
+offset_bottom = 226.0
+
+[node name="Cell0" type="ColorRect" parent="W18118" unique_id=534893463]
+material = SubResource("ShaderMaterial_24")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 81.0
+offset_right = 296.0
+offset_bottom = 94.0
+
+[node name="Ring0" type="ColorRect" parent="W18118" unique_id=1855703934]
+material = SubResource("ShaderMaterial_20")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 80.0
+offset_right = 297.0
+offset_bottom = 95.0
+
+[node name="Ring1" type="ColorRect" parent="W18118" unique_id=2032351327]
+material = SubResource("ShaderMaterial_21")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 80.0
+offset_right = 282.0
+offset_bottom = 202.0
+
+[node name="Ring2" type="ColorRect" parent="W18118" unique_id=2002741636]
+material = SubResource("ShaderMaterial_21")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 39.0
+offset_top = 118.0
+offset_right = 85.0
+offset_bottom = 164.0
+
+[node name="Ring3" type="ColorRect" parent="W18118" unique_id=1575565884]
+material = SubResource("ShaderMaterial_21")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 118.0
+offset_top = 118.0
+offset_right = 164.0
+offset_bottom = 164.0
+
+[node name="Ring4" type="ColorRect" parent="W18118" unique_id=726597876]
+material = SubResource("ShaderMaterial_21")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 197.0
+offset_top = 118.0
+offset_right = 243.0
+offset_bottom = 164.0
+
+[node name="Ring5" type="ColorRect" parent="W18118" unique_id=1294632757]
+material = SubResource("ShaderMaterial_22")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 115.0
+offset_top = 209.0
+offset_right = 167.0
+offset_bottom = 228.0
+
+[node name="Ring6" type="ColorRect" parent="W18118" unique_id=1238494249]
+material = SubResource("ShaderMaterial_23")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 201.0
+offset_right = 282.0
+offset_bottom = 237.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18118" unique_id=1936792616]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 83.0
+offset_right = 287.0
+offset_bottom = 84.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18118" unique_id=1221173698]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 83.0
+offset_right = 294.0
+offset_bottom = 84.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18118" unique_id=1877803768]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 84.0
+offset_right = 288.0
+offset_bottom = 85.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18118" unique_id=760156408]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 84.0
+offset_right = 294.0
+offset_bottom = 85.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18118" unique_id=634422092]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 85.0
+offset_right = 289.0
+offset_bottom = 86.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18118" unique_id=769049495]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 85.0
+offset_right = 293.0
+offset_bottom = 86.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18118" unique_id=857807034]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 86.0
+offset_right = 292.0
+offset_bottom = 87.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18118" unique_id=140116796]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 87.0
+offset_right = 291.0
+offset_bottom = 88.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18118" unique_id=433403499]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 88.0
+offset_right = 292.0
+offset_bottom = 89.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18118" unique_id=1645880079]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 89.0
+offset_right = 289.0
+offset_bottom = 90.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18118" unique_id=1526336355]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 89.0
+offset_right = 293.0
+offset_bottom = 90.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18118" unique_id=1026694768]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 90.0
+offset_right = 288.0
+offset_bottom = 91.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18118" unique_id=2091222297]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 90.0
+offset_right = 294.0
+offset_bottom = 91.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18118" unique_id=1230237126]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 91.0
+offset_right = 287.0
+offset_bottom = 92.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18118" unique_id=321260936]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 91.0
+offset_right = 294.0
+offset_bottom = 92.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Text1" type="Label" parent="W18118" unique_id=329802054]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 132.0
+offset_right = 80.0
+offset_bottom = 150.0
+mouse_filter = 2
+text = "Input"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text2" type="Label" parent="W18118" unique_id=512699102]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 132.0
+offset_right = 160.0
+offset_bottom = 148.0
+mouse_filter = 2
+text = "Stone"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text3" type="Label" parent="W18118" unique_id=1648272979]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 132.0
+offset_right = 242.0
+offset_bottom = 150.0
+mouse_filter = 2
+text = "Output"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text4" type="Label" parent="W18118" unique_id=1021073342]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 135.0
+offset_right = 110.0
+offset_bottom = 148.0
+mouse_filter = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text5" type="Label" parent="W18118" unique_id=172950765]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 136.0
+offset_right = 189.0
+offset_bottom = 147.0
+mouse_filter = 2
+text = "="
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text6" type="Label" parent="W18118" unique_id=1359397499]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 210.0
+offset_right = 162.0
+offset_bottom = 226.0
+mouse_filter = 2
+text = "Smith!"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="W18120" type="Control" parent="." unique_id=2000139707]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 360.0
+offset_right = 640.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="Cell1" type="ColorRect" parent="W18120" unique_id=238651662]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 5.0
+offset_top = 85.0
+offset_right = 277.0
+offset_bottom = 197.0
+
+[node name="Cell7" type="ColorRect" parent="W18120" unique_id=1967801522]
+material = SubResource("ShaderMaterial_31")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 203.0
+offset_right = 280.0
+offset_bottom = 235.0
+
+[node name="Cell2" type="ColorRect" parent="W18120" unique_id=383303074]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 123.0
+offset_top = 97.0
+offset_right = 159.0
+offset_bottom = 133.0
+
+[node name="Cell3" type="ColorRect" parent="W18120" unique_id=1259008170]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 44.0
+offset_top = 123.0
+offset_right = 80.0
+offset_bottom = 159.0
+
+[node name="Cell4" type="ColorRect" parent="W18120" unique_id=1586340438]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 202.0
+offset_top = 123.0
+offset_right = 238.0
+offset_bottom = 159.0
+
+[node name="Cell5" type="ColorRect" parent="W18120" unique_id=392673882]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 123.0
+offset_top = 149.0
+offset_right = 159.0
+offset_bottom = 185.0
+
+[node name="Cell6" type="ColorRect" parent="W18120" unique_id=1360817830]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 117.0
+offset_top = 211.0
+offset_right = 165.0
+offset_bottom = 226.0
+
+[node name="Cell0" type="ColorRect" parent="W18120" unique_id=2130546519]
+material = SubResource("ShaderMaterial_30")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 81.0
+offset_right = 296.0
+offset_bottom = 94.0
+
+[node name="Ring0" type="ColorRect" parent="W18120" unique_id=1020215337]
+material = SubResource("ShaderMaterial_26")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 80.0
+offset_right = 297.0
+offset_bottom = 95.0
+
+[node name="Ring1" type="ColorRect" parent="W18120" unique_id=741832246]
+material = SubResource("ShaderMaterial_27")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 80.0
+offset_right = 282.0
+offset_bottom = 202.0
+
+[node name="Ring2" type="ColorRect" parent="W18120" unique_id=1968922583]
+material = SubResource("ShaderMaterial_27")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 118.0
+offset_top = 92.0
+offset_right = 164.0
+offset_bottom = 138.0
+
+[node name="Ring3" type="ColorRect" parent="W18120" unique_id=1486124512]
+material = SubResource("ShaderMaterial_27")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 39.0
+offset_top = 118.0
+offset_right = 85.0
+offset_bottom = 164.0
+
+[node name="Ring4" type="ColorRect" parent="W18120" unique_id=1499839486]
+material = SubResource("ShaderMaterial_27")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 197.0
+offset_top = 118.0
+offset_right = 243.0
+offset_bottom = 164.0
+
+[node name="Ring5" type="ColorRect" parent="W18120" unique_id=1649672010]
+material = SubResource("ShaderMaterial_27")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 118.0
+offset_top = 144.0
+offset_right = 164.0
+offset_bottom = 190.0
+
+[node name="Ring6" type="ColorRect" parent="W18120" unique_id=150359179]
+material = SubResource("ShaderMaterial_28")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 115.0
+offset_top = 209.0
+offset_right = 167.0
+offset_bottom = 228.0
+
+[node name="Ring7" type="ColorRect" parent="W18120" unique_id=1276828863]
+material = SubResource("ShaderMaterial_29")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 201.0
+offset_right = 282.0
+offset_bottom = 237.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18120" unique_id=576099877]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 83.0
+offset_right = 287.0
+offset_bottom = 84.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18120" unique_id=2120904051]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 83.0
+offset_right = 294.0
+offset_bottom = 84.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18120" unique_id=1167464120]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 84.0
+offset_right = 288.0
+offset_bottom = 85.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18120" unique_id=1122516879]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 84.0
+offset_right = 294.0
+offset_bottom = 85.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18120" unique_id=1326611933]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 85.0
+offset_right = 289.0
+offset_bottom = 86.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18120" unique_id=1388309870]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 85.0
+offset_right = 293.0
+offset_bottom = 86.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18120" unique_id=1639260539]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 86.0
+offset_right = 292.0
+offset_bottom = 87.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18120" unique_id=156651973]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 87.0
+offset_right = 291.0
+offset_bottom = 88.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18120" unique_id=1073362260]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 88.0
+offset_right = 292.0
+offset_bottom = 89.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18120" unique_id=1507928386]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 89.0
+offset_right = 289.0
+offset_bottom = 90.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18120" unique_id=1718264881]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 89.0
+offset_right = 293.0
+offset_bottom = 90.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18120" unique_id=1222317985]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 90.0
+offset_right = 288.0
+offset_bottom = 91.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18120" unique_id=1273758790]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 90.0
+offset_right = 294.0
+offset_bottom = 91.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18120" unique_id=1494671925]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 91.0
+offset_right = 287.0
+offset_bottom = 92.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18120" unique_id=2047606170]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 91.0
+offset_right = 294.0
+offset_bottom = 92.0
+color = Color(0.332, 0.334, 0.294, 1)
+
+[node name="Text1" type="Label" parent="W18120" unique_id=2088030843]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 106.0
+offset_right = 160.0
+offset_bottom = 122.0
+mouse_filter = 2
+text = "Stone"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text2" type="Label" parent="W18120" unique_id=2110867042]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 132.0
+offset_right = 80.0
+offset_bottom = 150.0
+mouse_filter = 2
+text = "Input"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text3" type="Label" parent="W18120" unique_id=1563602377]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 132.0
+offset_right = 242.0
+offset_bottom = 150.0
+mouse_filter = 2
+text = "Output"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text4" type="Label" parent="W18120" unique_id=1316498240]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 133.0
+offset_right = 151.0
+offset_bottom = 149.0
+mouse_filter = 2
+text = "&"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text5" type="Label" parent="W18120" unique_id=554302322]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 135.0
+offset_right = 110.0
+offset_bottom = 148.0
+mouse_filter = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text6" type="Label" parent="W18120" unique_id=1228208254]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 136.0
+offset_right = 189.0
+offset_bottom = 147.0
+mouse_filter = 2
+text = "="
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text7" type="Label" parent="W18120" unique_id=1355716780]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 159.0
+offset_right = 158.0
+offset_bottom = 175.0
+mouse_filter = 2
+text = "Item"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text8" type="Label" parent="W18120" unique_id=1107316099]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 210.0
+offset_right = 162.0
+offset_bottom = 226.0
+mouse_filter = 2
+text = "Smith!"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="W18043" type="Control" parent="." unique_id=1692141784]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 360.0
+offset_right = 960.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="Cell1" type="ColorRect" parent="W18043" unique_id=2076333276]
+material = SubResource("ShaderMaterial_36")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+
+[node name="Cell4" type="ColorRect" parent="W18043" unique_id=1788001064]
+material = SubResource("ShaderMaterial_37")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 283.0
+offset_right = 280.0
+offset_bottom = 315.0
+
+[node name="Cell2" type="ColorRect" parent="W18043" unique_id=1481685203]
+material = SubResource("ShaderMaterial_36")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 11.0
+offset_top = 291.0
+offset_right = 59.0
+offset_bottom = 306.0
+
+[node name="Cell3" type="ColorRect" parent="W18043" unique_id=1087605020]
+material = SubResource("ShaderMaterial_36")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 223.0
+offset_top = 291.0
+offset_right = 271.0
+offset_bottom = 306.0
+
+[node name="Cell0" type="ColorRect" parent="W18043" unique_id=265321324]
+material = SubResource("ShaderMaterial_36")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 283.0
+offset_top = 1.0
+offset_right = 296.0
+offset_bottom = 14.0
+
+[node name="Ring0" type="ColorRect" parent="W18043" unique_id=1360502610]
+material = SubResource("ShaderMaterial_32")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 282.0
+offset_top = 0.0
+offset_right = 297.0
+offset_bottom = 15.0
+
+[node name="Ring1" type="ColorRect" parent="W18043" unique_id=1826673684]
+material = SubResource("ShaderMaterial_33")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 282.0
+offset_bottom = 282.0
+
+[node name="Ring2" type="ColorRect" parent="W18043" unique_id=2132189351]
+material = SubResource("ShaderMaterial_34")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 9.0
+offset_top = 289.0
+offset_right = 61.0
+offset_bottom = 308.0
+
+[node name="Ring3" type="ColorRect" parent="W18043" unique_id=2100267007]
+material = SubResource("ShaderMaterial_34")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 221.0
+offset_top = 289.0
+offset_right = 273.0
+offset_bottom = 308.0
+
+[node name="Ring4" type="ColorRect" parent="W18043" unique_id=1415817436]
+material = SubResource("ShaderMaterial_35")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 0.0
+offset_top = 281.0
+offset_right = 282.0
+offset_bottom = 317.0
+
+[node name="Mark0_0" type="ColorRect" parent="W18043" unique_id=1426179478]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 3.0
+offset_right = 287.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_1" type="ColorRect" parent="W18043" unique_id=713610540]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 3.0
+offset_right = 294.0
+offset_bottom = 4.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_2" type="ColorRect" parent="W18043" unique_id=275232855]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 4.0
+offset_right = 288.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_3" type="ColorRect" parent="W18043" unique_id=104661469]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 5.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_4" type="ColorRect" parent="W18043" unique_id=779561748]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 5.0
+offset_right = 289.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_5" type="ColorRect" parent="W18043" unique_id=461188746]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 5.0
+offset_right = 293.0
+offset_bottom = 6.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_6" type="ColorRect" parent="W18043" unique_id=1462096255]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 6.0
+offset_right = 292.0
+offset_bottom = 7.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_7" type="ColorRect" parent="W18043" unique_id=497325004]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 288.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 8.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_8" type="ColorRect" parent="W18043" unique_id=1777372799]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 287.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 9.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_9" type="ColorRect" parent="W18043" unique_id=2017673364]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 286.0
+offset_top = 9.0
+offset_right = 289.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_10" type="ColorRect" parent="W18043" unique_id=1057206122]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 290.0
+offset_top = 9.0
+offset_right = 293.0
+offset_bottom = 10.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_11" type="ColorRect" parent="W18043" unique_id=507827457]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 10.0
+offset_right = 288.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_12" type="ColorRect" parent="W18043" unique_id=1631566003]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 291.0
+offset_top = 10.0
+offset_right = 294.0
+offset_bottom = 11.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_13" type="ColorRect" parent="W18043" unique_id=2128368499]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 285.0
+offset_top = 11.0
+offset_right = 287.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Mark0_14" type="ColorRect" parent="W18043" unique_id=809920355]
+layout_mode = 0
+mouse_filter = 2
+offset_left = 292.0
+offset_top = 11.0
+offset_right = 294.0
+offset_bottom = 12.0
+color = Color(0.337, 0.341, 0.298, 1)
+
+[node name="Text1" type="Label" parent="W18043" unique_id=1914459997]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 291.0
+offset_right = 60.0
+offset_bottom = 307.0
+mouse_filter = 2
+text = "Tutorial"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text2" type="Label" parent="W18043" unique_id=1758965634]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 291.0
+offset_right = 274.0
+offset_bottom = 307.0
+mouse_filter = 2
+text = "I'm Good"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="W18122" type="Control" parent="." unique_id=1123025770]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 360.0
+offset_right = 1280.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="Cell0" type="ColorRect" parent="W18122" unique_id=815424597]
+material = SubResource("ShaderMaterial_39")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 35.0
+offset_top = 211.0
+offset_right = 83.0
+offset_bottom = 226.0
+
+[node name="Cell1" type="ColorRect" parent="W18122" unique_id=281052939]
+material = SubResource("ShaderMaterial_39")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 117.0
+offset_top = 211.0
+offset_right = 165.0
+offset_bottom = 226.0
+
+[node name="Cell2" type="ColorRect" parent="W18122" unique_id=576719538]
+material = SubResource("ShaderMaterial_39")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 199.0
+offset_top = 211.0
+offset_right = 247.0
+offset_bottom = 226.0
+
+[node name="Ring0" type="ColorRect" parent="W18122" unique_id=1462298747]
+material = SubResource("ShaderMaterial_38")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 33.0
+offset_top = 209.0
+offset_right = 85.0
+offset_bottom = 228.0
+
+[node name="Ring1" type="ColorRect" parent="W18122" unique_id=755285033]
+material = SubResource("ShaderMaterial_38")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 115.0
+offset_top = 209.0
+offset_right = 167.0
+offset_bottom = 228.0
+
+[node name="Ring2" type="ColorRect" parent="W18122" unique_id=662931348]
+material = SubResource("ShaderMaterial_38")
+layout_mode = 0
+mouse_filter = 2
+offset_left = 197.0
+offset_top = 209.0
+offset_right = 249.0
+offset_bottom = 228.0
+
+[node name="Text0" type="Label" parent="W18122" unique_id=105771498]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 210.0
+offset_right = 77.0
+offset_bottom = 226.0
+mouse_filter = 2
+text = "Grind"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text1" type="Label" parent="W18122" unique_id=809044504]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 210.0
+offset_right = 159.0
+offset_bottom = 226.0
+mouse_filter = 2
+text = "Hone"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text2" type="Label" parent="W18122" unique_id=1922399029]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 210.0
+offset_right = 248.0
+offset_bottom = 228.0
+mouse_filter = 2
+text = "Sharpen"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10

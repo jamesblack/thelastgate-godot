@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://c4nhp1yrm7a4i"]
+
+[ext_resource type="Script" uid="uid://c2yeyh5kp5s8c" path="res://Hud/Waypoints/WaypointWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="PackedScene" uid="uid://bhr4a7tqkufdc" path="res://Hud/Waypoints/waypoint_row.tscn" id="3_row"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="4_close"]
+[ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="5_scroll"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_search"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.4, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_search_focus"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.86, 0.42, 1)
+
+[node name="WaypointWindow" type="Control" unique_id=294002951]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=1658333016]
+layout_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=1525589016]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+size_flags_vertical = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1901756544]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="HBoxContainer" parent="Window/Frame/Layout" unique_id=1679583982]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body" unique_id=1511263030]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 0
+
+[node name="Row0" parent="Window/Frame/Layout/Body/Rows" unique_id=1972145922 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row1" parent="Window/Frame/Layout/Body/Rows" unique_id=1472270609 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row2" parent="Window/Frame/Layout/Body/Rows" unique_id=1826861835 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row3" parent="Window/Frame/Layout/Body/Rows" unique_id=1550489982 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row4" parent="Window/Frame/Layout/Body/Rows" unique_id=463812566 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row5" parent="Window/Frame/Layout/Body/Rows" unique_id=770130800 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row6" parent="Window/Frame/Layout/Body/Rows" unique_id=1998967950 instance=ExtResource("3_row")]
+layout_mode = 2
+
+[node name="Row7" parent="Window/Frame/Layout/Body/Rows" unique_id=103250475 instance=ExtResource("3_row")]
+custom_minimum_size = Vector2(265, 35)
+layout_mode = 2
+
+[node name="ScrollColumn" type="Container" parent="Window/Frame/Layout/Body" unique_id=1522704780]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(9, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 1
+
+[node name="ScrollBar" type="VScrollBar" parent="Window/Frame/Layout/Body/ScrollColumn" unique_id=542696271]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1
+script = ExtResource("5_scroll")
+max_value = 27.0
+step = 1.0
+page = 8.0
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=311896133]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Search" type="LineEdit" parent="Window/Frame/Layout/Footer" unique_id=1697563244]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_top = NodePath(".")
+focus_previous = NodePath(".")
+theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.35, 1)
+theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
+theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
+theme_override_styles/normal = SubResource("StyleBoxFlat_search")
+theme_override_styles/focus = SubResource("StyleBoxFlat_search_focus")
+placeholder_text = "Type to find a waypoint"
+max_length = 31
+context_menu_enabled = false
+
+[node name="CloseButton" parent="Window" unique_id=1493988146 instance=ExtResource("4_close")]
+unique_name_in_owner = true
+layout_mode = 2

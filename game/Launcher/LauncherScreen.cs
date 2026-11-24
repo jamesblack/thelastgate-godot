@@ -95,7 +95,9 @@ public partial class LauncherScreen : Control
     // Buttons are written in the bold font, everything else in the regular one.
     private void ApplyFonts()
     {
-        var themed = WindowFonts.WithFont(Theme, Fonts.Regular, Fonts.Size);
+        var themed = (Theme)Theme.Duplicate();
+        themed.DefaultFont = Fonts.Regular;
+        themed.DefaultFontSize = Fonts.Size;
         themed.SetFont("font", "Button", Fonts.Bold);
         themed.SetFont("font", "OptionButton", Fonts.Regular);
         Theme = themed;

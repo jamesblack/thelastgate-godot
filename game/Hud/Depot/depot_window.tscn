@@ -1,0 +1,532 @@
+[gd_scene format=3 uid="uid://cikoega2qm5yf"]
+
+[ext_resource type="Script" uid="uid://cum5x5g6bobsi" path="res://Hud/Depot/DepotWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="4_click"]
+[ext_resource type="PackedScene" uid="uid://bydn5g2axrvh4" path="res://Hud/item_cell.tscn" id="5_cell"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="6_close"]
+
+[node name="DepotWindow" type="Control" unique_id=1721021381]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=1336364590]
+layout_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=1506563225]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1160564595]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Items" type="Container" parent="Window/Frame/Layout" unique_id=443409216]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+FadesAs = 2
+
+[node name="Grid" type="GridContainer" parent="Window/Frame/Layout/Items" unique_id=472360263]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Cell0" parent="Window/Frame/Layout/Items/Grid" unique_id=1845541230 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell1" parent="Window/Frame/Layout/Items/Grid" unique_id=1303616571 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell2" parent="Window/Frame/Layout/Items/Grid" unique_id=290712729 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell3" parent="Window/Frame/Layout/Items/Grid" unique_id=1258204879 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell4" parent="Window/Frame/Layout/Items/Grid" unique_id=1932112064 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell5" parent="Window/Frame/Layout/Items/Grid" unique_id=910492733 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell6" parent="Window/Frame/Layout/Items/Grid" unique_id=934582397 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell7" parent="Window/Frame/Layout/Items/Grid" unique_id=1680457290 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell8" parent="Window/Frame/Layout/Items/Grid" unique_id=499179825 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell9" parent="Window/Frame/Layout/Items/Grid" unique_id=163168623 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell10" parent="Window/Frame/Layout/Items/Grid" unique_id=1505482431 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell11" parent="Window/Frame/Layout/Items/Grid" unique_id=258574525 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell12" parent="Window/Frame/Layout/Items/Grid" unique_id=316699722 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell13" parent="Window/Frame/Layout/Items/Grid" unique_id=1011635050 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell14" parent="Window/Frame/Layout/Items/Grid" unique_id=1501502383 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell15" parent="Window/Frame/Layout/Items/Grid" unique_id=683401320 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell16" parent="Window/Frame/Layout/Items/Grid" unique_id=1661784129 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell17" parent="Window/Frame/Layout/Items/Grid" unique_id=337815032 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell18" parent="Window/Frame/Layout/Items/Grid" unique_id=1547526153 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell19" parent="Window/Frame/Layout/Items/Grid" unique_id=1826224392 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell20" parent="Window/Frame/Layout/Items/Grid" unique_id=214016607 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell21" parent="Window/Frame/Layout/Items/Grid" unique_id=705432967 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell22" parent="Window/Frame/Layout/Items/Grid" unique_id=834745400 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell23" parent="Window/Frame/Layout/Items/Grid" unique_id=1102157078 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell24" parent="Window/Frame/Layout/Items/Grid" unique_id=1519324535 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell25" parent="Window/Frame/Layout/Items/Grid" unique_id=801535394 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell26" parent="Window/Frame/Layout/Items/Grid" unique_id=196489770 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell27" parent="Window/Frame/Layout/Items/Grid" unique_id=230366815 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell28" parent="Window/Frame/Layout/Items/Grid" unique_id=1727840016 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell29" parent="Window/Frame/Layout/Items/Grid" unique_id=684452956 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell30" parent="Window/Frame/Layout/Items/Grid" unique_id=208297828 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell31" parent="Window/Frame/Layout/Items/Grid" unique_id=1111748218 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell32" parent="Window/Frame/Layout/Items/Grid" unique_id=1865933371 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell33" parent="Window/Frame/Layout/Items/Grid" unique_id=1955418536 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell34" parent="Window/Frame/Layout/Items/Grid" unique_id=1725687423 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell35" parent="Window/Frame/Layout/Items/Grid" unique_id=1313858003 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell36" parent="Window/Frame/Layout/Items/Grid" unique_id=605246121 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell37" parent="Window/Frame/Layout/Items/Grid" unique_id=520703690 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell38" parent="Window/Frame/Layout/Items/Grid" unique_id=1879229625 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell39" parent="Window/Frame/Layout/Items/Grid" unique_id=1658469887 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell40" parent="Window/Frame/Layout/Items/Grid" unique_id=1124794051 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell41" parent="Window/Frame/Layout/Items/Grid" unique_id=1366183490 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell42" parent="Window/Frame/Layout/Items/Grid" unique_id=344964918 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell43" parent="Window/Frame/Layout/Items/Grid" unique_id=1676491803 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell44" parent="Window/Frame/Layout/Items/Grid" unique_id=1467843200 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell45" parent="Window/Frame/Layout/Items/Grid" unique_id=790826084 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell46" parent="Window/Frame/Layout/Items/Grid" unique_id=1817131787 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell47" parent="Window/Frame/Layout/Items/Grid" unique_id=979936644 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell48" parent="Window/Frame/Layout/Items/Grid" unique_id=968391889 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell49" parent="Window/Frame/Layout/Items/Grid" unique_id=1213742395 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell50" parent="Window/Frame/Layout/Items/Grid" unique_id=894212381 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell51" parent="Window/Frame/Layout/Items/Grid" unique_id=1350581486 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell52" parent="Window/Frame/Layout/Items/Grid" unique_id=1499880160 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell53" parent="Window/Frame/Layout/Items/Grid" unique_id=1991433401 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell54" parent="Window/Frame/Layout/Items/Grid" unique_id=1000053848 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 6
+
+[node name="Cell55" parent="Window/Frame/Layout/Items/Grid" unique_id=944929867 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 4
+
+[node name="Cell56" parent="Window/Frame/Layout/Items/Grid" unique_id=1654223447 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell57" parent="Window/Frame/Layout/Items/Grid" unique_id=202000480 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell58" parent="Window/Frame/Layout/Items/Grid" unique_id=1254063387 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell59" parent="Window/Frame/Layout/Items/Grid" unique_id=1200040232 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell60" parent="Window/Frame/Layout/Items/Grid" unique_id=1880125434 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell61" parent="Window/Frame/Layout/Items/Grid" unique_id=1472350481 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell62" parent="Window/Frame/Layout/Items/Grid" unique_id=1212750370 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 2
+
+[node name="Cell63" parent="Window/Frame/Layout/Items/Grid" unique_id=665793107 instance=ExtResource("5_cell")]
+layout_mode = 2
+Edges = 0
+
+[node name="Pages" type="Container" parent="Window/Frame/Layout" unique_id=763705191]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBG"
+Edges = 1
+
+[node name="Tabs" type="GridContainer" parent="Window/Frame/Layout/Pages" unique_id=742092890]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Page0" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=372207193]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 6
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page0" unique_id=219354031]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page0/Click" unique_id=808709353]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page1" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=1547598202]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 6
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page1" unique_id=948090346]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page1/Click" unique_id=1162075326]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page2" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=1544519348]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 6
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page2" unique_id=1796422305]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page2/Click" unique_id=1613958926]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 3"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page3" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=576857577]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 4
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page3" unique_id=675339610]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page3/Click" unique_id=131603045]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 4"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page4" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=1815690802]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 2
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page4" unique_id=1007133810]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page4/Click" unique_id=1975138342]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 5"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page5" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=1105515028]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 2
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page5" unique_id=1460263196]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page5/Click" unique_id=1178115443]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 6"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page6" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=1743035387]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 2
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page6" unique_id=1270620792]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page6/Click" unique_id=1526168684]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 7"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Page7" type="Container" parent="Window/Frame/Layout/Pages/Tabs" unique_id=744918832]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Edges = 0
+
+[node name="Click" type="Control" parent="Window/Frame/Layout/Pages/Tabs/Page7" unique_id=1669920329]
+custom_minimum_size = Vector2(65, 15)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")
+
+[node name="Label" type="Label" parent="Window/Frame/Layout/Pages/Tabs/Page7/Click" unique_id=501332509]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Page 8"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="CloseButton" parent="Window" unique_id=506665186 instance=ExtResource("6_close")]
+unique_name_in_owner = true
+layout_mode = 2

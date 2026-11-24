@@ -388,10 +388,11 @@ focus_mode = 0
 theme_type_variation = &"DarkButton"
 text = "Reset General to Defaults"
 
-[node name="CloseButton" type="TextureButton" parent="Window" unique_id=1870376445]
+[node name="CloseButton" type="Button" parent="Window" unique_id=1870376445]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(14, 14)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
 tooltip_text = "Close"
+theme_type_variation = &"DarkCloseButton"

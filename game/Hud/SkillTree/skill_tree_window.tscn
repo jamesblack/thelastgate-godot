@@ -1,0 +1,379 @@
+[gd_scene format=3 uid="uid://dunfj2uaq4jcb"]
+
+[ext_resource type="Script" uid="uid://cj6xsbo12dip3" path="res://Hud/SkillTree/SkillTreeWindowView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://dns0wvx5gfo6b" path="res://Hud/ArchiveSprite.cs" id="2_sprite"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="5_label"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="6_panel"]
+[ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="7_line"]
+[ext_resource type="PackedScene" uid="uid://bn4kt7r2rasxe" path="res://Hud/SkillTree/skill_tree_node.tscn" id="8_node"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="9_close"]
+
+[node name="SkillTreeWindow" type="Control" unique_id=1323465024]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 297.0
+offset_bottom = 317.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=1184318837]
+layout_mode = 0
+offset_right = 297.0
+offset_bottom = 317.0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=611006616]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1445292428]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TreeArea" type="Container" parent="Window/Frame/Layout" unique_id=925961197]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(270, 260)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("6_panel")
+Fill = 1
+FadesAs = 4
+
+[node name="Diagram" type="Control" parent="Window/Frame/Layout/TreeArea" unique_id=1535103191]
+custom_minimum_size = Vector2(268, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="Links" type="Control" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1425243213]
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Link0" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=177758214]
+points = PackedVector2Array(134, 134, 90, 159)
+width = 2.0
+script = ExtResource("7_line")
+Profile = "W"
+
+[node name="Link1" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=234012328]
+points = PackedVector2Array(134, 134, 134, 83)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link2" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1448635303]
+points = PackedVector2Array(134, 134, 178, 159)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link3" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=930529022]
+points = PackedVector2Array(90, 159, 90, 210)
+width = 2.0
+script = ExtResource("7_line")
+Profile = "W"
+
+[node name="Link4" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1826957224]
+points = PackedVector2Array(90, 159, 46, 184)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link5" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=137568963]
+points = PackedVector2Array(90, 159, 46, 134)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link6" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=467808755]
+points = PackedVector2Array(134, 83, 90, 58)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link7" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1037912462]
+points = PackedVector2Array(134, 83, 134, 32)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link8" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1169239034]
+points = PackedVector2Array(134, 83, 178, 58)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link9" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1641467761]
+points = PackedVector2Array(178, 159, 222, 134)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link10" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=1157062786]
+points = PackedVector2Array(178, 159, 222, 184)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Link11" type="Line2D" parent="Window/Frame/Layout/TreeArea/Diagram/Links" unique_id=587138866]
+points = PackedVector2Array(178, 159, 178, 210)
+width = 2.0
+script = ExtResource("7_line")
+
+[node name="Centre" type="Control" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1456029551]
+anchors_preset = 0
+offset_left = 120.0
+offset_top = 120.0
+offset_right = 148.0
+offset_bottom = 148.0
+mouse_filter = 2
+
+[node name="Circle" type="Container" parent="Window/Frame/Layout/TreeArea/Diagram/Centre" unique_id=877946577]
+layout_mode = 0
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 33.0
+offset_bottom = 33.0
+mouse_filter = 2
+script = ExtResource("6_panel")
+Shape = 1
+Profile = "GGRRGG"
+
+[node name="Ring" type="Container" parent="Window/Frame/Layout/TreeArea/Diagram/Centre" unique_id=742477169]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 31.0
+offset_bottom = 31.0
+mouse_filter = 2
+script = ExtResource("6_panel")
+Shape = 1
+Fill = 2
+Profile = "WW"
+
+[node name="CentreIcon" type="TextureRect" parent="Window/Frame/Layout/TreeArea/Diagram/Centre" unique_id=955902091]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 33.0
+offset_bottom = 33.0
+mouse_filter = 2
+stretch_mode = 3
+script = ExtResource("2_sprite")
+SpriteNumber = 6600
+TrimToDrawnArea = true
+
+[node name="Node0" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1234546408 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 145.0
+offset_right = 104.0
+offset_bottom = 173.0
+Link = NodePath("../Links/Link0")
+ParentAngle = 60.4
+Learned = true
+
+[node name="Node1" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=661606146 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 69.0
+offset_right = 148.0
+offset_bottom = 97.0
+Link = NodePath("../Links/Link1")
+ParentAngle = 180.0
+IconSprite = 6602
+
+[node name="Node2" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=2119423463 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 145.0
+offset_right = 192.0
+offset_bottom = 173.0
+Link = NodePath("../Links/Link2")
+ParentAngle = -60.4
+IconSprite = 6603
+
+[node name="Node3" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1585853107 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 196.0
+offset_right = 104.0
+offset_bottom = 224.0
+Link = NodePath("../Links/Link3")
+IconSprite = 6604
+Learned = true
+Highlighted = true
+
+[node name="Node4" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1611926861 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 170.0
+offset_right = 60.0
+offset_bottom = 198.0
+Link = NodePath("../Links/Link4")
+ParentAngle = 60.4
+IconSprite = 6605
+
+[node name="Node5" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1830571528 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 120.0
+offset_right = 60.0
+offset_bottom = 148.0
+Link = NodePath("../Links/Link5")
+ParentAngle = 119.6
+IconSprite = 6606
+
+[node name="Node6" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1211203440 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 44.0
+offset_right = 104.0
+offset_bottom = 72.0
+Link = NodePath("../Links/Link6")
+ParentAngle = 119.6
+IconSprite = 6607
+
+[node name="Node7" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=1112656214 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 18.0
+offset_right = 148.0
+offset_bottom = 46.0
+Link = NodePath("../Links/Link7")
+ParentAngle = 180.0
+IconSprite = 6608
+
+[node name="Node8" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=2047435798 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 44.0
+offset_right = 192.0
+offset_bottom = 72.0
+Link = NodePath("../Links/Link8")
+ParentAngle = -119.6
+IconSprite = 6609
+
+[node name="Node9" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=707340219 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 120.0
+offset_right = 236.0
+offset_bottom = 148.0
+Link = NodePath("../Links/Link9")
+ParentAngle = -119.6
+IconSprite = 6610
+
+[node name="Node10" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=822825820 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 170.0
+offset_right = 236.0
+offset_bottom = 198.0
+Link = NodePath("../Links/Link10")
+ParentAngle = -60.4
+IconSprite = 6611
+
+[node name="Node11" parent="Window/Frame/Layout/TreeArea/Diagram" unique_id=395206520 instance=ExtResource("8_node")]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 196.0
+offset_right = 192.0
+offset_bottom = 224.0
+Link = NodePath("../Links/Link11")
+IconSprite = 6612
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1960541262]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("6_panel")
+Profile = "GBG"
+Padding = 1
+
+[node name="Lines" type="VBoxContainer" parent="Window/Frame/Layout/Footer" unique_id=2007752153]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Top" type="HBoxContainer" parent="Window/Frame/Layout/Footer/Lines" unique_id=940051333]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/Frame/Layout/Footer/Lines/Top" unique_id=946481058]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+
+[node name="Name" type="Label" parent="Window/Frame/Layout/Footer/Lines/Top/MarginContainer" unique_id=1724663240]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Absolution"
+script = ExtResource("5_label")
+
+[node name="Points" type="Container" parent="Window/Frame/Layout/Footer/Lines/Top" unique_id=1213989796]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/Frame/Layout/Footer/Lines/Top/Points" unique_id=91312095]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Caption" type="Label" parent="Window/Frame/Layout/Footer/Lines/Top/Points/MarginContainer" unique_id=2116596193]
+layout_mode = 2
+text = "Skill Points"
+script = ExtResource("5_label")
+Colour = 12
+
+[node name="Count" type="Container" parent="Window/Frame/Layout/Footer/Lines/Top" unique_id=892470182]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/Frame/Layout/Footer/Lines/Top/Count" unique_id=538128058]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Counter" type="Label" parent="Window/Frame/Layout/Footer/Lines/Top/Count/MarginContainer" unique_id=1398980049]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1/2"
+horizontal_alignment = 1
+script = ExtResource("5_label")
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/Frame/Layout/Footer/Lines" unique_id=103209254]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/Frame/Layout/Footer/Lines/MarginContainer" unique_id=883418622]
+layout_mode = 2
+
+[node name="Description1" type="Label" parent="Window/Frame/Layout/Footer/Lines/MarginContainer/VBoxContainer" unique_id=1586311286]
+unique_name_in_owner = true
+layout_mode = 2
+text = "2% more damage dealt for each buff or debuff "
+script = ExtResource("5_label")
+
+[node name="Description2" type="Label" parent="Window/Frame/Layout/Footer/Lines/MarginContainer/VBoxContainer" unique_id=1037261873]
+unique_name_in_owner = true
+layout_mode = 2
+text = "on you."
+script = ExtResource("5_label")
+
+[node name="CloseButton" parent="Window" unique_id=1385206731 instance=ExtResource("9_close")]
+unique_name_in_owner = true
+layout_mode = 2

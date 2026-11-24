@@ -1,0 +1,68 @@
+[gd_resource type="Theme" format=3 uid="uid://qvtq3w8cek7e"]
+
+[ext_resource type="FontFile" uid="uid://b82uh0hp40axg" path="res://fonts/classic/blue.tres" id="1_73a5j"]
+[ext_resource type="FontFile" uid="uid://0q4rjirs4wi1" path="res://fonts/classic/white.tres" id="2_k3nyo"]
+[ext_resource type="FontFile" uid="uid://bdl5y4x5vp8ty" path="res://fonts/classic/green.tres" id="3_ngpbl"]
+[ext_resource type="FontFile" uid="uid://diyn33wnc3wsq" path="res://fonts/classic/lime.tres" id="4_wmmw0"]
+[ext_resource type="FontFile" uid="uid://dgadpmdo8bk2y" path="res://fonts/classic/orange.tres" id="5_iwmrn"]
+[ext_resource type="FontFile" uid="uid://dd6fjx5humyys" path="res://fonts/classic/pink.tres" id="6_e8hb4"]
+[ext_resource type="FontFile" uid="uid://e7agdm80chvh" path="res://fonts/classic/purple.tres" id="7_ad56r"]
+[ext_resource type="FontFile" uid="uid://crkljpiskij88" path="res://fonts/classic/red.tres" id="8_y8dxs"]
+[ext_resource type="FontFile" uid="uid://nhq14etxtvp0" path="res://fonts/classic/teal.tres" id="9_4texh"]
+[ext_resource type="FontFile" uid="uid://wtd46rgt8pnn" path="res://fonts/classic/yellow.tres" id="10_6ulsq"]
+
+[resource]
+default_font = ExtResource("2_k3nyo")
+default_font_size = 9
+HudBlue/base_type = &"Label"
+HudBlue/colors/font_color = Color(1, 1, 1, 1)
+HudBlue/font_sizes/font_size = 9
+HudBlue/fonts/font = ExtResource("1_73a5j")
+HudDim/base_type = &"Label"
+HudDim/colors/font_color = Color(0.5647059, 0.6039216, 0.6039216, 1)
+HudDim/font_sizes/font_size = 9
+HudDim/fonts/font = ExtResource("2_k3nyo")
+HudEngraved/base_type = &"Label"
+HudEngraved/colors/font_color = Color(0.3372549, 0.34117648, 0.29803923, 1)
+HudEngraved/font_sizes/font_size = 9
+HudEngraved/fonts/font = ExtResource("2_k3nyo")
+HudGreen/base_type = &"Label"
+HudGreen/colors/font_color = Color(1, 1, 1, 1)
+HudGreen/font_sizes/font_size = 9
+HudGreen/fonts/font = ExtResource("3_ngpbl")
+HudGrey/base_type = &"Label"
+HudGrey/colors/font_color = Color(0.28235295, 0.31764707, 0.31764707, 1)
+HudGrey/font_sizes/font_size = 9
+HudGrey/fonts/font = ExtResource("2_k3nyo")
+HudLime/base_type = &"Label"
+HudLime/colors/font_color = Color(1, 1, 1, 1)
+HudLime/font_sizes/font_size = 9
+HudLime/fonts/font = ExtResource("4_wmmw0")
+HudOrange/base_type = &"Label"
+HudOrange/colors/font_color = Color(1, 1, 1, 1)
+HudOrange/font_sizes/font_size = 9
+HudOrange/fonts/font = ExtResource("5_iwmrn")
+HudPink/base_type = &"Label"
+HudPink/colors/font_color = Color(1, 1, 1, 1)
+HudPink/font_sizes/font_size = 9
+HudPink/fonts/font = ExtResource("6_e8hb4")
+HudPurple/base_type = &"Label"
+HudPurple/colors/font_color = Color(1, 1, 1, 1)
+HudPurple/font_sizes/font_size = 9
+HudPurple/fonts/font = ExtResource("7_ad56r")
+HudRed/base_type = &"Label"
+HudRed/colors/font_color = Color(1, 1, 1, 1)
+HudRed/font_sizes/font_size = 9
+HudRed/fonts/font = ExtResource("8_y8dxs")
+HudTeal/base_type = &"Label"
+HudTeal/colors/font_color = Color(1, 1, 1, 1)
+HudTeal/font_sizes/font_size = 9
+HudTeal/fonts/font = ExtResource("9_4texh")
+HudWhite/base_type = &"Label"
+HudWhite/colors/font_color = Color(1, 1, 1, 1)
+HudWhite/font_sizes/font_size = 9
+HudWhite/fonts/font = ExtResource("2_k3nyo")
+HudYellow/base_type = &"Label"
+HudYellow/colors/font_color = Color(1, 1, 1, 1)
+HudYellow/font_sizes/font_size = 9
+HudYellow/fonts/font = ExtResource("10_6ulsq")

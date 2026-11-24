@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://pew1yckprspw"]
+
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="1_click"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+
+[node name="CloseButton" type="Control" unique_id=1385206731]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 14.0
+offset_bottom = 14.0
+size_flags_vertical = 0
+tooltip_text = "Close"
+script = ExtResource("1_click")
+LightsUp = true
+
+[node name="Look" type="Container" parent="." unique_id=582071338]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Shape = 2
+Profile = "G"

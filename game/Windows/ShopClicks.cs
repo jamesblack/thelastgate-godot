@@ -1,4 +1,3 @@
-using System;
 using TheLastGate.Cursors;
 using TheLastGate.Net;
 using TheLastGate.World;
@@ -7,12 +6,8 @@ namespace TheLastGate.Windows;
 
 public static class ShopClicks
 {
-    public const int Cells = 64;
-
-    // The grid has 64 cells for 62 items; the current client sends the last slot for the two cells past the end.
-    private const int LastSlot = 62;
-
-    public static int SlotFor(int cell) => Math.Min(LastSlot, cell);
+    // A grave's 40 carried, 20 worn, held item and gold; a merchant fills the first 40.
+    public const int Slots = 62;
 
     public static byte[]? Packet(MapButton button, MapKeys keys, int shopNumber, int slot) => button switch
     {

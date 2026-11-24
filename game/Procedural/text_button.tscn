@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://07n24263pdjd"]
+
+[ext_resource type="Script" uid="uid://dmqufqw0ngc8d" path="res://Procedural/ProceduralButton.cs" id="1_button"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="3_click"]
+
+[node name="TextButton" type="Container" unique_id=1588203417]
+mouse_filter = 2
+script = ExtResource("1_button")
+Profile = "GBG"
+Padding = 2
+
+[node name="Label" type="Label" parent="." unique_id=902117345]
+custom_minimum_size = Vector2(44, 11)
+layout_mode = 2
+text = "Button"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_label")
+Colour = 10
+
+[node name="Click" type="Control" parent="." unique_id=1730662981]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("3_click")

@@ -13,15 +13,6 @@ public class ShopClicksTests
 {
     private const int ShopNumber = 1201;
 
-    [TestCase(0, 0)]
-    [TestCase(61, 61)]
-    [TestCase(62, 62)]
-    [TestCase(63, 62)]
-    public void SlotFor_GivesTheBottomRightCellsTheLastSlot(int cell, int slot)
-    {
-        AssertThat(ShopClicks.SlotFor(cell)).IsEqual(slot);
-    }
-
     [TestCase(MapButton.Left, MapKeys.None, 5)]
     [TestCase(MapButton.Left, MapKeys.Ctrl, 129)]
     [TestCase(MapButton.Left, MapKeys.Alt, 129)]

@@ -1,0 +1,2547 @@
+[gd_scene format=3 uid="uid://b7q2demogoldl"]
+
+[ext_resource type="Script" uid="uid://cbb2uorafdhjc" path="res://Demo/GoldLineDemo.cs" id="1_demo"]
+[ext_resource type="Theme" uid="uid://bxevvm0ssb2pb" path="res://themes/OptionsTheme.tres" id="2_theme"]
+[ext_resource type="Shader" uid="uid://1lj0i3dn6ac1" path="res://Demo/gold_line.gdshader" id="3_shader"]
+[ext_resource type="Texture2D" uid="uid://duo7mchnq2lkf" path="res://Demo/gold_tile.png" id="4_tile"]
+[ext_resource type="Texture2D" uid="uid://bxpauml57qtrc" path="res://Demo/today_18094.png" id="5_today"]
+[ext_resource type="Script" uid="uid://3xui5vw55lxu" path="res://Hud/ThemedClickArea.cs" id="6_area"]
+[ext_resource type="Shader" uid="uid://ch65tp4mdqqig" path="res://Demo/dark_frame.gdshader" id="7_frame"]
+[ext_resource type="Texture2D" uid="uid://dt55fj2xagny4" path="res://Demo/fill_tile.png" id="8_fill"]
+[ext_resource type="Shader" uid="uid://bjfdfbrxseto" path="res://Demo/dark_procedural.gdshader" id="9_procedural"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gold"]
+shader = ExtResource("3_shader")
+shader_parameter/gold = ExtResource("4_tile")
+shader_parameter/window_origin = Vector2(300, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
+bg_color = Color(0.4, 0.364706, 0.227451, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_frame"]
+shader = ExtResource("7_frame")
+shader_parameter/gold = ExtResource("4_tile")
+shader_parameter/fill = ExtResource("8_fill")
+shader_parameter/window_origin = Vector2(900, 0)
+shader_parameter/box_size = Vector2(282, 317)
+shader_parameter/gap_colour = Color(0.0235, 0.0353, 0.0667, 1)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gold_900"]
+shader = ExtResource("3_shader")
+shader_parameter/gold = ExtResource("4_tile")
+shader_parameter/window_origin = Vector2(900, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tab"]
+shader = ExtResource("7_frame")
+shader_parameter/gold = ExtResource("4_tile")
+shader_parameter/fill = ExtResource("8_fill")
+shader_parameter/window_origin = Vector2(900, 0)
+shader_parameter/box_size = Vector2(68, 17)
+shader_parameter/gap_colour = Color(0.0235, 0.0353, 0.0667, 1)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p_frame"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 0
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0235, 0.0353, 0.0667, 1)
+shader_parameter/fill_colour = Color(0.071, 0.021, 0.021, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.25
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(0, 340)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 1, 0, 0, 0)
+shader_parameter/profile_width = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p_line"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 1
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0235, 0.0353, 0.0667, 1)
+shader_parameter/fill_colour = Color(0.071, 0.021, 0.021, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.25
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(0, 340)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p_tab"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 0
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0235, 0.0353, 0.0667, 1)
+shader_parameter/fill_colour = Color(0.071, 0.021, 0.021, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.25
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(0, 340)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i_blue"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 0
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0224, 0.0369, 0.0682, 1)
+shader_parameter/fill_colour = Color(0.0224, 0.0369, 0.0682, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.22
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(300, 340)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i_box"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 0
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0224, 0.0369, 0.0682, 1)
+shader_parameter/fill_colour = Color(0.071, 0.021, 0.021, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.25
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(300, 340)
+shader_parameter/profile = PackedInt32Array(0, 1, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i_line"]
+shader = ExtResource("9_procedural")
+shader_parameter/mode = 1
+shader_parameter/gold_colour = Color(0.407, 0.369, 0.231, 1)
+shader_parameter/gap_colour = Color(0.0224, 0.0369, 0.0682, 1)
+shader_parameter/fill_colour = Color(0.071, 0.021, 0.021, 1)
+shader_parameter/gold_grain = 6.0
+shader_parameter/gold_variation = 0.16
+shader_parameter/fill_grain = 3.5
+shader_parameter/fill_variation = 0.25
+shader_parameter/streak_angle = 0.6
+shader_parameter/window_origin = Vector2(300, 340)
+shader_parameter/profile = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/profile_width = 0
+
+[node name="GoldLineDemo" type="Control" unique_id=1183260327]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1200.0
+offset_bottom = 660.0
+theme = ExtResource("2_theme")
+script = ExtResource("1_demo")
+
+[node name="Today" type="TextureRect" parent="." unique_id=586693443]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 320.0
+texture = ExtResource("5_today")
+
+[node name="ShaderGold" type="Control" parent="." unique_id=782508697]
+anchors_preset = 0
+offset_left = 300.0
+offset_right = 597.0
+offset_bottom = 317.0
+
+[node name="Backdrop" type="PanelContainer" parent="ShaderGold" unique_id=1608920987]
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 317.0
+theme_type_variation = &"DarkWindowPanel"
+
+[node name="Cells" type="GridContainer" parent="ShaderGold" unique_id=1225013667]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Cell0" type="PanelContainer" parent="ShaderGold/Cells" unique_id=680460368]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell1" type="PanelContainer" parent="ShaderGold/Cells" unique_id=200390632]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell2" type="PanelContainer" parent="ShaderGold/Cells" unique_id=832745989]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell3" type="PanelContainer" parent="ShaderGold/Cells" unique_id=534255591]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell4" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1940101536]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell5" type="PanelContainer" parent="ShaderGold/Cells" unique_id=397888147]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell6" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1992967028]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell7" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1288936098]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell8" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1608999010]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell9" type="PanelContainer" parent="ShaderGold/Cells" unique_id=918338011]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell10" type="PanelContainer" parent="ShaderGold/Cells" unique_id=845872240]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell11" type="PanelContainer" parent="ShaderGold/Cells" unique_id=2115402979]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell12" type="PanelContainer" parent="ShaderGold/Cells" unique_id=966325074]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell13" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1268600159]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell14" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1073972169]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell15" type="PanelContainer" parent="ShaderGold/Cells" unique_id=533196561]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell16" type="PanelContainer" parent="ShaderGold/Cells" unique_id=434387652]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell17" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1126583725]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell18" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1661898829]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell19" type="PanelContainer" parent="ShaderGold/Cells" unique_id=2065667878]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell20" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1524763933]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell21" type="PanelContainer" parent="ShaderGold/Cells" unique_id=761447463]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell22" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1015587882]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell23" type="PanelContainer" parent="ShaderGold/Cells" unique_id=108857114]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell24" type="PanelContainer" parent="ShaderGold/Cells" unique_id=495361566]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell25" type="PanelContainer" parent="ShaderGold/Cells" unique_id=526115671]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell26" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1393874450]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell27" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1566927045]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell28" type="PanelContainer" parent="ShaderGold/Cells" unique_id=155516826]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell29" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1054291730]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell30" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1306142905]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell31" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1272517146]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell32" type="PanelContainer" parent="ShaderGold/Cells" unique_id=998383665]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell33" type="PanelContainer" parent="ShaderGold/Cells" unique_id=314570393]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell34" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1529038219]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell35" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1017454086]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell36" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1333423371]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell37" type="PanelContainer" parent="ShaderGold/Cells" unique_id=407959094]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell38" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1807961259]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell39" type="PanelContainer" parent="ShaderGold/Cells" unique_id=911767987]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell40" type="PanelContainer" parent="ShaderGold/Cells" unique_id=456393228]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell41" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1217441105]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell42" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1170404776]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell43" type="PanelContainer" parent="ShaderGold/Cells" unique_id=2116856142]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell44" type="PanelContainer" parent="ShaderGold/Cells" unique_id=2042937444]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell45" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1853075530]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell46" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1055878077]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell47" type="PanelContainer" parent="ShaderGold/Cells" unique_id=606255685]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell48" type="PanelContainer" parent="ShaderGold/Cells" unique_id=922124653]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell49" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1523220009]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell50" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1655198439]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell51" type="PanelContainer" parent="ShaderGold/Cells" unique_id=122382613]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell52" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1218151231]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell53" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1677665518]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell54" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1989528202]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell55" type="PanelContainer" parent="ShaderGold/Cells" unique_id=536531069]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell56" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1844099261]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell57" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1608164064]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell58" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1452946496]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell59" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1561195945]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell60" type="PanelContainer" parent="ShaderGold/Cells" unique_id=394113114]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell61" type="PanelContainer" parent="ShaderGold/Cells" unique_id=2074515969]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell62" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1314598723]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell63" type="PanelContainer" parent="ShaderGold/Cells" unique_id=1406359834]
+material = SubResource("ShaderMaterial_gold")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Divider" type="Panel" parent="ShaderGold" unique_id=2121073169]
+material = SubResource("ShaderMaterial_gold")
+layout_mode = 0
+offset_left = 2.0
+offset_top = 278.0
+offset_right = 280.0
+offset_bottom = 279.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="Pages" type="GridContainer" parent="ShaderGold" unique_id=585261709]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 279.0
+offset_right = 277.0
+offset_bottom = 313.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="PageButton0" type="Control" parent="ShaderGold/Pages" unique_id=1071321336]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton1" type="Control" parent="ShaderGold/Pages" unique_id=875091833]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton2" type="Control" parent="ShaderGold/Pages" unique_id=300134238]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton3" type="Control" parent="ShaderGold/Pages" unique_id=193238719]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton4" type="Control" parent="ShaderGold/Pages" unique_id=901695202]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton5" type="Control" parent="ShaderGold/Pages" unique_id=1210920297]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton6" type="Control" parent="ShaderGold/Pages" unique_id=261111315]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton7" type="Control" parent="ShaderGold/Pages" unique_id=1467593042]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="CloseButton" type="Control" parent="ShaderGold" unique_id=1713565759]
+anchors_preset = 0
+offset_left = 283.0
+offset_right = 297.0
+offset_bottom = 14.0
+theme_type_variation = &"DarkCloseButton"
+script = ExtResource("6_area")
+
+[node name="FlatGold" type="Control" parent="." unique_id=640520613]
+anchors_preset = 0
+offset_left = 600.0
+offset_right = 897.0
+offset_bottom = 317.0
+
+[node name="Backdrop" type="PanelContainer" parent="FlatGold" unique_id=1836364066]
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 317.0
+theme_type_variation = &"DarkWindowPanel"
+
+[node name="Cells" type="GridContainer" parent="FlatGold" unique_id=806226571]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Cell0" type="PanelContainer" parent="FlatGold/Cells" unique_id=350334076]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell1" type="PanelContainer" parent="FlatGold/Cells" unique_id=2113107851]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell2" type="PanelContainer" parent="FlatGold/Cells" unique_id=987860554]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell3" type="PanelContainer" parent="FlatGold/Cells" unique_id=574046226]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell4" type="PanelContainer" parent="FlatGold/Cells" unique_id=1205727847]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell5" type="PanelContainer" parent="FlatGold/Cells" unique_id=1901529838]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell6" type="PanelContainer" parent="FlatGold/Cells" unique_id=1812942085]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell7" type="PanelContainer" parent="FlatGold/Cells" unique_id=1156726605]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell8" type="PanelContainer" parent="FlatGold/Cells" unique_id=302106779]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell9" type="PanelContainer" parent="FlatGold/Cells" unique_id=400922316]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell10" type="PanelContainer" parent="FlatGold/Cells" unique_id=148233915]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell11" type="PanelContainer" parent="FlatGold/Cells" unique_id=868921643]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell12" type="PanelContainer" parent="FlatGold/Cells" unique_id=1728699951]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell13" type="PanelContainer" parent="FlatGold/Cells" unique_id=163001932]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell14" type="PanelContainer" parent="FlatGold/Cells" unique_id=911925843]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell15" type="PanelContainer" parent="FlatGold/Cells" unique_id=2092648464]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell16" type="PanelContainer" parent="FlatGold/Cells" unique_id=1493985621]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell17" type="PanelContainer" parent="FlatGold/Cells" unique_id=650906929]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell18" type="PanelContainer" parent="FlatGold/Cells" unique_id=2028011189]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell19" type="PanelContainer" parent="FlatGold/Cells" unique_id=539487678]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell20" type="PanelContainer" parent="FlatGold/Cells" unique_id=345211452]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell21" type="PanelContainer" parent="FlatGold/Cells" unique_id=151057040]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell22" type="PanelContainer" parent="FlatGold/Cells" unique_id=1591597185]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell23" type="PanelContainer" parent="FlatGold/Cells" unique_id=264691649]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell24" type="PanelContainer" parent="FlatGold/Cells" unique_id=2044921362]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell25" type="PanelContainer" parent="FlatGold/Cells" unique_id=813106583]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell26" type="PanelContainer" parent="FlatGold/Cells" unique_id=1754699885]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell27" type="PanelContainer" parent="FlatGold/Cells" unique_id=1338149492]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell28" type="PanelContainer" parent="FlatGold/Cells" unique_id=498337506]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell29" type="PanelContainer" parent="FlatGold/Cells" unique_id=443413308]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell30" type="PanelContainer" parent="FlatGold/Cells" unique_id=1695814052]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell31" type="PanelContainer" parent="FlatGold/Cells" unique_id=738230235]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell32" type="PanelContainer" parent="FlatGold/Cells" unique_id=862492575]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell33" type="PanelContainer" parent="FlatGold/Cells" unique_id=447031746]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell34" type="PanelContainer" parent="FlatGold/Cells" unique_id=1811246350]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell35" type="PanelContainer" parent="FlatGold/Cells" unique_id=1676666217]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell36" type="PanelContainer" parent="FlatGold/Cells" unique_id=1743178771]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell37" type="PanelContainer" parent="FlatGold/Cells" unique_id=1083357493]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell38" type="PanelContainer" parent="FlatGold/Cells" unique_id=1825077468]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell39" type="PanelContainer" parent="FlatGold/Cells" unique_id=1629586163]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell40" type="PanelContainer" parent="FlatGold/Cells" unique_id=404176856]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell41" type="PanelContainer" parent="FlatGold/Cells" unique_id=155073025]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell42" type="PanelContainer" parent="FlatGold/Cells" unique_id=601876120]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell43" type="PanelContainer" parent="FlatGold/Cells" unique_id=366515045]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell44" type="PanelContainer" parent="FlatGold/Cells" unique_id=365723515]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell45" type="PanelContainer" parent="FlatGold/Cells" unique_id=1854733258]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell46" type="PanelContainer" parent="FlatGold/Cells" unique_id=784491352]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell47" type="PanelContainer" parent="FlatGold/Cells" unique_id=1612813566]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell48" type="PanelContainer" parent="FlatGold/Cells" unique_id=719355572]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell49" type="PanelContainer" parent="FlatGold/Cells" unique_id=184475740]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell50" type="PanelContainer" parent="FlatGold/Cells" unique_id=1179164000]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell51" type="PanelContainer" parent="FlatGold/Cells" unique_id=1152941714]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell52" type="PanelContainer" parent="FlatGold/Cells" unique_id=870228545]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell53" type="PanelContainer" parent="FlatGold/Cells" unique_id=2098204471]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell54" type="PanelContainer" parent="FlatGold/Cells" unique_id=148369403]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell55" type="PanelContainer" parent="FlatGold/Cells" unique_id=1114410651]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell56" type="PanelContainer" parent="FlatGold/Cells" unique_id=2006362236]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell57" type="PanelContainer" parent="FlatGold/Cells" unique_id=669132907]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell58" type="PanelContainer" parent="FlatGold/Cells" unique_id=864320040]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell59" type="PanelContainer" parent="FlatGold/Cells" unique_id=1858957669]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell60" type="PanelContainer" parent="FlatGold/Cells" unique_id=862704526]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell61" type="PanelContainer" parent="FlatGold/Cells" unique_id=426016772]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell62" type="PanelContainer" parent="FlatGold/Cells" unique_id=519482936]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell63" type="PanelContainer" parent="FlatGold/Cells" unique_id=248048609]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Divider" type="Panel" parent="FlatGold" unique_id=1986043185]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 278.0
+offset_right = 280.0
+offset_bottom = 279.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="Pages" type="GridContainer" parent="FlatGold" unique_id=1159655736]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 279.0
+offset_right = 277.0
+offset_bottom = 313.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="PageButton0" type="Control" parent="FlatGold/Pages" unique_id=135943789]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton1" type="Control" parent="FlatGold/Pages" unique_id=677354549]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton2" type="Control" parent="FlatGold/Pages" unique_id=1545531803]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton3" type="Control" parent="FlatGold/Pages" unique_id=1536495517]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton4" type="Control" parent="FlatGold/Pages" unique_id=2131282862]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton5" type="Control" parent="FlatGold/Pages" unique_id=1017499563]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton6" type="Control" parent="FlatGold/Pages" unique_id=973940825]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="PageButton7" type="Control" parent="FlatGold/Pages" unique_id=132559832]
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+theme_type_variation = &"DarkTab"
+script = ExtResource("6_area")
+
+[node name="CloseButton" type="Control" parent="FlatGold" unique_id=1233020216]
+anchors_preset = 0
+offset_left = 283.0
+offset_right = 297.0
+offset_bottom = 14.0
+theme_type_variation = &"DarkCloseButton"
+script = ExtResource("6_area")
+
+[node name="NoSprite" type="Control" parent="." unique_id=1718013623]
+anchors_preset = 0
+offset_left = 900.0
+offset_right = 1197.0
+offset_bottom = 317.0
+
+[node name="Backdrop" type="ColorRect" parent="NoSprite" unique_id=716038786]
+material = SubResource("ShaderMaterial_frame")
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 317.0
+
+[node name="Cells" type="GridContainer" parent="NoSprite" unique_id=396519105]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Cell0" type="PanelContainer" parent="NoSprite/Cells" unique_id=1691501594]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell1" type="PanelContainer" parent="NoSprite/Cells" unique_id=1504540705]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell2" type="PanelContainer" parent="NoSprite/Cells" unique_id=931297088]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell3" type="PanelContainer" parent="NoSprite/Cells" unique_id=998266918]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell4" type="PanelContainer" parent="NoSprite/Cells" unique_id=200886524]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell5" type="PanelContainer" parent="NoSprite/Cells" unique_id=1377451361]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell6" type="PanelContainer" parent="NoSprite/Cells" unique_id=763418819]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell7" type="PanelContainer" parent="NoSprite/Cells" unique_id=1716819355]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell8" type="PanelContainer" parent="NoSprite/Cells" unique_id=700944102]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell9" type="PanelContainer" parent="NoSprite/Cells" unique_id=631351485]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell10" type="PanelContainer" parent="NoSprite/Cells" unique_id=1561122295]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell11" type="PanelContainer" parent="NoSprite/Cells" unique_id=974448019]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell12" type="PanelContainer" parent="NoSprite/Cells" unique_id=633914955]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell13" type="PanelContainer" parent="NoSprite/Cells" unique_id=1030402214]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell14" type="PanelContainer" parent="NoSprite/Cells" unique_id=2014525349]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell15" type="PanelContainer" parent="NoSprite/Cells" unique_id=1590235662]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell16" type="PanelContainer" parent="NoSprite/Cells" unique_id=481894001]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell17" type="PanelContainer" parent="NoSprite/Cells" unique_id=1371871426]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell18" type="PanelContainer" parent="NoSprite/Cells" unique_id=947575592]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell19" type="PanelContainer" parent="NoSprite/Cells" unique_id=366519525]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell20" type="PanelContainer" parent="NoSprite/Cells" unique_id=1550330345]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell21" type="PanelContainer" parent="NoSprite/Cells" unique_id=631535765]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell22" type="PanelContainer" parent="NoSprite/Cells" unique_id=2120072722]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell23" type="PanelContainer" parent="NoSprite/Cells" unique_id=218887148]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell24" type="PanelContainer" parent="NoSprite/Cells" unique_id=1988642935]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell25" type="PanelContainer" parent="NoSprite/Cells" unique_id=353773684]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell26" type="PanelContainer" parent="NoSprite/Cells" unique_id=601446575]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell27" type="PanelContainer" parent="NoSprite/Cells" unique_id=678300304]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell28" type="PanelContainer" parent="NoSprite/Cells" unique_id=648918461]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell29" type="PanelContainer" parent="NoSprite/Cells" unique_id=1787984600]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell30" type="PanelContainer" parent="NoSprite/Cells" unique_id=1510268329]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell31" type="PanelContainer" parent="NoSprite/Cells" unique_id=1007245870]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell32" type="PanelContainer" parent="NoSprite/Cells" unique_id=315837519]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell33" type="PanelContainer" parent="NoSprite/Cells" unique_id=1875248071]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell34" type="PanelContainer" parent="NoSprite/Cells" unique_id=1980813868]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell35" type="PanelContainer" parent="NoSprite/Cells" unique_id=495235710]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell36" type="PanelContainer" parent="NoSprite/Cells" unique_id=823151439]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell37" type="PanelContainer" parent="NoSprite/Cells" unique_id=959593224]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell38" type="PanelContainer" parent="NoSprite/Cells" unique_id=1840395535]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell39" type="PanelContainer" parent="NoSprite/Cells" unique_id=1915250022]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell40" type="PanelContainer" parent="NoSprite/Cells" unique_id=1671317114]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell41" type="PanelContainer" parent="NoSprite/Cells" unique_id=2070391764]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell42" type="PanelContainer" parent="NoSprite/Cells" unique_id=1578496856]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell43" type="PanelContainer" parent="NoSprite/Cells" unique_id=607538687]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell44" type="PanelContainer" parent="NoSprite/Cells" unique_id=1245261305]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell45" type="PanelContainer" parent="NoSprite/Cells" unique_id=577110082]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell46" type="PanelContainer" parent="NoSprite/Cells" unique_id=963515680]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell47" type="PanelContainer" parent="NoSprite/Cells" unique_id=1002291206]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell48" type="PanelContainer" parent="NoSprite/Cells" unique_id=1824464283]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell49" type="PanelContainer" parent="NoSprite/Cells" unique_id=1951723721]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell50" type="PanelContainer" parent="NoSprite/Cells" unique_id=253694790]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell51" type="PanelContainer" parent="NoSprite/Cells" unique_id=521163637]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell52" type="PanelContainer" parent="NoSprite/Cells" unique_id=926380225]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell53" type="PanelContainer" parent="NoSprite/Cells" unique_id=1609225182]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell54" type="PanelContainer" parent="NoSprite/Cells" unique_id=605211302]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell55" type="PanelContainer" parent="NoSprite/Cells" unique_id=160176738]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell56" type="PanelContainer" parent="NoSprite/Cells" unique_id=1469528119]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell57" type="PanelContainer" parent="NoSprite/Cells" unique_id=1005953417]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell58" type="PanelContainer" parent="NoSprite/Cells" unique_id=1455027813]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell59" type="PanelContainer" parent="NoSprite/Cells" unique_id=1196605593]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell60" type="PanelContainer" parent="NoSprite/Cells" unique_id=1964110893]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell61" type="PanelContainer" parent="NoSprite/Cells" unique_id=1481539679]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell62" type="PanelContainer" parent="NoSprite/Cells" unique_id=2055220651]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell63" type="PanelContainer" parent="NoSprite/Cells" unique_id=1779484601]
+material = SubResource("ShaderMaterial_gold_900")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="SeparatorGap" type="ColorRect" parent="NoSprite" unique_id=1471672798]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 277.0
+offset_right = 276.0
+offset_bottom = 278.0
+color = Color(0.0235, 0.0353, 0.0667, 1)
+
+[node name="Separator" type="ColorRect" parent="NoSprite" unique_id=225081295]
+material = SubResource("ShaderMaterial_gold_900")
+layout_mode = 0
+offset_left = 6.0
+offset_top = 278.0
+offset_right = 276.0
+offset_bottom = 279.0
+
+[node name="Pages" type="GridContainer" parent="NoSprite" unique_id=1822917083]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 279.0
+offset_right = 277.0
+offset_bottom = 313.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Tab0" type="ColorRect" parent="NoSprite/Pages" unique_id=1415112949]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab1" type="ColorRect" parent="NoSprite/Pages" unique_id=1795204328]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab2" type="ColorRect" parent="NoSprite/Pages" unique_id=2000345975]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab3" type="ColorRect" parent="NoSprite/Pages" unique_id=1627410373]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab4" type="ColorRect" parent="NoSprite/Pages" unique_id=168680405]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab5" type="ColorRect" parent="NoSprite/Pages" unique_id=1948964636]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab6" type="ColorRect" parent="NoSprite/Pages" unique_id=2119296876]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab7" type="ColorRect" parent="NoSprite/Pages" unique_id=163846205]
+material = SubResource("ShaderMaterial_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="CloseButton" type="Control" parent="NoSprite" unique_id=353991772]
+anchors_preset = 0
+offset_left = 283.0
+offset_right = 297.0
+offset_bottom = 14.0
+theme_type_variation = &"DarkCloseButton"
+script = ExtResource("6_area")
+
+[node name="Procedural" type="Control" parent="." unique_id=1284250571]
+anchors_preset = 0
+offset_top = 340.0
+offset_right = 297.0
+offset_bottom = 657.0
+
+[node name="Backdrop" type="ColorRect" parent="Procedural" unique_id=336521652]
+material = SubResource("ShaderMaterial_p_frame")
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 318.0
+
+[node name="Cells" type="GridContainer" parent="Procedural" unique_id=1389774956]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 277.0
+offset_bottom = 277.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="Cell0" type="PanelContainer" parent="Procedural/Cells" unique_id=549616402]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell1" type="PanelContainer" parent="Procedural/Cells" unique_id=754945173]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell2" type="PanelContainer" parent="Procedural/Cells" unique_id=2130020998]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell3" type="PanelContainer" parent="Procedural/Cells" unique_id=440227546]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell4" type="PanelContainer" parent="Procedural/Cells" unique_id=858595947]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell5" type="PanelContainer" parent="Procedural/Cells" unique_id=583975764]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell6" type="PanelContainer" parent="Procedural/Cells" unique_id=1607319307]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell7" type="PanelContainer" parent="Procedural/Cells" unique_id=2134512269]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell8" type="PanelContainer" parent="Procedural/Cells" unique_id=635155220]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell9" type="PanelContainer" parent="Procedural/Cells" unique_id=1842099432]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell10" type="PanelContainer" parent="Procedural/Cells" unique_id=870341835]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell11" type="PanelContainer" parent="Procedural/Cells" unique_id=1024947816]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell12" type="PanelContainer" parent="Procedural/Cells" unique_id=1156447064]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell13" type="PanelContainer" parent="Procedural/Cells" unique_id=430852997]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell14" type="PanelContainer" parent="Procedural/Cells" unique_id=705028310]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell15" type="PanelContainer" parent="Procedural/Cells" unique_id=1197525932]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell16" type="PanelContainer" parent="Procedural/Cells" unique_id=2045667738]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell17" type="PanelContainer" parent="Procedural/Cells" unique_id=1918402770]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell18" type="PanelContainer" parent="Procedural/Cells" unique_id=678264122]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell19" type="PanelContainer" parent="Procedural/Cells" unique_id=1458936554]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell20" type="PanelContainer" parent="Procedural/Cells" unique_id=205114727]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell21" type="PanelContainer" parent="Procedural/Cells" unique_id=915029052]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell22" type="PanelContainer" parent="Procedural/Cells" unique_id=122434967]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell23" type="PanelContainer" parent="Procedural/Cells" unique_id=1610157301]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell24" type="PanelContainer" parent="Procedural/Cells" unique_id=1875221863]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell25" type="PanelContainer" parent="Procedural/Cells" unique_id=1340517420]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell26" type="PanelContainer" parent="Procedural/Cells" unique_id=1349114741]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell27" type="PanelContainer" parent="Procedural/Cells" unique_id=244041514]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell28" type="PanelContainer" parent="Procedural/Cells" unique_id=1907625952]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell29" type="PanelContainer" parent="Procedural/Cells" unique_id=1156025753]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell30" type="PanelContainer" parent="Procedural/Cells" unique_id=227309370]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell31" type="PanelContainer" parent="Procedural/Cells" unique_id=1450303997]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell32" type="PanelContainer" parent="Procedural/Cells" unique_id=858409468]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell33" type="PanelContainer" parent="Procedural/Cells" unique_id=1570232212]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell34" type="PanelContainer" parent="Procedural/Cells" unique_id=658734571]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell35" type="PanelContainer" parent="Procedural/Cells" unique_id=619460744]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell36" type="PanelContainer" parent="Procedural/Cells" unique_id=1843865630]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell37" type="PanelContainer" parent="Procedural/Cells" unique_id=1229950100]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell38" type="PanelContainer" parent="Procedural/Cells" unique_id=426097137]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell39" type="PanelContainer" parent="Procedural/Cells" unique_id=1784714185]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell40" type="PanelContainer" parent="Procedural/Cells" unique_id=811508301]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell41" type="PanelContainer" parent="Procedural/Cells" unique_id=870430027]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell42" type="PanelContainer" parent="Procedural/Cells" unique_id=891369669]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell43" type="PanelContainer" parent="Procedural/Cells" unique_id=1969891619]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell44" type="PanelContainer" parent="Procedural/Cells" unique_id=125339401]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell45" type="PanelContainer" parent="Procedural/Cells" unique_id=2119350148]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell46" type="PanelContainer" parent="Procedural/Cells" unique_id=1300058229]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell47" type="PanelContainer" parent="Procedural/Cells" unique_id=149523889]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell48" type="PanelContainer" parent="Procedural/Cells" unique_id=587593040]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell49" type="PanelContainer" parent="Procedural/Cells" unique_id=1889056402]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell50" type="PanelContainer" parent="Procedural/Cells" unique_id=834631040]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell51" type="PanelContainer" parent="Procedural/Cells" unique_id=1544439033]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell52" type="PanelContainer" parent="Procedural/Cells" unique_id=989696516]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell53" type="PanelContainer" parent="Procedural/Cells" unique_id=1729849646]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell54" type="PanelContainer" parent="Procedural/Cells" unique_id=1842553933]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell55" type="PanelContainer" parent="Procedural/Cells" unique_id=1609493333]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell56" type="PanelContainer" parent="Procedural/Cells" unique_id=1478174999]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell57" type="PanelContainer" parent="Procedural/Cells" unique_id=1402238916]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell58" type="PanelContainer" parent="Procedural/Cells" unique_id=1371384665]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell59" type="PanelContainer" parent="Procedural/Cells" unique_id=1149488021]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell60" type="PanelContainer" parent="Procedural/Cells" unique_id=436649287]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell61" type="PanelContainer" parent="Procedural/Cells" unique_id=1110442094]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell62" type="PanelContainer" parent="Procedural/Cells" unique_id=1115471093]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell63" type="PanelContainer" parent="Procedural/Cells" unique_id=1953294227]
+material = SubResource("ShaderMaterial_p_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="SeparatorGap" type="ColorRect" parent="Procedural" unique_id=1447558241]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 277.0
+offset_right = 276.0
+offset_bottom = 278.0
+color = Color(0.0235, 0.0353, 0.0667, 1)
+
+[node name="Separator" type="ColorRect" parent="Procedural" unique_id=1063139528]
+material = SubResource("ShaderMaterial_p_line")
+layout_mode = 0
+offset_left = 6.0
+offset_top = 278.0
+offset_right = 276.0
+offset_bottom = 279.0
+
+[node name="Pages" type="GridContainer" parent="Procedural" unique_id=786660093]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 279.0
+offset_right = 277.0
+offset_bottom = 313.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Tab0" type="ColorRect" parent="Procedural/Pages" unique_id=358733962]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab1" type="ColorRect" parent="Procedural/Pages" unique_id=1464557401]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab2" type="ColorRect" parent="Procedural/Pages" unique_id=1772221314]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab3" type="ColorRect" parent="Procedural/Pages" unique_id=221862281]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab4" type="ColorRect" parent="Procedural/Pages" unique_id=1822967452]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab5" type="ColorRect" parent="Procedural/Pages" unique_id=1000051705]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab6" type="ColorRect" parent="Procedural/Pages" unique_id=1780958398]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Tab7" type="ColorRect" parent="Procedural/Pages" unique_id=118353810]
+material = SubResource("ShaderMaterial_p_tab")
+custom_minimum_size = Vector2(68, 17)
+layout_mode = 2
+
+[node name="Inventory" type="Control" parent="." unique_id=170784103]
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 340.0
+offset_right = 674.0
+offset_bottom = 454.0
+
+[node name="HudBackground" type="ColorRect" parent="Inventory" unique_id=1071413669]
+material = SubResource("ShaderMaterial_i_blue")
+layout_mode = 0
+offset_right = 374.0
+offset_bottom = 114.0
+
+[node name="Box" type="ColorRect" parent="Inventory" unique_id=154558422]
+material = SubResource("ShaderMaterial_i_box")
+layout_mode = 0
+offset_left = 10.0
+offset_top = 3.0
+offset_right = 367.0
+offset_bottom = 109.0
+
+[node name="Cells" type="GridContainer" parent="Inventory" unique_id=1458294063]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 352.0
+offset_bottom = 107.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 10
+
+[node name="Cell0" type="PanelContainer" parent="Inventory/Cells" unique_id=1543020326]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell1" type="PanelContainer" parent="Inventory/Cells" unique_id=1906277115]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell2" type="PanelContainer" parent="Inventory/Cells" unique_id=366592392]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell3" type="PanelContainer" parent="Inventory/Cells" unique_id=687330711]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell4" type="PanelContainer" parent="Inventory/Cells" unique_id=910746802]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell5" type="PanelContainer" parent="Inventory/Cells" unique_id=409305150]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell6" type="PanelContainer" parent="Inventory/Cells" unique_id=400341147]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell7" type="PanelContainer" parent="Inventory/Cells" unique_id=1870632019]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell8" type="PanelContainer" parent="Inventory/Cells" unique_id=337532395]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell9" type="PanelContainer" parent="Inventory/Cells" unique_id=296126023]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell10" type="PanelContainer" parent="Inventory/Cells" unique_id=449028719]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell11" type="PanelContainer" parent="Inventory/Cells" unique_id=120774308]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell12" type="PanelContainer" parent="Inventory/Cells" unique_id=283671125]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell13" type="PanelContainer" parent="Inventory/Cells" unique_id=236066298]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell14" type="PanelContainer" parent="Inventory/Cells" unique_id=569027692]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell15" type="PanelContainer" parent="Inventory/Cells" unique_id=1347847209]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell16" type="PanelContainer" parent="Inventory/Cells" unique_id=1274190965]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell17" type="PanelContainer" parent="Inventory/Cells" unique_id=1941381365]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell18" type="PanelContainer" parent="Inventory/Cells" unique_id=1019759100]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell19" type="PanelContainer" parent="Inventory/Cells" unique_id=540213359]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell20" type="PanelContainer" parent="Inventory/Cells" unique_id=1849411130]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell21" type="PanelContainer" parent="Inventory/Cells" unique_id=2134466607]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell22" type="PanelContainer" parent="Inventory/Cells" unique_id=1928782732]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell23" type="PanelContainer" parent="Inventory/Cells" unique_id=1155528256]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell24" type="PanelContainer" parent="Inventory/Cells" unique_id=484551764]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell25" type="PanelContainer" parent="Inventory/Cells" unique_id=329025716]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell26" type="PanelContainer" parent="Inventory/Cells" unique_id=358855200]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell27" type="PanelContainer" parent="Inventory/Cells" unique_id=258762850]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell28" type="PanelContainer" parent="Inventory/Cells" unique_id=1074565384]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="Cell29" type="PanelContainer" parent="Inventory/Cells" unique_id=727110900]
+material = SubResource("ShaderMaterial_i_line")
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"DarkSlot"
+
+[node name="ScrollColumn" type="PanelContainer" parent="Inventory" unique_id=1766216163]
+material = SubResource("ShaderMaterial_i_line")
+layout_mode = 0
+offset_left = 352.0
+offset_top = 5.0
+offset_right = 365.0
+offset_bottom = 107.0
+theme_type_variation = &"DarkSlot"
+
+[node name="ScrollDivider0" type="ColorRect" parent="Inventory" unique_id=1558246432]
+material = SubResource("ShaderMaterial_i_line")
+layout_mode = 0
+offset_left = 353.0
+offset_top = 35.0
+offset_right = 364.0
+offset_bottom = 36.0
+
+[node name="ScrollDivider1" type="ColorRect" parent="Inventory" unique_id=1090588427]
+material = SubResource("ShaderMaterial_i_line")
+layout_mode = 0
+offset_left = 353.0
+offset_top = 76.0
+offset_right = 364.0
+offset_bottom = 77.0
+
+[node name="Arrow0" type="ColorRect" parent="Inventory" unique_id=1860758198]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 12.0
+offset_right = 359.0
+offset_bottom = 13.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow1" type="ColorRect" parent="Inventory" unique_id=186964668]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 13.0
+offset_right = 360.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow2" type="ColorRect" parent="Inventory" unique_id=1778978119]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 14.0
+offset_right = 361.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow3" type="ColorRect" parent="Inventory" unique_id=844977747]
+layout_mode = 0
+offset_left = 355.0
+offset_top = 15.0
+offset_right = 362.0
+offset_bottom = 16.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow4" type="ColorRect" parent="Inventory" unique_id=1930679991]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 16.0
+offset_right = 359.0
+offset_bottom = 17.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow5" type="ColorRect" parent="Inventory" unique_id=384870165]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 17.0
+offset_right = 359.0
+offset_bottom = 18.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow6" type="ColorRect" parent="Inventory" unique_id=1224035273]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 18.0
+offset_right = 359.0
+offset_bottom = 19.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow7" type="ColorRect" parent="Inventory" unique_id=662254825]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 19.0
+offset_right = 359.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow8" type="ColorRect" parent="Inventory" unique_id=731037533]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 20.0
+offset_right = 359.0
+offset_bottom = 21.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow9" type="ColorRect" parent="Inventory" unique_id=796391069]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 21.0
+offset_right = 359.0
+offset_bottom = 22.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow10" type="ColorRect" parent="Inventory" unique_id=1793101226]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 22.0
+offset_right = 359.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow11" type="ColorRect" parent="Inventory" unique_id=221085609]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 23.0
+offset_right = 359.0
+offset_bottom = 24.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow12" type="ColorRect" parent="Inventory" unique_id=1727023768]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 24.0
+offset_right = 359.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow13" type="ColorRect" parent="Inventory" unique_id=871756699]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 25.0
+offset_right = 359.0
+offset_bottom = 26.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow14" type="ColorRect" parent="Inventory" unique_id=701914568]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 26.0
+offset_right = 359.0
+offset_bottom = 27.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow15" type="ColorRect" parent="Inventory" unique_id=1058760212]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 27.0
+offset_right = 359.0
+offset_bottom = 28.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow16" type="ColorRect" parent="Inventory" unique_id=1918622733]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 28.0
+offset_right = 359.0
+offset_bottom = 29.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow17" type="ColorRect" parent="Inventory" unique_id=511114735]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 83.0
+offset_right = 359.0
+offset_bottom = 84.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow18" type="ColorRect" parent="Inventory" unique_id=875978448]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 84.0
+offset_right = 359.0
+offset_bottom = 85.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow19" type="ColorRect" parent="Inventory" unique_id=537970008]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 85.0
+offset_right = 359.0
+offset_bottom = 86.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow20" type="ColorRect" parent="Inventory" unique_id=1281539500]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 86.0
+offset_right = 359.0
+offset_bottom = 87.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow21" type="ColorRect" parent="Inventory" unique_id=1031008760]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 87.0
+offset_right = 359.0
+offset_bottom = 88.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow22" type="ColorRect" parent="Inventory" unique_id=1844727764]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 88.0
+offset_right = 359.0
+offset_bottom = 89.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow23" type="ColorRect" parent="Inventory" unique_id=1183703299]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 89.0
+offset_right = 359.0
+offset_bottom = 90.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow24" type="ColorRect" parent="Inventory" unique_id=2038347877]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 90.0
+offset_right = 359.0
+offset_bottom = 91.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow25" type="ColorRect" parent="Inventory" unique_id=1440574550]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 91.0
+offset_right = 359.0
+offset_bottom = 92.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow26" type="ColorRect" parent="Inventory" unique_id=115477771]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 92.0
+offset_right = 359.0
+offset_bottom = 93.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow27" type="ColorRect" parent="Inventory" unique_id=1055377829]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 93.0
+offset_right = 359.0
+offset_bottom = 94.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow28" type="ColorRect" parent="Inventory" unique_id=501384674]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 94.0
+offset_right = 359.0
+offset_bottom = 95.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow29" type="ColorRect" parent="Inventory" unique_id=1800605411]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 95.0
+offset_right = 359.0
+offset_bottom = 96.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow30" type="ColorRect" parent="Inventory" unique_id=771476401]
+layout_mode = 0
+offset_left = 355.0
+offset_top = 96.0
+offset_right = 362.0
+offset_bottom = 97.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow31" type="ColorRect" parent="Inventory" unique_id=1258341072]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 97.0
+offset_right = 361.0
+offset_bottom = 98.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow32" type="ColorRect" parent="Inventory" unique_id=179417358]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 98.0
+offset_right = 360.0
+offset_bottom = 99.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="Arrow33" type="ColorRect" parent="Inventory" unique_id=892860091]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 99.0
+offset_right = 359.0
+offset_bottom = 100.0
+mouse_filter = 2
+color = Color(0.322, 0.325, 0.286, 1)
+
+[node name="ResizeMe" type="ColorRect" parent="." unique_id=1783001194]
+material = SubResource("ShaderMaterial_p_frame")
+layout_mode = 0
+offset_left = 700.0
+offset_top = 340.0
+offset_right = 1060.0
+offset_bottom = 660.0

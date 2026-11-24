@@ -19,15 +19,16 @@
 [ext_resource type="Script" uid="uid://csfabvsb1uc2c" path="res://Hud/UiPicture.cs" id="17_uipicture"]
 [ext_resource type="Script" uid="uid://bomtg3mqrk113" path="res://Hud/DarkModeShift.cs" id="18_darkshift"]
 [ext_resource type="Script" uid="uid://br01fdchbbgdf" path="res://Hud/ChatLine.cs" id="19_chatline"]
-[ext_resource type="PackedScene" uid="uid://c43vvk1g7qgns" path="res://Hud/text_windows.tscn" id="20_textwindows"]
-[ext_resource type="PackedScene" uid="uid://cv82ogaee8q8m" path="res://Hud/shop_window.tscn" id="21_shopwindow"]
-[ext_resource type="PackedScene" uid="uid://cikoega2qm5yf" path="res://Hud/depot_window.tscn" id="22_depotwindow"]
-[ext_resource type="PackedScene" uid="uid://bkd1i4cug6ojj" path="res://Hud/smith_window.tscn" id="23_smithwindow"]
-[ext_resource type="PackedScene" uid="uid://c4nhp1yrm7a4i" path="res://Hud/waypoint_window.tscn" id="24_waypointwindow"]
-[ext_resource type="PackedScene" uid="uid://dunfj2uaq4jcb" path="res://Hud/skill_tree_window.tscn" id="25_skilltreewindow"]
+[ext_resource type="PackedScene" uid="uid://c43vvk1g7qgns" path="res://Hud/TextWindow/text_windows.tscn" id="20_textwindows"]
+[ext_resource type="PackedScene" uid="uid://cv82ogaee8q8m" path="res://Hud/Shop/shop_window.tscn" id="21_shopwindow"]
+[ext_resource type="PackedScene" uid="uid://cikoega2qm5yf" path="res://Hud/Depot/depot_window.tscn" id="22_depotwindow"]
+[ext_resource type="PackedScene" uid="uid://bkd1i4cug6ojj" path="res://Hud/Smith/smith_window.tscn" id="23_smithwindow"]
+[ext_resource type="PackedScene" uid="uid://c4nhp1yrm7a4i" path="res://Hud/Waypoints/waypoint_window.tscn" id="24_waypointwindow"]
+[ext_resource type="PackedScene" uid="uid://dunfj2uaq4jcb" path="res://Hud/SkillTree/skill_tree_window.tscn" id="25_skilltreewindow"]
 [ext_resource type="PackedScene" uid="uid://datd803sos88d" path="res://Hud/options_window.tscn" id="26_optionswindow"]
 [ext_resource type="Script" uid="uid://gv2wi01n21oy" path="res://Hud/PlannerButtonBox.cs" id="27_plannerbox"]
 [ext_resource type="Script" uid="uid://c1ilumk25t2g2" path="res://Hud/StatModeButton.cs" id="28_statmode"]
+[ext_resource type="Theme" uid="uid://qvtq3w8cek7e" path="res://themes/HudTextTheme.tres" id="29_hudtext"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_scroll"]
 
@@ -92,6 +93,7 @@ anchors_preset = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 mouse_filter = 2
+theme = ExtResource("29_hudtext")
 script = ExtResource("1_cyccr")
 
 [node name="Frame" type="TextureRect" parent="." unique_id=2008325883]

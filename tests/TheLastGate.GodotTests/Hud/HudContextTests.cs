@@ -28,7 +28,7 @@ public partial class HudContextTests
         hud = GD.Load<PackedScene>("res://Hud/hud_view.tscn").Instantiate<HudView>();
         Tree.Root.AddChild(hud);
         hud.Sprites = sprites;
-        hud.Show(state, new GameSession(state), new ClassicFonts(sprites), _ => { });
+        hud.Show(state, new GameSession(state), new ClassicFonts(), _ => { });
     }
 
     [AfterTest]

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Godot;
 using TheLastGate.Assets;
@@ -13,6 +12,12 @@ using TheLastGate.Cursors;
 using TheLastGate.Game;
 using TheLastGate.Hotbar;
 using TheLastGate.Hotkeys;
+using TheLastGate.Hud.Depot;
+using TheLastGate.Hud.Shop;
+using TheLastGate.Hud.SkillTree;
+using TheLastGate.Hud.Smith;
+using TheLastGate.Hud.TextWindow;
+using TheLastGate.Hud.Waypoints;
 using TheLastGate.Items;
 using TheLastGate.Map;
 using TheLastGate.Net;
@@ -29,7 +34,6 @@ namespace TheLastGate.Hud;
 [Tool]
 public partial class HudView : Control
 {
-    private const long EditorCacheBudgetBytes = 64L * 1024 * 1024;
     private const int ReservedSlot = 4;
     private const int MaximumSlot = 5;
     private const string StrongholdName = "Stronghold";
@@ -77,7 +81,6 @@ public partial class HudView : Control
     private ClientSettings? clientSettings;
 
     private bool darkMode;
-    private SpriteLoader? editorSprites;
     private IFontSet? fonts;
     private GameSession? gameSession;
     private int? hoveredShopCell;
@@ -142,7 +145,11 @@ public partial class HudView : Control
         set
         {
             fonts = value;
-            ApplyWindowFonts(this);
+            if (value != null && !Engine.IsEditorHint())
+            {
+                HudTextTheme.Apply(HudTextTheme.Load(), value);
+            }
+
             ShowContext();
         }
     }
@@ -289,24 +296,24 @@ public partial class HudView : Control
         chatLine.LineSent += Say;
         chatLine.EscapePressed += PressEscape;
         var shopWindow = GetNode<ShopWindowView>("%ShopWindow");
-        shopWindow.GetNode<ClickArea>("CloseButton").Released += ClickCloseShop;
-        foreach (var node in shopWindow.GetNode("Grid").GetChildren())
+        shopWindow.CloseButton.Released += ClickCloseShop;
+        for (var cellNumber = 0; cellNumber < ShopClicks.Slots; cellNumber++)
         {
-            var shopCell = (ItemSlotView)node;
-            var cell = shopCell.GetIndex();
+            var cell = cellNumber;
+            var shopCell = shopWindow.Cell(cell);
             shopCell.Released += button => ClickShop(cell, button);
             shopCell.MouseEntered += () => hoveredShopCell = cell;
             shopCell.MouseExited += () => hoveredShopCell = null;
-            WatchCursor(shopCell, () => ShopCursor(ShopClicks.SlotFor(cell)));
+            WatchCursor(shopCell, () => ShopCursor(cell));
         }
 
         var depotWindow = GetNode<DepotWindowView>("%DepotWindow");
-        depotWindow.GetNode<ClickArea>("CloseButton").Released += ClickCloseShop;
-        depotWindow.GetNode<Control>("Blocker").GuiInput += ScrollDepot;
-        foreach (var node in depotWindow.GetNode("Blocker/Grid").GetChildren())
+        depotWindow.CloseButton.Released += ClickCloseShop;
+        depotWindow.WheelArea.GuiInput += ScrollDepot;
+        for (var cellNumber = 0; cellNumber < DepotClicks.Cells; cellNumber++)
         {
-            var depotCell = (ItemSlotView)node;
-            var cell = depotCell.GetIndex();
+            var cell = cellNumber;
+            var depotCell = depotWindow.Cell(cell);
             depotCell.Released += button => ClickDepot(cell, button);
             WatchCursor(
                 depotCell,
@@ -316,38 +323,37 @@ public partial class HudView : Control
         for (var page = 0; page < DepotPackets.Pages; page++)
         {
             var shownPage = page;
-            var pageButton = depotWindow.GetNode<ClickArea>($"Blocker/PageButton{page}");
-            pageButton.Released += button => ClickDepotPage(shownPage, button);
+            depotWindow.PageButton(page).Released += button => ClickDepotPage(shownPage, button);
         }
 
         var smithWindow = GetNode<SmithWindowView>("%SmithWindow");
-        smithWindow.GetNode<ClickArea>("CloseButton").Released += ClickCloseShop;
-        foreach (var (node, slot) in SmithWindowView.ItemSlots)
+        smithWindow.CloseButton.Released += ClickCloseShop;
+        for (var slotNumber = 0; slotNumber < SmithClicks.Slots; slotNumber++)
         {
-            smithWindow.GetNode<ItemSlotView>(node).Released += button => ClickSmithItem(slot, button);
+            var slot = slotNumber;
+            smithWindow.Slot(slot).Released += button => ClickSmithItem(slot, button);
         }
 
         for (var number = SmithClicks.FirstButton; number <= SmithClicks.LastButton; number++)
         {
             var buttonNumber = number;
-            var smithButton = smithWindow.GetNode<ClickArea>($"Button{number}");
-            smithButton.Released += button => ClickSmithButton(buttonNumber, button);
+            smithWindow.Button(number).Released += button => ClickSmithButton(buttonNumber, button);
         }
 
         var waypointWindow = GetNode<WaypointWindowView>("%WaypointWindow");
-        waypointWindow.GetNode<ClickArea>("CloseButton").Released += ClickCloseWaypoints;
+        waypointWindow.CloseButton.Released += ClickCloseWaypoints;
         waypointWindow.ScrollBar.ValueChanged += DragWaypoints;
-        waypointWindow.GetNode<Control>("Blocker").GuiInput += ScrollWaypoints;
+        waypointWindow.WheelArea.GuiInput += ScrollWaypoints;
         waypointWindow.SelectedChosen += ChooseSelectedWaypoint;
         waypointWindow.CloseAsked += () => ClickCloseWaypoints(MapButton.Left);
         for (var row = 0; row < WaypointWindow.VisibleRows; row++)
         {
             var shownRow = row;
-            ((ClickArea)waypointWindow.Row(row)).Released += button => ClickWaypoint(shownRow, button);
+            waypointWindow.Row(row).Released += button => ClickWaypoint(shownRow, button);
         }
 
         var skillTreeWindow = GetNode<SkillTreeWindowView>("%SkillTreeWindow");
-        skillTreeWindow.GetNode<ClickArea>("CloseButton").Released += ClickCloseSkillTree;
+        skillTreeWindow.CloseButton.Released += ClickCloseSkillTree;
         for (var node = 0; node < SkillTrees.Nodes; node++)
         {
             var shownNode = node;
@@ -444,7 +450,7 @@ public partial class HudView : Control
         var textWindows = GetNode<TextWindowView>("%TextWindows");
         foreach (var (buttonName, click) in TextWindowButtons)
         {
-            textWindows.GetNode<ClickArea>(buttonName).Released += button => ClickTextWindow(button, click);
+            textWindows.Button(buttonName).Released += button => ClickTextWindow(button, click);
         }
 
         chatLine.GrabFocus();
@@ -641,59 +647,19 @@ public partial class HudView : Control
     public override void _EnterTree()
     {
         GetTree().NodeAdded += ShowContextToNewNode;
-        if (!Engine.IsEditorHint())
+        if (Engine.IsEditorHint() && EditorSprites.Shared is { } editorSprites)
         {
-            ChildEnteredTree += ApplyWindowFonts;
-            return;
-        }
-
-        try
-        {
-            editorSprites = new SpriteLoader(DataPaths.Root(), EditorCacheBudgetBytes);
             sprites = editorSprites;
-            fonts = new ClassicFonts(editorSprites);
-        }
-        catch (Exception exception) when (exception is IOException or InvalidDataException
-            or UnauthorizedAccessException)
-        {
-            GD.PushWarning($"The interface sprites can't be shown: {exception.Message}");
+            fonts = new ClassicFonts();
         }
     }
 
     public override void _ExitTree()
     {
         GetTree().NodeAdded -= ShowContextToNewNode;
-        ChildEnteredTree -= ApplyWindowFonts;
-        if (editorSprites == null)
-        {
-            return;
-        }
-
-        editorSprites.Dispose();
-        editorSprites = null;
-        sprites = null;
-        fonts = null;
     }
 
     private static string Number(int value) => value.ToString(CultureInfo.InvariantCulture);
-
-    // Every window under the HUD, and anything without a font of its own, is written in the font set's white letters.
-    // The editor keeps the scenes' own fonts, so a saved scene never holds the font set.
-    private void ApplyWindowFonts(Node node)
-    {
-        if (Engine.IsEditorHint() || fonts == null)
-        {
-            return;
-        }
-
-        var font = fonts.For(TextColour.White);
-        if (node == this)
-        {
-            Theme = WindowFonts.WithFont(new Theme(), font.Font, font.Size);
-        }
-
-        WindowFonts.Apply(node, font.Font, font.Size);
-    }
 
     private void ShowContext()
     {
@@ -1253,8 +1219,7 @@ public partial class HudView : Control
             return;
         }
 
-        var slot = ShopClicks.SlotFor(cell);
-        if (ShopClicks.Packet(button, HeldKeys.Current(), state.Shop.Number, slot) is { } packet)
+        if (ShopClicks.Packet(button, HeldKeys.Current(), state.Shop.Number, cell) is { } packet)
         {
             sendCommand(packet);
         }
@@ -1283,8 +1248,7 @@ public partial class HudView : Control
     private void ScrollDepot(InputEvent inputEvent)
     {
         if (inputEvent is not InputEventMouseButton { Pressed: true } wheel || state == null
-            || wheel.ButtonIndex is not (MouseButton.WheelUp or MouseButton.WheelDown)
-            || !DepotWindowView.InWheelArea(wheel.Position))
+            || wheel.ButtonIndex is not (MouseButton.WheelUp or MouseButton.WheelDown))
         {
             return;
         }
@@ -1347,8 +1311,7 @@ public partial class HudView : Control
     private void ScrollWaypoints(InputEvent inputEvent)
     {
         if (inputEvent is not InputEventMouseButton { Pressed: true } wheel || gameSession == null
-            || wheel.ButtonIndex is not (MouseButton.WheelUp or MouseButton.WheelDown)
-            || !WaypointWindowView.InWheelArea(wheel.Position))
+            || wheel.ButtonIndex is not (MouseButton.WheelUp or MouseButton.WheelDown))
         {
             return;
         }

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bydn5g2axrvh4"]
+
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="1_panel"]
+[ext_resource type="PackedScene" uid="uid://c6vnyqfwgtfq3" path="res://Hud/item_slot.tscn" id="2_slot"]
+
+[node name="Cell" type="Container" unique_id=1874402291]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Slot" parent="." unique_id=1265520918 instance=ExtResource("2_slot")]
+layout_mode = 2

@@ -36,7 +36,7 @@ public class DebugKeyTests
         navigationKeys.TurnOff();
         hud = GD.Load<PackedScene>("res://Hud/hud_view.tscn").Instantiate<HudView>();
         Tree.Root.AddChild(hud);
-        hud.Show(state, new GameSession(state), new ClassicFonts(sprites), _ => { });
+        hud.Show(state, new GameSession(state), new ClassicFonts(), _ => { });
         hud.ReadDebugFacts = () => Facts;
         await Frames(2);
     }

@@ -1,0 +1,1284 @@
+[gd_scene format=3 uid="uid://baaihr3vp0pfb"]
+
+[ext_resource type="Script" uid="uid://cww43d6op6rkj" path="res://StyleGuide/StyleGuideView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="4_line"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="5_button"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="6_close"]
+[ext_resource type="PackedScene" uid="uid://bydn5g2axrvh4" path="res://Hud/item_cell.tscn" id="7_cell"]
+[ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="8_scroll"]
+
+[node name="StyleGuide" type="Control" unique_id=1529135218]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Page" type="VBoxContainer" parent="." unique_id=1225362864]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Page" unique_id=1741728849]
+layout_mode = 2
+text = "Style guide: the shared window components"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Intro" type="Label" parent="Page" unique_id=889541096]
+custom_minimum_size = Vector2(980, 0)
+layout_mode = 2
+text = "Every themed window is built from these parts. Select an example and change it in the Inspector to try a setting. Panels and lines are game/Procedural/ProceduralPanel.cs and ProceduralLine.cs; the shared buttons are game/Procedural/text_button.tscn and close_button.tscn; item cells are game/Hud/item_cell.tscn; text is game/Hud/HudLabel.cs. The finished windows live in game/Hud/ (Shop, Depot, Smith, Waypoints, TextWindow, SkillTree)."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Profile" type="HBoxContainer" parent="Page" unique_id=1210783772]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Profile" unique_id=595817822]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Profile/Notes" unique_id=1349189633]
+layout_mode = 2
+text = "Panel: Profile"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Profile/Notes" unique_id=835592039]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Add a Container with ProceduralPanel.cs. Profile lists its rings from the outside in, one letter per pixel: G gold, B blue gap, R red, W white. Its children are laid out inside the rings. Windows use GBGGBG for the frame and GBG for boxes inside it; G alone makes a single line."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Profile" unique_id=239752551]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example1" type="VBoxContainer" parent="Page/Profile/Examples" unique_id=1850134976]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Profile/Examples/Example1" unique_id=648611484]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = ""
+
+[node name="Caption" type="Label" parent="Page/Profile/Examples/Example1" unique_id=1308489457]
+layout_mode = 2
+text = "empty: fill only"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example2" type="VBoxContainer" parent="Page/Profile/Examples" unique_id=1377299558]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Profile/Examples/Example2" unique_id=1181932571]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+
+[node name="Caption" type="Label" parent="Page/Profile/Examples/Example2" unique_id=966832022]
+layout_mode = 2
+text = "G"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example3" type="VBoxContainer" parent="Page/Profile/Examples" unique_id=1543050538]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Profile/Examples/Example3" unique_id=792846602]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Caption" type="Label" parent="Page/Profile/Examples/Example3" unique_id=1321635504]
+layout_mode = 2
+text = "GBG"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example4" type="VBoxContainer" parent="Page/Profile/Examples" unique_id=1556860759]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Profile/Examples/Example4" unique_id=1075645485]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBGGBG"
+
+[node name="Caption" type="Label" parent="Page/Profile/Examples/Example4" unique_id=625000666]
+layout_mode = 2
+text = "GBGGBG"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example5" type="VBoxContainer" parent="Page/Profile/Examples" unique_id=475354153]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Profile/Examples/Example5" unique_id=103542623]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBRW"
+
+[node name="Caption" type="Label" parent="Page/Profile/Examples/Example5" unique_id=158917105]
+layout_mode = 2
+text = "GBRW"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Fill" type="HBoxContainer" parent="Page" unique_id=1308030647]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Fill" unique_id=205422157]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Fill/Notes" unique_id=1127333148]
+layout_mode = 2
+text = "Panel: Fill"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Fill/Notes" unique_id=1351214752]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "What is drawn inside the rings, grained like the art. Red is a window body, Blue a footer or picture area, None leaves it see-through (rings only), Selected is the steel blue of a selected row or tab, Green is the border-grained green of the waypoint scroll grabber."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Fill" unique_id=334903426]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example6" type="VBoxContainer" parent="Page/Fill/Examples" unique_id=1699358529]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fill/Examples/Example6" unique_id=937788405]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 0
+
+[node name="Caption" type="Label" parent="Page/Fill/Examples/Example6" unique_id=134146812]
+layout_mode = 2
+text = "Red"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example7" type="VBoxContainer" parent="Page/Fill/Examples" unique_id=1887241263]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fill/Examples/Example7" unique_id=1064774085]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 1
+
+[node name="Caption" type="Label" parent="Page/Fill/Examples/Example7" unique_id=599700076]
+layout_mode = 2
+text = "Blue"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example8" type="VBoxContainer" parent="Page/Fill/Examples" unique_id=364772669]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fill/Examples/Example8" unique_id=1771271796]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 2
+
+[node name="Caption" type="Label" parent="Page/Fill/Examples/Example8" unique_id=1958922789]
+layout_mode = 2
+text = "None"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example9" type="VBoxContainer" parent="Page/Fill/Examples" unique_id=113941421]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fill/Examples/Example9" unique_id=711841235]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 3
+
+[node name="Caption" type="Label" parent="Page/Fill/Examples/Example9" unique_id=203368831]
+layout_mode = 2
+text = "Selected"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example10" type="VBoxContainer" parent="Page/Fill/Examples" unique_id=1961365873]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fill/Examples/Example10" unique_id=305091924]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 4
+
+[node name="Caption" type="Label" parent="Page/Fill/Examples/Example10" unique_id=789844321]
+layout_mode = 2
+text = "Green"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Edges" type="HBoxContainer" parent="Page" unique_id=117016673]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Edges" unique_id=1840093039]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Edges/Notes" unique_id=533838529]
+layout_mode = 2
+text = "Panel: Edges"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Edges/Notes" unique_id=133102462]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Which sides draw rings (Top 1, Right 2, Bottom 4, Left 8; add them up). Leave a side out where two boxes touch so they share one border: a footer under a body uses Edges Top only, so the frame's rings close it on the other three sides."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Edges" unique_id=1685688336]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example11" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=941358153]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Edges/Examples/Example11" unique_id=362049539]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Edges = 15
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example11" unique_id=571903389]
+layout_mode = 2
+text = "All (15)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example12" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=1255831499]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Edges/Examples/Example12" unique_id=655890185]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Edges = 1
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example12" unique_id=1812989473]
+layout_mode = 2
+text = "Top (1)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example13" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=791669994]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Edges/Examples/Example13" unique_id=262726963]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Edges = 6
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example13" unique_id=1769953504]
+layout_mode = 2
+text = "Right + Bottom (6)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example14" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=159663806]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Edges/Examples/Example14" unique_id=1498157787]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Edges = 0
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example14" unique_id=652939503]
+layout_mode = 2
+text = "None (0)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example15" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=460601457]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Frame" type="Container" parent="Page/Edges/Examples/Example15" unique_id=495596522]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Page/Edges/Examples/Example15/Frame" unique_id=1010391632]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Page/Edges/Examples/Example15/Frame/Layout" unique_id=858354629]
+custom_minimum_size = Vector2(90, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+
+[node name="Footer" type="Container" parent="Page/Edges/Examples/Example15/Frame/Layout" unique_id=1704968401]
+custom_minimum_size = Vector2(90, 18)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Fill = 1
+Edges = 1
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example15" unique_id=1150908565]
+layout_mode = 2
+text = "body + footer (Top)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Padding" type="HBoxContainer" parent="Page" unique_id=516907633]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Padding" unique_id=824314538]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Padding/Notes" unique_id=427917096]
+layout_mode = 2
+text = "Panel: Padding"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Padding/Notes" unique_id=1718628938]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Extra pixels between the rings and the children, on every side. The text button uses 2; table cells use 1 to 3; footers use 4."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Padding" unique_id=619799818]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example16" type="VBoxContainer" parent="Page/Padding/Examples" unique_id=151010887]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Padding/Examples/Example16" unique_id=826185724]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Padding = 0
+
+[node name="Text" type="Label" parent="Page/Padding/Examples/Example16/Panel" unique_id=830643996]
+layout_mode = 2
+text = "Text"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Caption" type="Label" parent="Page/Padding/Examples/Example16" unique_id=657048817]
+layout_mode = 2
+text = "Padding 0"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example17" type="VBoxContainer" parent="Page/Padding/Examples" unique_id=154711655]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Padding/Examples/Example17" unique_id=1194212839]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Padding = 2
+
+[node name="Text" type="Label" parent="Page/Padding/Examples/Example17/Panel" unique_id=1847536582]
+layout_mode = 2
+text = "Text"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Caption" type="Label" parent="Page/Padding/Examples/Example17" unique_id=157025327]
+layout_mode = 2
+text = "Padding 2"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example18" type="VBoxContainer" parent="Page/Padding/Examples" unique_id=488650133]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Padding/Examples/Example18" unique_id=847250915]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Padding = 4
+
+[node name="Text" type="Label" parent="Page/Padding/Examples/Example18/Panel" unique_id=1127578800]
+layout_mode = 2
+text = "Text"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Caption" type="Label" parent="Page/Padding/Examples/Example18" unique_id=1622775526]
+layout_mode = 2
+text = "Padding 4"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Shape" type="HBoxContainer" parent="Page" unique_id=953740412]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Shape" unique_id=1262683797]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Shape/Notes" unique_id=1252925618]
+layout_mode = 2
+text = "Panel: Shape"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Shape/Notes" unique_id=966761410]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Box is the usual rect. Circle rounds it to the largest circle that fits. Close draws the close cross inside the rings (the close button uses it with Profile G)."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Shape" unique_id=1848986989]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example19" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=1375541105]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example19" unique_id=758918915]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Shape = 0
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example19" unique_id=381053142]
+layout_mode = 2
+text = "Box"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example20" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=1662179640]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example20" unique_id=1207472527]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Shape = 1
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example20" unique_id=557452088]
+layout_mode = 2
+text = "Circle"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example21" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=545144274]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example21" unique_id=135464389]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Shape = 2
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example21" unique_id=1725854669]
+layout_mode = 2
+text = "Close"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Fading" type="HBoxContainer" parent="Page" unique_id=292159616]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Fading" unique_id=949419775]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Fading/Notes" unique_id=629393382]
+layout_mode = 2
+text = "Panel: FadesAs and SolidRings"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Fading/Notes" unique_id=1543231953]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "FadesAs names the window background option that fades this panel (Shop, Depot, Smith, SkillTree, Waypoints, Text); None stays solid. Fading changes the panel's own alpha, never its children's, so put it on the body and leave frames, footers and buttons at None. SolidRings keeps the rings at full strength while the fill fades, as on the waypoint rows. These examples are faded by hand to 40%."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Fading" unique_id=383613502]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example22" type="VBoxContainer" parent="Page/Fading/Examples" unique_id=621369010]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fading/Examples/Example22" unique_id=878957754]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBGGBG"
+FadesAs = 5
+self_modulate = Color(1, 1, 1, 0.4)
+
+[node name="Caption" type="Label" parent="Page/Fading/Examples/Example22" unique_id=793634372]
+layout_mode = 2
+text = "SolidRings off"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example23" type="VBoxContainer" parent="Page/Fading/Examples" unique_id=767038146]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Fading/Examples/Example23" unique_id=1918406638]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBGGBG"
+FadesAs = 5
+SolidRings = true
+self_modulate = Color(1, 1, 1, 0.4)
+
+[node name="Caption" type="Label" parent="Page/Fading/Examples/Example23" unique_id=233379676]
+layout_mode = 2
+text = "SolidRings on"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Line" type="HBoxContainer" parent="Page" unique_id=619446394]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Line" unique_id=1518254118]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Line/Notes" unique_id=1164674926]
+layout_mode = 2
+text = "ProceduralLine"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Line/Notes" unique_id=1881277454]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "A Line2D with ProceduralLine.cs draws a grained line along its points in the colour of its Profile's first ring. The skill tree's links use it. Set Width for the thickness."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Line" unique_id=805942884]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example24" type="VBoxContainer" parent="Page/Line/Examples" unique_id=1617019217]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Holder" type="Control" parent="Page/Line/Examples/Example24" unique_id=1095527242]
+custom_minimum_size = Vector2(120, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Line" type="Line2D" parent="Page/Line/Examples/Example24/Holder" unique_id=326527300]
+points = PackedVector2Array(0, 6, 120, 6)
+width = 3.0
+script = ExtResource("4_line")
+Profile = "G"
+
+[node name="Caption" type="Label" parent="Page/Line/Examples/Example24" unique_id=245078676]
+layout_mode = 2
+text = "Profile G, Width 3"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ScrollBar" type="HBoxContainer" parent="Page" unique_id=952604610]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/ScrollBar" unique_id=1593402163]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/ScrollBar/Notes" unique_id=691332530]
+layout_mode = 2
+text = "Scroll bar"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/ScrollBar/Notes" unique_id=1649696924]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Add a VScrollBar with ProceduralScrollBar.cs inside a column panel (min width 9, Padding 1, Fill Red) and set its horizontal size flag to Fill. The script brings everything else: the panel shader draws the grabber in border-grained green with no rings, so it stays green wherever it scrolls, and it lights up 1.6x hovered and 2.0x dragged. Its material and styles are made in code and never saved. Set max_value to the item count and page to the rows shown."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/ScrollBar" unique_id=487044279]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example25" type="VBoxContainer" parent="Page/ScrollBar/Examples" unique_id=1427370960]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Column" type="Container" parent="Page/ScrollBar/Examples/Example25" unique_id=855046438]
+custom_minimum_size = Vector2(9, 90)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 1
+
+[node name="Bar" type="VScrollBar" parent="Page/ScrollBar/Examples/Example25/Column" unique_id=1728260106]
+layout_mode = 2
+size_flags_horizontal = 1
+script = ExtResource("8_scroll")
+max_value = 27.0
+step = 1.0
+page = 8.0
+value = 0.0
+
+[node name="Caption" type="Label" parent="Page/ScrollBar/Examples/Example25" unique_id=695912657]
+layout_mode = 2
+text = "top"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example26" type="VBoxContainer" parent="Page/ScrollBar/Examples" unique_id=889849876]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Column" type="Container" parent="Page/ScrollBar/Examples/Example26" unique_id=1690573785]
+custom_minimum_size = Vector2(9, 90)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 1
+
+[node name="Bar" type="VScrollBar" parent="Page/ScrollBar/Examples/Example26/Column" unique_id=1858054568]
+layout_mode = 2
+size_flags_horizontal = 1
+script = ExtResource("8_scroll")
+max_value = 27.0
+step = 1.0
+page = 8.0
+value = 19.0
+
+[node name="Caption" type="Label" parent="Page/ScrollBar/Examples/Example26" unique_id=1663747179]
+layout_mode = 2
+text = "scrolled to the end"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="TextButton" type="HBoxContainer" parent="Page" unique_id=312745144]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/TextButton" unique_id=183252496]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/TextButton/Notes" unique_id=1093326335]
+layout_mode = 2
+text = "Text button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/TextButton/Notes" unique_id=203329005]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Instance game/Procedural/text_button.tscn: a GBG box with a label and a Click area. Wire Click.Released in code. Set the caption from code (its Label belongs to the button scene, so the editor will not save a caption typed on an instance; here it is metadata 'caption'). It lights up 1.6x while hovered and 2.0x while held."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/TextButton" unique_id=1523933447]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example27" type="VBoxContainer" parent="Page/TextButton/Examples" unique_id=409881310]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/TextButton/Examples/Example27" unique_id=797891650 instance=ExtResource("5_button")]
+layout_mode = 2
+size_flags_horizontal = 0
+metadata/caption = "Smith!"
+
+[node name="Caption" type="Label" parent="Page/TextButton/Examples/Example27" unique_id=989286172]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example28" type="VBoxContainer" parent="Page/TextButton/Examples" unique_id=1940620239]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/TextButton/Examples/Example28" unique_id=912750195 instance=ExtResource("5_button")]
+layout_mode = 2
+modulate = Color(1.6, 1.6, 1.6, 1)
+size_flags_horizontal = 0
+metadata/caption = "Smith!"
+
+[node name="Caption" type="Label" parent="Page/TextButton/Examples/Example28" unique_id=1865903990]
+layout_mode = 2
+text = "hovered (1.6x)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example29" type="VBoxContainer" parent="Page/TextButton/Examples" unique_id=309503387]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/TextButton/Examples/Example29" unique_id=941180568 instance=ExtResource("5_button")]
+layout_mode = 2
+modulate = Color(2, 2, 2, 1)
+size_flags_horizontal = 0
+metadata/caption = "Smith!"
+
+[node name="Caption" type="Label" parent="Page/TextButton/Examples/Example29" unique_id=579015057]
+layout_mode = 2
+text = "held (2.0x)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="CloseButton" type="HBoxContainer" parent="Page" unique_id=383548073]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/CloseButton" unique_id=1884152021]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/CloseButton/Notes" unique_id=960626531]
+layout_mode = 2
+text = "Close button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/CloseButton/Notes" unique_id=874216587]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Instance game/Procedural/close_button.tscn beside a window's frame, inside an HBox with separation 1. It is a ClickArea with LightsUp on, so it brightens itself on hover and hold; any ClickArea can do the same by turning LightsUp on."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/CloseButton" unique_id=1076142164]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example30" type="VBoxContainer" parent="Page/CloseButton/Examples" unique_id=690014045]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Close" parent="Page/CloseButton/Examples/Example30" unique_id=822168958 instance=ExtResource("6_close")]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example30" unique_id=1091421574]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example31" type="VBoxContainer" parent="Page/CloseButton/Examples" unique_id=807621823]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Close" parent="Page/CloseButton/Examples/Example31" unique_id=1335319295 instance=ExtResource("6_close")]
+layout_mode = 2
+modulate = Color(1.6, 1.6, 1.6, 1)
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example31" unique_id=947878733]
+layout_mode = 2
+text = "hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example32" type="VBoxContainer" parent="Page/CloseButton/Examples" unique_id=1992253751]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Close" parent="Page/CloseButton/Examples/Example32" unique_id=1920324515 instance=ExtResource("6_close")]
+layout_mode = 2
+modulate = Color(2, 2, 2, 1)
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example32" unique_id=909807878]
+layout_mode = 2
+text = "held"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ItemCell" type="HBoxContainer" parent="Page" unique_id=1340541406]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/ItemCell" unique_id=1711465327]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/ItemCell/Notes" unique_id=1604360435]
+layout_mode = 2
+text = "Item cell"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/ItemCell/Notes" unique_id=967841385]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Instance game/Hud/item_cell.tscn for an item slot in a box; set Profile on the instance: G for grid cells (shop, depot), GBG for a slot on its own (smith). The slot is its child Slot (an ItemSlotView); its sample item here is metadata 'preview_sprite'."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/ItemCell" unique_id=327074284]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example33" type="VBoxContainer" parent="Page/ItemCell/Examples" unique_id=1860129831]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Cell" parent="Page/ItemCell/Examples/Example33" unique_id=120731336 instance=ExtResource("7_cell")]
+layout_mode = 2
+size_flags_horizontal = 0
+Profile = "G"
+metadata/preview_sprite = 5000
+
+[node name="Caption" type="Label" parent="Page/ItemCell/Examples/Example33" unique_id=714607340]
+layout_mode = 2
+text = "Profile G"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example34" type="VBoxContainer" parent="Page/ItemCell/Examples" unique_id=1114622129]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Cell" parent="Page/ItemCell/Examples/Example34" unique_id=1003302543 instance=ExtResource("7_cell")]
+layout_mode = 2
+size_flags_horizontal = 0
+Profile = "GBG"
+metadata/preview_sprite = 5001
+
+[node name="Caption" type="Label" parent="Page/ItemCell/Examples/Example34" unique_id=1646168405]
+layout_mode = 2
+text = "Profile GBG"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Text" type="HBoxContainer" parent="Page" unique_id=622490652]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Text" unique_id=1701659233]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Text/Notes" unique_id=333816469]
+layout_mode = 2
+text = "Text: HudLabel"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Text/Notes" unique_id=334871800]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Use a Label with HudLabel.cs for all window text, so it follows the HUD font set. Colour picks the colour; never set a font or font colour on the label itself."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Text" unique_id=731655091]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Column0" type="VBoxContainer" parent="Page/Text/Examples" unique_id=1428103312]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Red" type="Label" parent="Page/Text/Examples/Column0" unique_id=1251504354]
+layout_mode = 2
+text = "0 Red"
+script = ExtResource("3_label")
+Colour = 0
+
+[node name="Yellow" type="Label" parent="Page/Text/Examples/Column0" unique_id=1750318920]
+layout_mode = 2
+text = "1 Yellow"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Green" type="Label" parent="Page/Text/Examples/Column0" unique_id=1002886905]
+layout_mode = 2
+text = "2 Green"
+script = ExtResource("3_label")
+Colour = 2
+
+[node name="Blue" type="Label" parent="Page/Text/Examples/Column0" unique_id=568839002]
+layout_mode = 2
+text = "3 Blue"
+script = ExtResource("3_label")
+Colour = 3
+
+[node name="Pink" type="Label" parent="Page/Text/Examples/Column0" unique_id=1772788804]
+layout_mode = 2
+text = "4 Pink"
+script = ExtResource("3_label")
+Colour = 4
+
+[node name="Orange" type="Label" parent="Page/Text/Examples/Column0" unique_id=1002427716]
+layout_mode = 2
+text = "5 Orange"
+script = ExtResource("3_label")
+Colour = 5
+
+[node name="Lime" type="Label" parent="Page/Text/Examples/Column0" unique_id=455249552]
+layout_mode = 2
+text = "6 Lime"
+script = ExtResource("3_label")
+Colour = 6
+
+[node name="Column1" type="VBoxContainer" parent="Page/Text/Examples" unique_id=1268660502]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Teal" type="Label" parent="Page/Text/Examples/Column1" unique_id=776189207]
+layout_mode = 2
+text = "7 Teal"
+script = ExtResource("3_label")
+Colour = 7
+
+[node name="Purple" type="Label" parent="Page/Text/Examples/Column1" unique_id=362233767]
+layout_mode = 2
+text = "8 Purple"
+script = ExtResource("3_label")
+Colour = 8
+
+[node name="White" type="Label" parent="Page/Text/Examples/Column1" unique_id=409003080]
+layout_mode = 2
+text = "9 White"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Grey" type="Label" parent="Page/Text/Examples/Column1" unique_id=873724053]
+layout_mode = 2
+text = "10 Grey"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Dim" type="Label" parent="Page/Text/Examples/Column1" unique_id=363068136]
+layout_mode = 2
+text = "11 Dim"
+script = ExtResource("3_label")
+Colour = 11
+
+[node name="Engraved" type="Label" parent="Page/Text/Examples/Column1" unique_id=763342516]
+layout_mode = 2
+text = "12 Engraved"
+script = ExtResource("3_label")
+Colour = 12
+
+[node name="Recipe" type="HBoxContainer" parent="Page" unique_id=250714061]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Recipe" unique_id=1723554567]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Recipe/Notes" unique_id=1731355389]
+layout_mode = 2
+text = "A window"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Recipe/Notes" unique_id=1693210374]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+text = "Window (HBox, separation 1) > Frame (GBGGBG, Fill None, mouse_filter Stop so clicks never reach the world) > Layout (VBox, separation 0) > Body (Fill Red, FadesAs the window) and Footer (Fill Blue, GBG, Edges Top) holding text buttons; then the close button. Every node that only lays out sets mouse_filter Ignore. Save the scene visible and hide it in _Ready outside the editor."
+script = ExtResource("3_label")
+Colour = 1
+autowrap_mode = 3
+
+[node name="Examples" type="HBoxContainer" parent="Page/Recipe" unique_id=859521757]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example35" type="VBoxContainer" parent="Page/Recipe/Examples" unique_id=115070087]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Window" type="HBoxContainer" parent="Page/Recipe/Examples/Example35" unique_id=1746912089]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Page/Recipe/Examples/Example35/Window" unique_id=1655132379]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Page/Recipe/Examples/Example35/Window/Frame" unique_id=1077176343]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Page/Recipe/Examples/Example35/Window/Frame/Layout" unique_id=633593359]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 4
+
+[node name="Text" type="Label" parent="Page/Recipe/Examples/Example35/Window/Frame/Layout/Body" unique_id=1183305191]
+layout_mode = 2
+text = "The body holds the window's content."
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Footer" type="Container" parent="Page/Recipe/Examples/Example35/Window/Frame/Layout" unique_id=377253335]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Page/Recipe/Examples/Example35/Window/Frame/Layout/Footer" unique_id=360687028]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Button" parent="Page/Recipe/Examples/Example35/Window/Frame/Layout/Footer/Centre" unique_id=471366753 instance=ExtResource("5_button")]
+layout_mode = 2
+metadata/caption = "Let's Go!"
+
+[node name="CloseButton" parent="Page/Recipe/Examples/Example35/Window" unique_id=840704425 instance=ExtResource("6_close")]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Page/Recipe/Examples/Example35" unique_id=1832890956]
+layout_mode = 2
+text = "frame, body, footer, close button"
+script = ExtResource("3_label")
+Colour = 10

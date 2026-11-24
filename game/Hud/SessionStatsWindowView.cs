@@ -12,10 +12,8 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
 {
     private const string SessionGroup = "This session";
     private const string HourGroup = "Per hour";
-    private const int CloseSprite = 18042;
     private const float NameWidth = 1.3f;
 
-    private static readonly Rect2 CloseRegion = new(283, 0, 14, 14);
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(10);
 
     private static readonly TableColumn[] Columns =
@@ -39,16 +37,16 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
     ];
 
     private TimeSpan? shownElapsed;
+    private EditorThemePreview? themePreview;
     public SessionStatsWindowView() => AddToGroup(HudContext.Group);
 
     private DataTable Table => GetNode<DataTable>("Window/Frame/Layout/Body/Table");
 
     public void ShowContext(HudContext context)
     {
-        if (context.Sprites?.GetTexture(CloseSprite) is { } sheet)
+        if (Theme != null && context.Sprites is { } sprites)
         {
-            GetNode<TextureButton>("Window/Close").TextureNormal =
-                new AtlasTexture { Atlas = sheet, Region = CloseRegion };
+            ThemeSprites.Apply(Theme, sprites);
         }
     }
 
@@ -56,17 +54,20 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
 
     public event Action? ClosePressed;
 
+    public override void _Notification(int what) => themePreview?.Notify(what);
+
     public override void _Ready()
     {
         Table.SetColumns(Columns);
         if (Engine.IsEditorHint())
         {
+            themePreview = EditorThemePreview.Show(this);
             ShowTallies(PreviewTallies, TimeSpan.FromMinutes(90));
             return;
         }
 
         GetNode<Button>("Window/Frame/Layout/Footer/Row/Reset").Pressed += () => ResetPressed?.Invoke();
-        GetNode<TextureButton>("Window/Close").Pressed += () => ClosePressed?.Invoke();
+        GetNode<Button>("Window/Close").Pressed += () => ClosePressed?.Invoke();
     }
 
     public void ShowWindow(bool shown, IEnumerable<CurrencyTally> tallies, TimeSpan elapsed)

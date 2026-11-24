@@ -4,11 +4,18 @@ using TheLastGate.Assets;
 namespace TheLastGate.Hud;
 
 // The sprites live in the archives rather than the project, so a theme's StyleBoxTexture names its sprite in
-// metadata and gets the texture once the HUD has loaded them. Not in the editor: the theme is a shared file
-// there, and saving would write the sprite into it.
+// metadata and gets the texture once the sprites are loaded. Not on the shared theme in the editor: saving a
+// scene there would write the texture's pixels into the theme file. The editor gets a textured copy instead.
 public static class ThemeSprites
 {
     private const string SpriteKey = "sprite";
+
+    public static Theme Textured(Theme theme, SpriteLoader sprites)
+    {
+        var copy = (Theme)theme.Duplicate(true);
+        Texture(copy, sprites);
+        return copy;
+    }
 
     public static void Apply(Theme theme, SpriteLoader sprites)
     {
@@ -17,6 +24,11 @@ public static class ThemeSprites
             return;
         }
 
+        Texture(theme, sprites);
+    }
+
+    private static void Texture(Theme theme, SpriteLoader sprites)
+    {
         foreach (var type in theme.GetStyleboxTypeList())
         {
             foreach (var name in theme.GetStyleboxList(type))
