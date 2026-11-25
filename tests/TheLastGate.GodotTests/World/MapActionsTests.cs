@@ -127,7 +127,7 @@ public class MapActionsTests
         AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.None))
             .IsEqual(new MapAction(Tile(28, 27), MapLayer.Object, MouseCursor.Use, null, null));
         var click = Decide(state, NearTheNextTile, QueueKeys, MapButton.Left);
-        AssertThat(click.QueuedUse.GetValueOrDefault()).IsEqual((OriginX + 28, OriginY + 27));
+        AssertThat(click.QueuedAction.GetValueOrDefault()).IsEqual((OriginX + 28, OriginY + 27, ClientCommand.Use));
         AssertThat(click.Command).IsNull();
     }
 
@@ -158,8 +158,8 @@ public class MapActionsTests
         var state = GiveMoreState(Item(28, 27, MapFlags.IsUsable));
         useQueue = true;
 
-        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.Left).QueuedUse.GetValueOrDefault())
-            .IsEqual((OriginX + 28, OriginY + 27));
+        AssertThat(Decide(state, NearTheNextTile, QueueKeys, MapButton.Left).QueuedAction.GetValueOrDefault())
+            .IsEqual((OriginX + 28, OriginY + 27, ClientCommand.Use));
     }
 
     [TestCase]
@@ -179,18 +179,39 @@ public class MapActionsTests
     }
 
     [TestCase]
-    public void CtrlShift_OnlyQueuesUsableItemsThatCanBeSeen()
+    public void CtrlShift_QueuesATakeOfAnItemThatCanOnlyBeTaken()
     {
-        var plain = Decide(QueueState(Item(28, 27)), NearTheNextTile, QueueKeys, MapButton.Left);
+        var action = Decide(QueueState(Item(28, 27)), NearTheNextTile, QueueKeys, MapButton.Left);
+
+        AssertThat(action.Cursor).IsEqual(MouseCursor.Take);
+        AssertThat(action.QueuedAction.GetValueOrDefault()).IsEqual((OriginX + 28, OriginY + 27, ClientCommand.PickUp));
+        AssertThat(action.Command).IsNull();
+    }
+
+    [TestCase]
+    public void CtrlShift_WithAHeldItemDoesNotQueueATake()
+    {
+        var action = Decide(QueueState(HeldItem(Candle), Item(27, 27)), OnPlayerTile, QueueKeys, MapButton.Left);
+
+        AssertThat(action.QueuedAction).IsNull();
+    }
+
+    [TestCase]
+    public void CtrlShift_DoesNotQueueItemsThatCannotBeSeen()
+    {
         var hidden = Decide(
             QueueState(Item(28, 27, MapFlags.IsUsable | MapFlags.Invisible)),
             NearTheNextTile,
             QueueKeys,
             MapButton.Left);
+        var hiddenTake = Decide(
+            QueueState(Item(28, 27, MapFlags.Invisible)),
+            NearTheNextTile,
+            QueueKeys,
+            MapButton.Left);
 
-        AssertThat(plain.Cursor).IsEqual(MouseCursor.Take);
-        AssertThat(plain.QueuedUse).IsNull();
-        AssertThat(hidden.QueuedUse).IsNull();
+        AssertThat(hidden.QueuedAction).IsNull();
+        AssertThat(hiddenTake.QueuedAction).IsNull();
     }
 
     [TestCase]

@@ -13,7 +13,7 @@ public enum UseQueueAdd
     Queued,
 }
 
-// Uses queued with Ctrl+Shift, or uses and pickups queued for an area, done one after another: the first is sent at
+// Uses and pickups queued with Ctrl+Shift or for an area, done one after another: the first is sent at
 // once when the player is idle, and the next when the server says the action before it has ended. A queued action
 // stays first until the server starts it, or with stubborn use on, until that use settles.
 public sealed class UseQueue(TextLog chat)
@@ -47,7 +47,7 @@ public sealed class UseQueue(TextLog chat)
     // 1 for the next use, 0 when the tile isn't queued.
     public int PositionOf(int x, int y) => queued.FindIndex(entry => (entry.X, entry.Y) == (x, y)) + 1;
 
-    public UseQueueAdd Add(int x, int y, PlayerTarget target)
+    public UseQueueAdd Add(int x, int y, ClientCommand command, PlayerTarget target)
     {
         if (queued.Count >= MostQueued && !IsInProgress(x, y, target) && PositionOf(x, y) == 0)
         {
@@ -55,7 +55,7 @@ public sealed class UseQueue(TextLog chat)
             return UseQueueAdd.Full;
         }
 
-        return Enqueue(x, y, ClientCommand.Use, target);
+        return Enqueue(x, y, command, target);
     }
 
     public int QueueArea(IEnumerable<AreaTarget> targets, PlayerTarget target)

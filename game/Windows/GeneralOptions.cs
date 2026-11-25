@@ -51,7 +51,7 @@ public static class GeneralOptions
             OptionSection.Classic),
         new(
             GeneralOption.UseQueue,
-            "Holding Ctrl+Shift when using an item queues that use. Limit 5.",
+            "Queued Actions: holding Ctrl+Shift when using or taking an item queues it. Limit 5.",
             false,
             OptionSection.Classic),
         new(

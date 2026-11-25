@@ -28,13 +28,13 @@ public class AreaUseTests
     {
         var sent = new List<byte[]>();
         var queue = new UseQueue(new TextLog()) { Enabled = true, Send = sent.Add };
-        queue.Add(1, 1, Busy);
+        queue.Add(1, 1, ClientCommand.Use, Busy);
         var area = Enumerable.Range(0, 8).Select(x => new AreaTarget(0, x, 5, ClientCommand.PickUp));
 
         AssertThat(queue.QueueArea(area, Busy)).IsEqual(8);
 
         AssertThat((queue.PositionOf(1, 1), queue.PositionOf(0, 5), queue.Count)).IsEqual((0, 1, 8));
-        AssertThat(queue.Add(9, 9, Busy)).IsEqual(UseQueueAdd.Full);
+        AssertThat(queue.Add(9, 9, ClientCommand.Use, Busy)).IsEqual(UseQueueAdd.Full);
         queue.TargetChanged(Busy, new PlayerTarget());
         AssertThat(sent).HasSize(1);
         AssertThat(sent[0]).ContainsExactly(MapCommandPackets.ForTile(ClientCommand.PickUp, 0, 5));

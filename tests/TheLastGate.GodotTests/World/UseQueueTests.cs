@@ -28,7 +28,7 @@ public class UseQueueTests
     [TestCase]
     public void TheFirstUseWhileIdle_IsSentAtOnce()
     {
-        AssertThat(queue.Add(10, 20, Target(Idle))).IsEqual(UseQueueAdd.Queued);
+        AssertThat(queue.Add(10, 20, ClientCommand.Use, Target(Idle))).IsEqual(UseQueueAdd.Queued);
 
         AssertThat(sent).HasSize(1);
         AssertThat(sent[0]).ContainsExactly(Use(10, 20));
@@ -36,10 +36,24 @@ public class UseQueueTests
     }
 
     [TestCase]
+    public void ATakeQueuedBehindAUse_IsSentAsAPickUpWhenItsTurnComes()
+    {
+        queue.Add(10, 20, ClientCommand.Use, Target(Idle));
+        queue.TargetChanged(Target(Idle), Target(Using, 10, 20));
+        queue.Add(11, 20, ClientCommand.PickUp, Target(Using, 10, 20));
+
+        queue.TargetChanged(Target(Using, 10, 20), Target(Idle));
+
+        AssertThat(sent).HasSize(2);
+        AssertThat(sent[1]).ContainsExactly(MapCommandPackets.ForTile(ClientCommand.PickUp, 11, 20));
+        AssertThat(queue.PositionOf(11, 20)).IsEqual(1);
+    }
+
+    [TestCase]
     public void UsesQueuedWhileBusy_WaitTheirTurn()
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
-        queue.Add(11, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
+        queue.Add(11, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         AssertThat(sent).IsEmpty();
         AssertThat((queue.PositionOf(10, 20), queue.PositionOf(11, 20))).IsEqual((1, 2));
@@ -48,7 +62,7 @@ public class UseQueueTests
     [TestCase]
     public void TheUseInProgress_IsNotQueued()
     {
-        AssertThat(queue.Add(10, 20, Target(Using, 10, 20))).IsEqual(UseQueueAdd.Ignored);
+        AssertThat(queue.Add(10, 20, ClientCommand.Use, Target(Using, 10, 20))).IsEqual(UseQueueAdd.Ignored);
 
         AssertThat(queue.Count).IsEqual(0);
     }
@@ -56,9 +70,9 @@ public class UseQueueTests
     [TestCase]
     public void AUseAlreadyQueued_IsNotQueuedTwice()
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
 
-        AssertThat(queue.Add(10, 20, Target(Using, 1, 1))).IsEqual(UseQueueAdd.Ignored);
+        AssertThat(queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1))).IsEqual(UseQueueAdd.Ignored);
         AssertThat(queue.Count).IsEqual(1);
     }
 
@@ -67,10 +81,10 @@ public class UseQueueTests
     {
         for (var x = 0; x < UseQueue.MostQueued; x++)
         {
-            queue.Add(x, 0, Target(Using, 1, 1));
+            queue.Add(x, 0, ClientCommand.Use, Target(Using, 1, 1));
         }
 
-        AssertThat(queue.Add(9, 0, Target(Using, 1, 1))).IsEqual(UseQueueAdd.Full);
+        AssertThat(queue.Add(9, 0, ClientCommand.Use, Target(Using, 1, 1))).IsEqual(UseQueueAdd.Full);
 
         AssertThat(queue.Count).IsEqual(UseQueue.MostQueued);
         AssertThat(chat.Lines).HasSize(1);
@@ -80,8 +94,8 @@ public class UseQueueTests
     [TestCase]
     public void WhenTheServerStartsTheFirstUse_ItLeavesTheQueue()
     {
-        queue.Add(10, 20, Target(Idle));
-        queue.Add(11, 20, Target(Idle));
+        queue.Add(10, 20, ClientCommand.Use, Target(Idle));
+        queue.Add(11, 20, ClientCommand.Use, Target(Idle));
 
         queue.TargetChanged(Target(Idle), Target(Using, 10, 20));
 
@@ -91,7 +105,7 @@ public class UseQueueTests
     [TestCase]
     public void AnotherUseStarting_LeavesTheQueueAlone()
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         queue.TargetChanged(Target(Idle), Target(Using, 5, 5));
 
@@ -101,8 +115,8 @@ public class UseQueueTests
     [TestCase]
     public void WhenAUseEnds_TheNextIsSent()
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
-        queue.Add(11, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
+        queue.Add(11, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         queue.TargetChanged(Target(Using, 1, 1), Target(Idle));
 
@@ -132,7 +146,7 @@ public class UseQueueTests
     [TestCase(ClientCommand.Attack)]
     public void AnOrdinaryCommand_ClearsTheQueue(ClientCommand command)
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         queue.Sent(MapCommandPackets.ForTile(command, 1, 1));
 
@@ -144,7 +158,7 @@ public class UseQueueTests
     [TestCase(ClientCommand.Skill)]
     public void GiveInventoryAndSkillCommands_KeepTheQueue(ClientCommand command)
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         queue.Sent(MapCommandPackets.ForTile(command, 1, 1));
 
@@ -154,7 +168,7 @@ public class UseQueueTests
     [TestCase]
     public void TurningTheOptionOff_ForgetsTheQueue()
     {
-        queue.Add(10, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
 
         queue.Enabled = false;
 
@@ -166,10 +180,10 @@ public class UseQueueTests
     {
         var pending = false;
         queue.WaitsForUse = () => pending;
-        queue.Add(10, 20, Target(Idle));
+        queue.Add(10, 20, ClientCommand.Use, Target(Idle));
         pending = true;
 
-        queue.Add(11, 20, Target(Using, 10, 20));
+        queue.Add(11, 20, ClientCommand.Use, Target(Using, 10, 20));
         queue.TargetChanged(Target(Idle), Target(Using, 10, 20));
         queue.TargetChanged(Target(Using, 10, 20), Target(Idle));
 
@@ -182,8 +196,8 @@ public class UseQueueTests
     {
         var pending = true;
         queue.WaitsForUse = () => pending;
-        queue.Add(10, 20, Target(Using, 1, 1));
-        queue.Add(11, 20, Target(Using, 1, 1));
+        queue.Add(10, 20, ClientCommand.Use, Target(Using, 1, 1));
+        queue.Add(11, 20, ClientCommand.Use, Target(Using, 1, 1));
         pending = false;
 
         queue.UseSettled(10, 20);
@@ -199,7 +213,7 @@ public class UseQueueTests
         var pending = true;
         queue.WaitsForUse = () => pending;
 
-        queue.Add(10, 20, Target(Idle));
+        queue.Add(10, 20, ClientCommand.Use, Target(Idle));
         AssertThat(sent).IsEmpty();
         pending = false;
         queue.UseSettled(5, 5);

@@ -45,7 +45,10 @@ public class GeneralOptionsTests
         GeneralOption.GiveMore,
         "Holding Ctrl+Shift when giving an item will attempt to reload that item.",
         false)]
-    [TestCase(GeneralOption.UseQueue, "Holding Ctrl+Shift when using an item queues that use. Limit 5.", false)]
+    [TestCase(
+        GeneralOption.UseQueue,
+        "Queued Actions: holding Ctrl+Shift when using or taking an item queues it. Limit 5.",
+        false)]
     [TestCase(
         GeneralOption.EnterToTalk,
         "Press Enter to activate chat mode before typing. Press Enter again to send, or ESC to cancel.",

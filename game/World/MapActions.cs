@@ -104,8 +104,7 @@ public static class MapActions
         return MapAction.Nothing;
     }
 
-    // Ctrl+Shift points at items as Shift does, but a left click on a usable item queues its use instead of sending
-    // it.
+    // Ctrl+Shift points at items as Shift does, but a left click queues the use or take instead of sending it.
     private static MapAction QueueAction(
         WorldMap map,
         (float Column, float Row) mouse,
@@ -130,10 +129,10 @@ public static class MapActions
 
         var usable = flags.HasFlag(MapFlags.IsUsable);
         var cursor = usable ? MouseCursor.Use : holdingItem ? MouseCursor.None : MouseCursor.Take;
-        var queues = button == MapButton.Left && usable && !flags.HasFlag(MapFlags.Invisible);
+        var queues = button == MapButton.Left && (usable || !holdingItem) && !flags.HasFlag(MapFlags.Invisible);
         return new MapAction(tileIndex, MapLayer.Object, cursor, null, null)
         {
-            QueuedUse = queues ? (tile.X, tile.Y) : null,
+            QueuedAction = queues ? (tile.X, tile.Y, usable ? ClientCommand.Use : ClientCommand.PickUp) : null,
         };
     }
 

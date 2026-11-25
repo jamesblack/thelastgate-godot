@@ -161,8 +161,8 @@ public class GameSessionTests
     {
         session.UseQueue.Enabled = true;
         session.UseQueue.Send = sent.Add;
-        session.UseQueue.Add(10, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
-        session.UseQueue.Add(11, 20, new PlayerTarget(0, 0, 0, Using, 1, 1));
+        session.UseQueue.Add(10, 20, ClientCommand.Use, new PlayerTarget(0, 0, 0, Using, 1, 1));
+        session.UseQueue.Add(11, 20, ClientCommand.Use, new PlayerTarget(0, 0, 0, Using, 1, 1));
 
         Process(SetTarget(Using, 1, 1));
         Process(SetTarget(Idle, 0, 0));

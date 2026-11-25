@@ -400,9 +400,9 @@ public partial class WorldView : Node2D
             GetViewport().SetInputAsHandled();
         }
 
-        if (action.QueuedUse is { } queuedUse)
+        if (action.QueuedAction is { } queued)
         {
-            if (Session.UseQueue.Add(queuedUse.X, queuedUse.Y, State.Player.Target) == UseQueueAdd.Queued)
+            if (Session.UseQueue.Add(queued.X, queued.Y, queued.Command, State.Player.Target) == UseQueueAdd.Queued)
             {
                 PlayClick();
             }

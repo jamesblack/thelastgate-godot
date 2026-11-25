@@ -1,4 +1,5 @@
 using TheLastGate.Cursors;
+using TheLastGate.Net;
 
 namespace TheLastGate.World;
 
@@ -11,8 +12,7 @@ public readonly record struct MapAction(
 {
     public const int NoTile = -1;
 
-    // The world tile a click queues a use of.
-    public (int X, int Y)? QueuedUse { get; init; }
+    public (int X, int Y, ClientCommand Command)? QueuedAction { get; init; }
 
     // The give picks up another item like the one given once the hand is empty.
     public bool GivesMore { get; init; }
