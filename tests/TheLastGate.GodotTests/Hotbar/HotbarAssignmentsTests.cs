@@ -13,6 +13,7 @@ public class HotbarAssignmentsTests
     private const int Protect = 17;
     private const int Blind = 37;
     private const int Light = 50;
+    private const int Recall = 51;
     private const int Identify = 52;
 
     [TestCase]
@@ -92,11 +93,18 @@ public class HotbarAssignmentsTests
     {
         var skills = new PlayerState().Skills;
         skills[Protect][0] = 10;
-        skills[Light][0] = 1;
         skills[Blind][0] = 5;
         skills[3][0] = 20;
 
-        AssertThat(HotbarAssignments.MenuSkills(skills, 0)).ContainsExactly(Blind, Light, Protect);
+        AssertThat(HotbarAssignments.MenuSkills(skills, 0)).ContainsExactly(Blind, Light, Protect, Recall);
+    }
+
+    [TestCase]
+    public void MenuSkills_ListsLightAndRecallThoughTheServerSendsNoValueForThem()
+    {
+        var skills = new PlayerState().Skills;
+
+        AssertThat(HotbarAssignments.MenuSkills(skills, 0)).ContainsExactly(Light, Recall);
     }
 
     [TestCase(0u, false)]
@@ -104,7 +112,6 @@ public class HotbarAssignmentsTests
     public void MenuSkills_ListsIdentifyOnlyForCharactersWhoKnowIt(uint kindred, bool listed)
     {
         var skills = new PlayerState().Skills;
-        skills[Identify][0] = 1;
 
         AssertThat(HotbarAssignments.MenuSkills(skills, kindred).Contains(Identify)).IsEqual(listed);
     }

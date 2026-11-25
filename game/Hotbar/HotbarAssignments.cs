@@ -9,7 +9,6 @@ namespace TheLastGate.Hotbar;
 public static class HotbarAssignments
 {
     private const int ButtonNameLength = 7;
-    private const int Identify = 52;
 
     private static readonly int[] UsableSkills =
         [37, 40, 16, 49, 22, 48, 41, 35, 24, 21, 20, 25, 18, 27, 47, 26, 52, 15, 50, 11, 42, 17, 43, 51, 46, 19];
@@ -40,7 +39,7 @@ public static class HotbarAssignments
 
     public static IReadOnlyList<int> MenuSkills(int[][] skills, uint kindred) =>
         UsableSkills
-            .Where(skill => skills[skill][0] != 0 && (skill != Identify || (kindred & Kindred.KnowsIdentify) != 0))
+            .Where(skill => Kindred.IsKnown(skill, skills[skill][0] != 0, kindred))
             .ToList();
 
     private static LogLine Line(string text) => new(text, (int)TextColour.Yellow);
