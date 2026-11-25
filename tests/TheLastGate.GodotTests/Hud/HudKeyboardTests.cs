@@ -30,7 +30,7 @@ public class HudKeyboardTests
 
     private static SceneTree Tree => (SceneTree)Engine.GetMainLoop();
 
-    private ChatLine Line => hud.GetNode<ChatLine>("%ChatLine");
+    private ChatLine Line => hud.GetNode<ChatView>("%Chat").Line;
 
     private bool ResetSent => sentPackets.Any(packet => packet.SequenceEqual(ResetPacket));
 
@@ -612,5 +612,5 @@ public class HudKeyboardTests
     }
 
     private VScrollBar LogScrollBar() =>
-        hud.GetNode<ChatLog>("%ChatLog").GetNode<RichTextLabel>("Text").GetVScrollBar();
+        hud.GetNode<ChatView>("%Chat").Log.GetNode<RichTextLabel>("Text").GetVScrollBar();
 }

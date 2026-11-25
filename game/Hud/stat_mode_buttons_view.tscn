@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://i5knzr06xziq"]
+
+[ext_resource type="Script" uid="uid://qyjb97ytst54" path="res://Hud/StatModeButtonsView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://c1ilumk25t2g2" path="res://Hud/StatModeButton.cs" id="7_mode"]
+
+[node name="StatModeButtonsView" type="Control" unique_id=337387235]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 71.0
+offset_bottom = 49.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1221710713]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Buttons" type="VBoxContainer" parent="Frame" unique_id=205851883]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="ListSkills" type="Control" parent="Frame/Buttons" unique_id=423347579]
+custom_minimum_size = Vector2(67, 15)
+layout_mode = 2
+script = ExtResource("7_mode")
+LightsUp = true
+Mode = 0
+
+[node name="Cell" type="Container" parent="Frame/Buttons/ListSkills" unique_id=294201886]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Buttons/ListSkills/Cell" unique_id=802423108]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+
+[node name="Text" type="Label" parent="Frame/Buttons/ListSkills/Cell/Margin" unique_id=1718322829]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Skills"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="BothMarker" type="Container" parent="Frame/Buttons/ListSkills" unique_id=1593417455]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GW"
+
+[node name="ListOffense" type="Control" parent="Frame/Buttons" unique_id=405805034]
+custom_minimum_size = Vector2(67, 15)
+layout_mode = 2
+script = ExtResource("7_mode")
+LightsUp = true
+Mode = 2
+
+[node name="Cell" type="Container" parent="Frame/Buttons/ListOffense" unique_id=1961758396]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Buttons/ListOffense/Cell" unique_id=1987414162]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+
+[node name="Text" type="Label" parent="Frame/Buttons/ListOffense/Cell/Margin" unique_id=1267999309]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Offenses"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="ListDefense" type="Control" parent="Frame/Buttons" unique_id=418425426]
+custom_minimum_size = Vector2(67, 15)
+layout_mode = 2
+script = ExtResource("7_mode")
+LightsUp = true
+Mode = 3
+
+[node name="Cell" type="Container" parent="Frame/Buttons/ListDefense" unique_id=161828382]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Buttons/ListDefense/Cell" unique_id=579258334]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+
+[node name="Text" type="Label" parent="Frame/Buttons/ListDefense/Cell/Margin" unique_id=1992712917]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Defenses"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+Colour = 1
+

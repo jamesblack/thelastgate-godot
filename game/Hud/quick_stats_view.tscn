@@ -1,0 +1,302 @@
+[gd_scene format=3 uid="uid://eyoqpja57y8s"]
+
+[ext_resource type="Script" uid="uid://43s9jhjmv5j8" path="res://Hud/QuickStatsView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_experience_back"]
+bg_color = Color(0, 0.1764706, 0.5176471, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_experience_fill"]
+bg_color = Color(0.7411765, 0.38039216, 0, 1)
+
+[node name="QuickStatsView" type="Control" unique_id=1875023453]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 171.0
+offset_bottom = 81.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=677684161]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(171, 0)
+layout_mode = 0
+offset_right = 171.0
+offset_bottom = 81.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Rows" type="VBoxContainer" parent="Frame" unique_id=1169148986]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="WeaponRow" type="HBoxContainer" parent="Frame/Rows" unique_id=349938404]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/WeaponRow" unique_id=1131038507]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/WeaponRow/NameCell" unique_id=1207085359]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 3
+
+[node name="Name" type="Label" parent="Frame/Rows/WeaponRow/NameCell/Margin" unique_id=1378088495]
+layout_mode = 2
+text = "Weapon Value"
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/WeaponRow" unique_id=1010112188]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/WeaponRow/ValueCell" unique_id=1651603703]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+
+[node name="WeaponValue" type="Label" parent="Frame/Rows/WeaponRow/ValueCell/Margin" unique_id=1653980195]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ArmorRow" type="HBoxContainer" parent="Frame/Rows" unique_id=365483992]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/ArmorRow" unique_id=1823195414]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ArmorRow/NameCell" unique_id=1387295088]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 3
+
+[node name="Name" type="Label" parent="Frame/Rows/ArmorRow/NameCell/Margin" unique_id=2090511313]
+layout_mode = 2
+text = "Armor Value"
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/ArmorRow" unique_id=1757970147]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ArmorRow/ValueCell" unique_id=680478216]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+
+[node name="ArmorValue" type="Label" parent="Frame/Rows/ArmorRow/ValueCell/Margin" unique_id=238860281]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="HitRow" type="HBoxContainer" parent="Frame/Rows" unique_id=851293107]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/HitRow" unique_id=319872549]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/HitRow/NameCell" unique_id=935490582]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 3
+
+[node name="Name" type="Label" parent="Frame/Rows/HitRow/NameCell/Margin" unique_id=519466638]
+layout_mode = 2
+text = "Hit Score"
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/HitRow" unique_id=713877443]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/HitRow/ValueCell" unique_id=2113254251]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+
+[node name="HitScore" type="Label" parent="Frame/Rows/HitRow/ValueCell/Margin" unique_id=2041590259]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ParryRow" type="HBoxContainer" parent="Frame/Rows" unique_id=1452003083]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/ParryRow" unique_id=1255950901]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ParryRow/NameCell" unique_id=824231733]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 3
+
+[node name="Name" type="Label" parent="Frame/Rows/ParryRow/NameCell/Margin" unique_id=397661694]
+layout_mode = 2
+text = "Parry Score"
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/ParryRow" unique_id=1651673682]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ParryRow/ValueCell" unique_id=667877882]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+
+[node name="ParryScore" type="Label" parent="Frame/Rows/ParryRow/ValueCell/Margin" unique_id=426080709]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ExperienceRow" type="HBoxContainer" parent="Frame/Rows" unique_id=2026840469]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/ExperienceRow" unique_id=1925637474]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ExperienceRow/NameCell" unique_id=562319086]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 3
+
+[node name="Name" type="Label" parent="Frame/Rows/ExperienceRow/NameCell/Margin" unique_id=1055054985]
+layout_mode = 2
+text = "Experience"
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/ExperienceRow" unique_id=458700558]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ExperienceRow/ValueCell" unique_id=1254983204]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+
+[node name="Experience" type="Label" parent="Frame/Rows/ExperienceRow/ValueCell/Margin" unique_id=983046671]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 2
+script = ExtResource("3_label")
+
+[node name="BarCell" type="Container" parent="Frame/Rows" unique_id=1085530253]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 14
+
+[node name="ExperienceBar" type="ProgressBar" parent="Frame/Rows/BarCell" unique_id=282620927]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_experience_back")
+theme_override_styles/fill = SubResource("StyleBoxFlat_experience_fill")
+max_value = 1.0
+step = 0.0
+value = 0.5
+show_percentage = false

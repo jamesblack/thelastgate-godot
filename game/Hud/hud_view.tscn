@@ -2,23 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c5sfhu1i1psob" path="res://Hud/HudView.cs" id="1_cyccr"]
 [ext_resource type="Script" uid="uid://dns0wvx5gfo6b" path="res://Hud/ArchiveSprite.cs" id="2_6ebvl"]
-[ext_resource type="Script" uid="uid://dcauyrtk0yhkq" path="res://Hud/ChatLog.cs" id="3_chatlog"]
-[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="4_hudlabel"]
-[ext_resource type="Script" uid="uid://b2ud80uowpc4u" path="res://Hud/PortraitBar.cs" id="5_portraitbar"]
-[ext_resource type="Script" uid="uid://32wxdmrregok" path="res://Hud/BuffIconsView.cs" id="6_bufficons"]
 [ext_resource type="PackedScene" uid="uid://c6vnyqfwgtfq3" path="res://Hud/item_slot.tscn" id="7_itemslot"]
 [ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="8_clickarea"]
-[ext_resource type="Script" uid="uid://bej4bhfsvv64f" path="res://Hud/InventoryGrid.cs" id="9_inventory"]
-[ext_resource type="Script" uid="uid://6buv0wcp8hh8" path="res://Hud/MoneyButton.cs" id="10_money"]
-[ext_resource type="Script" uid="uid://dd5oxqd1g6pxq" path="res://Hud/OptionButtonView.cs" id="11_option"]
-[ext_resource type="Shader" uid="uid://bi6mdff1gh8uh" path="res://World/sprite_tint.gdshader" id="12_tint"]
-[ext_resource type="PackedScene" uid="uid://d1q1eo6scq768" path="res://Hud/stat_row.tscn" id="13_statrow"]
-[ext_resource type="Script" uid="uid://bormpdkr4joe5" path="res://Hud/SkillList.cs" id="14_skilllist"]
-[ext_resource type="PackedScene" uid="uid://cuhhrkc0mkyc3" path="res://Hud/hotbar_button.tscn" id="15_hotbarbutton"]
+[ext_resource type="PackedScene" uid="uid://s1httvke1qfp" path="res://Hud/inventory_grid.tscn" id="9_inventory"]
 [ext_resource type="Script" uid="uid://da378io504a4k" path="res://Hud/HotbarMenu.cs" id="16_hotbarmenu"]
-[ext_resource type="Script" uid="uid://csfabvsb1uc2c" path="res://Hud/UiPicture.cs" id="17_uipicture"]
-[ext_resource type="Script" uid="uid://bomtg3mqrk113" path="res://Hud/DarkModeShift.cs" id="18_darkshift"]
-[ext_resource type="Script" uid="uid://br01fdchbbgdf" path="res://Hud/ChatLine.cs" id="19_chatline"]
 [ext_resource type="PackedScene" uid="uid://c43vvk1g7qgns" path="res://Hud/TextWindow/text_windows.tscn" id="20_textwindows"]
 [ext_resource type="PackedScene" uid="uid://cv82ogaee8q8m" path="res://Hud/Shop/shop_window.tscn" id="21_shopwindow"]
 [ext_resource type="PackedScene" uid="uid://cikoega2qm5yf" path="res://Hud/Depot/depot_window.tscn" id="22_depotwindow"]
@@ -26,48 +13,24 @@
 [ext_resource type="PackedScene" uid="uid://c4nhp1yrm7a4i" path="res://Hud/Waypoints/waypoint_window.tscn" id="24_waypointwindow"]
 [ext_resource type="PackedScene" uid="uid://dunfj2uaq4jcb" path="res://Hud/SkillTree/skill_tree_window.tscn" id="25_skilltreewindow"]
 [ext_resource type="PackedScene" uid="uid://datd803sos88d" path="res://Hud/options_window.tscn" id="26_optionswindow"]
-[ext_resource type="Script" uid="uid://gv2wi01n21oy" path="res://Hud/PlannerButtonBox.cs" id="27_plannerbox"]
-[ext_resource type="Script" uid="uid://c1ilumk25t2g2" path="res://Hud/StatModeButton.cs" id="28_statmode"]
 [ext_resource type="Theme" uid="uid://qvtq3w8cek7e" path="res://themes/HudTextTheme.tres" id="29_hudtext"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_scroll"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait"]
-shader = ExtResource("12_tint")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_marker"]
-draw_center = false
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_marker_both"]
-draw_center = false
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 1, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
-bg_color = Color(0, 0.380392157, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber_pressed"]
-bg_color = Color(0, 0.580392157, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skill_grabber"]
-content_margin_top = 5.5
-content_margin_bottom = 5.5
-bg_color = Color(0, 0.380392157, 0, 1)
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skill_grabber_pressed"]
-content_margin_top = 5.5
-content_margin_bottom = 5.5
-bg_color = Color(0, 0.580392157, 0, 1)
-anti_aliasing = false
+[ext_resource type="PackedScene" uid="uid://j0999vm8tiv1" path="res://Hud/currencies_view.tscn" id="30_currencies"]
+[ext_resource type="PackedScene" uid="uid://r4qt8xehkhbh" path="res://Hud/money_buttons_view.tscn" id="31_moneybuttons"]
+[ext_resource type="PackedScene" uid="uid://rj81hj3q46k7" path="res://Hud/attributes_view.tscn" id="32_attributes"]
+[ext_resource type="PackedScene" uid="uid://6ztv9f07dy6o" path="res://Hud/skills_view.tscn" id="33_skills"]
+[ext_resource type="PackedScene" uid="uid://6ukwdbkpxs1e" path="res://Hud/pools_view.tscn" id="34_pools"]
+[ext_resource type="PackedScene" uid="uid://i5knzr06xziq" path="res://Hud/stat_mode_buttons_view.tscn" id="35_statmode"]
+[ext_resource type="PackedScene" uid="uid://6h24btz5j98e" path="res://Hud/equipment_view.tscn" id="36_equipment"]
+[ext_resource type="PackedScene" uid="uid://4unwt7gudbfz" path="res://Hud/character_view.tscn" id="37_character"]
+[ext_resource type="PackedScene" uid="uid://wfro4shjd03r" path="res://Hud/chat_view.tscn" id="38_chat"]
+[ext_resource type="PackedScene" uid="uid://eyoqpja57y8s" path="res://Hud/quick_stats_view.tscn" id="39_quickstats"]
+[ext_resource type="PackedScene" uid="uid://grlcxtelhnxm" path="res://Hud/hotbar_view.tscn" id="40_hotbar"]
+[ext_resource type="PackedScene" uid="uid://m11m2annc6gs" path="res://Hud/quick_options_view.tscn" id="41_options"]
+[ext_resource type="PackedScene" uid="uid://1zy0xoicjp05" path="res://Hud/minimap_panel_view.tscn" id="42_minimap"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="43_panel"]
+[ext_resource type="Script" uid="uid://37x1mum2k45v" path="res://Hud/DiamondTile.cs" id="46_tile"]
+[ext_resource type="Texture2D" uid="uid://cwxqrsk68j4ha" path="res://Hud/skill_tree_icon.png" id="44_treeicon"]
+[ext_resource type="Texture2D" uid="uid://3q3lxa3wlthx" path="res://Hud/compass.png" id="45_compass"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_menu"]
 content_margin_left = 8.0
@@ -79,14 +42,6 @@ bg_color = Color(0.09019608, 0, 0.019607844, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_menu_hover"]
 bg_color = Color(0.25490198, 0.08627451, 0.08627451, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_experience_back"]
-bg_color = Color(0, 0.1764706, 0.5176471, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_experience_fill"]
-bg_color = Color(0.7411765, 0.38039216, 0, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_chat_line"]
-
 [node name="HudView" type="Control" unique_id=1980551908]
 layout_mode = 3
 anchors_preset = 0
@@ -96,815 +51,140 @@ mouse_filter = 2
 theme = ExtResource("29_hudtext")
 script = ExtResource("1_cyccr")
 
-[node name="Frame" type="TextureRect" parent="." unique_id=2008325883]
+[node name="Background" type="Container" parent="." unique_id=2008325883]
 layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
 mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 1
-DarkSpriteNumber = 18001
+script = ExtResource("43_panel")
+Fill = 1
+Hole = Rect2(0, 104, 1280, 687)
 
-[node name="SkillPanel" type="TextureRect" parent="." unique_id=925108062]
+[node name="Compass" type="TextureRect" parent="." unique_id=2008325884]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 649.0
+offset_right = 220.0
+offset_bottom = 677.0
+mouse_filter = 2
+texture = ExtResource("45_compass")
+
+[node name="Attributes" parent="." unique_id=1128480661 instance=ExtResource("32_attributes")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 134.0
+offset_left = 3.0
 offset_top = 3.0
-offset_right = 134.0
-offset_bottom = 3.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 99
-DarkSpriteNumber = 18099
+offset_right = 235.0
+offset_bottom = 105.0
 
-[node name="MetaPanel" type="TextureRect" parent="." unique_id=1389347476]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 134.0
-offset_top = 3.0
-offset_right = 134.0
-offset_bottom = 3.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 18097
-DarkSpriteNumber = 18098
-
-[node name="StatRows" type="VBoxContainer" parent="." unique_id=1128480661]
+[node name="Skills" parent="." unique_id=1909496005 instance=ExtResource("33_skills")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_top = 8.0
-offset_right = 232.0
-offset_bottom = 101.0
-mouse_filter = 2
-theme_override_constants/separation = 5
+offset_left = 3.0
+offset_top = 115.0
+offset_right = 248.0
+offset_bottom = 273.0
 
-[node name="Braveness" parent="StatRows" unique_id=1892120507 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Braveness"
-
-[node name="Willpower" parent="StatRows" unique_id=137262423 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Willpower"
-
-[node name="Intuition" parent="StatRows" unique_id=442327702 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Intuition"
-
-[node name="Agility" parent="StatRows" unique_id=419653536 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Agility"
-
-[node name="Strength" parent="StatRows" unique_id=1067092797 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Strength"
-
-[node name="Hitpoints" parent="StatRows" unique_id=1544905455 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Hitpoints"
-
-[node name="Mana" parent="StatRows" unique_id=1738382547 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Mana"
-
-[node name="SkillRows" type="VBoxContainer" parent="." unique_id=1909496005]
+[node name="Pools" parent="." unique_id=945458870 instance=ExtResource("34_pools")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_top = 120.0
-offset_right = 232.0
-offset_bottom = 255.0
-theme_override_constants/separation = 5
-script = ExtResource("14_skilllist")
-ScrollBarPath = NodePath("../SkillScrollBackground/SkillScrollBar")
+offset_left = 3.0
+offset_top = 283.0
+offset_right = 162.0
+offset_bottom = 329.0
 
-[node name="Skill0" parent="SkillRows" unique_id=1401575804 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Hand to Hand"
-
-[node name="Skill1" parent="SkillRows" unique_id=103077222 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Dagger"
-
-[node name="Skill2" parent="SkillRows" unique_id=781075276 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Sword"
-
-[node name="Skill3" parent="SkillRows" unique_id=719932070 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Axe"
-
-[node name="Skill4" parent="SkillRows" unique_id=1647355731 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Staff"
-
-[node name="Skill5" parent="SkillRows" unique_id=868563152 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Two-Handed"
-
-[node name="Skill6" parent="SkillRows" unique_id=575866524 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Bartering"
-
-[node name="Skill7" parent="SkillRows" unique_id=754424911 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Perception"
-
-[node name="Skill8" parent="SkillRows" unique_id=1565761766 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Stealth"
-
-[node name="Skill9" parent="SkillRows" unique_id=383979295 instance=ExtResource("13_statrow")]
-layout_mode = 2
-PreviewName = "Swimming"
-
-[node name="SkillScrollBackground" type="ColorRect" parent="." unique_id=1426859393]
+[node name="StatModeButtons" parent="." unique_id=303390523 instance=ExtResource("35_statmode")]
+unique_name_in_owner = true
 layout_mode = 0
-offset_left = 234.0
-offset_top = 118.0
-offset_right = 245.0
-offset_bottom = 256.0
-color = Color(0.0901960784, 0, 0.0196078431, 1)
+offset_left = 258.0
+offset_top = 179.0
+offset_right = 329.0
+offset_bottom = 228.0
 
-[node name="SkillScrollBar" type="VScrollBar" parent="SkillScrollBackground" unique_id=1395506844]
+[node name="DiamondTopLeft" type="Container" parent="." unique_id=1520394871]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 9.0
-offset_bottom = 136.0
-theme_override_styles/scroll = SubResource("StyleBoxEmpty_scroll")
-theme_override_styles/scroll_focus = SubResource("StyleBoxEmpty_scroll")
-theme_override_styles/grabber = SubResource("StyleBoxFlat_skill_grabber")
-theme_override_styles/grabber_highlight = SubResource("StyleBoxFlat_skill_grabber")
-theme_override_styles/grabber_pressed = SubResource("StyleBoxFlat_skill_grabber_pressed")
-max_value = 45.0
-step = 1.0
+offset_left = 271.0
+offset_top = 264.0
+offset_right = 315.0
+offset_bottom = 285.0
+mouse_filter = 1
+script = ExtResource("46_tile")
+Shape = 3
+Profile = "G"
+Hole = Rect2(-271, -160, 1280, 687)
 
-[node name="StatModeButtons" type="Control" parent="." unique_id=303390523]
+[node name="DiamondTopRight" type="Container" parent="." unique_id=1520394872]
+layout_mode = 0
+offset_left = 965.0
+offset_top = 264.0
+offset_right = 1009.0
+offset_bottom = 285.0
+mouse_filter = 1
+script = ExtResource("46_tile")
+Shape = 3
+Profile = "G"
+Hole = Rect2(-965, -160, 1280, 687)
+
+[node name="DiamondBottomLeft" type="Container" parent="." unique_id=1520394873]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 610.0
+offset_right = 315.0
+offset_bottom = 631.0
+mouse_filter = 1
+script = ExtResource("46_tile")
+Shape = 3
+Profile = "G"
+Hole = Rect2(-271, -506, 1280, 687)
+
+[node name="DiamondBottomRight" type="Container" parent="." unique_id=1520394874]
+layout_mode = 0
+offset_left = 965.0
+offset_top = 610.0
+offset_right = 1009.0
+offset_bottom = 631.0
+mouse_filter = 1
+script = ExtResource("46_tile")
+Shape = 3
+Profile = "G"
+Hole = Rect2(-965, -506, 1280, 687)
+
+[node name="Currencies" parent="." unique_id=372922641 instance=ExtResource("30_currencies")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 260.0
-offset_top = 181.0
-offset_right = 327.0
-offset_bottom = 226.0
-mouse_filter = 2
+offset_top = 109.0
+offset_right = 430.0
+offset_bottom = 169.0
 
-[node name="ListSkills" type="Control" parent="StatModeButtons" unique_id=1861344508]
-layout_mode = 0
-offset_top = 0.0
-offset_right = 67.0
-offset_bottom = 15.0
-script = ExtResource("28_statmode")
-Mode = 0
-
-[node name="Marker" type="Panel" parent="StatModeButtons/ListSkills" unique_id=1952717109]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 66.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="BothMarker" type="Panel" parent="StatModeButtons/ListSkills" unique_id=1208078834]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 66.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker_both")
-
-[node name="ListOffense" type="Control" parent="StatModeButtons" unique_id=836117959]
-layout_mode = 0
-offset_top = 15.0
-offset_right = 67.0
-offset_bottom = 30.0
-script = ExtResource("28_statmode")
-Mode = 2
-
-[node name="Marker" type="Panel" parent="StatModeButtons/ListOffense" unique_id=2142488696]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 66.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="ListDefense" type="Control" parent="StatModeButtons" unique_id=560702507]
-layout_mode = 0
-offset_top = 30.0
-offset_right = 67.0
-offset_bottom = 45.0
-script = ExtResource("28_statmode")
-Mode = 3
-
-[node name="Marker" type="Panel" parent="StatModeButtons/ListDefense" unique_id=1717171717]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 66.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="UpdateLabel" type="Label" parent="." unique_id=261780883]
+[node name="MinimapPanel" parent="." unique_id=1736402916 instance=ExtResource("42_minimap")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 144.0
-offset_top = 260.0
-offset_right = 180.0
-offset_bottom = 269.0
-text = "Update"
-script = ExtResource("4_hudlabel")
-
-[node name="UpdatePoints" type="Label" parent="." unique_id=554641458]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 189.0
-offset_top = 260.0
-offset_right = 231.0
-offset_bottom = 269.0
-text = "12345"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="UpdateButton" type="Control" parent="." unique_id=1568474112]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 137.0
-offset_top = 258.0
-offset_right = 185.0
-offset_bottom = 270.0
-script = ExtResource("8_clickarea")
-
-[node name="PlannerBox" type="Control" parent="." unique_id=182702310]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 5.0
-offset_top = 256.0
-offset_right = 61.0
-offset_bottom = 272.0
-mouse_filter = 2
-script = ExtResource("27_plannerbox")
-
-[node name="PlannerLabel" type="Label" parent="." unique_id=442982855]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 9.0
-offset_top = 260.0
-offset_right = 51.0
-offset_bottom = 269.0
-text = "Planner"
-script = ExtResource("4_hudlabel")
-
-[node name="PlannerButton" type="Control" parent="." unique_id=838215612]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 8.0
-offset_top = 258.0
-offset_right = 60.0
-offset_bottom = 270.0
-script = ExtResource("8_clickarea")
-
-[node name="HitPointsLabel" type="Label" parent="." unique_id=945458870]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 288.0
-offset_right = 63.0
-offset_bottom = 297.0
-text = "Hitpoints"
-script = ExtResource("4_hudlabel")
-
-[node name="HitPoints" type="Label" parent="." unique_id=1963927491]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 117.0
-offset_top = 288.0
-offset_right = 135.0
-offset_bottom = 297.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="MaxHitPoints" type="Label" parent="." unique_id=185032121]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 141.0
-offset_top = 288.0
-offset_right = 159.0
-offset_bottom = 297.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="EnduranceLabel" type="Label" parent="." unique_id=1678015742]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 302.0
-offset_right = 63.0
-offset_bottom = 311.0
-text = "Endurance"
-script = ExtResource("4_hudlabel")
-
-[node name="Endurance" type="Label" parent="." unique_id=1801096990]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 117.0
-offset_top = 302.0
-offset_right = 135.0
-offset_bottom = 311.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="MaxEndurance" type="Label" parent="." unique_id=1901787974]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 141.0
-offset_top = 302.0
-offset_right = 159.0
-offset_bottom = 311.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ManaLabel" type="Label" parent="." unique_id=229626845]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 316.0
-offset_right = 63.0
-offset_bottom = 325.0
-text = "Mana"
-script = ExtResource("4_hudlabel")
-
-[node name="Mana" type="Label" parent="." unique_id=1647925322]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 117.0
-offset_top = 316.0
-offset_right = 135.0
-offset_bottom = 325.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="MaxMana" type="Label" parent="." unique_id=269460927]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 141.0
-offset_top = 316.0
-offset_right = 159.0
-offset_bottom = 325.0
-text = "999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="MoneyName" type="Label" parent="." unique_id=372922641]
-layout_mode = 0
-offset_left = 267.0
-offset_top = 114.0
-offset_right = 333.0
-offset_bottom = 123.0
-text = "Money"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Money" type="Label" parent="." unique_id=1030938640]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 341.0
-offset_top = 114.0
-offset_right = 425.0
-offset_bottom = 123.0
-text = "999999G 99S"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="StrongholdName" type="Label" parent="." unique_id=1365562404]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 267.0
-offset_top = 128.0
-offset_right = 333.0
-offset_bottom = 137.0
-text = "Stronghold"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Stronghold" type="Label" parent="." unique_id=1172819782]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 341.0
-offset_top = 128.0
-offset_right = 425.0
-offset_bottom = 137.0
-text = "999999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="CasinoName" type="Label" parent="." unique_id=229170078]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 267.0
-offset_top = 142.0
-offset_right = 333.0
-offset_bottom = 151.0
-text = "Casino"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Casino" type="Label" parent="." unique_id=1863135163]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 341.0
-offset_top = 142.0
-offset_right = 425.0
-offset_bottom = 151.0
-text = "999999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ContractName" type="Label" parent="." unique_id=1527457345]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 267.0
-offset_top = 156.0
-offset_right = 333.0
-offset_bottom = 165.0
-text = "Contract"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Contract" type="Label" parent="." unique_id=776004825]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 341.0
-offset_top = 156.0
-offset_right = 425.0
-offset_bottom = 165.0
-text = "999999"
-horizontal_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Location" type="Label" parent="." unique_id=1516188764]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 9.0
-offset_top = 570.0
-offset_right = 129.0
-offset_bottom = 579.0
-text = "Aston"
-script = ExtResource("4_hudlabel")
-
-[node name="Minimap" type="Control" parent="." unique_id=1736402915]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 6.0
-offset_top = 582.0
-offset_right = 134.0
-offset_bottom = 710.0
-script = ExtResource("8_clickarea")
-
-[node name="Picture" type="TextureRect" parent="Minimap" unique_id=419283376]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="MinimapZoomIn" type="Control" parent="." unique_id=1288650137]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 136.0
-offset_top = 582.0
-offset_right = 152.0
-offset_bottom = 598.0
-script = ExtResource("8_clickarea")
-
-[node name="MinimapZoomOut" type="Control" parent="." unique_id=902731488]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 136.0
-offset_top = 600.0
-offset_right = 152.0
-offset_bottom = 616.0
-script = ExtResource("8_clickarea")
+offset_left = 3.0
+offset_top = 565.0
+offset_right = 155.0
+offset_bottom = 713.0
 
 [node name="TreeButton" type="Control" parent="." unique_id=484884030]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 341.0
+offset_left = 339.0
 offset_top = 179.0
-offset_right = 370.0
-offset_bottom = 210.0
+offset_right = 371.0
+offset_bottom = 211.0
 script = ExtResource("8_clickarea")
+LightsUp = true
 
 [node name="Glow" type="TextureRect" parent="TreeButton" unique_id=119514720]
 visible = false
 layout_mode = 0
-offset_left = -4.0
+offset_left = -2.0
 offset_top = -2.0
 mouse_filter = 2
 script = ExtResource("2_6ebvl")
 SpriteNumber = 18008
 
-[node name="Picture" type="TextureRect" parent="TreeButton" unique_id=1074817622]
-layout_mode = 0
-offset_left = -2.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 18002
-DarkSpriteNumber = 18004
-
-[node name="SwapSetButton" type="Control" parent="." unique_id=1530283471]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 671.0
-offset_top = 6.0
-offset_right = 687.0
-offset_bottom = 22.0
-script = ExtResource("8_clickarea")
-
-[node name="SecondCharmFrame" type="TextureRect" parent="." unique_id=1582723311]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 775.0
-offset_top = 15.0
-offset_right = 775.0
-offset_bottom = 15.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 3
-DarkSpriteNumber = 18003
-
-[node name="Head" parent="." unique_id=1907131032 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 739.0
-offset_top = 6.0
-offset_right = 771.0
-offset_bottom = 38.0
-
-[node name="Neck" parent="." unique_id=1688920084 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 701.0
-offset_top = 19.0
-offset_right = 733.0
-offset_bottom = 51.0
-
-[node name="Body" parent="." unique_id=1500227407 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 739.0
-offset_top = 40.0
-offset_right = 771.0
-offset_bottom = 72.0
-
-[node name="Arms" parent="." unique_id=1238251922 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 705.0
-offset_top = 57.0
-offset_right = 737.0
-offset_bottom = 89.0
-
-[node name="Belt" parent="." unique_id=162288247 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 739.0
-offset_top = 74.0
-offset_right = 771.0
-offset_bottom = 106.0
-
-[node name="Charm" parent="." unique_id=1904633855 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 778.0
-offset_top = 18.0
-offset_right = 810.0
-offset_bottom = 50.0
-
-[node name="Feet" parent="." unique_id=1099917037 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 739.0
-offset_top = 108.0
-offset_right = 771.0
-offset_bottom = 140.0
-
-[node name="OffHand" parent="." unique_id=1766358331 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 807.0
-offset_top = 57.0
-offset_right = 839.0
-offset_bottom = 89.0
-
-[node name="MainHand" parent="." unique_id=634836507 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 671.0
-offset_top = 57.0
-offset_right = 703.0
-offset_bottom = 89.0
-
-[node name="Cloak" parent="." unique_id=1493662250 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 773.0
-offset_top = 57.0
-offset_right = 805.0
-offset_bottom = 89.0
-
-[node name="LeftRing" parent="." unique_id=211354012 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 777.0
-offset_top = 95.0
-offset_right = 809.0
-offset_bottom = 127.0
-
-[node name="RightRing" parent="." unique_id=436835654 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 701.0
-offset_top = 95.0
-offset_right = 733.0
-offset_bottom = 127.0
-
-[node name="SecondCharm" parent="." unique_id=343107963 instance=ExtResource("7_itemslot")]
-unique_name_in_owner = true
-offset_left = 802.0
-offset_top = 18.0
-offset_right = 834.0
-offset_bottom = 50.0
-
-[node name="OwnName" type="Label" parent="." unique_id=606909419]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 846.0
-offset_top = 32.0
-offset_right = 970.0
-offset_bottom = 41.0
-text = "Worldofslaying"
-horizontal_alignment = 1
-script = ExtResource("4_hudlabel")
-
-[node name="HitPointBar" type="Control" parent="." unique_id=777391917]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 845.0
-offset_top = 131.0
-offset_right = 907.0
-offset_bottom = 137.0
-mouse_filter = 2
-script = ExtResource("5_portraitbar")
-LookColour = Color(0.709677419, 0, 0, 1)
-
-[node name="Background" type="ColorRect" parent="HitPointBar" unique_id=899829088]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0, 0.0793650794, 0.516129032, 1)
-
-[node name="Reserved" type="ColorRect" parent="HitPointBar" unique_id=1753279629]
-layout_mode = 0
-offset_left = 62.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.516129032, 0.507936508, 0.516129032, 1)
-
-[node name="Current" type="ColorRect" parent="HitPointBar" unique_id=1190918889]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 40.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.0322580645, 0.380952381, 0, 1)
-[node name="EnduranceBar" type="Control" parent="." unique_id=288091721]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 845.0
-offset_top = 138.0
-offset_right = 907.0
-offset_bottom = 144.0
-mouse_filter = 2
-script = ExtResource("5_portraitbar")
-LookColour = Color(0.709677419, 0, 0, 1)
-
-[node name="Background" type="ColorRect" parent="EnduranceBar" unique_id=943746242]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0, 0.0793650794, 0.516129032, 1)
-
-[node name="Reserved" type="ColorRect" parent="EnduranceBar" unique_id=715949606]
-layout_mode = 0
-offset_left = 62.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.516129032, 0.507936508, 0.516129032, 1)
-
-[node name="Current" type="ColorRect" parent="EnduranceBar" unique_id=136438214]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 40.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.0322580645, 0.380952381, 0, 1)
-[node name="ManaBar" type="Control" parent="." unique_id=938535383]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 845.0
-offset_top = 145.0
-offset_right = 907.0
-offset_bottom = 151.0
-mouse_filter = 2
-script = ExtResource("5_portraitbar")
-LookColour = Color(0.709677419, 0, 0, 1)
-
-[node name="Background" type="ColorRect" parent="ManaBar" unique_id=1773139351]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0, 0.0793650794, 0.516129032, 1)
-
-[node name="Reserved" type="ColorRect" parent="ManaBar" unique_id=364543312]
-layout_mode = 0
-offset_left = 62.0
-offset_right = 62.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.516129032, 0.507936508, 0.516129032, 1)
-
-[node name="Current" type="ColorRect" parent="ManaBar" unique_id=847524060]
-layout_mode = 0
-offset_left = 0.0
-offset_right = 40.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.0322580645, 0.380952381, 0, 1)
-[node name="RankBadge" type="TextureRect" parent="." unique_id=751328766]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 935.0
-offset_top = 42.0
-offset_right = 935.0
-offset_bottom = 42.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-SpriteNumber = 10
-
-[node name="Portrait" type="TextureRect" parent="." unique_id=321547363]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_portrait")
-layout_mode = 0
-offset_left = 874.0
-offset_top = 36.0
-offset_right = 874.0
-offset_bottom = 36.0
-mouse_filter = 2
-script = ExtResource("2_6ebvl")
-
-[node name="PortraitName" type="Label" parent="." unique_id=1648801510]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 846.0
-offset_top = 157.0
-offset_right = 970.0
-offset_bottom = 166.0
-text = "Worldofslaying"
-horizontal_alignment = 1
-script = ExtResource("4_hudlabel")
-
-[node name="RankName" type="Label" parent="." unique_id=950528596]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 846.0
-offset_top = 176.0
-offset_right = 970.0
-offset_bottom = 185.0
-text = "Private First Class"
-horizontal_alignment = 1
-script = ExtResource("4_hudlabel")
-
-[node name="BuffArea" type="Control" parent="." unique_id=1862043517]
-layout_mode = 0
-offset_left = 848.0
-offset_top = 8.0
-offset_right = 1008.0
-offset_bottom = 123.0
-mouse_filter = 2
-
-[node name="Buffs" type="VFlowContainer" parent="BuffArea" unique_id=702918334]
-unique_name_in_owner = true
+[node name="Picture" type="Control" parent="TreeButton" unique_id=1074817622]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -912,21 +192,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-script = ExtResource("6_bufficons")
-PreviewSprites = PackedInt32Array(86, 87, 88)
 
-[node name="DebuffArea" type="Control" parent="." unique_id=1290455861]
-layout_mode = 0
-offset_left = 808.0
-offset_top = 8.0
-offset_right = 968.0
-offset_bottom = 123.0
-mouse_filter = 2
-
-[node name="Debuffs" type="VFlowContainer" parent="DebuffArea" unique_id=563013775]
-unique_name_in_owner = true
+[node name="Box" type="Container" parent="TreeButton/Picture" unique_id=1840266031]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -934,672 +201,81 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-layout_direction = 3
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-script = ExtResource("6_bufficons")
-PreviewSprites = PackedInt32Array(89, 91)
+script = ExtResource("43_panel")
+Profile = "GBG"
 
-[node name="ChatLog" type="Control" parent="." unique_id=417290385]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 974.0
-offset_top = 7.0
-offset_right = 1275.0
-offset_bottom = 230.0
-mouse_filter = 1
-script = ExtResource("3_chatlog")
-
-[node name="Text" type="RichTextLabel" parent="ChatLog" unique_id=1640332919]
+[node name="Icon" type="TextureRect" parent="TreeButton/Picture" unique_id=1840266032]
 layout_mode = 0
 offset_left = 3.0
-offset_top = 1.0
-offset_right = 291.0
-offset_bottom = 221.0
+offset_top = 3.0
+offset_right = 29.0
+offset_bottom = 29.0
 mouse_filter = 2
-theme_override_constants/line_separation = 1
-scroll_active = false
-autowrap_mode = 3
-vertical_alignment = 2
+texture = ExtResource("44_treeicon")
 
-[node name="ChatLine" type="LineEdit" parent="." unique_id=777391917]
+[node name="Equipment" parent="." unique_id=1530283471 instance=ExtResource("36_equipment")]
 unique_name_in_owner = true
 layout_mode = 0
-focus_mode = 1
-offset_left = 977.0
-offset_top = 233.0
-offset_right = 1265.0
-offset_bottom = 242.0
-theme_override_constants/caret_width = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_chat_line")
-theme_override_styles/read_only = SubResource("StyleBoxEmpty_chat_line")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_chat_line")
-keep_editing_on_text_submit = true
-context_menu_enabled = false
-shortcut_keys_enabled = false
-selecting_enabled = false
-drag_and_drop_selection_enabled = false
-script = ExtResource("19_chatline")
-PreviewText = "Hello there, how are you today?"
+offset_left = 668.0
+offset_top = 3.0
+offset_right = 842.0
+offset_bottom = 143.0
 
-[node name="InventoryScrollBackground" type="ColorRect" parent="." unique_id=1161903683]
-layout_mode = 0
-offset_left = 601.0
-offset_top = 6.0
-offset_right = 612.0
-offset_bottom = 106.0
-color = Color(0.0901960784, 0, 0.0196078431, 1)
-
-[node name="InventoryScrollBar" type="VScrollBar" parent="InventoryScrollBackground" unique_id=490208918]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 9.0
-offset_bottom = 98.0
-theme_override_styles/scroll = SubResource("StyleBoxEmpty_scroll")
-theme_override_styles/scroll_focus = SubResource("StyleBoxEmpty_scroll")
-theme_override_styles/grabber = SubResource("StyleBoxFlat_grabber")
-theme_override_styles/grabber_highlight = SubResource("StyleBoxFlat_grabber")
-theme_override_styles/grabber_pressed = SubResource("StyleBoxFlat_grabber_pressed")
-max_value = 4.0
-step = 1.0
-page = 1.0
-
-[node name="Inventory" type="GridContainer" parent="." unique_id=1295486384]
+[node name="Character" parent="." unique_id=606909419 instance=ExtResource("37_character")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 261.0
-offset_top = 6.0
-offset_right = 599.0
-offset_bottom = 106.0
-theme_override_constants/h_separation = 2
-theme_override_constants/v_separation = 2
-columns = 10
-script = ExtResource("9_inventory")
-ScrollBarPath = NodePath("../InventoryScrollBackground/InventoryScrollBar")
+offset_left = 842.0
+offset_top = 3.0
+offset_right = 972.0
+offset_bottom = 192.0
 
-[node name="Cell0" parent="Inventory" unique_id=565516540 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell1" parent="Inventory" unique_id=1838909327 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell2" parent="Inventory" unique_id=788516696 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell3" parent="Inventory" unique_id=729912223 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell4" parent="Inventory" unique_id=789272402 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell5" parent="Inventory" unique_id=1826527988 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell6" parent="Inventory" unique_id=1588564461 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell7" parent="Inventory" unique_id=159531474 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell8" parent="Inventory" unique_id=1144036050 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell9" parent="Inventory" unique_id=867567466 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell10" parent="Inventory" unique_id=871687236 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell11" parent="Inventory" unique_id=239853808 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell12" parent="Inventory" unique_id=970804713 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell13" parent="Inventory" unique_id=1090678428 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell14" parent="Inventory" unique_id=808239128 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell15" parent="Inventory" unique_id=459893100 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell16" parent="Inventory" unique_id=818663936 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell17" parent="Inventory" unique_id=1456774074 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell18" parent="Inventory" unique_id=113572231 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell19" parent="Inventory" unique_id=1179903013 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell20" parent="Inventory" unique_id=1579215916 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell21" parent="Inventory" unique_id=297108904 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell22" parent="Inventory" unique_id=1463178999 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell23" parent="Inventory" unique_id=474274028 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell24" parent="Inventory" unique_id=824877445 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell25" parent="Inventory" unique_id=156648177 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell26" parent="Inventory" unique_id=1030974558 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell27" parent="Inventory" unique_id=1831915609 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell28" parent="Inventory" unique_id=409598476 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="Cell29" parent="Inventory" unique_id=374646689 instance=ExtResource("7_itemslot")]
-layout_mode = 2
-
-[node name="MoneyButtons" type="Control" parent="." unique_id=1738204011]
+[node name="Chat" parent="." unique_id=417290385 instance=ExtResource("38_chat")]
 unique_name_in_owner = true
 layout_mode = 0
-mouse_filter = 2
+offset_left = 972.0
+offset_top = 3.0
+offset_right = 1277.0
+offset_bottom = 246.0
 
-[node name="TenThousandGold" type="Control" parent="MoneyButtons" unique_id=517029318]
-layout_mode = 0
-offset_left = 434.0
-offset_top = 112.0
-offset_right = 467.0
-offset_bottom = 145.0
-script = ExtResource("10_money")
-Silver = 1000000
-
-[node name="ThousandGold" type="Control" parent="MoneyButtons" unique_id=1866209347]
-layout_mode = 0
-offset_left = 468.0
-offset_top = 112.0
-offset_right = 501.0
-offset_bottom = 145.0
-script = ExtResource("10_money")
-Silver = 100000
-
-[node name="HundredGold" type="Control" parent="MoneyButtons" unique_id=942285130]
-layout_mode = 0
-offset_left = 502.0
-offset_top = 112.0
-offset_right = 535.0
-offset_bottom = 145.0
-script = ExtResource("10_money")
-Silver = 10000
-
-[node name="TrashCan" type="Control" parent="." unique_id=1402291776]
+[node name="Inventory" parent="." unique_id=1295486384 instance=ExtResource("9_inventory")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 536.0
-offset_top = 112.0
-offset_right = 569.0
-offset_bottom = 145.0
-script = ExtResource("8_clickarea")
+offset_left = 258.0
+offset_top = 3.0
+offset_right = 615.0
+offset_bottom = 109.0
 
-[node name="QuickStats" type="Control" parent="." unique_id=287478516]
+[node name="MoneyButtons" parent="." unique_id=1738204011 instance=ExtResource("31_moneybuttons")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 431.0
+offset_top = 109.0
+offset_right = 565.0
+offset_bottom = 141.0
+
+[node name="QuickStats" parent="." unique_id=287478516 instance=ExtResource("39_quickstats")]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1106.0
 offset_top = 256.0
 offset_right = 1277.0
 offset_bottom = 337.0
-mouse_filter = 2
 
-[node name="Background" type="TextureRect" parent="QuickStats" unique_id=568477336]
-layout_mode = 0
-mouse_filter = 2
-script = ExtResource("17_uipicture")
-PictureNumber = 2
-DarkPictureNumber = 10002
-
-[node name="RowsShift" type="Control" parent="QuickStats" unique_id=1353718319]
-layout_mode = 0
-mouse_filter = 2
-script = ExtResource("18_darkshift")
-Shift = Vector2(2, 1)
-
-[node name="Rows" type="VBoxContainer" parent="QuickStats/RowsShift" unique_id=1975525606]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = 164.0
-offset_bottom = 70.0
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="WeaponRow" type="Control" parent="QuickStats/RowsShift/Rows" unique_id=954164831]
-custom_minimum_size = Vector2(160, 12)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="QuickStats/RowsShift/Rows/WeaponRow" unique_id=1443712526]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Weapon Value"
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="WeaponValue" type="Label" parent="QuickStats/RowsShift/Rows/WeaponRow" unique_id=478922447]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ArmorRow" type="Control" parent="QuickStats/RowsShift/Rows" unique_id=1419588298]
-custom_minimum_size = Vector2(160, 12)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="QuickStats/RowsShift/Rows/ArmorRow" unique_id=1815987978]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Armor Value"
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ArmorValue" type="Label" parent="QuickStats/RowsShift/Rows/ArmorRow" unique_id=1222112955]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="HitRow" type="Control" parent="QuickStats/RowsShift/Rows" unique_id=480739026]
-custom_minimum_size = Vector2(160, 12)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="QuickStats/RowsShift/Rows/HitRow" unique_id=809753918]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Hit Score"
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="HitScore" type="Label" parent="QuickStats/RowsShift/Rows/HitRow" unique_id=713493663]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ParryRow" type="Control" parent="QuickStats/RowsShift/Rows" unique_id=496475764]
-custom_minimum_size = Vector2(160, 12)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="QuickStats/RowsShift/Rows/ParryRow" unique_id=1922340438]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Parry Score"
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ParryScore" type="Label" parent="QuickStats/RowsShift/Rows/ParryRow" unique_id=1468227262]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="ExperienceRow" type="Control" parent="QuickStats/RowsShift/Rows" unique_id=1006527775]
-custom_minimum_size = Vector2(160, 12)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="QuickStats/RowsShift/Rows/ExperienceRow" unique_id=225242856]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Experience"
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="Experience" type="Label" parent="QuickStats/RowsShift/Rows/ExperienceRow" unique_id=1551750768]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = ExtResource("4_hudlabel")
-
-[node name="BarShift" type="Control" parent="QuickStats" unique_id=1660233156]
-layout_mode = 0
-mouse_filter = 2
-script = ExtResource("18_darkshift")
-Shift = Vector2(1, 1)
-
-[node name="ExperienceBar" type="ProgressBar" parent="QuickStats/BarShift" unique_id=1972870276]
+[node name="Hotbar" parent="." unique_id=517060299 instance=ExtResource("40_hotbar")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 2.0
-offset_top = 71.0
-offset_right = 167.0
-offset_bottom = 77.0
-mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_experience_back")
-theme_override_styles/fill = SubResource("StyleBoxFlat_experience_fill")
-max_value = 1.0
-step = 0.0
-value = 0.5
-show_percentage = false
+offset_left = 1033.0
+offset_top = 594.0
+offset_right = 1277.0
+offset_bottom = 658.0
 
-[node name="Hotbar" type="GridContainer" parent="." unique_id=517060299]
+[node name="OptionButtons" parent="." unique_id=795425564 instance=ExtResource("41_options")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1036.0
-offset_top = 597.0
-offset_right = 1274.0
-offset_bottom = 655.0
-mouse_filter = 2
-theme_override_constants/h_separation = 2
-theme_override_constants/v_separation = 2
-columns = 5
-
-[node name="Button0" parent="Hotbar" unique_id=953811919 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 0
-
-[node name="Button1" parent="Hotbar" unique_id=995439180 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 1
-
-[node name="Button2" parent="Hotbar" unique_id=1425351043 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 2
-
-[node name="Button3" parent="Hotbar" unique_id=1843045982 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 3
-
-[node name="Button4" parent="Hotbar" unique_id=464276394 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 4
-
-[node name="Button5" parent="Hotbar" unique_id=1452338007 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 5
-
-[node name="Button6" parent="Hotbar" unique_id=515778967 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 6
-
-[node name="Button7" parent="Hotbar" unique_id=1598755381 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 7
-
-[node name="Button8" parent="Hotbar" unique_id=1005475748 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 8
-
-[node name="Button9" parent="Hotbar" unique_id=1300626704 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 9
-
-[node name="Button10" parent="Hotbar" unique_id=593286637 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 10
-
-[node name="Button11" parent="Hotbar" unique_id=493656773 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 11
-
-[node name="Button12" parent="Hotbar" unique_id=1539737040 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 12
-
-[node name="Button13" parent="Hotbar" unique_id=1094287985 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 13
-
-[node name="Button14" parent="Hotbar" unique_id=993850405 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 14
-
-[node name="Button15" parent="Hotbar" unique_id=1864162268 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 15
-
-[node name="Button16" parent="Hotbar" unique_id=923635042 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 16
-
-[node name="Button17" parent="Hotbar" unique_id=1634498790 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 17
-
-[node name="Button18" parent="Hotbar" unique_id=696455699 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 18
-
-[node name="Button19" parent="Hotbar" unique_id=912053409 instance=ExtResource("15_hotbarbutton")]
-layout_mode = 2
-Slot = 19
-
-[node name="OptionButtons" type="GridContainer" parent="." unique_id=795425564]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1083.0
-offset_top = 666.0
-offset_right = 1275.0
-offset_bottom = 711.0
-mouse_filter = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-columns = 4
-
-[node name="Fast" type="Control" parent="OptionButtons" unique_id=423946139]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 0
-
-[node name="Marker" type="Panel" parent="OptionButtons/Fast" unique_id=947876999]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="Normal" type="Control" parent="OptionButtons" unique_id=1497871144]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 1
-
-[node name="Marker" type="Panel" parent="OptionButtons/Normal" unique_id=203694312]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="Slow" type="Control" parent="OptionButtons" unique_id=255555737]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 2
-
-[node name="Marker" type="Panel" parent="OptionButtons/Slow" unique_id=1863673106]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="HealthPercent" type="Control" parent="OptionButtons" unique_id=1250797845]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 3
-
-[node name="Marker" type="Panel" parent="OptionButtons/HealthPercent" unique_id=302142728]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="StatBase" type="Control" parent="OptionButtons" unique_id=885310972]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 4
-
-[node name="Marker" type="Panel" parent="OptionButtons/StatBase" unique_id=1351527726]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="HideWalls" type="Control" parent="OptionButtons" unique_id=224551738]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 5
-
-[node name="Marker" type="Panel" parent="OptionButtons/HideWalls" unique_id=1189709946]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="Names" type="Control" parent="OptionButtons" unique_id=561060838]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 6
-
-[node name="Marker" type="Panel" parent="OptionButtons/Names" unique_id=180521324]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="HealthBars" type="Control" parent="OptionButtons" unique_id=284570285]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 7
-
-[node name="Marker" type="Panel" parent="OptionButtons/HealthBars" unique_id=1031247021]
-visible = false
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 47.0
-offset_bottom = 14.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_marker")
-
-[node name="Options" type="Control" parent="OptionButtons" unique_id=998017869]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 8
-
-[node name="FirstBlank" type="Control" parent="OptionButtons" unique_id=250013383]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 9
-
-[node name="SecondBlank" type="Control" parent="OptionButtons" unique_id=616819858]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 10
-
-[node name="Exit" type="Control" parent="OptionButtons" unique_id=294804716]
-custom_minimum_size = Vector2(48, 15)
-layout_mode = 2
-script = ExtResource("11_option")
-Kind = 11
+offset_left = 1081.0
+offset_top = 664.0
+offset_right = 1277.0
+offset_bottom = 713.0
 
 [node name="ShopWindow" parent="." unique_id=745665677 instance=ExtResource("21_shopwindow")]
 unique_name_in_owner = true

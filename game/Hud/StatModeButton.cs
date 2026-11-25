@@ -1,4 +1,5 @@
 using Godot;
+using TheLastGate.Procedural;
 using TheLastGate.Stats;
 
 namespace TheLastGate.Hud;
@@ -10,11 +11,10 @@ public partial class StatModeButton : ClickArea
     public void ShowMarked(StatPanel panel)
     {
         var marked = panel.IsMarked(Mode);
-        var both = panel.Mode == StatListMode.SkillsAndMeta;
-        GetNode<CanvasItem>("Marker").Visible = marked && !both;
+        GetNode<ProceduralPanel>("Cell").Fill = marked ? ProceduralFill.Selected : ProceduralFill.None;
         if (GetNodeOrNull<CanvasItem>("BothMarker") is { } bothMarker)
         {
-            bothMarker.Visible = marked && both;
+            bothMarker.Visible = marked && panel.Mode == StatListMode.SkillsAndMeta;
         }
     }
 }

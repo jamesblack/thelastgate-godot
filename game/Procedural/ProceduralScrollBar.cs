@@ -9,7 +9,12 @@ namespace TheLastGate.Procedural;
 [Tool]
 public partial class ProceduralScrollBar : VScrollBar
 {
+    private static readonly StringName[] GrabberStyles = ["grabber", "grabber_highlight", "grabber_pressed"];
+    private static readonly Color[] GrabberShades = [Colors.White, ClickArea.Hovered, ClickArea.Held];
+
     private static Theme? look;
+
+    private int minimumGrabberLength;
 
     public ProceduralScrollBar()
     {
@@ -17,10 +22,34 @@ public partial class ProceduralScrollBar : VScrollBar
         Theme = look ??= Look();
     }
 
+    // A bar with no page has no grabber length of its own, so it draws this many pixels.
+    [Export]
+    public int MinimumGrabberLength
+    {
+        get => minimumGrabberLength;
+        set
+        {
+            minimumGrabberLength = value;
+            for (var style = 0; style < GrabberStyles.Length; style++)
+            {
+                if (value == 0)
+                {
+                    RemoveThemeStyleboxOverride(GrabberStyles[style]);
+                }
+                else
+                {
+                    AddThemeStyleboxOverride(GrabberStyles[style], Grabber(GrabberShades[style], value));
+                }
+            }
+        }
+    }
+
     public override void _ValidateProperty(Dictionary property)
     {
         var name = property["name"].AsStringName();
-        if (name != CanvasItem.PropertyName.Material && name != Control.PropertyName.Theme)
+        var generated = name == CanvasItem.PropertyName.Material || name == Control.PropertyName.Theme
+            || name.ToString().StartsWith("theme_override_styles/grabber");
+        if (!generated)
         {
             return;
         }
@@ -34,11 +63,14 @@ public partial class ProceduralScrollBar : VScrollBar
         var track = new StyleBoxEmpty();
         theme.SetStylebox("scroll", "VScrollBar", track);
         theme.SetStylebox("scroll_focus", "VScrollBar", track);
-        theme.SetStylebox("grabber", "VScrollBar", Grabber(Colors.White));
-        theme.SetStylebox("grabber_highlight", "VScrollBar", Grabber(ClickArea.Hovered));
-        theme.SetStylebox("grabber_pressed", "VScrollBar", Grabber(ClickArea.Held));
+        for (var style = 0; style < GrabberStyles.Length; style++)
+        {
+            theme.SetStylebox(GrabberStyles[style], "VScrollBar", Grabber(GrabberShades[style], 0));
+        }
+
         return theme;
     }
 
-    private static StyleBoxFlat Grabber(Color shade) => new() { BgColor = shade };
+    private static StyleBoxFlat Grabber(Color shade, int minimumLength) =>
+        new() { BgColor = shade, ContentMarginTop = minimumLength / 2f, ContentMarginBottom = minimumLength / 2f };
 }

@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://wfro4shjd03r"]
+
+[ext_resource type="Script" uid="uid://52mbmzrqjads" path="res://Hud/ChatView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://dcauyrtk0yhkq" path="res://Hud/ChatLog.cs" id="3_chatlog"]
+[ext_resource type="Script" uid="uid://br01fdchbbgdf" path="res://Hud/ChatLine.cs" id="19_chatline"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_chat_line"]
+
+[node name="ChatView" type="Control" unique_id=639693836]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 305.0
+offset_bottom = 243.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1870146343]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Sections" type="VBoxContainer" parent="Frame" unique_id=1575746505]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="LogSection" type="Control" parent="Frame/Sections" unique_id=385044404]
+custom_minimum_size = Vector2(0, 224)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LineSection" type="Container" parent="Frame/Sections" unique_id=1669886865]
+custom_minimum_size = Vector2(0, 13)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="ChatLog" type="Control" parent="." unique_id=417290385]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 303.0
+offset_bottom = 227.0
+mouse_filter = 1
+script = ExtResource("3_chatlog")
+
+[node name="Text" type="RichTextLabel" parent="ChatLog" unique_id=1640332919]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 291.0
+offset_bottom = 221.0
+mouse_filter = 2
+theme_override_constants/line_separation = 1
+scroll_active = false
+autowrap_mode = 3
+vertical_alignment = 2
+
+[node name="ChatLine" type="LineEdit" parent="." unique_id=777391917]
+unique_name_in_owner = true
+layout_mode = 0
+focus_mode = 1
+offset_left = 5.0
+offset_top = 230.0
+offset_right = 293.0
+offset_bottom = 239.0
+theme_override_constants/caret_width = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_chat_line")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_chat_line")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_chat_line")
+keep_editing_on_text_submit = true
+context_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+script = ExtResource("19_chatline")
+PreviewText = "Hello there, how are you today?"

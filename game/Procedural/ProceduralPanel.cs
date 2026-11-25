@@ -12,6 +12,7 @@ public partial class ProceduralPanel : Container, IHudContextUser
 {
     private ProceduralEdges edges = ProceduralEdges.All;
     private ProceduralFill fill;
+    private Rect2 hole;
     private int padding;
     private string profile = "";
     private ProceduralShape shape;
@@ -108,6 +109,23 @@ public partial class ProceduralPanel : Container, IHudContextUser
         }
     }
 
+    // An isometric diamond cut out of the panel, in the panel's own pixels.
+    [Export]
+    public Rect2 Hole
+    {
+        get => hole;
+        set
+        {
+            if (value == hole)
+            {
+                return;
+            }
+
+            hole = value;
+            Restyle();
+        }
+    }
+
     [Export] public WindowBackground FadesAs { get; set; }
 
     [Export]
@@ -178,7 +196,7 @@ public partial class ProceduralPanel : Container, IHudContextUser
 
     private int Inset(ProceduralEdges side) => (edges.HasFlag(side) ? profile.Length : 0) + padding;
 
-    private void Restyle() => Material = ProceduralLook.Panel(shape, profile, fill, edges, solidRings);
+    private void Restyle() => Material = ProceduralLook.Panel(shape, profile, fill, edges, solidRings, hole);
 
     private void Remeasure()
     {

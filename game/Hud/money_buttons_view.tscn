@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://r4qt8xehkhbh"]
+
+[ext_resource type="Script" uid="uid://jmeozf37vhtz" path="res://Hud/MoneyButtonsView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://6buv0wcp8hh8" path="res://Hud/MoneyButton.cs" id="3_money"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="4_click"]
+[ext_resource type="Script" uid="uid://dns0wvx5gfo6b" path="res://Hud/ArchiveSprite.cs" id="5_sprite"]
+[ext_resource type="Texture2D" uid="uid://cc4ldvmc3dujf" path="res://Hud/trash_can.png" id="6_trash"]
+
+[node name="MoneyButtonsView" type="Control" unique_id=2074310889]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 134.0
+offset_bottom = 32.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Buttons" type="HBoxContainer" parent="." unique_id=1995044293]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="TenThousandGold" type="Control" parent="Buttons" unique_id=1932205618]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+script = ExtResource("3_money")
+LightsUp = true
+Silver = 1000000
+
+[node name="Box" type="Container" parent="Buttons/TenThousandGold" unique_id=738442666]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Coins" type="TextureRect" parent="Buttons/TenThousandGold" unique_id=293937101]
+self_modulate = Color(0.657, 0.737, 0.968, 1)
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("5_sprite")
+SpriteNumber = 121
+
+[node name="ThousandGold" type="Control" parent="Buttons" unique_id=1154121966]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+script = ExtResource("3_money")
+LightsUp = true
+Silver = 100000
+
+[node name="Box" type="Container" parent="Buttons/ThousandGold" unique_id=519837896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Coins" type="TextureRect" parent="Buttons/ThousandGold" unique_id=897888628]
+self_modulate = Color(0.657, 0.737, 0.968, 1)
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("5_sprite")
+SpriteNumber = 120
+
+[node name="HundredGold" type="Control" parent="Buttons" unique_id=687935607]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+script = ExtResource("3_money")
+LightsUp = true
+Silver = 10000
+
+[node name="Box" type="Container" parent="Buttons/HundredGold" unique_id=171801668]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Coins" type="TextureRect" parent="Buttons/HundredGold" unique_id=229115280]
+self_modulate = Color(0.657, 0.737, 0.968, 1)
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("5_sprite")
+SpriteNumber = 41
+
+[node name="TrashCan" type="Control" parent="Buttons" unique_id=246504067]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+script = ExtResource("4_click")
+LightsUp = true
+
+[node name="Box" type="Container" parent="Buttons/TrashCan" unique_id=963678341]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Can" type="TextureRect" parent="Buttons/TrashCan" unique_id=1527816279]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 29.0
+offset_bottom = 29.0
+mouse_filter = 2
+texture = ExtResource("6_trash")

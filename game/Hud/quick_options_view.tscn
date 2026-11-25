@@ -1,0 +1,363 @@
+[gd_scene format=3 uid="uid://m11m2annc6gs"]
+
+[ext_resource type="Script" uid="uid://ond9s0ik3uxw" path="res://Hud/QuickOptionsView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://dd5oxqd1g6pxq" path="res://Hud/OptionButtonView.cs" id="4_option"]
+
+[node name="QuickOptionsView" type="Control" unique_id=930551262]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 196.0
+offset_bottom = 49.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Band" type="Container" parent="." unique_id=2104392484]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 34.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Buttons" type="GridContainer" parent="Band" unique_id=1595596251]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Fast" type="Control" parent="Band/Buttons" unique_id=423946139]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 0
+
+[node name="Cell" type="Container" parent="Band/Buttons/Fast" unique_id=301388503]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/Fast/Cell" unique_id=538250736]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/Fast/Cell/Margin" unique_id=1607117352]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Fast"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="Normal" type="Control" parent="Band/Buttons" unique_id=1497871144]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 1
+
+[node name="Cell" type="Container" parent="Band/Buttons/Normal" unique_id=1323242036]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/Normal/Cell" unique_id=102814927]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/Normal/Cell/Margin" unique_id=1259162252]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Normal"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="Slow" type="Control" parent="Band/Buttons" unique_id=255555737]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 2
+
+[node name="Cell" type="Container" parent="Band/Buttons/Slow" unique_id=1078213814]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/Slow/Cell" unique_id=531281513]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/Slow/Cell/Margin" unique_id=2014384821]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Slow"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="HealthPercent" type="Control" parent="Band/Buttons" unique_id=1250797845]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 3
+
+[node name="Cell" type="Container" parent="Band/Buttons/HealthPercent" unique_id=403276734]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/HealthPercent/Cell" unique_id=213218729]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/HealthPercent/Cell/Margin" unique_id=483081233]
+layout_mode = 2
+size_flags_vertical = 0
+text = "HP %"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="StatBase" type="Control" parent="Band/Buttons" unique_id=885310972]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 4
+
+[node name="Cell" type="Container" parent="Band/Buttons/StatBase" unique_id=1879704251]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/StatBase/Cell" unique_id=1704842038]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/StatBase/Cell/Margin" unique_id=896342952]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Base"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="HideWalls" type="Control" parent="Band/Buttons" unique_id=224551738]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 5
+
+[node name="Cell" type="Container" parent="Band/Buttons/HideWalls" unique_id=176576910]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/HideWalls/Cell" unique_id=1754729836]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/HideWalls/Cell/Margin" unique_id=304337408]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Hide"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="Names" type="Control" parent="Band/Buttons" unique_id=561060838]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 6
+
+[node name="Cell" type="Container" parent="Band/Buttons/Names" unique_id=1945029251]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/Names/Cell" unique_id=1419062712]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/Names/Cell/Margin" unique_id=1487720847]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Names"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="HealthBars" type="Control" parent="Band/Buttons" unique_id=284570285]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 7
+
+[node name="Cell" type="Container" parent="Band/Buttons/HealthBars" unique_id=414566843]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Band/Buttons/HealthBars/Cell" unique_id=191835419]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="Band/Buttons/HealthBars/Cell/Margin" unique_id=781083148]
+layout_mode = 2
+size_flags_vertical = 0
+text = "HP Bars"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="OptionsBox" type="Container" parent="." unique_id=905814136]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 32.0
+offset_right = 52.0
+offset_bottom = 49.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 14
+
+[node name="Options" type="Control" parent="OptionsBox" unique_id=998017869]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 8
+
+[node name="Cell" type="Container" parent="OptionsBox/Options" unique_id=217098609]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="OptionsBox/Options/Cell" unique_id=1016741454]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="OptionsBox/Options/Cell/Margin" unique_id=1352938746]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Options"
+horizontal_alignment = 1
+script = ExtResource("3_label")
+
+[node name="ExitBox" type="Container" parent="." unique_id=1652781996]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 32.0
+offset_right = 196.0
+offset_bottom = 49.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 14
+
+[node name="Exit" type="Control" parent="ExitBox" unique_id=294804716]
+custom_minimum_size = Vector2(48, 15)
+layout_mode = 2
+script = ExtResource("4_option")
+LightsUp = true
+Kind = 11
+
+[node name="Cell" type="Container" parent="ExitBox/Exit" unique_id=1963314966]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="ExitBox/Exit/Cell" unique_id=638292205]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="Caption" type="Label" parent="ExitBox/Exit/Cell/Margin" unique_id=1896848367]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Exit"
+horizontal_alignment = 1
+script = ExtResource("3_label")

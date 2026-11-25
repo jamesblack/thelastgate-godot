@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://rj81hj3q46k7"]
+
+[ext_resource type="Script" uid="uid://lrlw15ge0fk8" path="res://Hud/AttributesView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="PackedScene" uid="uid://d1q1eo6scq768" path="res://Hud/stat_row.tscn" id="4_row"]
+
+[node name="AttributesView" type="Control" unique_id=1231954946]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 232.0
+offset_bottom = 102.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=304893711]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Rows" type="VBoxContainer" parent="Frame" unique_id=1609746936]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Braveness" parent="Frame/Rows" unique_id=1548313646 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Braveness"
+
+[node name="Willpower" parent="Frame/Rows" unique_id=407974902 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Willpower"
+
+[node name="Intuition" parent="Frame/Rows" unique_id=1100277412 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Intuition"
+
+[node name="Agility" parent="Frame/Rows" unique_id=1522039300 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Agility"
+
+[node name="Strength" parent="Frame/Rows" unique_id=1163741488 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Strength"
+
+[node name="Hitpoints" parent="Frame/Rows" unique_id=870950705 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Hitpoints"
+
+[node name="Mana" parent="Frame/Rows" unique_id=1035974494 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Mana"

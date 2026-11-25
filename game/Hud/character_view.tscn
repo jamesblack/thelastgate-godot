@@ -1,0 +1,305 @@
+[gd_scene format=3 uid="uid://4unwt7gudbfz"]
+
+[ext_resource type="Script" uid="uid://7mvzexjt5lcn" path="res://Hud/CharacterView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="4_hudlabel"]
+[ext_resource type="Script" uid="uid://b2ud80uowpc4u" path="res://Hud/PortraitBar.cs" id="5_portraitbar"]
+[ext_resource type="Script" uid="uid://32wxdmrregok" path="res://Hud/BuffIconsView.cs" id="6_bufficons"]
+[ext_resource type="Script" uid="uid://dns0wvx5gfo6b" path="res://Hud/ArchiveSprite.cs" id="2_6ebvl"]
+[ext_resource type="Shader" uid="uid://bi6mdff1gh8uh" path="res://World/sprite_tint.gdshader" id="12_tint"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait"]
+shader = ExtResource("12_tint")
+
+[node name="CharacterView" type="Control" unique_id=347942282]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 130.0
+offset_bottom = 189.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1274501783]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+
+[node name="Sections" type="VBoxContainer" parent="Frame" unique_id=1054747348]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="PortraitSection" type="Control" parent="Frame/Sections" unique_id=1276798446]
+custom_minimum_size = Vector2(0, 124)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HitPointBarSection" type="Container" parent="Frame/Sections" unique_id=1089069639]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="Holder" type="Control" parent="Frame/Sections/HitPointBarSection" unique_id=1869295312]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HitPointBar" type="Control" parent="Frame/Sections/HitPointBarSection/Holder" unique_id=777391917]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+script = ExtResource("5_portraitbar")
+LookColour = Color(0.709677419, 0, 0, 1)
+
+[node name="Background" type="ColorRect" parent="Frame/Sections/HitPointBarSection/Holder/HitPointBar" unique_id=899829088]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0, 0.0793650794, 0.516129032, 1)
+
+[node name="Reserved" type="ColorRect" parent="Frame/Sections/HitPointBarSection/Holder/HitPointBar" unique_id=1753279629]
+layout_mode = 0
+offset_left = 62.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.516129032, 0.507936508, 0.516129032, 1)
+
+[node name="Current" type="ColorRect" parent="Frame/Sections/HitPointBarSection/Holder/HitPointBar" unique_id=1190918889]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 40.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.0322580645, 0.380952381, 0, 1)
+
+[node name="EnduranceBarSection" type="Container" parent="Frame/Sections" unique_id=476273945]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="Holder" type="Control" parent="Frame/Sections/EnduranceBarSection" unique_id=712410896]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="EnduranceBar" type="Control" parent="Frame/Sections/EnduranceBarSection/Holder" unique_id=288091721]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+script = ExtResource("5_portraitbar")
+LookColour = Color(0.709677419, 0, 0, 1)
+
+[node name="Background" type="ColorRect" parent="Frame/Sections/EnduranceBarSection/Holder/EnduranceBar" unique_id=943746242]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0, 0.0793650794, 0.516129032, 1)
+
+[node name="Reserved" type="ColorRect" parent="Frame/Sections/EnduranceBarSection/Holder/EnduranceBar" unique_id=715949606]
+layout_mode = 0
+offset_left = 62.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.516129032, 0.507936508, 0.516129032, 1)
+
+[node name="Current" type="ColorRect" parent="Frame/Sections/EnduranceBarSection/Holder/EnduranceBar" unique_id=136438214]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 40.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.0322580645, 0.380952381, 0, 1)
+
+[node name="ManaBarSection" type="Container" parent="Frame/Sections" unique_id=1504910710]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="Holder" type="Control" parent="Frame/Sections/ManaBarSection" unique_id=392062552]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ManaBar" type="Control" parent="Frame/Sections/ManaBarSection/Holder" unique_id=938535383]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+script = ExtResource("5_portraitbar")
+LookColour = Color(0.709677419, 0, 0, 1)
+
+[node name="Background" type="ColorRect" parent="Frame/Sections/ManaBarSection/Holder/ManaBar" unique_id=1773139351]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0, 0.0793650794, 0.516129032, 1)
+
+[node name="Reserved" type="ColorRect" parent="Frame/Sections/ManaBarSection/Holder/ManaBar" unique_id=364543312]
+layout_mode = 0
+offset_left = 62.0
+offset_right = 62.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.516129032, 0.507936508, 0.516129032, 1)
+
+[node name="Current" type="ColorRect" parent="Frame/Sections/ManaBarSection/Holder/ManaBar" unique_id=847524060]
+layout_mode = 0
+offset_left = 0.0
+offset_right = 40.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.0322580645, 0.380952381, 0, 1)
+
+[node name="PortraitNameSection" type="Container" parent="Frame/Sections" unique_id=555266981]
+custom_minimum_size = Vector2(0, 19)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="Margin" type="MarginContainer" parent="Frame/Sections/PortraitNameSection" unique_id=1094823957]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_left = 2
+
+[node name="PortraitName" type="Label" parent="Frame/Sections/PortraitNameSection/Margin" unique_id=1648801510]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Worldofslaying"
+horizontal_alignment = 1
+script = ExtResource("4_hudlabel")
+
+[node name="RankNameSection" type="Container" parent="Frame/Sections" unique_id=1787767822]
+custom_minimum_size = Vector2(0, 19)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 1
+
+[node name="Margin" type="MarginContainer" parent="Frame/Sections/RankNameSection" unique_id=1990242452]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_left = 2
+
+[node name="RankName" type="Label" parent="Frame/Sections/RankNameSection/Margin" unique_id=950528596]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Private First Class"
+horizontal_alignment = 1
+script = ExtResource("4_hudlabel")
+
+[node name="OwnName" type="Label" parent="." unique_id=606909419]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 29.0
+offset_right = 128.0
+offset_bottom = 38.0
+text = "Worldofslaying"
+horizontal_alignment = 1
+script = ExtResource("4_hudlabel")
+
+[node name="RankBadge" type="TextureRect" parent="." unique_id=751328766]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 93.0
+offset_top = 39.0
+offset_right = 93.0
+offset_bottom = 39.0
+mouse_filter = 2
+script = ExtResource("2_6ebvl")
+SpriteNumber = 10
+
+[node name="Portrait" type="TextureRect" parent="." unique_id=321547363]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_portrait")
+layout_mode = 0
+offset_left = 32.0
+offset_top = 33.0
+offset_right = 32.0
+offset_bottom = 33.0
+mouse_filter = 2
+script = ExtResource("2_6ebvl")
+
+[node name="BuffArea" type="Control" parent="." unique_id=1862043517]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 166.0
+offset_bottom = 120.0
+mouse_filter = 2
+
+[node name="Buffs" type="VFlowContainer" parent="BuffArea" unique_id=702918334]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+script = ExtResource("6_bufficons")
+PreviewSprites = PackedInt32Array(86, 87, 88)
+
+
+[node name="DebuffArea" type="Control" parent="." unique_id=1290455861]
+layout_mode = 0
+offset_left = -34.0
+offset_top = 5.0
+offset_right = 126.0
+offset_bottom = 120.0
+mouse_filter = 2
+
+[node name="Debuffs" type="VFlowContainer" parent="DebuffArea" unique_id=563013775]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+layout_direction = 3
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+script = ExtResource("6_bufficons")
+PreviewSprites = PackedInt32Array(89, 91)
+

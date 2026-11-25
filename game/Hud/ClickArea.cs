@@ -14,6 +14,7 @@ public partial class ClickArea : Control
 
     private bool held;
     private bool hovered;
+    private bool lightsUp;
 
     public ClickArea()
     {
@@ -21,7 +22,28 @@ public partial class ClickArea : Control
         MouseExited += () => ShowHovered(false);
     }
 
-    [Export] public bool LightsUp { get; set; }
+    [Export]
+    public bool LightsUp
+    {
+        get => lightsUp;
+        set
+        {
+            lightsUp = value;
+            if (value)
+            {
+                Reshade();
+            }
+            else
+            {
+                Lit.Modulate = Colors.White;
+            }
+        }
+    }
+
+    // Lights up only this child, such as the sign in a + cell, instead of the whole area.
+    [Export] public NodePath LitContent { get; set; } = new();
+
+    private CanvasItem Lit => LitContent.IsEmpty ? this : GetNode<CanvasItem>(LitContent);
 
     // For areas whose tooltip depends on where in them the mouse is.
     public Func<Vector2, string>? TooltipFor { get; set; }
@@ -81,7 +103,7 @@ public partial class ClickArea : Control
         var shade = held ? Held : hovered ? Hovered : Colors.White;
         if (LightsUp)
         {
-            Modulate = shade;
+            Lit.Modulate = shade;
         }
 
         ShadeChanged?.Invoke(shade);

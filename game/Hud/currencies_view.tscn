@@ -1,0 +1,233 @@
+[gd_scene format=3 uid="uid://j0999vm8tiv1"]
+
+[ext_resource type="Script" uid="uid://0ekdszerbce0" path="res://Hud/CurrenciesView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[node name="CurrenciesView" type="Control" unique_id=1637909518]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 170.0
+offset_bottom = 60.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1051098386]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Rows" type="VBoxContainer" parent="Frame" unique_id=276429649]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="MoneyRow" type="HBoxContainer" parent="Frame/Rows" unique_id=2117964789]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/MoneyRow" unique_id=622307525]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/MoneyRow/NameCell" unique_id=1298146482]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="MoneyName" type="Label" parent="Frame/Rows/MoneyRow/NameCell/Margin" unique_id=2040025695]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Money"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/MoneyRow" unique_id=247480795]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/MoneyRow/ValueCell" unique_id=269054062]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+
+[node name="Money" type="Label" parent="Frame/Rows/MoneyRow/ValueCell/Margin" unique_id=733316296]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999999G 99S"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="StrongholdRow" type="HBoxContainer" parent="Frame/Rows" unique_id=1064381557]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/StrongholdRow" unique_id=686839693]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/StrongholdRow/NameCell" unique_id=478313210]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="StrongholdName" type="Label" parent="Frame/Rows/StrongholdRow/NameCell/Margin" unique_id=1024760939]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Stronghold"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/StrongholdRow" unique_id=1061578300]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/StrongholdRow/ValueCell" unique_id=1808588256]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+
+[node name="Stronghold" type="Label" parent="Frame/Rows/StrongholdRow/ValueCell/Margin" unique_id=1126146669]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="CasinoRow" type="HBoxContainer" parent="Frame/Rows" unique_id=1631850373]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/CasinoRow" unique_id=1274762723]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/CasinoRow/NameCell" unique_id=395862885]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="CasinoName" type="Label" parent="Frame/Rows/CasinoRow/NameCell/Margin" unique_id=458097715]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Casino"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/CasinoRow" unique_id=1162168091]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/CasinoRow/ValueCell" unique_id=134533971]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+
+[node name="Casino" type="Label" parent="Frame/Rows/CasinoRow/ValueCell/Margin" unique_id=1485035433]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ContractRow" type="HBoxContainer" parent="Frame/Rows" unique_id=1583249558]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/ContractRow" unique_id=1270616050]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ContractRow/NameCell" unique_id=622805658]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="ContractName" type="Label" parent="Frame/Rows/ContractRow/NameCell/Margin" unique_id=339262929]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Contract"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ValueCell" type="Container" parent="Frame/Rows/ContractRow" unique_id=993317277]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ContractRow/ValueCell" unique_id=1927333661]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+
+[node name="Contract" type="Label" parent="Frame/Rows/ContractRow/ValueCell/Margin" unique_id=1602835595]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999999"
+horizontal_alignment = 2
+script = ExtResource("3_label")

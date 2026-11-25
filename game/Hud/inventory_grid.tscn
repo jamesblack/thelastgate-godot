@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://s1httvke1qfp"]
+
+[ext_resource type="Script" uid="uid://bej4bhfsvv64f" path="res://Hud/InventoryGrid.cs" id="1_grid"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="PackedScene" uid="uid://bydn5g2axrvh4" path="res://Hud/item_cell.tscn" id="3_cell"]
+[ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="4_scroll"]
+
+[node name="InventoryGrid" type="Control" unique_id=1832447132]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 357.0
+offset_bottom = 106.0
+script = ExtResource("1_grid")
+
+[node name="Frame" type="Container" parent="." unique_id=318298991]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Columns" type="HBoxContainer" parent="Frame" unique_id=1907300356]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Cells" type="GridContainer" parent="Frame/Columns" unique_id=1954615112]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 10
+
+[node name="Cell0" parent="Frame/Columns/Cells" unique_id=593643301 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell1" parent="Frame/Columns/Cells" unique_id=1224194467 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell2" parent="Frame/Columns/Cells" unique_id=1445457609 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell3" parent="Frame/Columns/Cells" unique_id=2059322755 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell4" parent="Frame/Columns/Cells" unique_id=860929311 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell5" parent="Frame/Columns/Cells" unique_id=119320629 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell6" parent="Frame/Columns/Cells" unique_id=873989072 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell7" parent="Frame/Columns/Cells" unique_id=587296681 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell8" parent="Frame/Columns/Cells" unique_id=466470024 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell9" parent="Frame/Columns/Cells" unique_id=2015842572 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell10" parent="Frame/Columns/Cells" unique_id=1701548315 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell11" parent="Frame/Columns/Cells" unique_id=1442142315 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell12" parent="Frame/Columns/Cells" unique_id=1783115167 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell13" parent="Frame/Columns/Cells" unique_id=1009505050 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell14" parent="Frame/Columns/Cells" unique_id=772829811 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell15" parent="Frame/Columns/Cells" unique_id=1112014819 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell16" parent="Frame/Columns/Cells" unique_id=948314292 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell17" parent="Frame/Columns/Cells" unique_id=1590915792 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell18" parent="Frame/Columns/Cells" unique_id=682219581 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell19" parent="Frame/Columns/Cells" unique_id=456129089 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell20" parent="Frame/Columns/Cells" unique_id=1736206705 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell21" parent="Frame/Columns/Cells" unique_id=1000802005 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell22" parent="Frame/Columns/Cells" unique_id=263368499 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell23" parent="Frame/Columns/Cells" unique_id=2048995394 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell24" parent="Frame/Columns/Cells" unique_id=2132329372 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell25" parent="Frame/Columns/Cells" unique_id=1772774541 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell26" parent="Frame/Columns/Cells" unique_id=1836747580 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell27" parent="Frame/Columns/Cells" unique_id=1285267403 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell28" parent="Frame/Columns/Cells" unique_id=1390051352 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="Cell29" parent="Frame/Columns/Cells" unique_id=1789895570 instance=ExtResource("3_cell")]
+layout_mode = 2
+
+[node name="ScrollColumn" type="Container" parent="Frame/Columns" unique_id=1741726145]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Padding = 2
+
+[node name="ScrollBar" type="VScrollBar" parent="Frame/Columns/ScrollColumn" unique_id=2052652057]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1
+max_value = 4.0
+step = 1.0
+page = 1.0
+script = ExtResource("4_scroll")

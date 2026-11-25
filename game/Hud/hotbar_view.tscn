@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://grlcxtelhnxm"]
+
+[ext_resource type="Script" uid="uid://5h70aly9shzu" path="res://Hud/HotbarView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="PackedScene" uid="uid://cuhhrkc0mkyc3" path="res://Hud/hotbar_button.tscn" id="3_button"]
+
+[node name="HotbarView" type="Control" unique_id=293494873]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 244.0
+offset_bottom = 64.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1315700713]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Buttons" type="GridContainer" parent="Frame" unique_id=368066192]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 5
+
+[node name="Button0" parent="Frame/Buttons" unique_id=953811919 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 0
+
+[node name="Button1" parent="Frame/Buttons" unique_id=995439180 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 1
+
+[node name="Button2" parent="Frame/Buttons" unique_id=1425351043 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 2
+
+[node name="Button3" parent="Frame/Buttons" unique_id=1843045982 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 3
+
+[node name="Button4" parent="Frame/Buttons" unique_id=464276394 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 4
+
+[node name="Button5" parent="Frame/Buttons" unique_id=1452338007 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 5
+
+[node name="Button6" parent="Frame/Buttons" unique_id=515778967 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 6
+
+[node name="Button7" parent="Frame/Buttons" unique_id=1598755381 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 7
+
+[node name="Button8" parent="Frame/Buttons" unique_id=1005475748 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 8
+
+[node name="Button9" parent="Frame/Buttons" unique_id=1300626704 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 9
+
+[node name="Button10" parent="Frame/Buttons" unique_id=593286637 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 10
+
+[node name="Button11" parent="Frame/Buttons" unique_id=493656773 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 11
+
+[node name="Button12" parent="Frame/Buttons" unique_id=1539737040 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 12
+
+[node name="Button13" parent="Frame/Buttons" unique_id=1094287985 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 13
+
+[node name="Button14" parent="Frame/Buttons" unique_id=993850405 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 14
+
+[node name="Button15" parent="Frame/Buttons" unique_id=1864162268 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 15
+
+[node name="Button16" parent="Frame/Buttons" unique_id=923635042 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 16
+
+[node name="Button17" parent="Frame/Buttons" unique_id=1634498790 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 17
+
+[node name="Button18" parent="Frame/Buttons" unique_id=696455699 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 18
+
+[node name="Button19" parent="Frame/Buttons" unique_id=912053409 instance=ExtResource("3_button")]
+layout_mode = 2
+Slot = 19

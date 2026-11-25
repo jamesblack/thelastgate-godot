@@ -37,11 +37,7 @@ public partial class HudView : Control
 {
     private const int ReservedSlot = 4;
     private const int MaximumSlot = 5;
-    private const string StrongholdName = "Stronghold";
-    private const string CasinoName = "Casino";
-    private const string ContractName = "Contract";
     private const string SwapSetHint = "Swap equipment with a stored alternate set.";
-    private const string TrashCanName = "TrashCan";
     private const string ItemTooltipBinding = "item_tooltip_hotkey";
     private const string WorldMapWindowScenePath = "res://Map/world_map_window.tscn";
     private const string PlannerWindowScenePath = "res://Planner/planner_window.tscn";
@@ -55,11 +51,6 @@ public partial class HudView : Control
     private const int HitScoreMeta = 5;
     private const int ParryScoreMeta = 6;
 
-    private const int ExpandedQuickStatsPicture = 2;
-    private const int CompactQuickStatsPicture = 3;
-    private const int DarkPictureOffset = 10000;
-    private const float ExperienceBarTop = 71;
-    private const float HiddenQuickStatsRows = 28;
     private static readonly Vector2 HeldItemOffset = new(16, 16);
 
     private static readonly (string Button, Func<TextWindows, TextWindowAction> Click)[] TextWindowButtons =
@@ -216,10 +207,11 @@ public partial class HudView : Control
         gameSession = shownSession;
         statPlan = shownSession.StatPlan;
         sendCommand = sendToServer;
+        var equipment = GetNode<EquipmentView>("%Equipment");
         for (var slot = WornSlot.Head; slot <= WornSlot.SecondCharm; slot++)
         {
             var clickedSlot = slot;
-            var wornView = GetNode<ItemSlotView>("%" + slot);
+            var wornView = equipment.Slot(slot);
             wornView.Released += button => ClickWorn(clickedSlot, button);
             wornView.TooltipRequest = () => WornTooltip(clickedSlot);
             wornView.MouseEntered += () => state?.ItemLooks.Prefer(ItemSlotKind.Worn, (int)clickedSlot);
@@ -232,41 +224,38 @@ public partial class HudView : Control
                     HeldKeys.Current()));
         }
 
-        GetNode<ClickArea>("%SwapSetButton").Released += ClickSwapSet;
-        var trashCan = GetNode<ClickArea>("%" + TrashCanName);
+        equipment.SwapSetButton.Released += ClickSwapSet;
+        var moneyButtons = GetNode<MoneyButtonsView>("%MoneyButtons");
+        var trashCan = moneyButtons.TrashCan;
         trashCan.Released += ClickTrashCan;
         WatchCursor(trashCan, () => TrashCan.Cursor(HoldingItem));
-        foreach (var node in GetNode("%OptionButtons").GetChildren())
+        foreach (var optionButton in GetNode<QuickOptionsView>("%OptionButtons").Buttons)
         {
-            var optionButton = (OptionButtonView)node;
             optionButton.Released += button => ClickOption(optionButton.Kind, button);
         }
 
-        foreach (var node in GetNode("%MoneyButtons").GetChildren())
+        foreach (var moneyButton in moneyButtons.Buttons)
         {
-            var moneyButton = (MoneyButton)node;
             moneyButton.Released += button => ClickMoney(moneyButton.Silver, button);
         }
 
-        foreach (var node in GetNode("%StatRows").GetChildren().Concat(GetNode("%SkillRows").GetChildren()))
+        var skillList = GetNode<SkillList>("%Skills");
+        foreach (var row in GetNode<AttributesView>("%Attributes").Rows.Concat(skillList.Rows))
         {
-            var row = (StatRow)node;
-            row.GetNode<ClickArea>("NameArea").Released += button => ClickStatName(row, button);
-            row.GetNode<ClickArea>("RaiseArea").Released += button => ClickStat(row, true, button);
-            row.GetNode<ClickArea>("LowerArea").Released += button => ClickStat(row, false, button);
+            row.NameArea.Released += button => ClickStatName(row, button);
+            row.RaiseArea.Released += button => ClickStat(row, true, button);
+            row.LowerArea.Released += button => ClickStat(row, false, button);
         }
 
-        foreach (var node in GetNode("%StatModeButtons").GetChildren())
+        foreach (var modeButton in GetNode<StatModeButtonsView>("%StatModeButtons").Buttons)
         {
-            var modeButton = (StatModeButton)node;
             modeButton.Released += button => ClickStatMode(modeButton.Mode, button);
             modeButton.MouseEntered += AskForMetaText;
         }
 
-        GetNode<ClickArea>("%UpdateButton").Released += ClickUpdate;
-        foreach (var node in GetNode("%Hotbar").GetChildren())
+        skillList.UpdateButton.Released += ClickUpdate;
+        foreach (var hotbarButton in GetNode<HotbarView>("%Hotbar").Buttons)
         {
-            var hotbarButton = (HotbarButtonView)node;
             hotbarButton.Released += button => ClickHotbar(hotbarButton.Slot, button);
         }
 
@@ -275,7 +264,7 @@ public partial class HudView : Control
         for (var cell = 0; cell < InventoryScroll.VisibleSlots; cell++)
         {
             var clickedCell = cell;
-            var cellView = inventory.GetChild<ItemSlotView>(cell);
+            var cellView = inventory.Slot(cell);
             cellView.TooltipRequest = () => InventoryTooltip(inventory.SlotShownIn(clickedCell));
             cellView.MouseEntered += () =>
                 state?.ItemLooks.Prefer(ItemSlotKind.Inventory, inventory.SlotShownIn(clickedCell));
@@ -292,8 +281,8 @@ public partial class HudView : Control
 
         state.LookShown += ShowLook;
         Fonts = fontSet;
-        GetNode<ChatLog>("%ChatLog").Show(state.Chat, fontSet);
-        var chatLine = GetNode<ChatLine>("%ChatLine");
+        GetNode<ChatView>("%Chat").Log.Show(state.Chat, fontSet);
+        var chatLine = GetNode<ChatView>("%Chat").Line;
         chatLine.LineSent += Say;
         chatLine.EscapePressed += PressEscape;
         var shopWindow = GetNode<ShopWindowView>("%ShopWindow");
@@ -362,12 +351,13 @@ public partial class HudView : Control
         }
 
         GetNode<ClickArea>("%TreeButton").Released += ClickTreeButton;
-        var minimap = GetNode<ClickArea>("%Minimap");
+        var minimapPanel = GetNode<MinimapPanelView>("%MinimapPanel");
+        var minimap = minimapPanel.Map;
         minimap.Released += button => ClickMinimap(MinimapButton.Map, button);
         minimap.GuiInput += ScrollMinimap;
         minimap.TooltipFor = MinimapPinName;
-        GetNode<ClickArea>("%MinimapZoomIn").Released += button => ClickMinimap(MinimapButton.ZoomIn, button);
-        GetNode<ClickArea>("%MinimapZoomOut").Released += button => ClickMinimap(MinimapButton.ZoomOut, button);
+        minimapPanel.ZoomIn.Released += button => ClickMinimap(MinimapButton.ZoomIn, button);
+        minimapPanel.ZoomOut.Released += button => ClickMinimap(MinimapButton.ZoomOut, button);
         worldMapWindow = GD.Load<PackedScene>(WorldMapWindowScenePath).Instantiate<WorldMapWindowView>();
         AddChild(worldMapWindow);
         worldMapWindow.NotesChanged += MapNotesChanged;
@@ -391,7 +381,7 @@ public partial class HudView : Control
         sessionStatsWindow.ResetPressed += ResetSessionStats;
         sessionStatsWindow.ClosePressed += () => ShowSessionStats(false);
         ShowSessionStats(false);
-        GetNode<ClickArea>("%PlannerButton").Released += ClickPlannerButton;
+        GetNode<SkillList>("%Skills").PlannerButton.Released += ClickPlannerButton;
         var optionsWindow = GetNode<OptionsWindowView>("%OptionsWindow");
         optionsWindow.TabChosen += ChooseOptionsTab;
         optionsWindow.CloseChosen += CloseOptions;
@@ -469,14 +459,12 @@ public partial class HudView : Control
         }
 
         var player = state.Player;
-        ShowPool("HitPoints", player.ActiveHitPoints, player.HitPoints[MaximumSlot]);
-        ShowPool("Endurance", player.ActiveEndurance, player.Endurance[MaximumSlot]);
-        ShowPool("Mana", player.ActiveMana, player.Mana[MaximumSlot]);
-        SetText("Money", Currencies.MoneyText(player.Gold));
-        ShowPoints("Stronghold", StrongholdName, player.BlackStrongholdPoints);
-        ShowPoints("Casino", CasinoName, player.Tokens);
-        ShowPoints("Contract", ContractName, player.OsirisPoints);
-        SetText("Location", player.Location);
+        var pools = GetNode<PoolsView>("%Pools");
+        pools.ShowPool("HitPoints", player.ActiveHitPoints, player.HitPoints[MaximumSlot]);
+        pools.ShowPool("Endurance", player.ActiveEndurance, player.Endurance[MaximumSlot]);
+        pools.ShowPool("Mana", player.ActiveMana, player.Mana[MaximumSlot]);
+        GetNode<CurrenciesView>("%Currencies").Show(player);
+        GetNode<MinimapPanelView>("%MinimapPanel").ShowLocation(player.Location);
         if (gameSession.TextWindows.AnyOpen || gameSession.WaypointWindow.IsOpen
             || gameSession.SkillTreeWindow.Open != null
             || state.OpenShop != null)
@@ -502,15 +490,13 @@ public partial class HudView : Control
             ShowPortrait(player, gameSession.MapFrames.CharacterSprite(WorldMap.PlayerTile));
         }
 
-        foreach (var node in GetNode("%OptionButtons").GetChildren())
+        foreach (var optionButton in GetNode<QuickOptionsView>("%OptionButtons").Buttons)
         {
-            var optionButton = (OptionButtonView)node;
             optionButton.ShowMarked(OptionButtons.IsMarked(optionButton.Kind, Settings, player.Mode));
         }
 
-        foreach (var node in GetNode("%Hotbar").GetChildren())
+        foreach (var hotbarButton in GetNode<HotbarView>("%Hotbar").Buttons)
         {
-            var hotbarButton = (HotbarButtonView)node;
             var slot = hotbarButton.Slot;
             hotbarButton.ShowName(HotbarButtons.Name(Settings.HotbarActions[slot], Settings.HotbarNames[slot]));
             hotbarButton.ShowKey();
@@ -523,8 +509,9 @@ public partial class HudView : Control
         ShowWorldMap();
         ShowPlanner();
         var buffIcons = BuffIcons.For(player.Buffs);
-        GetNode<BuffIconsView>("%Buffs").Show(buffIcons.Buffs);
-        GetNode<BuffIconsView>("%Debuffs").Show(buffIcons.Debuffs);
+        var character = GetNode<CharacterView>("%Character");
+        character.Buffs.Show(buffIcons.Buffs);
+        character.Debuffs.Show(buffIcons.Debuffs);
     }
 
     public override void _Input(InputEvent inputEvent)
@@ -560,7 +547,7 @@ public partial class HudView : Control
             return;
         }
 
-        var chatLine = GetNode<ChatLine>("%ChatLine");
+        var chatLine = GetNode<ChatView>("%Chat").Line;
         var handled = chatLine.RunsHotkeys && RunBoundHotkey(key);
         if (!chatLine.TakesTyping && ChatKeyFor(key.Keycode) is { } chatKey)
         {
@@ -577,7 +564,7 @@ public partial class HudView : Control
 
         if (LogPagesFor(key.Keycode) is { } pages)
         {
-            GetNode<ChatLog>("%ChatLog").ScrollPages(pages);
+            GetNode<ChatView>("%Chat").Log.ScrollPages(pages);
             handled = true;
         }
 
@@ -1019,7 +1006,7 @@ public partial class HudView : Control
                 Image.Format.Rgba8,
                 minimapPixels);
             minimapTexture = ImageTexture.CreateFromImage(minimapImage);
-            GetNode<TextureRect>("%Minimap/Picture").Texture = minimapTexture;
+            GetNode<MinimapPanelView>("%MinimapPanel").ShowPicture(minimapTexture);
             return;
         }
 
@@ -1140,7 +1127,7 @@ public partial class HudView : Control
 
     private void ShowStats(PlayerState player)
     {
-        var skillList = GetNode<SkillList>("%SkillRows");
+        var skillList = GetNode<SkillList>("%Skills");
         var panel = skillList.Panel;
         var showBase = Settings.ShowStatBase;
         if (panel.ShowsMetaOnTop)
@@ -1153,42 +1140,32 @@ public partial class HudView : Control
         }
 
         skillList.Show(player, state!.Terminology, statPlan, showBase);
-        SetText("UpdatePoints", Number(player.Points - statPlan.PointsUsed));
-        var skillsBelow = !panel.ShowsMetaStats;
-        foreach (var name in (string[])["%SkillPanel", "%UpdateLabel", "%UpdatePoints", "%UpdateButton"])
-        {
-            GetNode<CanvasItem>(name).Visible = skillsBelow;
-        }
-
-        GetNode<CanvasItem>("%MetaPanel").Visible = panel.Mode == StatListMode.SkillsAndMeta;
-        foreach (var node in GetNode("%StatModeButtons").GetChildren())
-        {
-            ((StatModeButton)node).ShowMarked(panel);
-        }
+        skillList.ShowUpdate(!panel.ShowsMetaStats, player.Points - statPlan.PointsUsed);
+        GetNode<StatModeButtonsView>("%StatModeButtons").ShowMarked(panel);
     }
 
     private void ShowAttributes(PlayerState player, bool showBase)
     {
-        var rows = GetNode("%StatRows");
+        var attributes = GetNode<AttributesView>("%Attributes");
         for (var attribute = 0; attribute < PlayerState.AttributeCount; attribute++)
         {
             var line = StatLines.Attribute(attribute, player.Attributes[attribute], statPlan, player.Points);
-            rows.GetChild<StatRow>(attribute).Show(line, attribute, showBase);
+            attributes.Row(attribute).Show(line, attribute, showBase);
         }
 
         var hitPoints = StatLines.HitPoints(player.HitPoints, statPlan, player.Points);
-        rows.GetChild<StatRow>(HitPointsRow).Show(hitPoints, StatSlots.HitPoints, showBase);
+        attributes.Row(HitPointsRow).Show(hitPoints, StatSlots.HitPoints, showBase);
         var mana = StatLines.Mana(player.Mana, statPlan, player.Points);
-        rows.GetChild<StatRow>(ManaRow).Show(mana, StatSlots.Mana, showBase);
+        attributes.Row(ManaRow).Show(mana, StatSlots.Mana, showBase);
     }
 
     private void ShowTopMeta(StatPanel panel)
     {
-        var rows = GetNode("%StatRows");
+        var attributes = GetNode<AttributesView>("%Attributes");
         for (var row = 0; row < StatPanel.TopRows; row++)
         {
             var meta = panel.TopMeta(row)!.Value;
-            rows.GetChild<StatRow>(row).ShowMeta(MetaLines.For(state!.Terminology.MetaStats[meta]), meta);
+            attributes.Row(row).ShowMeta(MetaLines.For(state!.Terminology.MetaStats[meta]), meta);
         }
     }
 
@@ -1213,7 +1190,7 @@ public partial class HudView : Control
             return;
         }
 
-        GetNode<SkillList>("%SkillRows").Choose(mode);
+        GetNode<SkillList>("%Skills").Choose(mode);
         ShowStats(state.Player);
         ShowPlanner();
     }
@@ -1442,24 +1419,13 @@ public partial class HudView : Control
         change(ClientSettings);
         ClientSettings.Save();
         ShowQuickStatsLayout();
-        GetNode<ChatLine>("%ChatLine").EnterToTalk = ClientSettings.EnterToTalk;
+        GetNode<ChatView>("%Chat").Line.EnterToTalk = ClientSettings.EnterToTalk;
         ShowContext();
         ClientSettingsChanged?.Invoke();
     }
 
-    // Without Hit and Parry the current client draws a shorter box, and the experience bar moves up with the rows.
-    private void ShowQuickStatsLayout()
-    {
-        var expanded = ClientSettings?.ExpandedQuickStats ?? true;
-        var quickStats = GetNode<Control>("QuickStats");
-        quickStats.GetNode<CanvasItem>("RowsShift/Rows/HitRow").Visible = expanded;
-        quickStats.GetNode<CanvasItem>("RowsShift/Rows/ParryRow").Visible = expanded;
-        var background = quickStats.GetNode<UiPicture>("Background");
-        background.PictureNumber = expanded ? ExpandedQuickStatsPicture : CompactQuickStatsPicture;
-        background.DarkPictureNumber = background.PictureNumber + DarkPictureOffset;
-        var bar = GetNode<Control>("%ExperienceBar");
-        bar.Position = bar.Position with { Y = expanded ? ExperienceBarTop : ExperienceBarTop - HiddenQuickStatsRows };
-    }
+    private void ShowQuickStatsLayout() =>
+        GetNode<QuickStatsView>("%QuickStats").ShowExpanded(ClientSettings?.ExpandedQuickStats ?? true);
 
     private void ClickCloseShop(MapButton button)
     {
@@ -1588,12 +1554,14 @@ public partial class HudView : Control
     {
         ShowQuickStatsLayout();
         var metaStats = state!.Terminology.MetaStats;
-        SetText("WeaponValue", Number(player.Weapon));
-        SetText("ArmorValue", Number(player.Armor));
-        SetText("HitScore", Number(metaStats[HitScoreMeta].Value));
-        SetText("ParryScore", Number(metaStats[ParryScoreMeta].Value));
-        SetText("Experience", Number(player.PointsTotal));
-        GetNode<ProgressBar>("%ExperienceBar").Value = Ranks.Progress(player.PointsTotal);
+        GetNode<QuickStatsView>("%QuickStats")
+            .Show(
+                player.Weapon,
+                player.Armor,
+                metaStats[HitScoreMeta].Value,
+                metaStats[ParryScoreMeta].Value,
+                player.PointsTotal,
+                Ranks.Progress(player.PointsTotal));
     }
 
     private void ClickHotbar(int slot, MapButton button)
@@ -1911,13 +1879,8 @@ public partial class HudView : Control
     {
         using var timing = Timings.Measure("planner.refresh");
         var enabled = PlannerEnabled;
-        var buttonShown = enabled && !GetNode<SkillList>("%SkillRows").Panel.ShowsMetaStats;
-        foreach (var name in (string[])["%PlannerBox", "%PlannerLabel", "%PlannerButton"])
-        {
-            GetNode<CanvasItem>(name).Visible = buttonShown;
-        }
-
-        GetNode<PlannerButtonBox>("%PlannerBox").DarkMode = DarkMode;
+        var skillList = GetNode<SkillList>("%Skills");
+        skillList.ShowPlannerButton(enabled && !skillList.Panel.ShowsMetaStats);
         if (state == null || gameSession == null || plannerWindow == null)
         {
             return;
@@ -2000,11 +1963,11 @@ public partial class HudView : Control
 
     private void ShowPortrait(PlayerState player, int sprite)
     {
-        ShowBar("HitPointBar", player.ActiveHitPoints, player.HitPoints);
-        ShowBar("EnduranceBar", player.ActiveEndurance, player.Endurance);
-        ShowBar("ManaBar", player.ActiveMana, player.Mana);
-        GetNode<CanvasItem>("%OwnName").Visible = true;
-        SetText("OwnName", player.Name);
+        var character = GetNode<CharacterView>("%Character");
+        ShowBar(character.HitPointBar, player.ActiveHitPoints, player.HitPoints);
+        ShowBar(character.EnduranceBar, player.ActiveEndurance, player.Endurance);
+        ShowBar(character.ManaBar, player.ActiveMana, player.Mana);
+        character.ShowOwnName(player.Name);
         ShowCharacter(player.Name, player.PointsTotal, sprite, SpriteTint.None);
         if (state is { OpenShop: not (null or ShopKind.WeaponSmith or ShopKind.ArmourSmith) })
         {
@@ -2017,69 +1980,48 @@ public partial class HudView : Control
 
     private void ShowPortrait(CharacterLook look)
     {
-        ShowLookBar("HitPointBar", look.ActiveHitPoints, look.HitPoints);
-        ShowLookBar("EnduranceBar", look.ActiveEndurance, look.Endurance);
-        ShowLookBar("ManaBar", look.ActiveMana, look.Mana);
-        GetNode<CanvasItem>("%OwnName").Visible = false;
+        var character = GetNode<CharacterView>("%Character");
+        ShowLookBar(character.HitPointBar, look.ActiveHitPoints, look.HitPoints);
+        ShowLookBar(character.EnduranceBar, look.ActiveEndurance, look.Endurance);
+        ShowLookBar(character.ManaBar, look.ActiveMana, look.Mana);
+        character.ShowOwnName(null);
         ShowCharacter(look.Name, look.Points, look.Sprite, LookPanel.PortraitTint(look.Flags));
-        GetNode<CanvasItem>("%SecondCharmFrame").Visible = look.Worn[(int)WornSlot.SecondCharm] != 0;
+        var equipment = GetNode<EquipmentView>("%Equipment");
+        equipment.ShowSecondCharm(look.Worn[(int)WornSlot.SecondCharm] != 0);
         for (var slot = WornSlot.Head; slot <= WornSlot.SecondCharm; slot++)
         {
-            var slotView = GetNode<ItemSlotView>("%" + slot);
+            var slotView = equipment.Slot(slot);
             slotView.Show(new ItemSlot(look.Worn[(int)slot], 0, 0, 0), [], false);
             slotView.ShowHotbarKey(null);
         }
     }
 
-    private void ShowCharacter(string name, int points, int sprite, SpriteTint tint)
-    {
-        SetText("PortraitName", name);
-        SetText("RankName", Ranks.Name(points));
-        SetSprite("RankBadge", RankBadges.Sprite(points));
-        SetSprite("Portrait", sprite);
-        var material = (ShaderMaterial)GetNode<CanvasItem>("%Portrait").Material;
-        material.SetShaderParameter("grey", tint.HasFlag(SpriteTint.Grey));
-        material.SetShaderParameter("infrared", tint.HasFlag(SpriteTint.Infrared));
-        material.SetShaderParameter("bloody", tint.HasFlag(SpriteTint.Bloody));
-    }
+    private void ShowCharacter(string name, int points, int sprite, SpriteTint tint) =>
+        GetNode<CharacterView>("%Character")
+            .ShowCharacter(name, Ranks.Name(points), RankBadges.Sprite(points), sprite, tint);
 
     private void ShowEquipment(PlayerState player)
     {
         var blocked = Equipment.BlockedSlots(player.HeldItem, player.Worn);
         var secondCharmWorn = player.Worn[(int)WornSlot.SecondCharm].Sprite != 0;
-        GetNode<CanvasItem>("%SecondCharmFrame").Visible = secondCharmWorn;
+        var equipment = GetNode<EquipmentView>("%Equipment");
+        equipment.ShowSecondCharm(secondCharmWorn);
         for (var slot = WornSlot.Head; slot <= WornSlot.SecondCharm; slot++)
         {
             var item = player.Worn[(int)slot];
             var showBlocked = blocked.Contains(slot) && (slot != WornSlot.SecondCharm || secondCharmWorn);
-            var slotView = GetNode<ItemSlotView>("%" + slot);
+            var slotView = equipment.Slot(slot);
             slotView.Show(item, ItemOverlays.Worn(item), showBlocked);
             var hotbarKey = item.Sprite != 0 ? HotbarButtons.GearKeyButton(Settings.HotbarActions, slot) : null;
             slotView.ShowHotbarKey(hotbarKey);
         }
     }
 
-    private void ShowPool(string name, int current, int maximum)
-    {
-        SetText(name, Number(current));
-        SetText("Max" + name, Number(maximum));
-    }
+    private static void ShowBar(PortraitBar bar, int current, int[] values) =>
+        bar.Show(PortraitBars.For(current, values[MaximumSlot], values[ReservedSlot]), false);
 
-    private void ShowBar(string name, int current, int[] values) =>
-        GetNode<PortraitBar>("%" + name)
-            .Show(PortraitBars.For(current, values[MaximumSlot], values[ReservedSlot]), false);
-
-    private void ShowLookBar(string name, int current, int maximum) =>
-        GetNode<PortraitBar>("%" + name).Show(PortraitBars.For(current, maximum, 0), true);
-
-    private void ShowPoints(string name, string shownName, int points)
-    {
-        SetText(name + "Name", Currencies.RowName(shownName, points));
-        SetText(name, Number(points));
-    }
+    private static void ShowLookBar(PortraitBar bar, int current, int maximum) =>
+        bar.Show(PortraitBars.For(current, maximum, 0), true);
 
     private void SetText(string name, string text) => GetNode<Label>("%" + name).Text = text;
-
-    private void SetSprite(string name, int spriteNumber) =>
-        GetNode<ArchiveSprite>("%" + name).SpriteNumber = spriteNumber;
 }

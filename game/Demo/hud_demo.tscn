@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://chuddemoadcec3b98d0d"]
+
+[ext_resource type="Script" uid="uid://dwm0rj8k0x104" path="res://Demo/HudDemo.cs" id="1_demo"]
+
+[node name="HudDemo" type="Control" unique_id=1517302841]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+script = ExtResource("1_demo")

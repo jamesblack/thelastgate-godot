@@ -1,0 +1,242 @@
+[gd_scene format=3 uid="uid://6ukwdbkpxs1e"]
+
+[ext_resource type="Script" uid="uid://3e2bdpbjw3sy" path="res://Hud/PoolsView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[node name="PoolsView" type="Control" unique_id=1946252118]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 159.0
+offset_bottom = 46.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=979222895]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Rows" type="VBoxContainer" parent="Frame" unique_id=231690203]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="HitPointsRow" type="HBoxContainer" parent="Frame/Rows" unique_id=401145528]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/HitPointsRow" unique_id=714697398]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/HitPointsRow/NameCell" unique_id=1557385287]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+
+[node name="HitPointsName" type="Label" parent="Frame/Rows/HitPointsRow/NameCell/Margin" unique_id=833482248]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Hitpoints"
+script = ExtResource("3_label")
+
+[node name="CurrentCell" type="Container" parent="Frame/Rows/HitPointsRow" unique_id=588100665]
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/HitPointsRow/CurrentCell" unique_id=1684375409]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="HitPoints" type="Label" parent="Frame/Rows/HitPointsRow/CurrentCell/Margin" unique_id=944757738]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="MaxCell" type="Container" parent="Frame/Rows/HitPointsRow" unique_id=1281958140]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/HitPointsRow/MaxCell" unique_id=1559645979]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="MaxHitPoints" type="Label" parent="Frame/Rows/HitPointsRow/MaxCell/Margin" unique_id=1518265993]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="EnduranceRow" type="HBoxContainer" parent="Frame/Rows" unique_id=779373720]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/EnduranceRow" unique_id=1431837827]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/EnduranceRow/NameCell" unique_id=589802540]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+
+[node name="EnduranceName" type="Label" parent="Frame/Rows/EnduranceRow/NameCell/Margin" unique_id=2012133590]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Endurance"
+script = ExtResource("3_label")
+
+[node name="CurrentCell" type="Container" parent="Frame/Rows/EnduranceRow" unique_id=131508657]
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/EnduranceRow/CurrentCell" unique_id=1581450510]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="Endurance" type="Label" parent="Frame/Rows/EnduranceRow/CurrentCell/Margin" unique_id=827800334]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="MaxCell" type="Container" parent="Frame/Rows/EnduranceRow" unique_id=633167938]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/EnduranceRow/MaxCell" unique_id=1816867905]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="MaxEndurance" type="Label" parent="Frame/Rows/EnduranceRow/MaxCell/Margin" unique_id=551091262]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="ManaRow" type="HBoxContainer" parent="Frame/Rows" unique_id=1817175308]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameCell" type="Container" parent="Frame/Rows/ManaRow" unique_id=2009351894]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ManaRow/NameCell" unique_id=1847136891]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+
+[node name="ManaName" type="Label" parent="Frame/Rows/ManaRow/NameCell/Margin" unique_id=653072976]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Mana"
+script = ExtResource("3_label")
+
+[node name="CurrentCell" type="Container" parent="Frame/Rows/ManaRow" unique_id=1772427178]
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 13
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ManaRow/CurrentCell" unique_id=1821874320]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="Mana" type="Label" parent="Frame/Rows/ManaRow/CurrentCell/Margin" unique_id=722352250]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")
+
+[node name="MaxCell" type="Container" parent="Frame/Rows/ManaRow" unique_id=2121413718]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Rows/ManaRow/MaxCell" unique_id=2109822577]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+
+[node name="MaxMana" type="Label" parent="Frame/Rows/ManaRow/MaxCell/Margin" unique_id=536543633]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "999"
+horizontal_alignment = 2
+script = ExtResource("3_label")

@@ -570,7 +570,7 @@ Colour = 9
 [node name="Text" type="Label" parent="Page/Shape/Notes" unique_id=966761410]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-text = "Box is the usual rect. Circle rounds it to the largest circle that fits. Close draws the close cross inside the rings (the close button uses it with Profile G)."
+text = "Box is the usual rect. Circle rounds it to the largest circle that fits. Close draws the close cross inside the rings (the close button uses it with Profile G). Diamond draws the isometric 2:1 diamond of the HUD art; give it a width twice its height plus one row (44 x 21 is the tile under the list buttons), and each ring is a three-pixel run per row like the art's slanted lines. Hole cuts the same diamond out of any panel, given as x, y, width and height in the panel's own pixels; the HUD background is a Fill Blue panel with a Hole for the world's window."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -637,6 +637,66 @@ Shape = 2
 [node name="Caption" type="Label" parent="Page/Shape/Examples/Example21" unique_id=1725854669]
 layout_mode = 2
 text = "Close"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example34" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=1903318842]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example34" unique_id=1294019821]
+custom_minimum_size = Vector2(44, 21)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Shape = 3
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example34" unique_id=1029384756]
+layout_mode = 2
+text = "Diamond, G"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example35" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=1739201846]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example35" unique_id=1820394817]
+custom_minimum_size = Vector2(66, 33)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Shape = 3
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example35" unique_id=1182039485]
+layout_mode = 2
+text = "Diamond, GBG"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example36" type="VBoxContainer" parent="Page/Shape/Examples" unique_id=1382049571]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Container" parent="Page/Shape/Examples/Example36" unique_id=1502938471]
+custom_minimum_size = Vector2(80, 41)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GBG"
+Hole = Rect2(18, 10, 44, 21)
+
+[node name="Caption" type="Label" parent="Page/Shape/Examples/Example36" unique_id=1928374650]
+layout_mode = 2
+text = "Box, GBG, Hole"
 script = ExtResource("3_label")
 Colour = 10
 
@@ -785,7 +845,7 @@ Colour = 9
 [node name="Text" type="Label" parent="Page/ScrollBar/Notes" unique_id=1649696924]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-text = "Add a VScrollBar with ProceduralScrollBar.cs inside a column panel (min width 9, Padding 1, Fill Red) and set its horizontal size flag to Fill. The script brings everything else: the panel shader draws the grabber in border-grained green with no rings, so it stays green wherever it scrolls, and it lights up 1.6x hovered and 2.0x dragged. Its material and styles are made in code and never saved. Set max_value to the item count and page to the rows shown."
+text = "Add a VScrollBar with ProceduralScrollBar.cs inside a column panel (min width 9, Padding 1, Fill Red) and set its horizontal size flag to Fill. The script brings everything else: the panel shader draws the grabber in border-grained green with no rings, so it stays green wherever it scrolls, and it lights up 1.6x hovered and 2.0x dragged. Its material and styles are made in code and never saved. Set max_value to the item count and page to the rows shown. A bar that scrolls one row at a time with no page (the skill list) sets MinimumGrabberLength instead, so its grabber keeps that many pixels."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -848,6 +908,34 @@ value = 19.0
 [node name="Caption" type="Label" parent="Page/ScrollBar/Examples/Example26" unique_id=1663747179]
 layout_mode = 2
 text = "scrolled to the end"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example27" type="VBoxContainer" parent="Page/ScrollBar/Examples" unique_id=1093384571]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Column" type="Container" parent="Page/ScrollBar/Examples/Example27" unique_id=1482020563]
+custom_minimum_size = Vector2(9, 90)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 1
+
+[node name="Bar" type="VScrollBar" parent="Page/ScrollBar/Examples/Example27/Column" unique_id=1964150277]
+layout_mode = 2
+size_flags_horizontal = 1
+script = ExtResource("8_scroll")
+max_value = 45.0
+step = 1.0
+value = 10.0
+MinimumGrabberLength = 11
+
+[node name="Caption" type="Label" parent="Page/ScrollBar/Examples/Example27" unique_id=1517368072]
+layout_mode = 2
+text = "no page, MinimumGrabberLength 11"
 script = ExtResource("3_label")
 Colour = 10
 
@@ -951,7 +1039,7 @@ Colour = 9
 [node name="Text" type="Label" parent="Page/CloseButton/Notes" unique_id=874216587]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-text = "Instance game/Procedural/close_button.tscn beside a window's frame, inside an HBox with separation 1. It is a ClickArea with LightsUp on, so it brightens itself on hover and hold; any ClickArea can do the same by turning LightsUp on."
+text = "Instance game/Procedural/close_button.tscn beside a window's frame, inside an HBox with separation 1. It is a ClickArea with LightsUp on, so it brightens itself on hover and hold; any ClickArea can do the same by turning LightsUp on. Point its LitContent at one child to light only that child, as the + and - cells of the stat rows light only their sign. Keep that child beside the panel, not inside it: a panel's shader drops brightening from what it holds."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -1005,6 +1093,52 @@ size_flags_horizontal = 0
 [node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example32" unique_id=909807878]
 layout_mode = 2
 text = "held"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example33" type="VBoxContainer" parent="Page/CloseButton/Examples" unique_id=1203948577]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Area" type="Control" parent="Page/CloseButton/Examples/Example33" unique_id=1739920418]
+custom_minimum_size = Vector2(13, 14)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+
+[node name="Cell" type="Container" parent="Page/CloseButton/Examples/Example33/Area" unique_id=1418226615]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Page/CloseButton/Examples/Example33/Area" unique_id=1584103375]
+modulate = Color(1.6, 1.6, 1.6, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_left = 4
+
+[node name="Sign" type="Label" parent="Page/CloseButton/Examples/Example33/Area/Margin" unique_id=1309427741]
+layout_mode = 2
+size_flags_vertical = 0
+text = "+"
+script = ExtResource("3_label")
+
+[node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example33" unique_id=2010938424]
+layout_mode = 2
+text = "LitContent: only the sign, hovered"
 script = ExtResource("3_label")
 Colour = 10
 

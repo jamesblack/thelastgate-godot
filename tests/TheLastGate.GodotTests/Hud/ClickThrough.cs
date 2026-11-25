@@ -7,12 +7,13 @@ public static partial class ClickThrough
 {
     private static readonly Vector2 InsideTheRings = new(2, 2);
 
-    public static bool ReachesTheWorld(Control frame)
+    public static bool ReachesTheWorld(Control frame) => ReachesTheWorldAt(frame.GlobalPosition + InsideTheRings);
+
+    public static bool ReachesTheWorldAt(Vector2 point)
     {
         var tree = (SceneTree)Engine.GetMainLoop();
         var world = new UnhandledClicks();
         tree.Root.AddChild(world);
-        var point = frame.GlobalPosition + InsideTheRings;
         foreach (var pressed in new[] { true, false })
         {
             tree.Root.PushInput(

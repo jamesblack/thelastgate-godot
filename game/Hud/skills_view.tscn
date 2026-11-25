@@ -1,0 +1,210 @@
+[gd_scene format=3 uid="uid://6ztv9f07dy6o"]
+
+[ext_resource type="Script" uid="uid://bormpdkr4joe5" path="res://Hud/SkillList.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://d1q1eo6scq768" path="res://Hud/stat_row.tscn" id="4_row"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="5_click"]
+[ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="6_scroll"]
+
+[node name="SkillsView" type="Control" unique_id=548756616]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 245.0
+offset_bottom = 158.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1838220182]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 245.0
+offset_bottom = 144.0
+mouse_filter = 0
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Columns" type="HBoxContainer" parent="Frame" unique_id=1757610633]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Rows" type="VBoxContainer" parent="Frame/Columns" unique_id=964854877]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Skill0" parent="Frame/Columns/Rows" unique_id=462327492 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Hand to Hand"
+
+[node name="Skill1" parent="Frame/Columns/Rows" unique_id=1871486297 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Dagger"
+
+[node name="Skill2" parent="Frame/Columns/Rows" unique_id=856423864 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Sword"
+
+[node name="Skill3" parent="Frame/Columns/Rows" unique_id=1795623990 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Axe"
+
+[node name="Skill4" parent="Frame/Columns/Rows" unique_id=1635877447 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Staff"
+
+[node name="Skill5" parent="Frame/Columns/Rows" unique_id=1744370150 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Two-Handed"
+
+[node name="Skill6" parent="Frame/Columns/Rows" unique_id=732727509 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Bartering"
+
+[node name="Skill7" parent="Frame/Columns/Rows" unique_id=1101768677 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Perception"
+
+[node name="Skill8" parent="Frame/Columns/Rows" unique_id=1438874069 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Stealth"
+
+[node name="Skill9" parent="Frame/Columns/Rows" unique_id=263998461 instance=ExtResource("4_row")]
+layout_mode = 2
+PreviewName = "Swimming"
+
+[node name="ScrollColumn" type="Container" parent="Frame/Columns" unique_id=1589474305]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "G"
+Padding = 2
+
+[node name="ScrollBar" type="VScrollBar" parent="Frame/Columns/ScrollColumn" unique_id=393656927]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1
+max_value = 45.0
+step = 1.0
+script = ExtResource("6_scroll")
+MinimumGrabberLength = 11
+
+[node name="PlannerFooter" type="Container" parent="." unique_id=611153243]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = 142.0
+offset_right = 60.0
+offset_bottom = 158.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 14
+
+[node name="PlannerButton" type="Control" parent="PlannerFooter" unique_id=1496772466]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 14)
+layout_mode = 2
+script = ExtResource("5_click")
+LightsUp = true
+
+[node name="Cell" type="Container" parent="PlannerFooter/PlannerButton" unique_id=1439719078]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="PlannerFooter/PlannerButton/Cell" unique_id=1229555273]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+
+[node name="PlannerLabel" type="Label" parent="PlannerFooter/PlannerButton/Cell/Margin" unique_id=1996969749]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Planner"
+script = ExtResource("3_label")
+
+[node name="UpdateFooter" type="Container" parent="." unique_id=1713528980]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 131.0
+offset_top = 142.0
+offset_right = 232.0
+offset_bottom = 158.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 14
+
+[node name="Cells" type="HBoxContainer" parent="UpdateFooter" unique_id=138587147]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="UpdateButton" type="Control" parent="UpdateFooter/Cells" unique_id=1398434754]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(49, 14)
+layout_mode = 2
+script = ExtResource("5_click")
+LightsUp = true
+
+[node name="Cell" type="Container" parent="UpdateFooter/Cells/UpdateButton" unique_id=280543490]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 15
+
+[node name="Margin" type="MarginContainer" parent="UpdateFooter/Cells/UpdateButton/Cell" unique_id=1114280626]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 7
+
+[node name="UpdateLabel" type="Label" parent="UpdateFooter/Cells/UpdateButton/Cell/Margin" unique_id=613358304]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Update"
+script = ExtResource("3_label")
+
+[node name="PointsCell" type="Container" parent="UpdateFooter/Cells" unique_id=2019912227]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+Edges = 7
+
+[node name="Margin" type="MarginContainer" parent="UpdateFooter/Cells/PointsCell" unique_id=1997622101]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 1
+
+[node name="UpdatePoints" type="Label" parent="UpdateFooter/Cells/PointsCell/Margin" unique_id=376013976]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "12345"
+horizontal_alignment = 2
+script = ExtResource("3_label")

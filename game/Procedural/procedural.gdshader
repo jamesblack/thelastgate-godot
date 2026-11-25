@@ -20,11 +20,14 @@ uniform int profile_width = 0;
 uniform int fill = 0;
 uniform int edges = 15;
 uniform bool solid_rings = false;
+// An isometric diamond (x, y, width, height in the panel's pixels) cut out of the panel; zero height cuts nothing.
+uniform vec4 hole = vec4(0.0);
 
 const int SHAPE_BOX = 0;
 const int SHAPE_LINE = 1;
 const int SHAPE_CLOSE = 2;
 const int SHAPE_CIRCLE = 3;
+const int SHAPE_DIAMOND = 4;
 const int RING_GOLD = 0;
 const int RING_BLUE = 1;
 const int RING_RED = 2;
@@ -109,6 +112,25 @@ void fragment() {
 				discard;
 			}
 			inset = int(floor(radius - from_centre));
+		}
+		// An isometric diamond, its rings stepping two pixels across for each row down like the art's 2:1 lines.
+		// Each ring is a three-pixel run per row, so neighbouring rows' runs overlap by one pixel and read as unbroken.
+		if (hole.w > 0.0) {
+			int hole_row = local.y - int(hole.y);
+			int hole_rows_from_point = min(hole_row, int(hole.w) - 1 - hole_row);
+			float hole_from_middle = abs(float(local.x) + 0.5 - (hole.x + hole.z * 0.5));
+			if (hole_rows_from_point >= 0 && 2.0 * float(hole_rows_from_point) - hole_from_middle >= -1.5) {
+				discard;
+			}
+		}
+		if (shape == SHAPE_DIAMOND) {
+			int rows_from_point = min(local.y, size.y - 1 - local.y);
+			float from_middle = abs(float(local.x) + 0.5 - float(size.x) * 0.5);
+			float slack = 2.0 * float(rows_from_point) - from_middle;
+			if (slack < -1.5) {
+				discard;
+			}
+			inset = int(floor((slack + 1.5) / 3.0));
 		}
 		vec3 colour;
 		bool ring = inset < profile_width;

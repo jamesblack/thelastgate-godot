@@ -5,21 +5,16 @@ using TheLastGate.State;
 
 namespace TheLastGate.Hud;
 
-public partial class InventoryGrid : GridContainer
+public partial class InventoryGrid : Control
 {
     private readonly InventoryScroll scroll = new();
-    private ScrollBar? scrollBar;
 
-    [Export] public NodePath ScrollBarPath { get; set; } = new();
+    private ScrollBar ScrollBar => GetNode<ScrollBar>("%ScrollBar");
 
     public override void _Ready()
     {
-        if (!ScrollBarPath.IsEmpty)
-        {
-            scrollBar = GetNode<ScrollBar>(ScrollBarPath);
-            scrollBar.MaxValue = InventoryScroll.LastRow + 1;
-            scrollBar.ValueChanged += value => scroll.ScrollTo((int)value);
-        }
+        ScrollBar.MaxValue = InventoryScroll.LastRow + 1;
+        ScrollBar.ValueChanged += value => scroll.ScrollTo((int)value);
     }
 
     public override void _GuiInput(InputEvent inputEvent)
@@ -33,11 +28,13 @@ public partial class InventoryGrid : GridContainer
         if (click.Pressed && click.ButtonIndex is MouseButton.WheelUp or MouseButton.WheelDown)
         {
             scroll.ScrollBy(click.ButtonIndex == MouseButton.WheelUp ? -1 : 1);
-            scrollBar?.SetValueNoSignal(scroll.Row);
+            ScrollBar.SetValueNoSignal(scroll.Row);
         }
     }
 
     public int SlotShownIn(int cell) => scroll.SlotShownIn(cell);
+
+    public ItemSlotView Slot(int cell) => GetNode("%Cells").GetChild(cell).GetNode<ItemSlotView>("Slot");
 
     public void Show(PlayerState player, int[] hotbarActions)
     {
@@ -45,7 +42,7 @@ public partial class InventoryGrid : GridContainer
         {
             var slot = scroll.SlotShownIn(cell);
             var item = player.Inventory[slot];
-            var slotView = GetChild<ItemSlotView>(cell);
+            var slotView = Slot(cell);
             slotView.Show(item, ItemOverlays.Carried(item), false);
             slotView.ShowHotbarKey(HotbarButtons.InventoryKeyButton(hotbarActions, slot));
         }

@@ -128,7 +128,7 @@ public class WaypointKeyboardTests
     [TestCase]
     public async Task WithEnterToTalkOn_UpDoesNotOpenTheChatLine()
     {
-        var line = hud.GetNode<ChatLine>("%ChatLine");
+        var line = hud.GetNode<ChatView>("%Chat").Line;
         line.EnterToTalk = true;
 
         Keyboard.Press(Key.Up);

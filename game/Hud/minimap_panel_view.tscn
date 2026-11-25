@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://1zy0xoicjp05"]
+
+[ext_resource type="Script" uid="uid://x7s2rqiu31zn" path="res://Hud/MinimapPanelView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="4_click"]
+[ext_resource type="Texture2D" uid="uid://ccu306fceybet" path="res://Hud/zoom_in.png" id="5_zoomin"]
+[ext_resource type="Texture2D" uid="uid://l2ubv34ltfpi" path="res://Hud/zoom_out.png" id="6_zoomout"]
+
+[node name="MinimapPanelView" type="Control" unique_id=865803649]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 152.0
+offset_bottom = 148.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1517371718]
+layout_mode = 0
+offset_right = 134.0
+offset_bottom = 148.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+
+[node name="Cells" type="VBoxContainer" parent="Frame" unique_id=1174461752]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TitleCell" type="Container" parent="Frame/Cells" unique_id=472330574]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Margin" type="MarginContainer" parent="Frame/Cells/TitleCell" unique_id=1548720401]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+
+[node name="Location" type="Label" parent="Frame/Cells/TitleCell/Margin" unique_id=1516188764]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Aston"
+clip_text = true
+script = ExtResource("3_label")
+
+[node name="MapCell" type="Container" parent="Frame/Cells" unique_id=294967159]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Minimap" type="Control" parent="Frame/Cells/MapCell" unique_id=1736402915]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("4_click")
+
+[node name="Picture" type="TextureRect" parent="Frame/Cells/MapCell/Minimap" unique_id=419283376]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ZoomWing" type="Container" parent="." unique_id=1798463761]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 14.0
+offset_right = 152.0
+offset_bottom = 54.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 7
+
+[node name="Buttons" type="VBoxContainer" parent="ZoomWing" unique_id=742597242]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="MinimapZoomIn" type="Control" parent="ZoomWing/Buttons" unique_id=1288650137]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+script = ExtResource("4_click")
+LightsUp = true
+
+[node name="Cell" type="Container" parent="ZoomWing/Buttons/MinimapZoomIn" unique_id=1208769807]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Icon" type="TextureRect" parent="ZoomWing/Buttons/MinimapZoomIn" unique_id=808272160]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 17.0
+offset_bottom = 17.0
+mouse_filter = 2
+texture = ExtResource("5_zoomin")
+
+[node name="MinimapZoomOut" type="Control" parent="ZoomWing/Buttons" unique_id=902731488]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+script = ExtResource("4_click")
+LightsUp = true
+
+[node name="Cell" type="Container" parent="ZoomWing/Buttons/MinimapZoomOut" unique_id=735011235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Icon" type="TextureRect" parent="ZoomWing/Buttons/MinimapZoomOut" unique_id=624716109]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 17.0
+offset_bottom = 17.0
+mouse_filter = 2
+texture = ExtResource("6_zoomout")
