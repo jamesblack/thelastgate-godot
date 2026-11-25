@@ -138,8 +138,8 @@ public partial class PlannerWindowView : Panel, IHudContextUser
         }
 
         ShowFocusLines(panel.Lines);
-        PlanIt.Visible = panel.Plan.Count > 0;
-        PlanIt.Disabled = !panel.Affordable;
+        PlanIt.Visible = panel.Plan.Count > 0 || panel.Working;
+        PlanIt.Disabled = panel.Working || !panel.Affordable;
     }
 
     private void ShowFocusLines(IReadOnlyList<FocusLine> lines)

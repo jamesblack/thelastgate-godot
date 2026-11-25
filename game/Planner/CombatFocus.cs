@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TheLastGate.Rules;
 
 namespace TheLastGate.Planner;
@@ -54,13 +55,14 @@ public sealed record CombatFocusResult(int CurrentValue, FocusRoute? Best);
 // The cheapest way to give Hit, Parry, Weapon or Armor Value +1, with buffs, tarot and item effects counted.
 public static class CombatFocus
 {
-    public static CombatFocusResult Search(CombatFocusInput input)
+    public static CombatFocusResult Search(CombatFocusInput input, CancellationToken cancel = default)
     {
         var currentValue = StatWithPoints(input, new int[input.Candidates.Count]);
         var best = FocusSearch.Cheapest(
             input.Candidates,
             uint.MaxValue,
-            points => StatWithPoints(input, points) >= currentValue + 1);
+            points => StatWithPoints(input, points) >= currentValue + 1,
+            cancel);
         return new CombatFocusResult(currentValue, best);
     }
 

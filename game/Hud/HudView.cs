@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Characters;
@@ -73,7 +74,7 @@ public partial class HudView : Control
 
     private readonly DepotPage depotPage = new();
     private readonly ExitSequence exit = new();
-    private readonly FocusCache focusCache = new();
+    private readonly FocusCache focusCache = new(search => Task.Run(search));
     private readonly LookPanel lookPanel = new();
     private readonly byte[] minimapPixels = new byte[MinimapView.Pixels * MinimapView.Pixels * 4];
     private readonly MinimapView minimapView = new();
@@ -614,6 +615,11 @@ public partial class HudView : Control
         if (state == null)
         {
             return;
+        }
+
+        if (focusCache.TakeFinished())
+        {
+            ShowPlanner();
         }
 
         RecheckTooltipWhenShowingChanges();

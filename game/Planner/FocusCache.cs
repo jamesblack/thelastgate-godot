@@ -1,28 +1,17 @@
+using System;
+
 namespace TheLastGate.Planner;
 
-// A search that finds nothing can take most of a second, so each one runs again only when what it reads has changed.
-public sealed class FocusCache
+// A search can take most of a second, so it runs away from the caller, and again only when what it reads has
+// changed. Null means its answer isn't ready yet.
+public sealed class FocusCache(Action<Action> startSearch)
 {
-    private (BuffFocusInput Input, BuffFocusResult Result)? buff;
-    private (CombatFocusInput Input, CombatFocusResult Result)? combat;
+    private readonly FocusJob<BuffFocusInput, BuffFocusResult> buff = new(BuffFocus.Search, startSearch);
+    private readonly FocusJob<CombatFocusInput, CombatFocusResult> combat = new(CombatFocus.Search, startSearch);
 
-    public BuffFocusResult Buff(BuffFocusInput input)
-    {
-        if (buff is not { } cached || !cached.Input.Equals(input))
-        {
-            buff = cached = (input, BuffFocus.Search(input));
-        }
+    public BuffFocusResult? Buff(BuffFocusInput input) => buff.For(input);
 
-        return cached.Result;
-    }
+    public CombatFocusResult? Combat(CombatFocusInput input) => combat.For(input);
 
-    public CombatFocusResult Combat(CombatFocusInput input)
-    {
-        if (combat is not { } cached || !cached.Input.Equals(input))
-        {
-            combat = cached = (input, CombatFocus.Search(input));
-        }
-
-        return cached.Result;
-    }
+    public bool TakeFinished() => buff.TakeFinished() | combat.TakeFinished();
 }

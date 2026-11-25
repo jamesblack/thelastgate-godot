@@ -24,6 +24,7 @@ public sealed record FocusLine(string Text, string? Value, bool Indented, FocusT
 public sealed class FocusPanel
 {
     public const string Prompt = "Click a skill or combat stat to focus it";
+    public const string WorkingText = "Working out the cheapest +1...";
 
     private const int ShownSkill = 1;
 
@@ -36,6 +37,8 @@ public sealed class FocusPanel
 
     public bool Affordable { get; private init; }
 
+    public bool Working { get; private init; }
+
     // The focus is on something that can't be focused now, so it should be dropped.
     public bool LostFocus { get; private init; }
 
@@ -44,9 +47,15 @@ public sealed class FocusPanel
         using var timing = Timings.Measure("planner.focus");
         if (focus?.Stat is { } stat)
         {
-            return FocusInputs.Combat(sheet, stat) is { } input
-                ? CombatPanel(sheet.Game, CombatModel.StatNames[(int)stat], cache.Combat(input))
-                : Lost();
+            if (FocusInputs.Combat(sheet, stat) is not { } input)
+            {
+                return Lost();
+            }
+
+            var statName = CombatModel.StatNames[(int)stat];
+            return cache.Combat(input) is { } result
+                ? CombatPanel(sheet.Game, statName, result)
+                : StillWorking(statName);
         }
 
         if (focus?.Skill is not { } skill)
@@ -72,6 +81,16 @@ public sealed class FocusPanel
     private static FocusLine PromptLine() => new(Prompt, null, false, FocusTone.Normal);
 
     private static FocusPanel Lost() => new() { Lines = [PromptLine()], LostFocus = true };
+
+    private static FocusPanel StillWorking(string name) => new()
+    {
+        Lines =
+        [
+            new FocusLine(name, null, false, FocusTone.Heading),
+            new FocusLine(WorkingText, null, false, FocusTone.Normal),
+        ],
+        Working = true,
+    };
 
     // Only learned skills on the list can be focused.
     private static bool Focusable(PlannerGame game, int skill) =>
@@ -152,8 +171,12 @@ public sealed class FocusPanel
     {
         var game = sheet.Game;
         var input = FocusInputs.Buffed(sheet, skill)!;
-        var result = cache.Buff(input);
         var name = game.SkillTexts[skill].Name;
+        if (cache.Buff(input) is not { } result)
+        {
+            return StillWorking(name);
+        }
+
         if (FocusInputs.SplitPool(game, result.Best) is not { } best)
         {
             return new FocusPanel { Lines = [Heading(name, result.CurrentValue), CantBeRaised(name)] };

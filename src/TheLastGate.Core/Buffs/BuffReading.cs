@@ -32,6 +32,24 @@ public sealed class BuffReading : IEquatable<BuffReading>
         == (other.Known, other.Power, other.HasExact, other.WeaponBonus, other.ArmorBonus)
         && AttributeBonus.Equals(other.AttributeBonus);
 
+    public BuffReading Copy()
+    {
+        var copy = new BuffReading
+        {
+            Known = Known,
+            Power = Power,
+            HasExact = HasExact,
+            WeaponBonus = WeaponBonus,
+            ArmorBonus = ArmorBonus,
+        };
+        foreach (var attribute in Enum.GetValues<AttributeSlot>())
+        {
+            copy.AttributeBonus[attribute] = AttributeBonus[attribute];
+        }
+
+        return copy;
+    }
+
     public override bool Equals(object? other) => Equals(other as BuffReading);
 
     public override int GetHashCode() => HashCode.Combine(Known, Power, WeaponBonus, ArmorBonus);

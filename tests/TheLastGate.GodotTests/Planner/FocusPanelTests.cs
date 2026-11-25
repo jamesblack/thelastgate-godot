@@ -15,12 +15,12 @@ public class FocusPanelTests
     private const int Agility = (int)AttributeSlot.Agility;
 
     private static readonly int SwordSlot = StatSlots.Skill(SwordSkill);
-    private FocusCache cache = new();
+    private FocusCache cache = new(FocusJobTests.RunNow);
 
     private PlannerGame game = null!;
 
     [BeforeTest]
-    public void StartAGame() => (cache, game) = (new FocusCache(), FocusInputsTests.SwordGame());
+    public void StartAGame() => (cache, game) = (new FocusCache(FocusJobTests.RunNow), FocusInputsTests.SwordGame());
 
     [TestCase]
     public void WithoutAFocus_ThePanelSaysHowToFocus()
@@ -129,6 +129,49 @@ public class FocusPanelTests
         AssertThat(others.Length).IsEqual(2);
         string[] routes = ["Direct (+1 Sword)", "Through attributes", "Through Bless"];
         AssertThat(others.Except(routes).ToArray()).IsEmpty();
+    }
+
+    [TestCase]
+    public void WhileItsSearchRuns_ABuffedSkillIsWorkingAndOffersNoPlan()
+    {
+        cache = new FocusCache(_ => { });
+
+        var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
+
+        AssertThat(panel.Working).IsTrue();
+        AssertThat(panel.Lines)
+            .ContainsExactly(
+                new FocusLine("Sword", null, false, FocusTone.Heading),
+                new FocusLine(FocusPanel.WorkingText, null, false, FocusTone.Normal));
+        AssertThat(panel.Plan).IsEmpty();
+        AssertThat(panel.LostFocus).IsFalse();
+    }
+
+    [TestCase]
+    public void WhileItsSearchRuns_ACombatStatIsWorking()
+    {
+        cache = new FocusCache(_ => { });
+
+        var panel = Panel(PlannerFocus.OnStat(CombatStat.Hit));
+
+        AssertThat(panel.Working).IsTrue();
+        AssertThat(panel.Lines[0]).IsEqual(new FocusLine("Hit Score", null, false, FocusTone.Heading));
+        AssertThat(panel.Plan).IsEmpty();
+    }
+
+    [TestCase]
+    public void OnceItsSearchFinishes_ABuffedSkillShowsItsRoute()
+    {
+        var held = new List<Action>();
+        cache = new FocusCache(held.Add);
+        Panel(PlannerFocus.OnSkill(SwordSkill));
+
+        held.ForEach(search => search());
+
+        AssertThat(cache.TakeFinished()).IsTrue();
+        var panel = Panel(PlannerFocus.OnSkill(SwordSkill));
+        AssertThat(panel.Working).IsFalse();
+        AssertThat(panel.Plan).IsNotEmpty();
     }
 
     [TestCase]

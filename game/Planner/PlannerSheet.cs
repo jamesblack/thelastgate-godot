@@ -250,7 +250,7 @@ public sealed class PlannerSheet
             input.SpellSkills[kind] = InTable(number) ? ModelSkill(number, true) : new BuffModelSkill();
             if (Game.BuffReadings[kind] is { } reading)
             {
-                input.Active[kind] = reading;
+                input.Active[kind] = reading.Copy();
             }
 
             // A buff from a spell you don't know stays in the numbers; it has no toggle.

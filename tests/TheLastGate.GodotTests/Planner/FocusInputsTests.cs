@@ -174,9 +174,22 @@ public class FocusInputsTests
     }
 
     [TestCase]
+    public void ABuffReadingChangedInPlace_MakesTheInputsDiffer()
+    {
+        var reading = new BuffReading { Known = true, Power = 90 };
+        game.BuffActive[(int)BuffKind.Bless] = true;
+        game.BuffReadings[(int)BuffKind.Bless] = reading;
+        var buffed = FocusInputs.Buffed(PlannerSheet.For(game), SwordSkill);
+
+        reading.Power = 120;
+
+        AssertThat(FocusInputs.Buffed(PlannerSheet.For(game), SwordSkill)).IsNotEqual(buffed);
+    }
+
+    [TestCase]
     public void TheCache_SearchesOnlyWhenTheInputChanges()
     {
-        var cache = new FocusCache();
+        var cache = new FocusCache(FocusJobTests.RunNow);
         var first = cache.Buff(FocusInputs.Buffed(PlannerSheet.For(game), SwordSkill)!);
 
         AssertThat(cache.Buff(FocusInputs.Buffed(PlannerSheet.For(game), SwordSkill)!)).IsSame(first);
@@ -188,7 +201,7 @@ public class FocusInputsTests
     [TestCase]
     public void TheCache_KeepsCombatSearchesApart()
     {
-        var cache = new FocusCache();
+        var cache = new FocusCache(FocusJobTests.RunNow);
         var hit = cache.Combat(FocusInputs.Combat(PlannerSheet.For(game), CombatStat.Hit)!);
 
         AssertThat(cache.Combat(FocusInputs.Combat(PlannerSheet.For(game), CombatStat.Hit)!)).IsSame(hit);

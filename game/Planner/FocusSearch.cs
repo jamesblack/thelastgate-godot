@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace TheLastGate.Planner;
 
@@ -47,7 +48,8 @@ public static class FocusSearch
     public static FocusRoute? Cheapest(
         IReadOnlyList<FocusCandidate> candidates,
         uint allowedCandidates,
-        Func<int[], bool> accept)
+        Func<int[], bool> accept,
+        CancellationToken cancel = default)
     {
         var digitValues = new ulong[candidates.Count];
         for (var index = 0; index < candidates.Count; index++)
@@ -60,6 +62,7 @@ public static class FocusSearch
         queue.Enqueue(0, (0, 0, 0));
         while (queue.TryDequeue(out var key, out var entry))
         {
+            cancel.ThrowIfCancellationRequested();
             var points = Decode(candidates.Count, key);
             if (key != 0 && accept(points))
             {

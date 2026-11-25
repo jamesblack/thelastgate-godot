@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TheLastGate.Buffs;
 using TheLastGate.Rules;
 using TheLastGate.State;
@@ -83,7 +84,7 @@ public static class BuffFocus
     private const int Bless = (int)BuffKind.Bless;
 
     // Every route is one of three kinds: the skill itself, its attributes, or through Bless.
-    public static BuffFocusResult Search(BuffFocusInput input)
+    public static BuffFocusResult Search(BuffFocusInput input, CancellationToken cancel = default)
     {
         var focusedCandidate = input.Candidates.FindIndex(candidate =>
             candidate.RaiseIndex == input.FocusedRaiseIndex);
@@ -97,10 +98,14 @@ public static class BuffFocus
 
         return new BuffFocusResult(
             currentValue,
-            FocusSearch.Cheapest(input.Candidates, uint.MaxValue, Reaches),
-            focusedCandidate < 0 ? null : FocusSearch.Cheapest(input.Candidates, Bit(focusedCandidate), Reaches),
-            FocusSearch.Cheapest(input.Candidates, ~(Bit(focusedCandidate) | Bit(blessCandidate)), Reaches),
-            blessCandidate < 0 ? null : FocusSearch.Cheapest(input.Candidates, uint.MaxValue, NeedsItsBlessPoints));
+            FocusSearch.Cheapest(input.Candidates, uint.MaxValue, Reaches, cancel),
+            focusedCandidate < 0
+                ? null
+                : FocusSearch.Cheapest(input.Candidates, Bit(focusedCandidate), Reaches, cancel),
+            FocusSearch.Cheapest(input.Candidates, ~(Bit(focusedCandidate) | Bit(blessCandidate)), Reaches, cancel),
+            blessCandidate < 0
+                ? null
+                : FocusSearch.Cheapest(input.Candidates, uint.MaxValue, NeedsItsBlessPoints, cancel));
 
         bool Reaches(int[] points) => ValueWithPoints(input, points) >= target;
 
