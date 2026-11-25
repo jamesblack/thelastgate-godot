@@ -37,6 +37,25 @@ public class SkillListTests
     }
 
     [TestCase]
+    public void TheFrame_JoinsOnlyTheFootersShown()
+    {
+        var frame = list.GetNode<ProceduralPanel>("%Frame");
+        var update = new Rect2(131, 142, 101, 16);
+        var planner = new Rect2(0, 142, 60, 16);
+
+        list.ShowUpdate(true, 0);
+        list.ShowPlannerButton(false);
+        AssertThat(frame.JoinedWith.ToArray()).ContainsExactly(update);
+
+        list.ShowPlannerButton(true);
+        AssertThat(frame.JoinedWith.ToArray()).ContainsExactly(planner, update);
+
+        list.ShowUpdate(false, 0);
+        list.ShowPlannerButton(false);
+        AssertThat(frame.JoinedWith.Count).IsEqual(0);
+    }
+
+    [TestCase]
     public void ShowPlannerButton_ShowsTheLeftFooter()
     {
         list.ShowPlannerButton(true);

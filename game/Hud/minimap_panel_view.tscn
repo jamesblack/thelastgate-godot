@@ -22,6 +22,7 @@ offset_bottom = 148.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(132, 14, 20, 40)])
 
 [node name="Cells" type="VBoxContainer" parent="Frame" unique_id=1174461752]
 layout_mode = 2
@@ -83,6 +84,7 @@ offset_bottom = 54.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(-132, -14, 134, 148)])
 Edges = 7
 
 [node name="Buttons" type="VBoxContainer" parent="ZoomWing" unique_id=742597242]

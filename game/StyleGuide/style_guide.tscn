@@ -311,7 +311,7 @@ Colour = 9
 [node name="Text" type="Label" parent="Page/Edges/Notes" unique_id=133102462]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-text = "Which sides draw rings (Top 1, Right 2, Bottom 4, Left 8; add them up). Leave a side out where two boxes touch so they share one border: a footer under a body uses Edges Top only, so the frame's rings close it on the other three sides."
+text = "Which sides draw rings (Top 1, Right 2, Bottom 4, Left 8; add them up). Leave a side out where two boxes touch so they share one border: a footer under a body uses Edges Top only, so the frame's rings close it on the other three sides. When the boxes overlap by the rings' width and only part of a side touches, give each JoinedWith the others' rects in its own pixels: the rings then follow the outline of them all and turn at the inside corners, as on the equipment cross, the quick options, the minimap zoom buttons and the skill list footers. Edges still decides where children sit, so leave out the side that joins."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -398,6 +398,43 @@ Edges = 0
 [node name="Caption" type="Label" parent="Page/Edges/Examples/Example14" unique_id=652939503]
 layout_mode = 2
 text = "None (0)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example37" type="VBoxContainer" parent="Page/Edges/Examples" unique_id=326148317]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Joined" type="Control" parent="Page/Edges/Examples/Example37" unique_id=1162372962]
+custom_minimum_size = Vector2(64, 46)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+
+[node name="Body" type="Container" parent="Page/Edges/Examples/Example37/Joined" unique_id=730098413]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 32.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(0, 30, 34, 16)])
+
+[node name="Footer" type="Container" parent="Page/Edges/Examples/Example37/Joined" unique_id=678594351]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 34.0
+offset_bottom = 46.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GB"
+Edges = 14
+JoinedWith = Array[Rect2]([Rect2(0, -30, 64, 32)])
+
+[node name="Caption" type="Label" parent="Page/Edges/Examples/Example37" unique_id=1353693919]
+layout_mode = 2
+text = "JoinedWith"
 script = ExtResource("3_label")
 Colour = 10
 

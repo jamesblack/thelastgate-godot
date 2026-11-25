@@ -22,6 +22,7 @@ offset_bottom = 34.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(0, 32, 52, 17), Rect2(144, 32, 52, 17)])
 
 [node name="Buttons" type="GridContainer" parent="Band" unique_id=1595596251]
 layout_mode = 2
@@ -287,6 +288,7 @@ offset_bottom = 49.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(0, -32, 196, 34)])
 Edges = 14
 
 [node name="Options" type="Control" parent="OptionsBox" unique_id=998017869]
@@ -329,6 +331,7 @@ offset_bottom = 49.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(-144, -32, 196, 34)])
 Edges = 14
 
 [node name="Exit" type="Control" parent="ExitBox" unique_id=294804716]

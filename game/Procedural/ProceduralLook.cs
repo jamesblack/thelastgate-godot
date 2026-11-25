@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using Godot;
 
 namespace TheLastGate.Procedural;
@@ -10,13 +12,14 @@ public static class ProceduralLook
     private const string ShaderPath = "res://Procedural/procedural.gdshader";
     private const int MaximumRings = 8;
     private const int LineShape = 1;
+    private const int MaximumJoined = 4;
 
     private static readonly Dictionary<Look, ShaderMaterial> Materials = [];
 
     private static Shader? shader;
 
     public static ShaderMaterial Line(string profile) =>
-        Material(new Look(LineShape, profile, ProceduralFill.None, ProceduralEdges.All, false, default));
+        Material(new Look(LineShape, profile, ProceduralFill.None, ProceduralEdges.All, false, default, ""));
 
     public static ShaderMaterial Panel(
         ProceduralShape shape,
@@ -24,8 +27,9 @@ public static class ProceduralLook
         ProceduralFill fill,
         ProceduralEdges edges = ProceduralEdges.All,
         bool solidRings = false,
-        Rect2 hole = default) =>
-        Material(new Look(ShaderShape(shape), profile, fill, edges, solidRings, hole));
+        Rect2 hole = default,
+        Rect2[]? joined = null) =>
+        Material(new Look(ShaderShape(shape), profile, fill, edges, solidRings, hole, JoinedKey(joined ?? [])));
 
     // The same test the shader makes for its Diamond shape and Hole, so a click lands where the pixels are drawn.
     public static bool InDiamond(Vector2 point, Rect2 diamond)
@@ -65,8 +69,28 @@ public static class ProceduralLook
         material.SetShaderParameter(
             "hole",
             new Vector4(look.Hole.Position.X, look.Hole.Position.Y, look.Hole.Size.X, look.Hole.Size.Y));
+        var joined = JoinedRects(look.Joined);
+        material.SetShaderParameter("joined", joined);
+        material.SetShaderParameter("joined_count", joined.Length);
         return Materials[look] = material;
     }
+
+    // A record compares arrays by reference, so the rects are kept as text to let equal looks share a material.
+    private static string JoinedKey(Rect2[] joined) =>
+        string.Join(';', joined.Take(MaximumJoined).Select(rect => string.Join(',', RectNumbers(rect))));
+
+    private static Vector4[] JoinedRects(string key) =>
+        key.Length == 0
+            ? []
+            : key.Split(';')
+                .Select(rect =>
+                    rect.Split(',').Select(number => float.Parse(number, CultureInfo.InvariantCulture)).ToArray())
+                .Select(numbers => new Vector4(numbers[0], numbers[1], numbers[2], numbers[3]))
+                .ToArray();
+
+    private static IEnumerable<string> RectNumbers(Rect2 rect) =>
+        new[] { rect.Position.X, rect.Position.Y, rect.Size.X, rect.Size.Y }
+            .Select(number => number.ToString(CultureInfo.InvariantCulture));
 
     private static int ShaderShape(ProceduralShape shape) =>
         shape switch
@@ -94,5 +118,6 @@ public static class ProceduralLook
         ProceduralFill Fill,
         ProceduralEdges Edges,
         bool SolidRings,
-        Rect2 Hole);
+        Rect2 Hole,
+        string Joined);
 }

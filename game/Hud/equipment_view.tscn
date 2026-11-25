@@ -24,6 +24,7 @@ offset_bottom = 140.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(-68, 51, 70, 38), Rect2(36, 51, 70, 38)])
 
 [node name="Cells" type="VBoxContainer" parent="Column" unique_id=235659212]
 layout_mode = 2
@@ -119,6 +120,7 @@ offset_bottom = 89.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(68, -51, 38, 140)])
 Edges = 13
 
 [node name="Cells" type="HBoxContainer" parent="LeftWing" unique_id=1491819946]
@@ -175,6 +177,7 @@ offset_bottom = 89.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(-36, -51, 38, 140)])
 Edges = 7
 
 [node name="Cells" type="HBoxContainer" parent="RightWing" unique_id=1679614300]

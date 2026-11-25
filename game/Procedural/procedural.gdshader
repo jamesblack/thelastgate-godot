@@ -22,6 +22,10 @@ uniform int edges = 15;
 uniform bool solid_rings = false;
 // An isometric diamond (x, y, width, height in the panel's pixels) cut out of the panel; zero height cuts nothing.
 uniform vec4 hole = vec4(0.0);
+// Neighbouring rects (x, y, width, height in the panel's pixels) that form one shape with the panel, so its rings
+// follow the outline of them all and turn at the inside corners where they meet.
+uniform vec4 joined[4];
+uniform int joined_count = 0;
 
 const int SHAPE_BOX = 0;
 const int SHAPE_LINE = 1;
@@ -84,6 +88,32 @@ vec3 ring_colour(int ring, vec2 pixel) {
 	return grained(gold_colour, pixel, gold_grain, gold_variation);
 }
 
+bool in_joined_shape(ivec2 point, ivec2 size) {
+	if (all(greaterThanEqual(point, ivec2(0))) && all(lessThan(point, size))) {
+		return true;
+	}
+	for (int index = 0; index < joined_count; index++) {
+		ivec2 corner = ivec2(joined[index].xy);
+		if (all(greaterThanEqual(point, corner)) && all(lessThan(point, corner + ivec2(joined[index].zw)))) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// The ring is one less than the distance to the nearest pixel outside the shape, counting diagonal steps as one.
+int joined_inset(ivec2 local, ivec2 size) {
+	int inset = profile_width;
+	for (int down = -profile_width; down <= profile_width; down++) {
+		for (int across = -profile_width; across <= profile_width; across++) {
+			if (!in_joined_shape(local + ivec2(across, down), size)) {
+				inset = min(inset, max(abs(across), abs(down)) - 1);
+			}
+		}
+	}
+	return inset;
+}
+
 void vertex() {
 	local_position = VERTEX;
 	canvas_position = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
@@ -104,7 +134,9 @@ void fragment() {
 		int from_top = (edges & EDGE_TOP) != 0 ? local.y : NO_EDGE;
 		int from_right = (edges & EDGE_RIGHT) != 0 ? size.x - 1 - local.x : NO_EDGE;
 		int from_bottom = (edges & EDGE_BOTTOM) != 0 ? size.y - 1 - local.y : NO_EDGE;
-		int inset = min(min(from_left, from_top), min(from_right, from_bottom));
+		int inset = joined_count > 0
+			? joined_inset(local, size)
+			: min(min(from_left, from_top), min(from_right, from_bottom));
 		if (shape == SHAPE_CIRCLE) {
 			float radius = float(min(size.x, size.y)) * 0.5;
 			float from_centre = length(vec2(local) + 0.5 - vec2(size) * 0.5);

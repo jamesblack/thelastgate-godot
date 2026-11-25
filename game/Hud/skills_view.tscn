@@ -102,6 +102,7 @@ offset_bottom = 158.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(0, -142, 245, 144)])
 Edges = 14
 
 [node name="PlannerButton" type="Control" parent="PlannerFooter" unique_id=1496772466]
@@ -146,6 +147,7 @@ offset_bottom = 158.0
 mouse_filter = 2
 script = ExtResource("2_panel")
 Profile = "GB"
+JoinedWith = Array[Rect2]([Rect2(-131, -142, 245, 144)])
 Edges = 14
 
 [node name="Cells" type="HBoxContainer" parent="UpdateFooter" unique_id=138587147]

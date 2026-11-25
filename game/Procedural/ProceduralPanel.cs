@@ -13,6 +13,7 @@ public partial class ProceduralPanel : Container, IHudContextUser
     private ProceduralEdges edges = ProceduralEdges.All;
     private ProceduralFill fill;
     private Rect2 hole;
+    private Array<Rect2> joinedWith = [];
     private int padding;
     private string profile = "";
     private ProceduralShape shape;
@@ -126,6 +127,19 @@ public partial class ProceduralPanel : Container, IHudContextUser
         }
     }
 
+    // Neighbours' rects, in the panel's own pixels, that it draws one border around with them. Edges still decides
+    // where children sit, but the rings follow the joined outline.
+    [Export]
+    public Array<Rect2> JoinedWith
+    {
+        get => joinedWith;
+        set
+        {
+            joinedWith = value;
+            Restyle();
+        }
+    }
+
     [Export] public WindowBackground FadesAs { get; set; }
 
     [Export]
@@ -196,7 +210,14 @@ public partial class ProceduralPanel : Container, IHudContextUser
 
     private int Inset(ProceduralEdges side) => (edges.HasFlag(side) ? profile.Length : 0) + padding;
 
-    private void Restyle() => Material = ProceduralLook.Panel(shape, profile, fill, edges, solidRings, hole);
+    private void Restyle() => Material = ProceduralLook.Panel(
+        shape,
+        profile,
+        fill,
+        edges,
+        solidRings,
+        hole,
+        [.. joinedWith]);
 
     private void Remeasure()
     {

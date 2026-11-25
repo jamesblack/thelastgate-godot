@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Godot;
+using Godot.Collections;
+using TheLastGate.Procedural;
 using TheLastGate.State;
 using TheLastGate.Stats;
 
@@ -24,6 +26,7 @@ public partial class SkillList : Control
         ShowScroll();
         ScrollBar.ValueChanged += value => Panel.ScrollTo((int)value);
         GetNode<Control>("%Frame").GuiInput += ScrollByWheel;
+        JoinShownFooters();
     }
 
     public void Choose(StatListMode button)
@@ -36,9 +39,14 @@ public partial class SkillList : Control
     {
         GetNode<CanvasItem>("%UpdateFooter").Visible = shown;
         GetNode<Label>("%UpdatePoints").Text = points.ToString(CultureInfo.InvariantCulture);
+        JoinShownFooters();
     }
 
-    public void ShowPlannerButton(bool shown) => GetNode<CanvasItem>("%PlannerFooter").Visible = shown;
+    public void ShowPlannerButton(bool shown)
+    {
+        GetNode<CanvasItem>("%PlannerFooter").Visible = shown;
+        JoinShownFooters();
+    }
 
     public void Show(PlayerState player, Terminology terminology, StatPlan plan, bool showBase)
     {
@@ -62,6 +70,16 @@ public partial class SkillList : Control
     }
 
     private StatRow Row(int row) => GetNode("%Rows").GetChild<StatRow>(row);
+
+    private void JoinShownFooters()
+    {
+        var frame = GetNode<ProceduralPanel>("%Frame");
+        frame.JoinedWith = new Array<Rect2>(
+            new[] { "%PlannerFooter", "%UpdateFooter" }
+                .Select(path => GetNode<Control>(path))
+                .Where(footer => footer.Visible)
+                .Select(footer => new Rect2(footer.Position - frame.Position, footer.Size)));
+    }
 
     private void ScrollByWheel(InputEvent inputEvent)
     {
