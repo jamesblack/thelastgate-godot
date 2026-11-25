@@ -111,6 +111,21 @@ jobs:
           path: ${{ env.GODOT_CACHE }}
           key: godot-${{ env.GODOT_RELEASE }}-mono-${{ runner.os }}
 
+      - name: Key the import cache on the files Godot imports
+        id: import-key
+        run: |
+          set -euo pipefail
+          hash=$(git ls-files -s -- game ':!game/**/*.cs' ':!game/**/*.uid' | sha256sum | cut -c1-16)
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+      # Godot compares each source file's MD5 with the one it stored at import, so an older cache is safe to
+      # restore: only the files that changed are imported again.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: game/.godot/imported
+          key: godot-imported-${{ env.GODOT_RELEASE }}-${{ runner.os }}-${{ steps.import-key.outputs.hash }}
+          restore-keys: godot-imported-${{ env.GODOT_RELEASE }}-${{ runner.os }}-
+
       - name: Download Godot and its export templates
         if: steps.godot-cache.outputs.cache-hit != 'true'
         run: |
