@@ -38,7 +38,7 @@ public class HudElementViewsTests
         AssertThat(view.GetNode<Label>("%CharmCaption").Text).IsEqual("Cards");
 
         view.ShowSecondCharm(false);
-        AssertThat(box.Size.X).IsEqual(36f);
+        AssertThat(box.Size.X).IsEqual(38f);
         AssertThat(view.GetNode<Label>("%CharmCaption").Text).IsEqual("Card");
         view.Free();
     }

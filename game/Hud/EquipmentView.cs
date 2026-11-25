@@ -5,7 +5,7 @@ namespace TheLastGate.Hud;
 
 public partial class EquipmentView : Control
 {
-    private const float OneCardWidth = 36;
+    private const float OneCardWidth = 38;
     private const float TwoCardsWidth = 62;
 
     public ClickArea SwapSetButton => GetNode<ClickArea>("%SwapSetButton");

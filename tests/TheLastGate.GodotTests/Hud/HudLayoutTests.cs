@@ -82,14 +82,14 @@ public class HudLayoutTests
     [TestCase(WornSlot.Body, 739, 40)]
     [TestCase(WornSlot.Arms, 705, 57)]
     [TestCase(WornSlot.Belt, 739, 74)]
-    [TestCase(WornSlot.Charm, 778, 18)]
+    [TestCase(WornSlot.Charm, 777, 19)]
     [TestCase(WornSlot.Feet, 739, 108)]
     [TestCase(WornSlot.OffHand, 807, 57)]
     [TestCase(WornSlot.MainHand, 671, 57)]
     [TestCase(WornSlot.Cloak, 773, 57)]
     [TestCase(WornSlot.LeftRing, 777, 95)]
     [TestCase(WornSlot.RightRing, 701, 95)]
-    [TestCase(WornSlot.SecondCharm, 802, 18)]
+    [TestCase(WornSlot.SecondCharm, 801, 19)]
     public void EquipmentSlots_SitWhereTheArtsBoxesWere(WornSlot slot, int left, int top)
     {
         var view = hud.GetNode<EquipmentView>("%Equipment").Slot(slot);
