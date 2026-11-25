@@ -4,7 +4,6 @@ namespace TheLastGate.Chat;
 
 public sealed class ChatLineView
 {
-    public const int MaxLength = 115;
     public const int VisibleLength = 48;
 
     private const int CursorLeadRight = 45;

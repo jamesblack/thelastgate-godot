@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TheLastGate.Net;
 
 namespace TheLastGate.Chat;
 
@@ -55,7 +56,7 @@ public sealed class TabCompletion
             }
 
             var added = word[prefix.Length..] + " ";
-            added = added[..Math.Min(added.Length, ChatLineView.MaxLength - typed.Text.Length)];
+            added = added[..Math.Min(added.Length, ChatPackets.MaxLength - typed.Text.Length)];
             var shown = (typed.Text.Insert(typed.Caret, added), typed.Caret + added.Length);
             cycle = new Cycle(typed, shown, index + 1);
             return shown;

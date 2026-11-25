@@ -66,12 +66,28 @@ public class ChatPacketsTests
     }
 
     [Fact]
-    public void Say_StopsAtOneHundredAndTwentyLetters()
+    public void MaxLength_IsWhatTheServersInputBufferKeeps()
+    {
+        Assert.Equal(ServerInputLength - 1, ChatPackets.MaxLength);
+    }
+
+    [Fact]
+    public void Say_SendsALineOfTheMostLettersInFull()
+    {
+        var text = string.Concat(Enumerable.Range(0, ChatPackets.MaxLength).Select(index => (char)('a' + index % 26)));
+
+        Assert.Equal(text, Said(new byte[ServerInputLength], ChatPackets.Say(text)));
+    }
+
+    [Fact]
+    public void Say_NeverSendsLettersPastTheMost()
     {
         var packets = ChatPackets.Say(new string('x', 130));
 
         Assert.Equal(Chunks, packets.Select(packet => (ClientCommand)packet[0]));
-        Assert.All(packets, packet => Assert.All(packet[1..], value => Assert.Equal((byte)'x', value)));
+        var sent = packets.SelectMany(packet => packet[1..]).ToArray();
+        Assert.All(sent[..ChatPackets.MaxLength], value => Assert.Equal((byte)'x', value));
+        Assert.Equal(0, sent[ChatPackets.MaxLength]);
     }
 
     // Each chunk fills its own 15 bytes of the buffer, and the last one ends it and says what the buffer holds.

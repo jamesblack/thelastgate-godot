@@ -3,6 +3,7 @@ using Godot;
 using Godot.Collections;
 using TheLastGate.Assets;
 using TheLastGate.Chat;
+using TheLastGate.Net;
 using TheLastGate.Profiling;
 
 namespace TheLastGate.Hud;
@@ -19,7 +20,12 @@ public partial class ChatLine : LineEdit, IHudContextUser
     private readonly ChatMode mode = new();
     private readonly ChatLineView view = new();
     private GameFont? font;
-    public ChatLine() => AddToGroup(HudContext.Group);
+
+    public ChatLine()
+    {
+        AddToGroup(HudContext.Group);
+        MaxLength = ChatPackets.MaxLength;
+    }
 
     [Export] public string PreviewText { get; set; } = "";
 

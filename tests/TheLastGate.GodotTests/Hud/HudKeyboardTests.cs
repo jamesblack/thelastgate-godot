@@ -61,6 +61,16 @@ public class HudKeyboardTests
     }
 
     [TestCase]
+    public async Task TheChatLine_TakesAsManyLettersAsTheServerKeeps()
+    {
+        Line.EnterToTalk = false;
+        Keyboard.Type(new string('a', ChatPackets.MaxLength + 5));
+        await Frames(1);
+
+        AssertThat(Line.Text.Length).IsEqual(ChatPackets.MaxLength);
+    }
+
+    [TestCase]
     public async Task WithEnterToTalkOff_AHotkeyRunsWhileTypingInTheChatLine()
     {
         Line.EnterToTalk = false;
