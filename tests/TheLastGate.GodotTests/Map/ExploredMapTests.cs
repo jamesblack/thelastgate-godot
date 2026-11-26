@@ -64,6 +64,28 @@ public sealed class ExploredMapTests
     }
 
     [TestCase]
+    public void BlockRevision_ChangesOnlyForTheBlockATileIsIn()
+    {
+        var map = new ExploredMap();
+
+        map.SetTile(300, 600, 0x1234);
+
+        AssertThat(map.BlockRevision(1, 2)).IsEqual(1);
+        AssertThat(map.BlockRevision(1, 1)).IsEqual(0);
+        AssertThat(map.BlockRevision(0, 2)).IsEqual(0);
+    }
+
+    [TestCase]
+    public void BlockRevision_ChangesEverywhereOnALoad()
+    {
+        var map = new ExploredMap(Width, Height);
+
+        map.Load([]);
+
+        AssertThat(map.BlockRevision(0, 0)).IsEqual(1);
+    }
+
+    [TestCase]
     public void Revision_CountsEveryChangeAndEveryLoad()
     {
         var map = new ExploredMap(Width, Height);

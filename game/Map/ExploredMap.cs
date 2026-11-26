@@ -10,6 +10,7 @@ namespace TheLastGate.Map;
 public sealed class ExploredMap
 {
     public const int Size = 2048;
+    public const int BlockSize = 256;
 
     // "TLGM", then little-endian u32 format, width, height and compressed size, then the zlib-compressed tiles.
     // Format 1 tiles are u16 RGB555, format 2 tiles are u32 0x00RRGGBB.
@@ -18,13 +19,18 @@ public sealed class ExploredMap
     private const uint FullColourFormat = 2;
     private const string TemporarySuffix = ".tmp";
 
+    private readonly int[] blockChanges;
+    private readonly int blocksDown;
     private readonly uint[] tiles;
+    private int loads;
 
     public ExploredMap(int width = Size, int height = Size)
     {
         Width = width;
         Height = height;
         tiles = new uint[width * height];
+        blocksDown = (height + BlockSize - 1) / BlockSize;
+        blockChanges = new int[(width + BlockSize - 1) / BlockSize * blocksDown];
     }
 
     public int Width { get; }
@@ -40,6 +46,8 @@ public sealed class ExploredMap
     // A blank map is written rather than the file deleted, so the current client's map isn't imported over it again.
     public static bool ClearSaved(string path) => new ExploredMap().SaveTo(path);
 
+    public int BlockRevision(int blockX, int blockY) => loads + blockChanges[blockX * blocksDown + blockY];
+
     public uint ColourAt(int tileX, int tileY) => IsOnMap(tileX, tileY) ? tiles[tileX * Height + tileY] : 0;
 
     public void SetTile(int tileX, int tileY, uint colour)
@@ -50,6 +58,7 @@ public sealed class ExploredMap
         }
 
         tiles[tileX * Height + tileY] = colour;
+        blockChanges[tileX / BlockSize * blocksDown + tileY / BlockSize]++;
         Changed = true;
         Revision++;
     }
@@ -80,6 +89,7 @@ public sealed class ExploredMap
 
         Changed = false;
         Revision++;
+        loads++;
         return loaded;
     }
 

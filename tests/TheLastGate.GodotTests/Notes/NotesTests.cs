@@ -354,9 +354,8 @@ public class NotesTests
         var pin = set.AddPoint(first, NoteKind.Pin, 4, 5, "Pin");
         set.SetNoteColour(pin, 4);
 
-        AssertThat(set.MoveNote(pin, first)).IsFalse();
-        AssertThat(set.MoveNote(pin, 999)).IsFalse();
-        AssertThat(set.MoveNote(pin, second)).IsTrue();
+        AssertThat(set.MoveNote(pin, 999, -1)).IsFalse();
+        AssertThat(set.MoveNote(pin, second, -1)).IsTrue();
 
         AssertThat(set.OwnerOf(pin)!.Id).IsEqual(second);
         AssertThat(set.FindNote(pin)!.ColourIndex).IsEqual(4);
@@ -367,7 +366,7 @@ public class NotesTests
             set.AddPoint(first, NoteKind.Pin, 1, 1, "");
         }
 
-        AssertThat(set.MoveNote(pin, first)).IsFalse();
+        AssertThat(set.MoveNote(pin, first, -1)).IsFalse();
     }
 
     [TestCase]

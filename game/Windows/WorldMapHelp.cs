@@ -14,7 +14,7 @@ public static class WorldMapHelp
             [
                 "Open the map with the World Map hotkey. Bind it under Keybindings in the options.",
                 "Scroll the mouse wheel to zoom in and out around the cursor.",
-                "Hold the right mouse button and drag to pan, or use the Pan tool and drag with the left button.",
+                "Hold the right or middle mouse button and drag to pan, or use the Pan tool and drag with the left button.",
                 "Tick Follow player to keep the map centred on you as you walk.",
                 "The bottom right corner shows the tile under the cursor.",
                 "Drag the title bar to move the window and the bottom right corner to resize it. Escape closes it.",

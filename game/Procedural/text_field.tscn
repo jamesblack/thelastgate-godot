@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://2to2s7a08woj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.4, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field_focus"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.86, 0.42, 1)
+
+[node name="TextField" type="LineEdit" unique_id=1554950347]
+theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.35, 1)
+theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
+theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
+theme_override_styles/normal = SubResource("StyleBoxFlat_field")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_field")
+context_menu_enabled = false

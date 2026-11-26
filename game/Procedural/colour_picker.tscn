@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://v3qb30gse0pt"]
+
+[ext_resource type="Script" uid="uid://cwjvvnc9ndb0" path="res://Procedural/ColourPicker.cs" id="1_picker"]
+
+[node name="ColourPicker" type="GridContainer" unique_id=966848471]
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 8
+script = ExtResource("1_picker")

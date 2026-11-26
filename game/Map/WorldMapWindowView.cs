@@ -4,20 +4,17 @@ using System.Linq;
 using Godot;
 using TheLastGate.Hud;
 using TheLastGate.Notes;
+using TheLastGate.Procedural;
 using TheLastGate.Windows;
 
 namespace TheLastGate.Map;
 
-// The current client's World Map window, drawn with the game's window and button sprites: a title bar to drag it by,
-// the category column, the map with the player's notes on it, and a bar of tools, Follow
-// player, the edited note's name and the tile under the cursor. Its own clicks change its own state; the HUD only
-// opens it and tells it what to show. Every change to the notes is handed straight back to be saved.
+// Its own clicks change its own state; the HUD only opens it and tells it what to show. Every change to the notes is
+// handed straight back to be saved.
 [Tool]
-public partial class WorldMapWindowView : Panel, IHudContextUser
+public partial class WorldMapWindowView : Control
 {
-    private const int FrameSprite = 18128;
-    private const float TitleBottom = 30;
-    private const int SwatchSize = 20;
+    private const int HelpLineGap = 4;
     private const int CategoryColourItem = NotePalette.Size;
 
     private static readonly Vector2 SmallestSize = new(480, 320);
@@ -30,71 +27,58 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     private Vector2 titleGrab;
     private bool titleHeld;
     private WorldMapWindow? window;
-    public WorldMapWindowView() => AddToGroup(HudContext.Group);
 
-    private WorldMapCanvas Canvas => GetNode<WorldMapCanvas>("Rows/Body/MapFrame/Canvas");
+    private float TitleBottom => GetNode<Control>("%TitleBar").GetGlobalRect().End.Y - GlobalPosition.Y;
+
+    private WorldMapCanvas Canvas => GetNode<WorldMapCanvas>("%Canvas");
 
     private Control Help => GetNode<Control>("HelpBlocker");
 
-    private CheckBox ShowOnMinimapBox => GetNode<CheckBox>("Rows/Body/Categories/Footer/ShowOnMinimap");
+    private ProceduralCheckBox ShowOnMinimapBox => GetNode<ProceduralCheckBox>("%ShowOnMinimap");
 
-    private WorldMapCategories CategoryColumn => GetNode<WorldMapCategories>("Rows/Body/Categories");
+    private ProceduralCheckBox FollowBox => GetNode<ProceduralCheckBox>("%Follow");
+
+    private WorldMapCategories CategoryColumn => GetNode<WorldMapCategories>("%Categories");
 
     private WorldMapEditor? Editor => window?.Editor;
 
     private Control LabelPrompt => GetNode<Control>("LabelBlocker");
 
-    private LineEdit LabelName => GetNode<LineEdit>("LabelBlocker/Prompt/Margins/Rows/Name");
+    private LineEdit LabelName => GetNode<LineEdit>("%LabelName");
 
     private Control DeletePrompt => GetNode<Control>("DeleteBlocker");
 
-    private LineEdit EditName => GetNode<LineEdit>("Rows/BottomBar/EditName");
+    private LineEdit EditName => GetNode<LineEdit>("%EditName");
 
-    private PopupMenu NoteMenu => GetNode<PopupMenu>("NoteMenu");
+    private ProceduralButton EditSave => GetNode<ProceduralButton>("%EditSave");
 
-    private PopupMenu ColourMenu => GetNode<PopupMenu>("NoteMenu/ColourMenu");
+    private ProceduralButton EditCancel => GetNode<ProceduralButton>("%EditCancel");
 
-    private PopupMenu SendToMenu => GetNode<PopupMenu>("NoteMenu/SendToMenu");
+    private ProceduralMenu NoteMenu => GetNode<ProceduralMenu>("NoteMenu");
+
+    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("NoteColourMenu");
 
     private static double Now => Time.GetTicksMsec() / 1000.0;
-
-    // The window and its inner panels are framed by the game's window sprite, which lives in the sprite archives.
-    public void ShowContext(HudContext context)
-    {
-        if (context.Sprites?.GetTexture(FrameSprite) is not { } texture)
-        {
-            return;
-        }
-
-        foreach (var frame in FindChildren("Frame", nameof(NinePatchRect), true, false).Cast<NinePatchRect>())
-        {
-            frame.Texture = texture;
-        }
-    }
 
     public event Action? NotesChanged;
 
     public override void _Ready()
     {
-        AddHelpLines();
+        AddHelpPages();
         if (Engine.IsEditorHint())
         {
             return;
         }
 
-        var close = GetNode<Button>("Rows/TitleBar/Close");
-        var cross = close.GetNode<PixelCross>("Cross");
-        close.MouseEntered += () => cross.Hovered = true;
-        close.MouseExited += () => cross.Hovered = false;
-        close.Pressed += () =>
+        GetNode<ClickArea>("%Close").Released += _ =>
         {
             window?.Close();
             Visible = false;
         };
-        GetNode<Button>("Rows/TitleBar/Help").Pressed += OpenHelp;
-        GetNode<Control>("Rows/TitleBar").GuiInput += DragByTitle;
-        GetNode<ResizeGrip>("ResizeGrip").Dragged += Resize;
-        GetNode<CheckBox>("Rows/BottomBar/Follow").Toggled += isOn =>
+        GetNode<ClickArea>("%Help").Released += _ => OpenHelp();
+        GetNode<Control>("%TitleBar").GuiInput += DragByTitle;
+        GetNode<ResizeGrip>("%ResizeGrip").Dragged += Resize;
+        FollowBox.Toggled += isOn =>
         {
             if (window != null)
             {
@@ -115,9 +99,9 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         ConnectEditControls();
         PrepareMenus();
 
-        GetNode<Button>("HelpBlocker/Help/Margins/Rows/Buttons/Back").Pressed += () => ChangeHelpPage(-1);
-        GetNode<Button>("HelpBlocker/Help/Margins/Rows/Buttons/Next").Pressed += () => ChangeHelpPage(1);
-        GetNode<Button>("HelpBlocker/Help/Margins/Rows/Buttons/Close").Pressed += () => Help.Visible = false;
+        Button("%HelpBack").Pressed += () => ChangeHelpPage(-1);
+        Button("%HelpNext").Pressed += () => ChangeHelpPage(1);
+        Button("%HelpClose").Pressed += () => Help.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -127,11 +111,10 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
             return;
         }
 
-        GetNode<Label>("Rows/BottomBar/Status").Text = window.StatusAt(Now);
-        GetNode<Label>("Rows/BottomBar/Coordinates").Text =
-            Canvas.HoveredTile is { } tile ? $"{tile.X}, {tile.Y}" : "";
-        GetNode<CheckBox>("Rows/BottomBar/Follow").SetPressedNoSignal(window.Follow);
-        ShowOnMinimapBox.SetPressedNoSignal(notes?.ShowOnMinimap == true);
+        GetNode<Label>("%Status").Text = window.StatusAt(Now);
+        GetNode<Label>("%Coordinates").Text = Canvas.HoveredTile is { } tile ? $"{tile.X}, {tile.Y}" : "";
+        FollowBox.Checked = window.Follow;
+        ShowOnMinimapBox.Checked = notes?.ShowOnMinimap == true;
         ShowTools(window.Editor);
         ShowEditControls(window.Editor);
         ShowLabelPrompt(window.Editor);
@@ -153,13 +136,14 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
                     || DeletePrompt.Visible || CategoryColumn.PromptOpen;
                 break;
             case InputEventKey { Pressed: true, Echo: false, Keycode: Key.Escape }
-                when LabelPrompt.Visible || DeletePrompt.Visible:
+                when LabelPrompt.Visible || DeletePrompt.Visible || Help.Visible:
                 if (LabelPrompt.Visible)
                 {
                     window.Editor.CancelLabel();
                 }
 
                 DeletePrompt.Visible = false;
+                Help.Visible = false;
                 GetViewport().SetInputAsHandled();
                 break;
             case InputEventKey { Pressed: true, Echo: false, Keycode: Key.Enter or Key.KpEnter }
@@ -203,7 +187,8 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         ShowTools(shownWindow.Editor);
         if (!Visible)
         {
-            NoteMenu.Hide();
+            NoteMenu.Close();
+            Help.Visible = false;
             DeletePrompt.Visible = false;
             CategoryColumn.CloseAll();
         }
@@ -221,7 +206,9 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         NotesChanged?.Invoke();
     }
 
-    private Button ToolButton(WorldMapTool tool) => GetNode<Button>($"Rows/BottomBar/{tool}");
+    private ProceduralButton ToolButton(WorldMapTool tool) => Button($"%{tool}");
+
+    private ProceduralButton Button(string path) => GetNode<ProceduralButton>(path);
 
     private void SaveChanges()
     {
@@ -239,7 +226,7 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         {
             var button = ToolButton(tool);
             button.Disabled = !WorldMapWindow.IsAvailable(tool, editor.CurrentCategoryId != 0);
-            button.SetPressedNoSignal(editor.Tool == tool);
+            button.On = editor.Tool == tool;
         }
     }
 
@@ -247,8 +234,8 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     {
         EditName.TextChanged += label => Editor?.RenameEdited(label);
         EditName.TextSubmitted += _ => SaveEdit();
-        GetNode<Button>("Rows/BottomBar/EditSave").Pressed += SaveEdit;
-        GetNode<Button>("Rows/BottomBar/EditCancel").Pressed += () => Editor?.CancelEdit();
+        EditSave.Pressed += SaveEdit;
+        EditCancel.Pressed += () => Editor?.CancelEdit();
     }
 
     // The name box is filled once when an edit starts, and then belongs to the player.
@@ -257,9 +244,9 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         var edited = editor.Edited;
         var editing = edited != null;
         EditName.Visible = editing;
-        GetNode<Button>("Rows/BottomBar/EditSave").Visible = editing;
-        GetNode<Button>("Rows/BottomBar/EditCancel").Visible = editing;
-        GetNode<Button>("Rows/BottomBar/EditSave").Disabled = !editor.CanSaveEdit;
+        EditSave.Visible = editing;
+        EditCancel.Visible = editing;
+        EditSave.Disabled = !editor.CanSaveEdit;
         if (edited != null && edited.Id != editedNameShownFor)
         {
             EditName.Text = edited.Label;
@@ -288,11 +275,10 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     {
         LabelName.TextChanged += _ => ShowLabelConfirm();
         LabelName.TextSubmitted += _ => ConfirmLabel();
-        GetNode<Button>("LabelBlocker/Prompt/Margins/Rows/Buttons/Confirm").Pressed += ConfirmLabel;
-        GetNode<Button>("LabelBlocker/Prompt/Margins/Rows/Buttons/Cancel").Pressed += () => Editor?.CancelLabel();
-        GetNode<Button>("DeleteBlocker/Prompt/Margins/Rows/Buttons/Confirm").Pressed += ConfirmDelete;
-        GetNode<Button>("DeleteBlocker/Prompt/Margins/Rows/Buttons/Cancel").Pressed +=
-            () => DeletePrompt.Visible = false;
+        Button("%LabelConfirm").Pressed += ConfirmLabel;
+        Button("%LabelCancel").Pressed += () => Editor?.CancelLabel();
+        Button("%DeleteConfirm").Pressed += ConfirmDelete;
+        Button("%DeleteCancel").Pressed += () => DeletePrompt.Visible = false;
     }
 
     // The name prompt opens empty, ready for typing, whenever the editor asks for a name.
@@ -318,8 +304,7 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     }
 
     private void ShowLabelConfirm() =>
-        GetNode<Button>("LabelBlocker/Prompt/Margins/Rows/Buttons/Confirm").Disabled =
-            Editor?.CanConfirmLabel(LabelName.Text) != true;
+        Button("%LabelConfirm").Disabled = Editor?.CanConfirmLabel(LabelName.Text) != true;
 
     private void ConfirmLabel()
     {
@@ -345,35 +330,17 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     private void AskToDelete(Note note)
     {
         deleteNoteId = note.Id;
-        GetNode<Label>("DeleteBlocker/Prompt/Margins/Rows/Question").Text = WorldMapWording.DeleteNoteQuestion(note);
+        GetNode<Label>("%DeleteQuestion").Text = WorldMapWording.DeleteNoteQuestion(note);
         DeletePrompt.Visible = true;
     }
 
-    // The menus are windows of their own, so they are given the window's font; the colour menu is the palette's
-    // swatches and the category's own colour.
     private void PrepareMenus()
     {
-        foreach (var menu in (PopupMenu[])[NoteMenu, ColourMenu, SendToMenu])
-        {
-            menu.AddThemeFontOverride("font", GetThemeFont("font", "Label"));
-            menu.AddThemeFontSizeOverride("font_size", GetThemeFontSize("font_size", "Label"));
-        }
-
-        for (var colourIndex = 0; colourIndex < NotePalette.Size; colourIndex++)
-        {
-            ColourMenu.AddIconRadioCheckItem(
-                NoteSwatches.Of(NotePalette.Rgb(colourIndex), SwatchSize),
-                "",
-                colourIndex);
-        }
-
-        ColourMenu.AddRadioCheckItem("Use category colour", CategoryColourItem);
-        NoteMenu.IdPressed += ChooseFromNoteMenu;
-        ColourMenu.IdPressed += id => Recolour(id == CategoryColourItem ? Note.CategoryColour : (int)id);
-        SendToMenu.IdPressed += id => SendTo((int)id);
+        NoteMenu.ItemChosen += ChooseFromNoteMenu;
+        ColourMenu.ItemChosen += _ => Recolour(Note.CategoryColour);
     }
 
-    private void OpenNoteMenu(NoteHit hit, Vector2 position)
+    public void OpenNoteMenu(NoteHit hit, Vector2 position)
     {
         if (notes?.FindNote(hit.NoteId) is not { } note || notes.OwnerOf(hit.NoteId) is not { } owner)
         {
@@ -383,8 +350,18 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         menuHit = hit;
         NoteMenu.Clear();
         NoteMenu.AddItem("Edit", (int)NoteMenuItem.Edit);
-        NoteMenu.AddSubmenuNodeItem("Colour", ColourMenu);
-        NoteMenu.AddSubmenuNodeItem("Send to", SendToMenu);
+        ColourMenu.Clear();
+        var usesCategoryColour = note.ColourIndex == Note.CategoryColour;
+        var picker = ColourPicker.Load(usesCategoryColour ? owner.ColourIndex : note.ColourIndex);
+        picker.ColourChosen += colourIndex =>
+        {
+            Recolour(colourIndex);
+            NoteMenu.Close();
+        };
+        ColourMenu.AddPicker(picker);
+        ColourMenu.AddSeparator();
+        ColourMenu.AddCheckItem("Use category colour", CategoryColourItem, usesCategoryColour);
+        NoteMenu.AddSubmenu("Colour", ColourMenu);
         NoteMenu.AddSeparator();
         var editingThis = Editor?.Edited?.Id == note.Id;
         if (note is { Kind: NoteKind.Path, Segments.Count: > 1 } && hit.SegmentIndex >= 0 && !editingThis)
@@ -393,25 +370,10 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         }
 
         NoteMenu.AddItem("Delete...", (int)NoteMenuItem.Delete);
-        var chosenColour = note.ColourIndex == Note.CategoryColour ? CategoryColourItem : note.ColourIndex;
-        for (var itemIndex = 0; itemIndex < ColourMenu.ItemCount; itemIndex++)
-        {
-            ColourMenu.SetItemChecked(itemIndex, ColourMenu.GetItemId(itemIndex) == chosenColour);
-        }
-
-        SendToMenu.Clear();
-        foreach (var category in notes.Tree())
-        {
-            SendToMenu.AddItem(category.Name, category.Id);
-            var itemIndex = SendToMenu.ItemCount - 1;
-            SendToMenu.SetItemIndent(itemIndex, notes.Depth(category.Id) - 1);
-            SendToMenu.SetItemDisabled(itemIndex, category.Id == owner.Id);
-        }
-
-        NoteMenu.Popup(new Rect2I((Vector2I)position, Vector2I.Zero));
+        NoteMenu.Popup(position);
     }
 
-    private void ChooseFromNoteMenu(long id)
+    private void ChooseFromNoteMenu(int id)
     {
         if (notes == null || Editor is not { } editor || notes.FindNote(menuHit.NoteId) is not { } note)
         {
@@ -440,15 +402,6 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
         if (notes != null)
         {
             Editor?.Recolour(notes, menuHit.NoteId, colourIndex);
-            SaveChanges();
-        }
-    }
-
-    private void SendTo(int categoryId)
-    {
-        if (notes != null)
-        {
-            Editor?.SendTo(notes, menuHit.NoteId, categoryId);
             SaveChanges();
         }
     }
@@ -499,34 +452,40 @@ public partial class WorldMapWindowView : Panel, IHudContextUser
     {
         var pageNumber = window?.HelpPage ?? 0;
         var page = WorldMapHelp.Pages[pageNumber];
-        GetNode<Label>("HelpBlocker/Help/Margins/Rows/Page/Title").Text = page.Title;
-        var lines = GetNode("HelpBlocker/Help/Margins/Rows/Page/Lines");
-        for (var index = 0; index < lines.GetChildCount(); index++)
+        GetNode<Label>("%HelpTitle").Text = page.Title;
+        var pages = GetNode("%HelpPages");
+        for (var index = 0; index < pages.GetChildCount(); index++)
         {
-            var line = lines.GetChild<Control>(index);
-            line.Visible = index < page.Lines.Count;
-            if (line.Visible)
-            {
-                line.GetNode<Label>("Text").Text = page.Lines[index];
-            }
+            pages.GetChild<Control>(index).Modulate = index == pageNumber ? Colors.White : Colors.Transparent;
         }
 
-        GetNode<Label>("HelpBlocker/Help/Margins/Rows/Buttons/PageNumber").Text =
-            window?.HelpPageText ?? $"1 / {WorldMapHelp.Pages.Count}";
-        GetNode<Button>("HelpBlocker/Help/Margins/Rows/Buttons/Back").Disabled = pageNumber == 0;
-        GetNode<Button>("HelpBlocker/Help/Margins/Rows/Buttons/Next").Disabled =
-            pageNumber == WorldMapHelp.Pages.Count - 1;
+        GetNode<Label>("%HelpPageNumber").Text = window?.HelpPageText ?? $"1 / {WorldMapHelp.Pages.Count}";
+        Button("%HelpBack").Disabled = pageNumber == 0;
+        Button("%HelpNext").Disabled = pageNumber == WorldMapHelp.Pages.Count - 1;
     }
 
-    // One bullet row for each line the longest page has; pages with fewer hide the rest.
-    private void AddHelpLines()
+    // Every page is laid out on top of the others and only the current one is seen, so the help is always as tall
+    // as its longest page and its buttons stay put.
+    private void AddHelpPages()
     {
-        var lines = GetNode("HelpBlocker/Help/Margins/Rows/Page/Lines");
+        var pages = GetNode("%HelpPages");
         var rowScene = GD.Load<PackedScene>("res://Map/help_line.tscn");
-        var mostLines = WorldMapHelp.Pages.Max(page => page.Lines.Count);
-        for (var index = lines.GetChildCount(); index < mostLines; index++)
+        foreach (var page in WorldMapHelp.Pages.Skip(pages.GetChildCount()))
         {
-            lines.AddChild(rowScene.Instantiate());
+            var lines = new VBoxContainer
+            {
+                MouseFilter = MouseFilterEnum.Ignore,
+                SizeFlagsVertical = SizeFlags.ShrinkBegin,
+            };
+            lines.AddThemeConstantOverride("separation", HelpLineGap);
+            foreach (var text in page.Lines)
+            {
+                var line = rowScene.Instantiate();
+                line.GetNode<Label>("Text").Text = text;
+                lines.AddChild(line);
+            }
+
+            pages.AddChild(lines);
         }
 
         ShowHelpPage();

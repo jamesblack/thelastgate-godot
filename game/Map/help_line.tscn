@@ -1,13 +1,16 @@
 [gd_scene format=3 uid="uid://dryoc5l2uw1fd"]
 
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="1_label"]
+
 [node name="HelpLine" type="HBoxContainer" unique_id=1840273416]
-custom_minimum_size = Vector2(460, 0)
+custom_minimum_size = Vector2(420, 0)
 theme_override_constants/separation = 8
 
 [node name="Bullet" type="Label" parent="." unique_id=377429105]
 layout_mode = 2
 size_flags_vertical = 0
-text = "•"
+text = "-"
+script = ExtResource("1_label")
 
 [node name="Text" type="Label" parent="." unique_id=1520884763]
 custom_minimum_size = Vector2(1, 0)
@@ -15,3 +18,4 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Scroll the mouse wheel to zoom in and out around the cursor."
 autowrap_mode = 3
+script = ExtResource("1_label")

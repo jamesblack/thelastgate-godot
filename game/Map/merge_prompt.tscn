@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://vanevdhtppvp"]
+
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="1_button"]
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="2_field"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://0sqkmol7pvue" path="res://Map/MergePrompt.cs" id="4_merge_script"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="5_panel"]
+
+[node name="MergePrompt" type="ColorRect" unique_id=1104578960]
+visible = false
+top_level = true
+z_index = 2
+z_as_relative = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("4_merge_script")
+
+[node name="Window" type="HBoxContainer" parent="." unique_id=935000115]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window" unique_id=1620243874]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("5_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1930941374]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout" unique_id=1922900034]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body" unique_id=1660853295]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="MergePage" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content" unique_id=1903530786]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Question" type="Label" parent="Window/Frame/Layout/Body/Content/MergePage" unique_id=1109052680]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Move \"Dungeons\" into \"Places\"?"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Clash" type="Label" parent="Window/Frame/Layout/Body/Content/MergePage" unique_id=1284185793]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "\"Places\" already has a category called \"Dungeons\"."
+custom_minimum_size = Vector2(260, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Hint" type="Label" parent="Window/Frame/Layout/Body/Content/MergePage" unique_id=1601794002]
+layout_mode = 2
+mouse_filter = 2
+text = "Merge puts them together. Rename keeps both."
+custom_minimum_size = Vector2(260, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Problem" type="Label" parent="Window/Frame/Layout/Body/Content/MergePage" unique_id=818600236]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(260, 0)
+autowrap_mode = 3
+visible = false
+script = ExtResource("3_label")
+Colour = 0
+
+[node name="RenamePage" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content" unique_id=818198001]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+visible = false
+
+[node name="RenameHeading" type="Label" parent="Window/Frame/Layout/Body/Content/RenamePage" unique_id=1755390397]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Rename \"Dungeons\" to"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Name" parent="Window/Frame/Layout/Body/Content/RenamePage" unique_id=424689291 instance=ExtResource("2_field")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(258, 0)
+max_length = 31
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1333605048]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Footer" unique_id=976253712]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Footer/Centre" unique_id=1791132636]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Merge" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=379505657 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Merge"
+
+[node name="Rename" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1125249638 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Rename..."
+
+[node name="Cancel" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1286518472 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="Move" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=134527359 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+Caption = "Move"
+
+[node name="Back" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1027311800 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+Caption = "Back"

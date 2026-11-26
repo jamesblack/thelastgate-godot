@@ -66,4 +66,20 @@ public class WorldMapWordingTests
         AssertThat(WorldMapWording.DuplicatePinsQuestion(1, "Camps", false))
             .IsEqual("Remove 1 duplicate pin from \"Camps\"?");
     }
+
+    [TestCase]
+    public void MergeQuestion_NamesBothCategories()
+    {
+        AssertThat(WorldMapWording.MergeQuestion("Dungeons", "Places")).IsEqual("Move \"Dungeons\" into \"Places\"?");
+        AssertThat(WorldMapWording.MergeClash("Places", "Dungeons"))
+            .IsEqual("\"Places\" already has a category called \"Dungeons\".");
+    }
+
+    [TestCase]
+    public void MergeQuestion_AtTheTopLevel()
+    {
+        AssertThat(WorldMapWording.MergeQuestion("Dungeons", null)).IsEqual("Move \"Dungeons\" to the top level?");
+        AssertThat(WorldMapWording.MergeClash(null, "Dungeons"))
+            .IsEqual("The top level already has a category called \"Dungeons\".");
+    }
 }

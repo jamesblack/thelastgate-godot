@@ -182,16 +182,14 @@ public class NoteCategoriesTests
     }
 
     [TestCase]
-    public void MoveCategory_RefusesLoopsAndStayingPut()
+    public void MoveCategory_RefusesLoops()
     {
         var first = set.AddCategory("A", 0);
         var child = set.AddCategory("A1", 0, first);
 
-        AssertThat(set.MoveCategory(first, child)).IsFalse();
-        AssertThat(set.MoveCategory(first, first)).IsFalse();
-        AssertThat(set.MoveCategory(child, first)).IsFalse();
-        AssertThat(set.CanMoveCategory(child, 0)).IsTrue();
-        AssertThat(set.MoveCategory(child, 0)).IsTrue();
+        AssertThat(set.MoveCategory(first, child, -1)).IsFalse();
+        AssertThat(set.MoveCategory(first, first, -1)).IsFalse();
+        AssertThat(set.MoveCategory(child, 0, -1)).IsTrue();
         AssertThat(set.FindCategory(child)!.ParentId).IsEqual(0);
     }
 
@@ -204,7 +202,7 @@ public class NoteCategoriesTests
         var nested = set.AddCategory("quest givers", 0, first);
         set.AddCategory("Leaf", 0, nested);
 
-        AssertThat(set.MoveCategory(nested, other)).IsTrue();
+        AssertThat(set.MoveCategory(nested, other, -1)).IsTrue();
 
         AssertThat(set.FindCategory(nested)!.ParentId).IsEqual(other);
         AssertThat(set.FindCategory(nested)!.Name).IsEqual("quest givers (2)");
@@ -224,36 +222,7 @@ public class NoteCategoriesTests
         var pair = set.AddCategory("Pair", 0);
         set.AddCategory("Pair child", 0, pair);
 
-        AssertThat(set.CanMoveCategory(pair, chain)).IsFalse();
-        AssertThat(set.MoveCategory(pair, chain)).IsFalse();
-    }
-
-    [TestCase]
-    public void ShiftCategory_SwapsWithTheNeighbouringSibling()
-    {
-        var aston = set.AddCategory("Aston", 0);
-        var questGivers = set.AddCategory("Quest Givers", 1, aston);
-        set.AddCategory("Neiseer", 2);
-        var treasure = set.AddCategory("Treasure", 3, aston);
-        var dungeons = set.AddCategory("Dungeons", 4);
-        set.Changed = false;
-
-        AssertThat(set.CanShiftCategory(aston, -1)).IsFalse();
-        AssertThat(set.CanShiftCategory(dungeons, 1)).IsFalse();
-        AssertThat(set.CanShiftCategory(questGivers, -1)).IsFalse();
-        AssertThat(set.CanShiftCategory(treasure, 1)).IsFalse();
-        AssertThat(set.CanShiftCategory(999, 1)).IsFalse();
-        AssertThat(set.ShiftCategory(aston, -1)).IsFalse();
-        AssertThat(set.Changed).IsFalse();
-
-        AssertThat(set.ShiftCategory(dungeons, -1)).IsTrue();
-        AssertThat(set.Changed).IsTrue();
-        AssertThat(set.Tree().Select(category => category.Name))
-            .ContainsExactly("Aston", "Quest Givers", "Treasure", "Dungeons", "Neiseer");
-
-        AssertThat(set.ShiftCategory(treasure, -1)).IsTrue();
-        AssertThat(set.Tree(aston).Select(category => category.Name))
-            .ContainsExactly("Aston", "Treasure", "Quest Givers");
-        AssertThat(set.FindCategory(treasure)!.ParentId).IsEqual(aston);
+        AssertThat(set.CheckCategoryMove(pair, chain)).IsEqual(NoteMoveRefusal.TooDeep);
+        AssertThat(set.MoveCategory(pair, chain, -1)).IsFalse();
     }
 }

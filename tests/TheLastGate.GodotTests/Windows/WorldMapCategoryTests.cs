@@ -87,32 +87,6 @@ public class WorldMapCategoryTests
     }
 
     [TestCase]
-    public void MoveCategory_OpensItsNewParentAndThatParentsParents()
-    {
-        var top = notes.AddCategory("Top", 0);
-        var middle = notes.AddCategory("Middle", 0, top);
-        var moving = notes.AddCategory("Moving", 0);
-
-        editor.MoveCategory(notes, moving, middle);
-
-        AssertThat(notes.FindCategory(moving)!.ParentId).IsEqual(middle);
-        AssertThat(editor.ExpandedCategories.Order()).ContainsExactly(top, middle);
-    }
-
-    [TestCase]
-    public void SendTo_OpensTheCategoryTheNoteWentTo()
-    {
-        var from = notes.AddCategory("From", 0);
-        var top = notes.AddCategory("Top", 0);
-        var to = notes.AddCategory("To", 0, top);
-        var pin = notes.AddPoint(from, NoteKind.Pin, 10, 10, "Camp");
-
-        editor.SendTo(notes, pin, to);
-
-        AssertThat(editor.ExpandedCategories.Order()).ContainsExactly(top, to);
-    }
-
-    [TestCase]
     public void DeleteCategory_LetsGoOfEverythingInIt()
     {
         var kept = notes.AddCategory("Kept", 0);

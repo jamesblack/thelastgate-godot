@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://oind5rho0m21"]
+
+[ext_resource type="Script" uid="uid://3mew5tx0nfsn" path="res://Procedural/ProceduralCheckBox.cs" id="1_box"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="4_click"]
+
+[node name="CheckBox" type="MarginContainer" unique_id=356757068]
+mouse_filter = 2
+script = ExtResource("1_box")
+Text = "Check box"
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=1569545166]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" type="Container" parent="Row" unique_id=514586815]
+custom_minimum_size = Vector2(11, 11)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+
+[node name="Mark" type="Control" parent="Row/Box" unique_id=1105811918]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Gold" type="Container" parent="Row/Box/Mark" unique_id=1001084545]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GGG"
+
+[node name="Label" type="Label" parent="Row" unique_id=713540436]
+layout_mode = 2
+mouse_filter = 2
+text = "Check box"
+script = ExtResource("3_label")
+
+[node name="Click" type="Control" parent="." unique_id=1938274651]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")

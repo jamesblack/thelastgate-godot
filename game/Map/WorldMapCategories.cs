@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
 using TheLastGate.Notes;
+using TheLastGate.Procedural;
 using TheLastGate.Windows;
 
 namespace TheLastGate.Map;
@@ -13,18 +13,8 @@ namespace TheLastGate.Map;
 // the selected note are picked out by a darker row.
 public partial class WorldMapCategories : Control
 {
-    private const int SwatchSize = 12;
-    private const int PaletteSwatchSize = 20;
     private const int NoParent = 0;
 
-    private static readonly Color Gold = Color.Color8(243, 219, 106);
-    private static readonly Color DimmedText = Color.Color8(72, 81, 81);
-    private static readonly Color ChosenRow = Color.Color8(58, 16, 16);
-
-    private readonly Dictionary<int, TreeItem> rows = [];
-    private NoteSet? builtNotes;
-    private int builtRevision = -1;
-    private (int Current, int Selected) highlighted;
     private NoteImportDraft? importDraft;
     private int menuCategoryId;
     private int newColour;
@@ -34,13 +24,12 @@ public partial class WorldMapCategories : Control
 
     public bool PromptOpen => Prompts.Any(prompt => prompt.Visible);
 
-    private Tree List => GetNode<Tree>("List");
+    private CategoryListView List => GetNode<CategoryListView>("%List");
 
-    private PopupMenu Menu => GetNode<PopupMenu>("Menu");
+    private ProceduralMenu Menu => GetNode<ProceduralMenu>("Menu");
 
-    private PopupMenu ColourMenu => GetNode<PopupMenu>("Menu/Colour");
+    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("ColourMenu");
 
-    private PopupMenu SendToMenu => GetNode<PopupMenu>("Menu/SendTo");
 
     private Control NewPrompt => GetNode<Control>("NewBlocker");
 
@@ -48,17 +37,21 @@ public partial class WorldMapCategories : Control
 
     private Control ExportPrompt => GetNode<Control>("ExportBlocker");
 
-    private Control DeletePrompt => GetNode<Control>("DeleteBlocker");
+    private Control DeletePrompt => GetNode<Control>("DeleteCategoryBlocker");
+
+    private MergePrompt MergePrompt => GetNode<MergePrompt>("%MergePrompt");
 
     private Control DuplicatesPrompt => GetNode<Control>("DuplicatesBlocker");
 
-    private Control[] Prompts => [NewPrompt, ImportPrompt, ExportPrompt, DeletePrompt, DuplicatesPrompt];
+    private Control[] Prompts => [NewPrompt, ImportPrompt, ExportPrompt, DeletePrompt, DuplicatesPrompt, MergePrompt];
 
-    private LineEdit NewName => PromptNode<LineEdit>(NewPrompt, "Name");
+    private LineEdit NewName => GetNode<LineEdit>("%NewName");
 
-    private TextEdit ImportCode => PromptNode<TextEdit>(ImportPrompt, "Code");
+    private ColourPicker NewColour => GetNode<ColourPicker>("%NewColour");
 
-    private LineEdit ImportRootName => PromptNode<LineEdit>(ImportPrompt, "Rename/RootName");
+    private TextEdit ImportCode => GetNode<TextEdit>("%ImportCode");
+
+    private LineEdit ImportRootName => GetNode<LineEdit>("%ImportRootName");
 
     private static double Now => Time.GetTicksMsec() / 1000.0;
 
@@ -68,21 +61,25 @@ public partial class WorldMapCategories : Control
 
     public override void _Ready()
     {
-        List.CreateItem();
-        List.ItemMouseSelected += ClickRow;
-        List.ItemCollapsed += item => window?.Editor.Expand(IdOf(item), !item.Collapsed);
-        List.ItemEdited += FinishRename;
-        GetNode<Button>("Footer/Buttons/New").Pressed += () => OpenNewPrompt(NoParent);
-        GetNode<Button>("Footer/Buttons/Import").Pressed += () => OpenImportPrompt(NoParent);
-        GetNode<Button>("Footer/Buttons/Export").Pressed += () => Export(window?.Editor.CurrentCategoryId ?? 0);
+        List.CategoryClicked += id => window?.Editor.ChooseCategory(id);
+        List.NoteClicked += SelectNote;
+        List.CategoryMenuWanted += OpenCategoryMenu;
+        List.NoteMenuWanted += (id, position) => NoteMenuWanted?.Invoke(new NoteHit(id, -1), position);
+        List.NotesChanged += SaveChanges;
+        List.CategoryRenamed += Rename;
+        List.ClashFound += AskAboutClash;
+        Button("%New").Pressed += () => OpenNewPrompt(NoParent);
+        Button("%Import").Pressed += () => OpenImportPrompt(NoParent);
+        Button("%Export").Pressed += () => Export(window?.Editor.CurrentCategoryId ?? 0);
+        MergePrompt.Done += SaveChanges;
         PrepareMenus();
         ConnectNewPrompt();
         ConnectImportPrompt();
-        PromptNode<Button>(ExportPrompt, "Buttons/Confirm").Pressed += () => ExportPrompt.Visible = false;
-        PromptNode<Button>(DeletePrompt, "Buttons/Confirm").Pressed += DeleteCategory;
-        PromptNode<Button>(DeletePrompt, "Buttons/Cancel").Pressed += () => DeletePrompt.Visible = false;
-        PromptNode<Button>(DuplicatesPrompt, "Buttons/Confirm").Pressed += RemoveDuplicates;
-        PromptNode<Button>(DuplicatesPrompt, "Buttons/Cancel").Pressed += () => DuplicatesPrompt.Visible = false;
+        Button("%ExportConfirm").Pressed += () => ExportPrompt.Visible = false;
+        Button("%DeleteCategoryConfirm").Pressed += DeleteCategory;
+        Button("%DeleteCategoryCancel").Pressed += () => DeletePrompt.Visible = false;
+        Button("%DuplicatesConfirm").Pressed += RemoveDuplicates;
+        Button("%DuplicatesCancel").Pressed += () => DuplicatesPrompt.Visible = false;
     }
 
     public override void _Process(double delta)
@@ -92,16 +89,7 @@ public partial class WorldMapCategories : Control
             return;
         }
 
-        if (notes != builtNotes || notes.Revision != builtRevision)
-        {
-            Rebuild(notes, window.Editor);
-        }
-        else if (highlighted != (window.Editor.CurrentCategoryId, window.Editor.SelectedNoteId))
-        {
-            Highlight(window.Editor);
-        }
-
-        GetNode<Button>("Footer/Buttons/Export").Disabled = notes.FindCategory(window.Editor.CurrentCategoryId) == null;
+        Button("%Export").Disabled = notes.FindCategory(window.Editor.CurrentCategoryId) == null;
         ClosePromptsThatLostTheirCategory(notes);
     }
 
@@ -118,9 +106,27 @@ public partial class WorldMapCategories : Control
     {
         window = shownWindow;
         notes = shownNotes;
+        List.Show(shownWindow, shownNotes);
         foreach (var name in (string[])["New", "Import"])
         {
-            GetNode<Button>($"Footer/Buttons/{name}").Disabled = shownNotes == null;
+            Button($"%{name}").Disabled = shownNotes == null;
+        }
+    }
+
+    public void OpenCategoryMenu(int categoryId, Vector2 position)
+    {
+        menuCategoryId = categoryId;
+        if (FillMenu())
+        {
+            Menu.Popup(position);
+        }
+    }
+
+    public void AskAboutClash(NoteDrag drag, NoteDropSlot slot, int clashId)
+    {
+        if (notes != null && window != null)
+        {
+            MergePrompt.Open(notes, window.Editor, drag, slot, clashId);
         }
     }
 
@@ -132,14 +138,10 @@ public partial class WorldMapCategories : Control
         }
 
         importDraft = null;
-        Menu.Hide();
+        Menu.Close();
     }
 
-    private static T PromptNode<T>(Control prompt, string path)
-        where T : Node =>
-        prompt.GetNode<T>($"Prompt/Margins/Rows/{path}");
-
-    private static int IdOf(TreeItem item) => item.GetMetadata(0).AsInt32();
+    private ProceduralButton Button(string path) => GetNode<ProceduralButton>(path);
 
     private void SaveChanges()
     {
@@ -149,273 +151,91 @@ public partial class WorldMapCategories : Control
         }
     }
 
-    // Categories and notes share one id counter, so a row's id says which it is.
-    private void Rebuild(NoteSet shown, WorldMapEditor editor)
+    private void SelectNote(int noteId)
     {
-        var root = List.GetRoot();
-        foreach (var child in root.GetChildren())
+        if (notes?.FindNote(noteId) is { } note && window != null)
         {
-            child.Free();
-        }
-
-        rows.Clear();
-        AddBranch(shown, editor, root, NoParent);
-        builtNotes = shown;
-        builtRevision = shown.Revision;
-        Highlight(editor);
-    }
-
-    private void AddBranch(NoteSet shown, WorldMapEditor editor, TreeItem parent, int parentId)
-    {
-        foreach (var category in shown.Categories.Where(category =>
-            category.ParentId == parentId && category.Id != parentId))
-        {
-            var dimmed = !shown.IsShown(category);
-            var row = AddRow(
-                parent,
-                category.Id,
-                category.Name,
-                NoteSwatches.Of(NotePalette.Rgb(category.ColourIndex), SwatchSize, dimmed),
-                dimmed);
-            AddBranch(shown, editor, row, category.Id);
-            foreach (var note in category.Notes)
-            {
-                var swatch = note.ColourIndex == Note.CategoryColour
-                    ? NoteSwatches.Blank(SwatchSize)
-                    : NoteSwatches.Of(NoteSet.Rgb(category, note), SwatchSize, dimmed);
-                AddRow(row, note.Id, WorldMapWording.KindPrefix(note.Kind) + note.Label, swatch, dimmed);
-            }
-
-            row.Collapsed = !editor.ExpandedCategories.Contains(category.Id);
+            window.Editor.Select(noteId);
+            window.ShowNote(note);
         }
     }
 
-    private TreeItem AddRow(TreeItem parent, int id, string text, Texture2D swatch, bool dimmed)
+    private void StartRename(int categoryId) => List.StartRename(categoryId);
+
+    private void Rename(int categoryId, string name)
     {
-        var row = List.CreateItem(parent);
-        row.SetText(0, text);
-        row.SetIcon(0, swatch);
-        row.SetMetadata(0, id);
-        row.SetCustomColor(0, dimmed ? DimmedText : Gold);
-        rows[id] = row;
-        return row;
-    }
-
-    private void Highlight(WorldMapEditor editor)
-    {
-        foreach (var id in (int[])[highlighted.Current, highlighted.Selected])
-        {
-            if (rows.TryGetValue(id, out var row))
-            {
-                row.ClearCustomBgColor(0);
-            }
-        }
-
-        highlighted = (editor.CurrentCategoryId, editor.SelectedNoteId);
-        foreach (var id in (int[])[highlighted.Current, highlighted.Selected])
-        {
-            if (rows.TryGetValue(id, out var row))
-            {
-                row.SetCustomBgColor(0, ChosenRow);
-            }
-        }
-    }
-
-    // A click on a category makes it the one new notes go into; a click on a note selects it and moves the map to it.
-    // A right click opens the row's menu.
-    private void ClickRow(Vector2 position, long buttonIndex)
-    {
-        if (List.GetSelected() is not { } row || notes == null || window == null)
-        {
-            return;
-        }
-
-        var id = IdOf(row);
-        List.DeselectAll();
-        var rightClick = buttonIndex == (long)MouseButton.Right;
-        if (notes.FindCategory(id) != null)
-        {
-            if (rightClick)
-            {
-                OpenMenu(id);
-            }
-            else
-            {
-                window.Editor.ChooseCategory(id);
-            }
-        }
-        else if (notes.FindNote(id) is { } note)
-        {
-            if (rightClick)
-            {
-                NoteMenuWanted?.Invoke(new NoteHit(id, -1), GetViewport().GetMousePosition());
-            }
-            else
-            {
-                window.Editor.Select(id);
-                window.ShowNote(note);
-            }
-        }
-    }
-
-    private void StartRename(int categoryId)
-    {
-        if (!rows.TryGetValue(categoryId, out var row))
-        {
-            return;
-        }
-
-        row.SetEditable(0, true);
-        List.SetSelected(row, 0);
-        List.EditSelected(true);
-    }
-
-    private void FinishRename()
-    {
-        if (List.GetEdited() is not { } row || notes == null)
-        {
-            return;
-        }
-
-        row.SetEditable(0, false);
-        var id = IdOf(row);
-        var name = row.GetText(0).Trim();
-        if (name.Length > 0 && notes.RenameCategory(id, name))
+        var wanted = name.Trim();
+        if (wanted.Length > 0 && notes?.RenameCategory(categoryId, wanted) == true)
         {
             SaveChanges();
         }
-        else
-        {
-            row.SetText(0, notes.FindCategory(id)?.Name ?? "");
-        }
-
-        List.DeselectAll();
     }
 
-    // The menus are windows of their own, so they are given the window's font. Showing, hiding and moving a category
-    // keep the menu open, as the current client does, so it is shut by hand for everything else.
+    // Showing and hiding a category keep the menu open, so several can be changed in one go.
     private void PrepareMenus()
     {
-        foreach (var menu in (PopupMenu[])[Menu, ColourMenu, SendToMenu])
-        {
-            menu.AddThemeFontOverride("font", GetThemeFont("font", "Label"));
-            menu.AddThemeFontSizeOverride("font_size", GetThemeFontSize("font_size", "Label"));
-        }
-
-        Menu.HideOnItemSelection = false;
-        Menu.HideOnCheckableItemSelection = false;
-        for (var colourIndex = 0; colourIndex < NotePalette.Size; colourIndex++)
-        {
-            ColourMenu.AddIconRadioCheckItem(
-                NoteSwatches.Of(NotePalette.Rgb(colourIndex), PaletteSwatchSize),
-                "",
-                colourIndex);
-        }
-
-        Menu.IdPressed += ChooseFromMenu;
-        ColourMenu.IdPressed += id =>
-        {
-            if (notes?.SetCategoryColour(menuCategoryId, (int)id) == true)
-            {
-                SaveChanges();
-            }
-        };
-        SendToMenu.IdPressed += id =>
-        {
-            if (notes != null)
-            {
-                window?.Editor.MoveCategory(notes, menuCategoryId, (int)id);
-                SaveChanges();
-            }
-        };
-    }
-
-    private void OpenMenu(int categoryId)
-    {
-        menuCategoryId = categoryId;
-        if (FillMenu())
-        {
-            Menu.Popup(new Rect2I((Vector2I)GetViewport().GetMousePosition(), Vector2I.Zero));
-        }
+        Menu.KeepOpenOnCheck = true;
+        Menu.ItemChosen += ChooseFromMenu;
     }
 
     private bool FillMenu()
     {
         if (notes?.FindCategory(menuCategoryId) is not { } category)
         {
-            Menu.Hide();
+            Menu.Close();
             return false;
         }
 
         Menu.Clear();
-        Menu.AddItem(category.Name, (int)MenuItem.Heading);
-        Menu.SetItemDisabled(Menu.ItemCount - 1, true);
+        Menu.AddHeading(category.Name);
         Menu.AddSeparator();
-        Menu.AddCheckItem("Show on map", (int)MenuItem.ShowOnMap);
-        Menu.SetItemChecked(Menu.ItemCount - 1, category.Visible);
-        Menu.AddCheckItem("Show labels", (int)MenuItem.ShowLabels);
-        Menu.SetItemChecked(Menu.ItemCount - 1, category.ShowLabels);
+        Menu.AddCheckItem("Show on map", (int)MenuItem.ShowOnMap, category.Visible);
+        Menu.AddCheckItem("Show labels", (int)MenuItem.ShowLabels, category.ShowLabels);
         Menu.AddSeparator();
         var canNest = notes.Depth(category.Id) < NoteLimits.Depth;
-        AddMenuItem("New subcategory...", MenuItem.NewSubcategory, canNest);
-        AddMenuItem("Import here...", MenuItem.ImportHere, canNest);
-        AddMenuItem("Rename", MenuItem.Rename, true);
-        Menu.AddSubmenuNodeItem("Colour", ColourMenu);
-        Menu.AddSubmenuNodeItem("Send to", SendToMenu);
-        AddMenuItem("Move up", MenuItem.MoveUp, notes.CanShiftCategory(category.Id, -1));
-        AddMenuItem("Move down", MenuItem.MoveDown, notes.CanShiftCategory(category.Id, 1));
+        Menu.AddItem("New subcategory...", (int)MenuItem.NewSubcategory, canNest);
+        Menu.AddItem("Import here...", (int)MenuItem.ImportHere, canNest);
+        Menu.AddItem("Rename", (int)MenuItem.Rename);
+        ColourMenu.Clear();
+        var picker = ColourPicker.Load(category.ColourIndex);
+        picker.ColourChosen += SetCategoryColour;
+        ColourMenu.AddPicker(picker);
+        Menu.AddSubmenu("Colour", ColourMenu);
         Menu.AddSeparator();
-        AddMenuItem("Export", MenuItem.Export, true);
+        Menu.AddItem("Export", (int)MenuItem.Export);
         var duplicates = notes.CountDuplicatePins(category.Id);
-        AddMenuItem(WorldMapWording.DuplicatePinsItem(duplicates), MenuItem.RemoveDuplicates, duplicates > 0);
-        if (duplicates == 0)
-        {
-            Menu.SetItemTooltip(
-                Menu.ItemCount - 1,
-                "No pins here share a name and spot with another pin in the same category.");
-        }
-
+        Menu.AddItem(
+            WorldMapWording.DuplicatePinsItem(duplicates),
+            (int)MenuItem.RemoveDuplicates,
+            duplicates > 0,
+            duplicates > 0 ? "" : "No pins here share a name and spot with another pin in the same category.");
         var hasSubcategories = notes.HasChildren(category.Id);
-        AddMenuItem("Delete category...", MenuItem.Delete, !hasSubcategories);
-        if (hasSubcategories)
-        {
-            Menu.SetItemTooltip(Menu.ItemCount - 1, "Delete or move its subcategories first.");
-        }
-
-        for (var itemIndex = 0; itemIndex < ColourMenu.ItemCount; itemIndex++)
-        {
-            ColourMenu.SetItemChecked(itemIndex, ColourMenu.GetItemId(itemIndex) == category.ColourIndex);
-        }
-
-        SendToMenu.Clear();
-        SendToMenu.AddItem("Top level", NoParent);
-        SendToMenu.SetItemDisabled(0, !notes.CanMoveCategory(category.Id, NoParent));
-        foreach (var target in notes.Tree())
-        {
-            SendToMenu.AddItem(target.Name, target.Id);
-            var itemIndex = SendToMenu.ItemCount - 1;
-            SendToMenu.SetItemIndent(itemIndex, notes.Depth(target.Id) - 1);
-            SendToMenu.SetItemDisabled(itemIndex, !notes.CanMoveCategory(category.Id, target.Id));
-        }
-
+        Menu.AddItem(
+            "Delete category...",
+            (int)MenuItem.Delete,
+            !hasSubcategories,
+            hasSubcategories ? "Delete or move its subcategories first." : "");
         return true;
     }
 
-    private void AddMenuItem(string text, MenuItem item, bool enabled)
+    private void SetCategoryColour(int colourIndex)
     {
-        Menu.AddItem(text, (int)item);
-        Menu.SetItemDisabled(Menu.ItemCount - 1, !enabled);
+        if (notes?.SetCategoryColour(menuCategoryId, colourIndex) == true)
+        {
+            SaveChanges();
+        }
+
+        Menu.Close();
     }
 
-    private void ChooseFromMenu(long id)
+    private void ChooseFromMenu(int id)
     {
         if (notes?.FindCategory(menuCategoryId) is not { } category || window == null)
         {
             return;
         }
 
-        var item = (MenuItem)id;
-        switch (item)
+        switch ((MenuItem)id)
         {
             case MenuItem.ShowOnMap:
                 category.Visible = !category.Visible;
@@ -424,9 +244,6 @@ public partial class WorldMapCategories : Control
             case MenuItem.ShowLabels:
                 category.ShowLabels = !category.ShowLabels;
                 notes.Changed = true;
-                break;
-            case MenuItem.MoveUp or MenuItem.MoveDown:
-                notes.ShiftCategory(category.Id, item == MenuItem.MoveUp ? -1 : 1);
                 break;
             case MenuItem.NewSubcategory:
                 OpenNewPrompt(category.Id);
@@ -444,24 +261,14 @@ public partial class WorldMapCategories : Control
                 AskToRemoveDuplicates(category);
                 break;
             case MenuItem.Delete:
-                PromptNode<Label>(DeletePrompt, "Question").Text = WorldMapWording.DeleteCategoryQuestion(category);
+                GetNode<Label>("%DeleteCategoryQuestion").Text = WorldMapWording.DeleteCategoryQuestion(category);
                 DeletePrompt.Visible = true;
-                break;
-            case MenuItem.Heading:
                 break;
             default:
                 throw new UnreachableException();
         }
 
         SaveChanges();
-        if (item is MenuItem.ShowOnMap or MenuItem.ShowLabels or MenuItem.MoveUp or MenuItem.MoveDown)
-        {
-            FillMenu();
-        }
-        else
-        {
-            Menu.Hide();
-        }
     }
 
     private void Export(int categoryId)
@@ -478,8 +285,8 @@ public partial class WorldMapCategories : Control
         }
 
         DisplayServer.ClipboardSet(code);
-        PromptNode<Label>(ExportPrompt, "Message").Text = NoteShareCode.CopiedMessage(code.Length);
-        PromptNode<Label>(ExportPrompt, "TooLong").Visible = code.Length > NoteShareCode.DiscordLimit;
+        GetNode<Label>("%ExportMessage").Text = NoteShareCode.CopiedMessage(code.Length);
+        GetNode<Label>("%ExportTooLong").Visible = code.Length > NoteShareCode.DiscordLimit;
         ExportPrompt.Visible = true;
     }
 
@@ -495,7 +302,7 @@ public partial class WorldMapCategories : Control
 
     private void AskToRemoveDuplicates(NoteCategory category)
     {
-        PromptNode<Label>(DuplicatesPrompt, "Question").Text = WorldMapWording.DuplicatePinsQuestion(
+        GetNode<Label>("%DuplicatesQuestion").Text = WorldMapWording.DuplicatePinsQuestion(
             notes!.CountDuplicatePins(category.Id),
             category.Name,
             notes.HasChildren(category.Id));
@@ -537,49 +344,23 @@ public partial class WorldMapCategories : Control
     {
         NewName.TextChanged += _ => ShowNewPrompt();
         NewName.TextSubmitted += _ => CreateCategory();
-        PromptNode<Button>(NewPrompt, "Buttons/Create").Pressed += CreateCategory;
-        PromptNode<Button>(NewPrompt, "Buttons/Cancel").Pressed += () => NewPrompt.Visible = false;
-        for (var colourIndex = 0; colourIndex < NotePalette.Size; colourIndex++)
-        {
-            var chosen = colourIndex;
-            PromptNode<Button>(NewPrompt, $"Palette/Swatch{colourIndex}").Pressed += () =>
-            {
-                newColour = chosen;
-                ShowNewPrompt();
-            };
-        }
+        Button("%NewCreate").Pressed += CreateCategory;
+        Button("%NewCancel").Pressed += () => NewPrompt.Visible = false;
+        NewColour.ColourChosen += chosen => newColour = chosen;
     }
 
     private void OpenNewPrompt(int parentId)
     {
         newParentId = parentId;
         newColour = 0;
+        NewColour.Chosen = newColour;
         NewName.Text = "";
         NewPrompt.Visible = true;
         NewName.GrabFocus();
         ShowNewPrompt();
     }
 
-    // The chosen colour has a gold border round its swatch.
-    private void ShowNewPrompt()
-    {
-        PromptNode<Button>(NewPrompt, "Buttons/Create").Disabled = NewName.Text.Length == 0;
-        for (var colourIndex = 0; colourIndex < NotePalette.Size; colourIndex++)
-        {
-            var rgb = NotePalette.Rgb(colourIndex);
-            var swatch = new StyleBoxFlat
-            {
-                BgColor = Color.Color8((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb),
-                BorderColor = Gold,
-            };
-            swatch.SetBorderWidthAll(colourIndex == newColour ? 2 : 0);
-            var button = PromptNode<Button>(NewPrompt, $"Palette/Swatch{colourIndex}");
-            foreach (var style in (string[])["normal", "hover", "pressed", "focus"])
-            {
-                button.AddThemeStyleboxOverride(style, swatch);
-            }
-        }
-    }
+    private void ShowNewPrompt() => Button("%NewCreate").Disabled = NewName.Text.Length == 0;
 
     private void CreateCategory()
     {
@@ -614,10 +395,10 @@ public partial class WorldMapCategories : Control
 
             ShowImportPrompt();
         };
-        PromptNode<Button>(ImportPrompt, "Merge").Pressed += () => FinishImport(importDraft?.Merge());
-        PromptNode<Button>(ImportPrompt, "Buttons/AddAsNew").Pressed += () => FinishImport(importDraft?.AddAsNew());
-        PromptNode<Button>(ImportPrompt, "Buttons/Add").Pressed += () => FinishImport(importDraft?.Add());
-        PromptNode<Button>(ImportPrompt, "Buttons/Cancel").Pressed += () =>
+        Button("%ImportMerge").Pressed += () => FinishImport(importDraft?.Merge());
+        Button("%ImportAddAsNew").Pressed += () => FinishImport(importDraft?.AddAsNew());
+        Button("%ImportAdd").Pressed += () => FinishImport(importDraft?.Add());
+        Button("%ImportCancel").Pressed += () =>
         {
             ImportPrompt.Visible = false;
             importDraft = null;
@@ -647,22 +428,22 @@ public partial class WorldMapCategories : Control
             return;
         }
 
-        var destination = PromptNode<Label>(ImportPrompt, "Destination");
+        var destination = GetNode<Label>("%ImportDestination");
         destination.Visible = draft.DestinationName != null;
         destination.Text = $"Import into \"{draft.DestinationName}\"";
-        PromptNode<Label>(ImportPrompt, "Preview").Text = draft.Preview;
-        PromptNode<Label>(ImportPrompt, "Preview").Visible = draft.Preview.Length > 0;
-        PromptNode<Label>(ImportPrompt, "Conflict").Text = draft.ConflictMessage;
-        foreach (var path in (string[])["Conflict", "Merge", "Rename", "Buttons/AddAsNew"])
+        GetNode<Label>("%ImportPreview").Text = draft.Preview;
+        GetNode<Label>("%ImportPreview").Visible = draft.Preview.Length > 0;
+        GetNode<Label>("%ImportConflict").Text = draft.ConflictMessage;
+        foreach (var path in (string[])["%ImportConflict", "%ImportMerge", "%ImportRename", "%ImportAddAsNew"])
         {
-            PromptNode<Control>(ImportPrompt, path).Visible = draft.HasConflict;
+            GetNode<Control>(path).Visible = draft.HasConflict;
         }
 
-        PromptNode<Button>(ImportPrompt, "Buttons/AddAsNew").Disabled = !draft.CanAddAsNew;
-        PromptNode<Button>(ImportPrompt, "Buttons/Add").Visible = !draft.HasConflict;
-        PromptNode<Button>(ImportPrompt, "Buttons/Add").Disabled = !draft.IsReady;
-        PromptNode<Label>(ImportPrompt, "Error").Text = draft.Error;
-        PromptNode<Label>(ImportPrompt, "Error").Visible = draft.Error.Length > 0;
+        Button("%ImportAddAsNew").Disabled = !draft.CanAddAsNew;
+        Button("%ImportAdd").Visible = !draft.HasConflict;
+        Button("%ImportAdd").Disabled = !draft.IsReady;
+        GetNode<Label>("%ImportError").Text = draft.Error;
+        GetNode<Label>("%ImportError").Visible = draft.Error.Length > 0;
     }
 
     private void FinishImport(NoteImportResult? result)
@@ -685,14 +466,11 @@ public partial class WorldMapCategories : Control
 
     private enum MenuItem
     {
-        Heading,
         ShowOnMap,
         ShowLabels,
         NewSubcategory,
         ImportHere,
         Rename,
-        MoveUp,
-        MoveDown,
         Export,
         RemoveDuplicates,
         Delete,

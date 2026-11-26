@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://2e2s6myjaeaa"]
+
+[ext_resource type="Script" uid="uid://eww6ywu3afjf" path="res://Procedural/ResizeGrip.cs" id="1_grip"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+
+[node name="ResizeGrip" type="Control" unique_id=1756018561]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 9.0
+offset_bottom = 9.0
+mouse_default_cursor_shape = 12
+script = ExtResource("1_grip")
+
+[node name="Dot0" type="Container" parent="." unique_id=1221526203]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 1.0
+offset_right = 9.0
+offset_bottom = 3.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"
+
+[node name="Dot1" type="Container" parent="." unique_id=1456105331]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 6.0
+offset_bottom = 6.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"
+
+[node name="Dot2" type="Container" parent="." unique_id=916447546]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 9.0
+offset_bottom = 6.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"
+
+[node name="Dot3" type="Container" parent="." unique_id=1619781984]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 7.0
+offset_right = 3.0
+offset_bottom = 9.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"
+
+[node name="Dot4" type="Container" parent="." unique_id=243437278]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 7.0
+offset_right = 6.0
+offset_bottom = 9.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"
+
+[node name="Dot5" type="Container" parent="." unique_id=196870409]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 9.0
+offset_bottom = 9.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Profile = "GG"

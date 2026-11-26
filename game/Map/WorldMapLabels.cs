@@ -11,6 +11,7 @@ public static class WorldMapLabels
 {
     public const int PinRadius = 3;
     public const int PinMarkerExtent = PinRadius + 1;
+    public const int PinSelectionRadius = 6;
 
     private const double NamesHiddenBelowPixelsPerTile = 2.68;
     private const float NameGap = 4;
@@ -133,6 +134,29 @@ public static class WorldMapLabels
         }
 
         return placed;
+    }
+
+    public static bool PinOnPanel(
+        WorldMapView view,
+        double panelWidth,
+        double panelHeight,
+        Note pin,
+        LabelRect? name)
+    {
+        var panel = new LabelRect(0, 0, (float)panelWidth, (float)panelHeight);
+        var (centreX, centreY) = PinCentre(view, panelWidth, panelHeight, pin);
+        var marker = new LabelRect(
+            centreX - PinSelectionRadius,
+            centreY - PinSelectionRadius,
+            centreX + PinSelectionRadius + 1,
+            centreY + PinSelectionRadius + 1);
+        return marker.Overlaps(panel)
+            || (name is { } offset
+                && new LabelRect(
+                    centreX + offset.Left,
+                    centreY + offset.Top,
+                    centreX + offset.Right,
+                    centreY + offset.Bottom).Overlaps(panel));
     }
 
     public static (float X, float Y) PinCentre(WorldMapView view, double panelWidth, double panelHeight, Note pin)

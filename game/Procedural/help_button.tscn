@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://gxauy1xqrtxw"]
+
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="1_click"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+
+[node name="HelpButton" type="Control" unique_id=937539091]
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 13.0
+offset_bottom = 13.0
+size_flags_vertical = 4
+tooltip_text = "Help"
+script = ExtResource("1_click")
+LightsUp = true
+
+[node name="Look" type="Container" parent="." unique_id=179348516]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Shape = 1
+Profile = "G"
+
+[node name="Nudge" type="MarginContainer" parent="Look" unique_id=1512807344]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 1
+
+[node name="Label" type="Label" parent="Look/Nudge" unique_id=1734333596]
+layout_mode = 2
+mouse_filter = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_label")
+Caption = true

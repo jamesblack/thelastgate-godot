@@ -134,6 +134,30 @@ public class WorldMapLabelsTests
     }
 
     [TestCase]
+    public void PinOnPanel_KeepsAPinInSight()
+    {
+        var pin = AddPin(512, 1024, "pin");
+
+        AssertThat(WorldMapLabels.PinOnPanel(view, Width, Height, pin, null)).IsTrue();
+    }
+
+    [TestCase]
+    public void PinOnPanel_DropsAPinPastTheEdge()
+    {
+        var pin = AddPin(512, 1024 + 110, "pin");
+
+        AssertThat(WorldMapLabels.PinOnPanel(view, Width, Height, pin, new LabelRect(8, -7, 40, 5))).IsFalse();
+    }
+
+    [TestCase]
+    public void PinOnPanel_KeepsAPinWhoseNameReachesIn()
+    {
+        var pin = AddPin(512, 1024 + 110, "pin");
+
+        AssertThat(WorldMapLabels.PinOnPanel(view, Width, Height, pin, new LabelRect(-60, -7, -10, 5))).IsTrue();
+    }
+
+    [TestCase]
     public void Layout_PlacesNamesAroundTheirPinsWithoutThePanel()
     {
         var pin = AddPin(512, 1024, "pin");

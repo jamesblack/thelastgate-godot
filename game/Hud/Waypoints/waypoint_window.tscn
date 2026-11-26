@@ -5,30 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bhr4a7tqkufdc" path="res://Hud/Waypoints/waypoint_row.tscn" id="3_row"]
 [ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="4_close"]
 [ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="5_scroll"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_search"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
-bg_color = Color(0, 0, 0, 0.35)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.45, 0.4, 0.15, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_search_focus"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
-bg_color = Color(0, 0, 0, 0.5)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.95, 0.86, 0.42, 1)
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="6_field"]
 
 [node name="WaypointWindow" type="Control" unique_id=294002951]
 layout_mode = 3
@@ -118,20 +95,13 @@ Profile = "GBG"
 Edges = 1
 Padding = 4
 
-[node name="Search" type="LineEdit" parent="Window/Frame/Layout/Footer" unique_id=1697563244]
+[node name="Search" parent="Window/Frame/Layout/Footer" unique_id=1697563244 instance=ExtResource("6_field")]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_top = NodePath(".")
 focus_previous = NodePath(".")
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.35, 1)
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_styles/normal = SubResource("StyleBoxFlat_search")
-theme_override_styles/focus = SubResource("StyleBoxFlat_search_focus")
 placeholder_text = "Type to find a waypoint"
 max_length = 31
-context_menu_enabled = false
 
 [node name="CloseButton" parent="Window" unique_id=1493988146 instance=ExtResource("4_close")]
 unique_name_in_owner = true

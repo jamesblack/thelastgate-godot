@@ -8,6 +8,27 @@
 [ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="6_close"]
 [ext_resource type="PackedScene" uid="uid://bydn5g2axrvh4" path="res://Hud/item_cell.tscn" id="7_cell"]
 [ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="8_scroll"]
+[ext_resource type="PackedScene" uid="uid://oind5rho0m21" path="res://Procedural/check_box.tscn" id="9_check"]
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="10_field"]
+[ext_resource type="PackedScene" uid="uid://xqwh1vaukyyr" path="res://Procedural/text_box.tscn" id="11_textbox"]
+[ext_resource type="PackedScene" uid="uid://v3qb30gse0pt" path="res://Procedural/colour_picker.tscn" id="12_picker"]
+[ext_resource type="PackedScene" uid="uid://gxauy1xqrtxw" path="res://Procedural/help_button.tscn" id="13_help"]
+[ext_resource type="PackedScene" uid="uid://2e2s6myjaeaa" path="res://Procedural/resize_grip.tscn" id="14_grip"]
+[ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="15_menu"]
+[ext_resource type="PackedScene" uid="uid://b18j726rnfcj" path="res://Map/category_row.tscn" id="16_row"]
+[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Map/category_list.tscn" id="17_list"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focused_example"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.86, 0.42, 1)
 
 [node name="StyleGuide" type="Control" unique_id=1529135218]
 layout_mode = 3
@@ -31,7 +52,7 @@ Colour = 9
 [node name="Intro" type="Label" parent="Page" unique_id=889541096]
 custom_minimum_size = Vector2(980, 0)
 layout_mode = 2
-text = "Every themed window is built from these parts. Select an example and change it in the Inspector to try a setting. Panels and lines are game/Procedural/ProceduralPanel.cs and ProceduralLine.cs; the shared buttons are game/Procedural/text_button.tscn and close_button.tscn; item cells are game/Hud/item_cell.tscn; text is game/Hud/HudLabel.cs. The finished windows live in game/Hud/ (Shop, Depot, Smith, Waypoints, TextWindow, SkillTree)."
+text = "Every themed window is built from these parts. Select an example and change it in the Inspector to try a setting. Panels and lines are game/Procedural/ProceduralPanel.cs and ProceduralLine.cs; the shared buttons are game/Procedural/text_button.tscn and close_button.tscn; item cells are game/Hud/item_cell.tscn; text is game/Hud/HudLabel.cs. The finished windows live in game/Hud/ (Shop, Depot, Smith, Waypoints, TextWindow, SkillTree) and game/Map/ (WorldMap)."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -1056,6 +1077,341 @@ text = "held (2.0x)"
 script = ExtResource("3_label")
 Colour = 10
 
+[node name="CheckBox" type="HBoxContainer" parent="Page" unique_id=1994222063]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/CheckBox" unique_id=311896899]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/CheckBox/Notes" unique_id=1802701737]
+layout_mode = 2
+text = "Checkbox"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/CheckBox/Notes" unique_id=283287727]
+layout_mode = 2
+text = "Instance game/Procedural/check_box.tscn and set Text, Checked and Disabled on the instance. Connect Toggled, which is raised only by a click; setting Checked from code is silent. Unchecked it is a GBG box with the blue fill; checked adds a GGG block inside. It lights up 1.6x while hovered, and Disabled fades it with Dim text."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/CheckBox" unique_id=1309553642]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example38" type="VBoxContainer" parent="Page/CheckBox/Examples" unique_id=1074575334]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" parent="Page/CheckBox/Examples/Example38" unique_id=115434876 instance=ExtResource("9_check")]
+layout_mode = 2
+Text = "Follow player"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CheckBox/Examples/Example38" unique_id=1049088144]
+layout_mode = 2
+text = "off"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example39" type="VBoxContainer" parent="Page/CheckBox/Examples" unique_id=1984344179]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" parent="Page/CheckBox/Examples/Example39" unique_id=1585621833 instance=ExtResource("9_check")]
+layout_mode = 2
+Text = "Follow player"
+Checked = true
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CheckBox/Examples/Example39" unique_id=1524989843]
+layout_mode = 2
+text = "on"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example40" type="VBoxContainer" parent="Page/CheckBox/Examples" unique_id=1339629811]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" parent="Page/CheckBox/Examples/Example40" unique_id=581886292 instance=ExtResource("9_check")]
+layout_mode = 2
+modulate = Color(1.6, 1.6, 1.6, 1)
+Text = "Follow player"
+Checked = true
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CheckBox/Examples/Example40" unique_id=1461978479]
+layout_mode = 2
+text = "hovered (1.6x)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example41" type="VBoxContainer" parent="Page/CheckBox/Examples" unique_id=1148077155]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" parent="Page/CheckBox/Examples/Example41" unique_id=1077997631 instance=ExtResource("9_check")]
+layout_mode = 2
+Text = "Follow player"
+Checked = true
+Disabled = true
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/CheckBox/Examples/Example41" unique_id=788191822]
+layout_mode = 2
+text = "Disabled"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ToggleButton" type="HBoxContainer" parent="Page" unique_id=521974066]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/ToggleButton" unique_id=169515970]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/ToggleButton/Notes" unique_id=387497142]
+layout_mode = 2
+text = "Toggle button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/ToggleButton/Notes" unique_id=1702131145]
+layout_mode = 2
+text = "A text button with On set: steel blue fill (Fill Selected) and yellow text while on, red with grey text while off. Use it for tools and other choices that stay chosen, such as the world map's tools; set On from code as the choice changes. A choice that can't be made right now fades to 60%."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/ToggleButton" unique_id=626944423]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example42" type="VBoxContainer" parent="Page/ToggleButton/Examples" unique_id=571143623]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/ToggleButton/Examples/Example42" unique_id=1436627100 instance=ExtResource("5_button")]
+layout_mode = 2
+metadata/caption = "Pin"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ToggleButton/Examples/Example42" unique_id=343369526]
+layout_mode = 2
+text = "off"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example43" type="VBoxContainer" parent="Page/ToggleButton/Examples" unique_id=1817040054]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/ToggleButton/Examples/Example43" unique_id=700699303 instance=ExtResource("5_button")]
+layout_mode = 2
+On = true
+metadata/caption = "Pin"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ToggleButton/Examples/Example43" unique_id=946845969]
+layout_mode = 2
+text = "On"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example44" type="VBoxContainer" parent="Page/ToggleButton/Examples" unique_id=467715205]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Button" parent="Page/ToggleButton/Examples/Example44" unique_id=1053152309 instance=ExtResource("5_button")]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.6)
+metadata/caption = "Line"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ToggleButton/Examples/Example44" unique_id=881173815]
+layout_mode = 2
+text = "unavailable (60%)"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="TextField" type="HBoxContainer" parent="Page" unique_id=1801552182]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/TextField" unique_id=1654931140]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/TextField/Notes" unique_id=1924492308]
+layout_mode = 2
+text = "Text field"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/TextField/Notes" unique_id=657220005]
+layout_mode = 2
+text = "Instance game/Procedural/text_field.tscn (a LineEdit) for one line, or text_box.tscn (a TextEdit whose scroll bar takes the procedural look) for several. Both are the waypoint search box: a thin dark-gold line on a darkened fill, gold while focused. Set placeholder_text, max_length and size on the instance. Show a problem as a Red HudLabel under the field. Set editable off and fade to 50% for a field that can't be typed in."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/TextField" unique_id=1326693656]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Rows" type="VBoxContainer" parent="Page/TextField/Examples" unique_id=1470842572]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="OneLine" type="HBoxContainer" parent="Page/TextField/Examples/Rows" unique_id=187351301]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example45" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine" unique_id=1232779358]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Field" parent="Page/TextField/Examples/Rows/OneLine/Example45" unique_id=1760508647 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+placeholder_text = "Category name"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example45" unique_id=1319810257]
+layout_mode = 2
+text = "empty, with a hint"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example46" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine" unique_id=621866997]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Field" parent="Page/TextField/Examples/Rows/OneLine/Example46" unique_id=896881663 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Dungeons"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example46" unique_id=1386965224]
+layout_mode = 2
+text = "filled"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example47" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine" unique_id=1922315554]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Field" parent="Page/TextField/Examples/Rows/OneLine/Example47" unique_id=194041094 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_focused_example")
+text = "Dungeons"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example47" unique_id=258166490]
+layout_mode = 2
+text = "focused"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example48" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine" unique_id=1232005517]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="WithProblem" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine/Example48" unique_id=396360801]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+size_flags_horizontal = 0
+
+[node name="Field" parent="Page/TextField/Examples/Rows/OneLine/Example48/WithProblem" unique_id=177393681 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Shops"
+
+[node name="Problem" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example48/WithProblem" unique_id=1285149507]
+layout_mode = 2
+text = "\"Places\" already has a \"Shops\"."
+script = ExtResource("3_label")
+Colour = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example48" unique_id=814487651]
+layout_mode = 2
+text = "a problem"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example49" type="VBoxContainer" parent="Page/TextField/Examples/Rows/OneLine" unique_id=969971367]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Field" parent="Page/TextField/Examples/Rows/OneLine/Example49" unique_id=1340401447 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+modulate = Color(1, 1, 1, 0.5)
+editable = false
+text = "Dungeons"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/OneLine/Example49" unique_id=644663502]
+layout_mode = 2
+text = "not editable"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example50" type="VBoxContainer" parent="Page/TextField/Examples/Rows" unique_id=420177949]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Box" parent="Page/TextField/Examples/Rows/Example50" unique_id=1900214844 instance=ExtResource("11_textbox")]
+layout_mode = 2
+custom_minimum_size = Vector2(230, 46)
+text = "TLGMAP1:eJyNkk1PwzAMhv9K5HMPTdNPl3HhCAhOcJoQWl8mpdK6LnGm0VX97zgdaBMb4hTL8fvHhCAhOcJoQWl8mpdK6LnGm0VX97zgdaBMb4hTL8fvHhCAhOcJoQWl8mpdK6LnGm0VX97zgdaBMb4hTL8fv"
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TextField/Examples/Rows/Example50" unique_id=1140025191]
+layout_mode = 2
+text = "text_box: several lines"
+script = ExtResource("3_label")
+Colour = 10
+
 [node name="CloseButton" type="HBoxContainer" parent="Page" unique_id=383548073]
 layout_mode = 2
 mouse_filter = 2
@@ -1176,6 +1532,207 @@ script = ExtResource("3_label")
 [node name="Caption" type="Label" parent="Page/CloseButton/Examples/Example33" unique_id=2010938424]
 layout_mode = 2
 text = "LitContent: only the sign, hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ColourPicker" type="HBoxContainer" parent="Page" unique_id=373503332]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/ColourPicker" unique_id=1582671484]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/ColourPicker/Notes" unique_id=710468771]
+layout_mode = 2
+text = "Colour picker"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/ColourPicker/Notes" unique_id=104566588]
+layout_mode = 2
+text = "Instance game/Procedural/colour_picker.tscn, a GridContainer of the note palette's swatches (14 x 14, Profile G, Padding 1). Set Chosen; the chosen swatch is ringed white. Connect ColourChosen, raised only by a click. Columns 8 lays it out in a row; Columns 4 makes the 4 x 2 grid a menu uses."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/ColourPicker" unique_id=1987213281]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example51" type="VBoxContainer" parent="Page/ColourPicker/Examples" unique_id=1740326481]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Picker" parent="Page/ColourPicker/Examples/Example51" unique_id=1284426201 instance=ExtResource("12_picker")]
+layout_mode = 2
+Chosen = 1
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ColourPicker/Examples/Example51" unique_id=683554553]
+layout_mode = 2
+text = "Columns 8, Chosen 1"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example52" type="VBoxContainer" parent="Page/ColourPicker/Examples" unique_id=164416500]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Picker" parent="Page/ColourPicker/Examples/Example52" unique_id=1427524457 instance=ExtResource("12_picker")]
+layout_mode = 2
+columns = 4
+Chosen = 6
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ColourPicker/Examples/Example52" unique_id=1791765747]
+layout_mode = 2
+text = "Columns 4, Chosen 6"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="HelpButton" type="HBoxContainer" parent="Page" unique_id=1885184070]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/HelpButton" unique_id=1137519000]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/HelpButton/Notes" unique_id=1091465545]
+layout_mode = 2
+text = "Help button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/HelpButton/Notes" unique_id=183695426]
+layout_mode = 2
+text = "Instance game/Procedural/help_button.tscn at the right of a title bar. It is a ClickArea with LightsUp on, a 13 by 13 Circle panel with Profile G holding a caption-font question mark, nudged one pixel right so its dot sits on the middle column; wire Released and set tooltip_text on the instance."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/HelpButton" unique_id=277858148]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example53" type="VBoxContainer" parent="Page/HelpButton/Examples" unique_id=1329305998]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Help" parent="Page/HelpButton/Examples/Example53" unique_id=105530656 instance=ExtResource("13_help")]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/HelpButton/Examples/Example53" unique_id=1652707332]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example54" type="VBoxContainer" parent="Page/HelpButton/Examples" unique_id=217949555]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Help" parent="Page/HelpButton/Examples/Example54" unique_id=379830009 instance=ExtResource("13_help")]
+layout_mode = 2
+modulate = Color(1.6, 1.6, 1.6, 1)
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/HelpButton/Examples/Example54" unique_id=1977990755]
+layout_mode = 2
+text = "hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ResizeGrip" type="HBoxContainer" parent="Page" unique_id=907799909]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/ResizeGrip" unique_id=408257804]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/ResizeGrip/Notes" unique_id=1954418229]
+layout_mode = 2
+text = "Resize grip"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/ResizeGrip/Notes" unique_id=526957350]
+layout_mode = 2
+text = "Instance game/Procedural/resize_grip.tscn in the bottom-right corner of a window that can be resized, inside its footer. Its Dragged event gives how far the mouse moved; add it to the window's size. Six 2 x 2 gold dots, lit 1.6x while hovered and 2.0x while dragged."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/ResizeGrip" unique_id=1576288942]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example55" type="VBoxContainer" parent="Page/ResizeGrip/Examples" unique_id=1762731698]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Grip" parent="Page/ResizeGrip/Examples/Example55" unique_id=1869722904 instance=ExtResource("14_grip")]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ResizeGrip/Examples/Example55" unique_id=175606978]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example56" type="VBoxContainer" parent="Page/ResizeGrip/Examples" unique_id=1719083655]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Grip" parent="Page/ResizeGrip/Examples/Example56" unique_id=1689440534 instance=ExtResource("14_grip")]
+layout_mode = 2
+modulate = Color(1.6, 1.6, 1.6, 1)
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ResizeGrip/Examples/Example56" unique_id=1863578309]
+layout_mode = 2
+text = "hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example57" type="VBoxContainer" parent="Page/ResizeGrip/Examples" unique_id=1594485049]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Grip" parent="Page/ResizeGrip/Examples/Example57" unique_id=1332872514 instance=ExtResource("14_grip")]
+layout_mode = 2
+modulate = Color(2, 2, 2, 1)
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/ResizeGrip/Examples/Example57" unique_id=694129419]
+layout_mode = 2
+text = "dragged"
 script = ExtResource("3_label")
 Colour = 10
 
@@ -1460,3 +2017,512 @@ layout_mode = 2
 text = "frame, body, footer, close button"
 script = ExtResource("3_label")
 Colour = 10
+
+[node name="TitleBar" type="HBoxContainer" parent="Page" unique_id=1698598639]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/TitleBar" unique_id=1166131805]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/TitleBar/Notes" unique_id=1512281086]
+layout_mode = 2
+text = "Title bar"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/TitleBar/Notes" unique_id=129720125]
+layout_mode = 2
+text = "The top box of a window that can be dragged by its title: a Container with ProceduralPanel.cs (Fill Blue, Profile GBG, Edges Bottom 4, Padding 3) holding an HBox of the title (HudLabel, White), a spacer that expands, and the help button. Put it first in the frame's Layout, above the body; dragging it moves the window."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/TitleBar" unique_id=1182379394]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example58" type="VBoxContainer" parent="Page/TitleBar/Examples" unique_id=1349146969]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="TitleBar" type="Container" parent="Page/TitleBar/Examples/Example58" unique_id=1644436778]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(240, 0)
+size_flags_horizontal = 0
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 4
+Padding = 3
+
+[node name="Cells" type="HBoxContainer" parent="Page/TitleBar/Examples/Example58/TitleBar" unique_id=1443661747]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Page/TitleBar/Examples/Example58/TitleBar/Cells" unique_id=1684636031]
+layout_mode = 2
+text = "World Map"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Spacer" type="Control" parent="Page/TitleBar/Examples/Example58/TitleBar/Cells" unique_id=811134611]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Help" parent="Page/TitleBar/Examples/Example58/TitleBar/Cells" unique_id=1580126728 instance=ExtResource("13_help")]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Page/TitleBar/Examples/Example58" unique_id=101807105]
+layout_mode = 2
+text = "title, spacer, help button"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Prompt" type="HBoxContainer" parent="Page" unique_id=852759602]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Prompt" unique_id=1749491491]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Prompt/Notes" unique_id=1623687133]
+layout_mode = 2
+text = "A prompt"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Prompt/Notes" unique_id=805329137]
+layout_mode = 2
+text = "A question asked over a window: the window recipe without a close button. Frame (GBGGBG, Fill None, mouse_filter Stop) > Layout (VBox, separation 0) > Body (Fill Red, Padding 6) holding a White heading, the fields and their Yellow labels; then the Footer (Fill Blue, GBG, Edges Top, Padding 4) with the text buttons centred. Show it over the window on a full-size top_level ColorRect with the ModalBackdrop script (game/Procedural/ModalBackdrop.cs), which keeps its clicks off the world, and let Escape cancel it."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Prompt" unique_id=1466696489]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example59" type="VBoxContainer" parent="Page/Prompt/Examples" unique_id=1387517945]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Window" type="HBoxContainer" parent="Page/Prompt/Examples/Example59" unique_id=1819865819]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+size_flags_horizontal = 0
+
+[node name="Frame" type="Container" parent="Page/Prompt/Examples/Example59/Window" unique_id=796820568]
+layout_mode = 2
+mouse_filter = 0
+size_flags_vertical = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Page/Prompt/Examples/Example59/Window/Frame" unique_id=188757104]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout" unique_id=697736572]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body" unique_id=1515020108]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body/Content" unique_id=1501540462]
+layout_mode = 2
+text = "New category"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="NameLabel" type="Label" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body/Content" unique_id=628969447]
+layout_mode = 2
+text = "Name"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Name" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body/Content" unique_id=1701225954 instance=ExtResource("10_field")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+text = "Dungeons"
+
+[node name="ColourLabel" type="Label" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body/Content" unique_id=1095238051]
+layout_mode = 2
+text = "Colour"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Colour" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Body/Content" unique_id=1560100085 instance=ExtResource("12_picker")]
+layout_mode = 2
+Chosen = 1
+
+[node name="Footer" type="Container" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout" unique_id=1122855953]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Footer" unique_id=398716906]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Footer/Centre" unique_id=1421550558]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Create" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=608579530 instance=ExtResource("5_button")]
+layout_mode = 2
+metadata/caption = "Create"
+
+[node name="Cancel" parent="Page/Prompt/Examples/Example59/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=599722162 instance=ExtResource("5_button")]
+layout_mode = 2
+metadata/caption = "Cancel"
+
+[node name="Caption" type="Label" parent="Page/Prompt/Examples/Example59" unique_id=119574382]
+layout_mode = 2
+text = "new category prompt"
+script = ExtResource("3_label")
+Colour = 10
+
+
+[node name="Menu" type="HBoxContainer" parent="Page" unique_id=1976713216]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Menu" unique_id=555407596]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Menu/Notes" unique_id=1884337558]
+layout_mode = 2
+text = "Menu"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Menu/Notes" unique_id=984398179]
+layout_mode = 2
+text = "Instance game/Procedural/procedural_menu.tscn once per menu and fill it from code each time it opens: Clear, then AddHeading, AddSeparator, AddItem (id, enabled, tooltip), AddCheckItem, AddSubmenu (another menu instance) and AddRow (any Control, such as a colour picker). Popup(position) shows it inside the screen; it closes on Escape, on a click outside (which it swallows), and after an item is chosen; KeepOpenOnCheck keeps it open for check items. Connect ItemChosen. A GBG red box; the hovered row is steel blue and lit 1.3x, disabled rows are Dim, and submenus open beside their row. Preview fills an instance with sample rows for this page."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Menu" unique_id=165368547]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example60" type="VBoxContainer" parent="Page/Menu/Examples" unique_id=407451315]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Pair" type="HBoxContainer" parent="Page/Menu/Examples/Example60" unique_id=648781172]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+size_flags_horizontal = 0
+
+[node name="Menu" parent="Page/Menu/Examples/Example60/Pair" unique_id=1188911403 instance=ExtResource("15_menu")]
+layout_mode = 2
+Preview = 1
+
+[node name="SubmenuAt" type="VBoxContainer" parent="Page/Menu/Examples/Example60/Pair" unique_id=883151209]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Above" type="Control" parent="Page/Menu/Examples/Example60/Pair/SubmenuAt" unique_id=1984560167]
+custom_minimum_size = Vector2(0, 87)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Submenu" parent="Page/Menu/Examples/Example60/Pair/SubmenuAt" unique_id=1388216759 instance=ExtResource("15_menu")]
+layout_mode = 2
+Preview = 2
+
+[node name="Caption" type="Label" parent="Page/Menu/Examples/Example60" unique_id=1781469494]
+layout_mode = 2
+text = "Preview Category and Preview Colours (Rename hovered)"
+script = ExtResource("3_label")
+Colour = 10
+
+
+[node name="TreeRow" type="HBoxContainer" parent="Page" unique_id=1712366961]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/TreeRow" unique_id=1498134655]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/TreeRow/Notes" unique_id=1254388585]
+layout_mode = 2
+text = "Tree row"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/TreeRow/Notes" unique_id=1817564832]
+layout_mode = 2
+text = "game/Map/category_row.tscn is one row of a tree list: indent 10 per level, the chevron (> closed, v open), a 9 x 9 swatch and the name. Notes keep their Pin:, Text: or Path: prefix and an empty swatch when they use their category's colour. Current is steel blue; Selected is steel blue with a G ring; hovered lights 2.2x; Dimmed (a hidden category) has Dim text and a dark swatch. The list (category_list.tscn) pools the rows beside the scroll bar; Preview fills it with sample notes, so drag them about here."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/TreeRow" unique_id=188100321]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example61" type="VBoxContainer" parent="Page/TreeRow/Examples" unique_id=840967568]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="States" type="VBoxContainer" parent="Page/TreeRow/Examples/Example61" unique_id=1728813411]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+size_flags_horizontal = 0
+
+[node name="Current" parent="Page/TreeRow/Examples/Example61/States" unique_id=1033384845 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+PreviewText = "Places"
+PreviewState = 1
+PreviewDepth = 0
+PreviewColour = 1
+PreviewExpanded = true
+
+[node name="Normal" parent="Page/TreeRow/Examples/Example61/States" unique_id=1201869799 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+PreviewText = "Dungeons"
+PreviewState = 0
+PreviewDepth = 1
+PreviewColour = 2
+
+[node name="Hovered" parent="Page/TreeRow/Examples/Example61/States" unique_id=1457334939 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+PreviewText = "Shops"
+PreviewState = 0
+PreviewDepth = 1
+PreviewColour = 3
+PreviewHovered = true
+
+[node name="Selected" parent="Page/TreeRow/Examples/Example61/States" unique_id=709303100 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+PreviewText = "Pin: Tavern"
+PreviewState = 2
+PreviewDepth = 1
+PreviewColour = 1
+PreviewIsNote = true
+
+[node name="Dimmed" parent="Page/TreeRow/Examples/Example61/States" unique_id=394909081 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+PreviewText = "Quests"
+PreviewState = 3
+PreviewDepth = 0
+PreviewColour = 4
+
+[node name="Caption" type="Label" parent="Page/TreeRow/Examples/Example61" unique_id=1235452042]
+layout_mode = 2
+text = "Current, normal, hovered, Selected, Dimmed"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example62" type="VBoxContainer" parent="Page/TreeRow/Examples" unique_id=1165041060]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="List" parent="Page/TreeRow/Examples/Example62" unique_id=792324070 instance=ExtResource("17_list")]
+layout_mode = 2
+custom_minimum_size = Vector2(220, 140)
+Preview = true
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/TreeRow/Examples/Example62" unique_id=204033190]
+layout_mode = 2
+text = "category_list.tscn with Preview: drag the rows"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="DragFeedback" type="HBoxContainer" parent="Page" unique_id=1801016465]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/DragFeedback" unique_id=824850489]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/DragFeedback/Notes" unique_id=1392895288]
+layout_mode = 2
+text = "Drag feedback"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/DragFeedback/Notes" unique_id=969357470]
+layout_mode = 2
+text = "While a row is dragged it fades to 30% where it was (Source) and a ghost of it (Profile G, red fill, 85%) follows the cursor, tinted red where it can't drop. Between rows a white line with a tick at the landing row's indent shows where it will go; a category it would drop into is ringed, steel blue and lit 1.4x (Target)."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/DragFeedback" unique_id=1180720435]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example63" type="VBoxContainer" parent="Page/DragFeedback/Examples" unique_id=203969631]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Source" parent="Page/DragFeedback/Examples/Example63" unique_id=1897921494 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 0)
+PreviewText = "Shops"
+PreviewState = 4
+PreviewDepth = 1
+PreviewColour = 3
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/DragFeedback/Examples/Example63" unique_id=645954562]
+layout_mode = 2
+text = "Source"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example64" type="VBoxContainer" parent="Page/DragFeedback/Examples" unique_id=1545893163]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Target" parent="Page/DragFeedback/Examples/Example64" unique_id=1424600434 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 0)
+PreviewText = "Quests"
+PreviewState = 5
+PreviewDepth = 0
+PreviewColour = 4
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/DragFeedback/Examples/Example64" unique_id=1391016035]
+layout_mode = 2
+text = "Target"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example65" type="VBoxContainer" parent="Page/DragFeedback/Examples" unique_id=1640109263]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Ghost" parent="Page/DragFeedback/Examples/Example65" unique_id=1348636459 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 0)
+PreviewText = "Shops"
+PreviewState = 6
+PreviewDepth = 0
+PreviewColour = 3
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/DragFeedback/Examples/Example65" unique_id=944146557]
+layout_mode = 2
+text = "Ghost"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example66" type="VBoxContainer" parent="Page/DragFeedback/Examples" unique_id=1885417666]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Refused" parent="Page/DragFeedback/Examples/Example66" unique_id=1757472183 instance=ExtResource("16_row")]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 0)
+PreviewText = "Shops"
+PreviewState = 7
+PreviewDepth = 0
+PreviewColour = 3
+size_flags_horizontal = 0
+
+[node name="Caption" type="Label" parent="Page/DragFeedback/Examples/Example66" unique_id=100572981]
+layout_mode = 2
+text = "RefusedGhost"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example67" type="VBoxContainer" parent="Page/DragFeedback/Examples" unique_id=1221914983]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Line" type="Control" parent="Page/DragFeedback/Examples/Example67" unique_id=1105041042]
+custom_minimum_size = Vector2(140, 7)
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 0
+
+[node name="Line" type="Line2D" parent="Page/DragFeedback/Examples/Example67/Line" unique_id=1955976790]
+points = PackedVector2Array(11, 3.5, 139, 3.5)
+width = 1.0
+script = ExtResource("4_line")
+Profile = "W"
+
+[node name="Tick" type="Line2D" parent="Page/DragFeedback/Examples/Example67/Line" unique_id=1005100963]
+points = PackedVector2Array(11.5, 1, 11.5, 6)
+width = 1.0
+script = ExtResource("4_line")
+Profile = "W"
+
+[node name="Caption" type="Label" parent="Page/DragFeedback/Examples/Example67" unique_id=1383191326]
+layout_mode = 2
+text = "the drop line"
+script = ExtResource("3_label")
+Colour = 10
+

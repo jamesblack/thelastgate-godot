@@ -69,6 +69,9 @@ public sealed class WorldMapEditor
 
     public IReadOnlyCollection<int> ExpandedCategories => expanded;
 
+    // A merge gives the notes it moves new ids, so nothing may be mid-edit while notes are dragged about.
+    public bool CanDrag => Edited == null && pending.Count == 0;
+
     private void ExpandWithAncestors(NoteSet notes, int categoryId)
     {
         for (var depth = 0; categoryId != 0 && depth <= NoteLimits.Depth; depth++)
@@ -119,14 +122,6 @@ public sealed class WorldMapEditor
         }
 
         return created;
-    }
-
-    public void MoveCategory(NoteSet notes, int categoryId, int parentId)
-    {
-        if (notes.MoveCategory(categoryId, parentId))
-        {
-            ExpandWithAncestors(notes, parentId);
-        }
     }
 
     // Nothing the editor holds may point into a category that has gone.
@@ -324,20 +319,84 @@ public sealed class WorldMapEditor
         }
     }
 
-    public void SendTo(NoteSet notes, int noteId, int categoryId)
+    // Dropping onto the category an item is already in isn't a target; the line between rows reorders instead.
+    public NoteMoveRefusal CheckDrop(NoteSet notes, NoteDrag drag, NoteDropSlot slot)
     {
-        if (!notes.MoveNote(noteId, categoryId))
+        if (!CanDrag)
         {
-            Problem?.Invoke("That category is full.");
-            return;
+            return NoteMoveRefusal.Busy;
         }
 
-        if (Edited?.Id == noteId)
+        if (drag.IsCategory)
         {
-            CancelEdit();
+            return slot.Onto && notes.FindCategory(drag.Id)?.ParentId == slot.ParentId
+                ? NoteMoveRefusal.Missing
+                : notes.CheckCategoryMove(drag.Id, slot.ParentId);
         }
 
-        ExpandWithAncestors(notes, categoryId);
+        return slot.ParentId == 0 || (slot.Onto && notes.OwnerOf(drag.Id)?.Id == slot.ParentId)
+            ? NoteMoveRefusal.Missing
+            : notes.CheckNoteMove(drag.Id, slot.ParentId);
+    }
+
+    public NoteDropResult Drop(NoteSet notes, NoteDrag drag, NoteDropSlot slot)
+    {
+        var refusal = CheckDrop(notes, drag, slot);
+        if (refusal != NoteMoveRefusal.None)
+        {
+            return new NoteDropResult(NoteDropOutcome.Refused, refusal, 0);
+        }
+
+        var index = slot.Onto ? -1 : slot.Index;
+        if (drag.IsCategory)
+        {
+            var clash = notes.Clash(drag.Id, slot.ParentId);
+            if (clash != 0)
+            {
+                return new NoteDropResult(NoteDropOutcome.Clash, NoteMoveRefusal.None, clash);
+            }
+
+            notes.MoveCategory(drag.Id, slot.ParentId, index);
+        }
+        else
+        {
+            notes.MoveNote(drag.Id, slot.ParentId, index);
+        }
+
+        ExpandWithAncestors(notes, slot.ParentId);
+        return new NoteDropResult(NoteDropOutcome.Moved, NoteMoveRefusal.None, 0);
+    }
+
+    public NoteImportResult MergeDropped(NoteSet notes, int categoryId, int targetId)
+    {
+        var result = NoteImport.MergeMoved(notes, categoryId, targetId);
+        if (result.Status != NoteImportStatus.Ok)
+        {
+            return result;
+        }
+
+        CurrentCategoryId = targetId;
+        if (notes.FindNote(SelectedNoteId) == null)
+        {
+            SelectedNoteId = 0;
+        }
+
+        ExpandWithAncestors(notes, notes.FindCategory(targetId)!.ParentId);
+        return result;
+    }
+
+    public bool RenameDropped(NoteSet notes, int categoryId, NoteDropSlot slot, string name)
+    {
+        var wanted = name.Trim();
+        if (wanted.Length == 0 || notes.FindNamed(slot.ParentId, wanted, notes.Categories.Count, categoryId) != null
+            || !notes.MoveCategory(categoryId, slot.ParentId, slot.Onto ? -1 : slot.Index))
+        {
+            return false;
+        }
+
+        notes.RenameCategory(categoryId, wanted);
+        ExpandWithAncestors(notes, slot.ParentId);
+        return true;
     }
 
     // A press near an end of the path being drawn or edited starts from that end, so segments join up.

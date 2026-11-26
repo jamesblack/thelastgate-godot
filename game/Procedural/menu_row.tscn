@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://chz9jog1ynzy"]
+
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="1_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="3_line"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="4_click"]
+
+[node name="MenuRow" type="Container" unique_id=656640519]
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Padding = 2
+
+[node name="Cells" type="HBoxContainer" parent="." unique_id=133127258]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Check" type="Container" parent="Cells" unique_id=184897192]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(11, 11)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "GBG"
+
+[node name="Mark" type="Control" parent="Cells/Check" unique_id=1718176134]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Gold" type="Container" parent="Cells/Check/Mark" unique_id=1885154833]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_panel")
+Profile = "GGG"
+
+[node name="Label" type="Label" parent="Cells" unique_id=629578066]
+layout_mode = 2
+mouse_filter = 2
+text = "Menu item"
+script = ExtResource("2_label")
+
+[node name="Spacer" type="Control" parent="Cells" unique_id=448367909]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Arrow" type="Control" parent="Cells" unique_id=1133589808]
+visible = false
+custom_minimum_size = Vector2(9, 11)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Chevron" type="Line2D" parent="Cells/Arrow" unique_id=1674852563]
+points = PackedVector2Array(3.5, 2.5, 6.5, 5.5, 3.5, 8.5)
+width = 1.0
+script = ExtResource("3_line")
+Profile = "G"
+
+[node name="Click" type="Control" parent="." unique_id=1847806670]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("4_click")

@@ -8,17 +8,22 @@ public static class WorldMapPicture
 {
     public const int Width = 2048;
     public const int Height = 1024;
+    public const int BlockSize = ExploredMap.BlockSize;
+    public const int BlocksAcross = Width / BlockSize;
+    public const int BlocksDown = Height / BlockSize;
 
     private const int BytesPerPixel = 4;
 
-    public static void Render(ExploredMap map, Span<byte> rgba)
+    // A block covers map x from down * BlockSize and map y from across * BlockSize.
+    public static void RenderBlock(ExploredMap map, int across, int down, Span<byte> rgba)
     {
-        for (var tileX = 0; tileX < Height; tileX++)
+        var (left, top) = (across * BlockSize, down * BlockSize);
+        for (var row = 0; row < BlockSize; row++)
         {
-            for (var tileY = 0; tileY < Width; tileY++)
+            for (var column = 0; column < BlockSize; column++)
             {
-                var colour = map.ColourAt(tileX, tileY);
-                var pixel = rgba.Slice((tileX * Width + tileY) * BytesPerPixel, BytesPerPixel);
+                var colour = map.ColourAt(top + row, left + column);
+                var pixel = rgba.Slice((row * BlockSize + column) * BytesPerPixel, BytesPerPixel);
                 pixel[0] = (byte)(colour >> 16);
                 pixel[1] = (byte)(colour >> 8);
                 pixel[2] = (byte)colour;

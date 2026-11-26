@@ -1,245 +1,149 @@
 [gd_scene format=3 uid="uid://dhjxuv8y6wbco"]
 
-[ext_resource type="Script" uid="uid://damkff6blbl7o" path="res://Map/WorldMapWindowView.cs" id="1_view"]
-[ext_resource type="Theme" uid="uid://bxevvm0ssb2pb" path="res://themes/OptionsTheme.tres" id="2_theme"]
-[ext_resource type="Script" uid="uid://bslwrp71aal2p" path="res://Map/PixelCross.cs" id="3_cross"]
-[ext_resource type="Script" uid="uid://b80snolajg5y8" path="res://Map/WorldMapCanvas.cs" id="4_canvas"]
-[ext_resource type="Script" uid="uid://eww6ywu3afjf" path="res://Map/ResizeGrip.cs" id="5_grip"]
-[ext_resource type="Script" uid="uid://d0mvdy4k0iyr" path="res://Map/WorldMapCategories.cs" id="6_categories"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="1_button"]
+[ext_resource type="Script" uid="uid://b80snolajg5y8" path="res://Map/WorldMapCanvas.cs" id="2_canvas"]
+[ext_resource type="Script" uid="uid://d0mvdy4k0iyr" path="res://Map/WorldMapCategories.cs" id="3_categories"]
+[ext_resource type="PackedScene" uid="uid://oind5rho0m21" path="res://Procedural/check_box.tscn" id="4_check"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="5_close"]
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="6_field"]
+[ext_resource type="PackedScene" uid="uid://2e2s6myjaeaa" path="res://Procedural/resize_grip.tscn" id="7_grip"]
+[ext_resource type="PackedScene" uid="uid://gxauy1xqrtxw" path="res://Procedural/help_button.tscn" id="8_help"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="9_label"]
+[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Map/category_list.tscn" id="10_list"]
+[ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="11_menu"]
+[ext_resource type="PackedScene" uid="uid://vanevdhtppvp" path="res://Map/merge_prompt.tscn" id="12_merge"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="13_panel"]
+[ext_resource type="PackedScene" uid="uid://v3qb30gse0pt" path="res://Procedural/colour_picker.tscn" id="14_picker"]
+[ext_resource type="PackedScene" uid="uid://xqwh1vaukyyr" path="res://Procedural/text_box.tscn" id="15_textbox"]
+[ext_resource type="Script" uid="uid://damkff6blbl7o" path="res://Map/WorldMapWindowView.cs" id="16_view"]
+[ext_resource type="Script" uid="uid://gwfuqhuficca" path="res://Procedural/ModalBackdrop.cs" id="20_backdrop"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
-bg_color = Color(0.0666667, 0.0196078, 0.0196078, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_none"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_hover"]
-bg_color = Color(0.290196, 0.0941176, 0.0941176, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
-bg_color = Color(0.2, 0.2, 0.2, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field_focus"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
-bg_color = Color(0.4, 0.4, 0.4, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.0666667, 0.0196078, 0.0196078, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_menu_separator"]
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
-
-[node name="WorldMapWindow" type="Panel" unique_id=1192837465]
+[node name="WorldMapWindow" type="Control" unique_id=1561926663]
+layout_mode = 3
+anchors_preset = 0
 offset_left = 60.0
 offset_top = 60.0
 offset_right = 960.0
 offset_bottom = 680.0
-theme = ExtResource("2_theme")
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
-script = ExtResource("1_view")
+mouse_filter = 2
+script = ExtResource("16_view")
 
-[node name="Frame" type="NinePatchRect" parent="." unique_id=640375829]
+[node name="Window" type="HBoxContainer" parent="." unique_id=1425879117]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Rows" type="VBoxContainer" parent="." unique_id=2005381617]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Frame" type="Container" parent="Window" unique_id=670199465]
+layout_mode = 2
+mouse_filter = 0
+size_flags_horizontal = 3
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1196519220]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TitleBar" type="Container" parent="Window/Frame/Layout" unique_id=1608145371]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 4
+Padding = 3
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/TitleBar" unique_id=1390372923]
+layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="TitleBar" type="Control" parent="Rows" unique_id=1450298133]
-custom_minimum_size = Vector2(0, 20)
+[node name="Title" type="Label" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=1060167036]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="Rows/TitleBar" unique_id=318273650]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "World Map"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Help" type="Button" parent="Rows/TitleBar" unique_id=1981127346]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -46.0
-offset_right = -27.0
-offset_bottom = 19.0
-grow_horizontal = 0
-tooltip_text = "How to use the world map"
-focus_mode = 0
-text = "?"
-
-[node name="Close" type="Button" parent="Rows/TitleBar" unique_id=713029461]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -19.0
-offset_bottom = 19.0
-grow_horizontal = 0
-focus_mode = 0
-
-[node name="Cross" type="Control" parent="Rows/TitleBar/Close" unique_id=1067362919]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("3_cross")
+text = "World Map"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Body" type="HBoxContainer" parent="Rows" unique_id=294561088]
+[node name="Spacer" type="Control" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=440704239]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Help" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=1791528123 instance=ExtResource("8_help")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "How to use the world map"
+
+[node name="Body" type="Container" parent="Window/Frame/Layout" unique_id=689353597]
+layout_mode = 2
+mouse_filter = 2
+size_flags_vertical = 3
+script = ExtResource("13_panel")
+Padding = 4
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/Body" unique_id=1487062206]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Categories" type="Control" parent="Window/Frame/Layout/Body/Cells" unique_id=1349346478]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
-theme_override_constants/separation = 8
+script = ExtResource("3_categories")
 
-[node name="Categories" type="Control" parent="Rows/Body" unique_id=1708249135]
-custom_minimum_size = Vector2(220, 0)
+[node name="Column" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=206635714]
+layout_mode = 1
+mouse_filter = 2
+theme_override_constants/separation = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="List" parent="Window/Frame/Layout/Body/Cells/Categories/Column" unique_id=410522634 instance=ExtResource("10_list")]
+unique_name_in_owner = true
 layout_mode = 2
-script = ExtResource("6_categories")
+size_flags_vertical = 3
 
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories" unique_id=932475614]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+[node name="ShowOnMinimap" parent="Window/Frame/Layout/Body/Cells/Categories/Column" unique_id=1557037568 instance=ExtResource("4_check")]
+unique_name_in_owner = true
+layout_mode = 2
+Text = "Show on minimap"
 
-[node name="List" type="Tree" parent="Rows/Body/Categories" unique_id=1996190928]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -64.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 2
-theme_override_constants/item_margin = 14
-theme_override_constants/icon_max_width = 12
-theme_override_constants/draw_guides = 0
-theme_override_constants/draw_relationship_lines = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_none")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_none")
-theme_override_styles/hovered = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/selected = SubResource("StyleBoxEmpty_none")
-theme_override_styles/selected_focus = SubResource("StyleBoxEmpty_none")
-theme_override_styles/cursor = SubResource("StyleBoxEmpty_none")
-theme_override_styles/cursor_unfocused = SubResource("StyleBoxEmpty_none")
-allow_rmb_select = true
-hide_root = true
-
-[node name="Footer" type="VBoxContainer" parent="Rows/Body/Categories" unique_id=1286450391]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -60.0
-offset_right = -8.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/Column" unique_id=1031290619]
+layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/Footer" unique_id=903817264]
-custom_minimum_size = Vector2(0, 1)
+[node name="New" parent="Window/Frame/Layout/Body/Cells/Categories/Column/Buttons" unique_id=1090754438 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
+Caption = "+ New"
 
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/Footer" unique_id=1064210145]
+[node name="Import" parent="Window/Frame/Layout/Body/Cells/Categories/Column/Buttons" unique_id=617720745 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 8
+Caption = "Import"
 
-[node name="New" type="Button" parent="Rows/Body/Categories/Footer/Buttons" unique_id=2010514983]
-custom_minimum_size = Vector2(52, 19)
+[node name="Export" parent="Window/Frame/Layout/Body/Cells/Categories/Column/Buttons" unique_id=1055072973 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-text = "+ New"
+Caption = "Export"
 
-[node name="Import" type="Button" parent="Rows/Body/Categories/Footer/Buttons" unique_id=2103120804]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Import"
-
-[node name="Export" type="Button" parent="Rows/Body/Categories/Footer/Buttons" unique_id=950248436]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Export"
-
-[node name="ShowOnMinimap" type="CheckBox" parent="Rows/Body/Categories/Footer" unique_id=1725093846]
-layout_mode = 2
-focus_mode = 0
-text = "Show on minimap"
-
-[node name="NewBlocker" type="ColorRect" parent="Rows/Body/Categories" unique_id=545386717]
+[node name="NewBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1138708136]
 visible = false
 top_level = true
 z_index = 2
@@ -247,9 +151,10 @@ z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
 
-[node name="Prompt" type="PanelContainer" parent="Rows/Body/Categories/NewBlocker" unique_id=1822202385]
+[node name="Window" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker" unique_id=1580973458]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -258,113 +163,92 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories/NewBlocker/Prompt" unique_id=697358459]
+[node name="Frame" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window" unique_id=1827635168]
 layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Margins" type="MarginContainer" parent="Rows/Body/Categories/NewBlocker/Prompt" unique_id=684908796]
+[node name="Layout" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame" unique_id=505836539]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="Rows" type="VBoxContainer" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins" unique_id=480612773]
+[node name="Body" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout" unique_id=1884772112]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body" unique_id=266530263]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Heading" type="Label" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=1589548441]
+[node name="Heading" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body/Content" unique_id=1430475537]
 layout_mode = 2
+mouse_filter = 2
 text = "New category"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=1124080583]
-custom_minimum_size = Vector2(0, 1)
+[node name="NameLabel" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body/Content" unique_id=1083971056]
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[node name="NameLabel" type="Label" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=453863346]
-layout_mode = 2
 text = "Name"
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Name" type="LineEdit" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=2089349983]
-custom_minimum_size = Vector2(220, 19)
+[node name="NewName" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body/Content" unique_id=698232121 instance=ExtResource("6_field")]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_styles/normal = SubResource("StyleBoxFlat_field")
-theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+custom_minimum_size = Vector2(200, 0)
 max_length = 31
 
-[node name="Palette" type="HBoxContainer" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=1197223552]
+[node name="ColourLabel" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body/Content" unique_id=1692421294]
 layout_mode = 2
-theme_override_constants/separation = 6
+mouse_filter = 2
+text = "Colour"
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Swatch0" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=922798436]
-custom_minimum_size = Vector2(20, 20)
+[node name="NewColour" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Body/Content" unique_id=391307045 instance=ExtResource("14_picker")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
 
-[node name="Swatch1" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=549528644]
-custom_minimum_size = Vector2(20, 20)
+[node name="Footer" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout" unique_id=464889694]
 layout_mode = 2
-focus_mode = 0
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
 
-[node name="Swatch2" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=265172874]
-custom_minimum_size = Vector2(20, 20)
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Footer" unique_id=373121222]
 layout_mode = 2
-focus_mode = 0
+mouse_filter = 2
 
-[node name="Swatch3" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=163748106]
-custom_minimum_size = Vector2(20, 20)
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Footer/Centre" unique_id=947740873]
 layout_mode = 2
-focus_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="Swatch4" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=1834715057]
-custom_minimum_size = Vector2(20, 20)
+[node name="NewCreate" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=648482211 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
+Caption = "Create"
 
-[node name="Swatch5" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=601471573]
-custom_minimum_size = Vector2(20, 20)
+[node name="NewCancel" parent="Window/Frame/Layout/Body/Cells/Categories/NewBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1580565567 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
+Caption = "Cancel"
 
-[node name="Swatch6" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=1305673190]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-focus_mode = 0
-
-[node name="Swatch7" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Palette" unique_id=1216068940]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-focus_mode = 0
-
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows" unique_id=1348922258]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Create" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Buttons" unique_id=1589998649]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Create"
-
-[node name="Cancel" type="Button" parent="Rows/Body/Categories/NewBlocker/Prompt/Margins/Rows/Buttons" unique_id=1335759771]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
-
-[node name="ImportBlocker" type="ColorRect" parent="Rows/Body/Categories" unique_id=1912489698]
+[node name="ImportBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1776111756]
 visible = false
 top_level = true
 z_index = 2
@@ -372,9 +256,10 @@ z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
 
-[node name="Prompt" type="PanelContainer" parent="Rows/Body/Categories/ImportBlocker" unique_id=1303889473]
+[node name="Window" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker" unique_id=577047368]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -383,504 +268,556 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories/ImportBlocker/Prompt" unique_id=1344024677]
+[node name="Frame" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window" unique_id=1591298890]
 layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Margins" type="MarginContainer" parent="Rows/Body/Categories/ImportBlocker/Prompt" unique_id=2090694059]
+[node name="Layout" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame" unique_id=601336936]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="Rows" type="VBoxContainer" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins" unique_id=1374236428]
+[node name="Body" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout" unique_id=247007451]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body" unique_id=146892391]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Heading" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1725516353]
+[node name="Heading" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1265791399]
 layout_mode = 2
+mouse_filter = 2
 text = "Import"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=119032361]
-custom_minimum_size = Vector2(0, 1)
+[node name="ImportDestination" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1500906826]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[node name="Destination" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1895183147]
-visible = false
-layout_mode = 2
 text = "Import into \"Shared\""
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="PasteLabel" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1063242276]
+[node name="PasteLabel" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1230699373]
 layout_mode = 2
+mouse_filter = 2
 text = "Paste a world map code:"
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Code" type="TextEdit" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=737493311]
-custom_minimum_size = Vector2(420, 84)
+[node name="ImportCode" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1423600660 instance=ExtResource("15_textbox")]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_field")
-theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
-wrap_mode = 1
+custom_minimum_size = Vector2(300, 80)
 
-[node name="Preview" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1148680692]
-visible = false
+[node name="ImportPreview" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1970585258]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 10
 
-[node name="Conflict" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=559687863]
-visible = false
+[node name="ImportConflict" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1544502351]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Merge" type="Button" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=462015541]
-visible = false
-custom_minimum_size = Vector2(52, 19)
+[node name="ImportMerge" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1429077941 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-text = "Merge"
+size_flags_horizontal = 0
+Caption = "Merge"
 
-[node name="Rename" type="HBoxContainer" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1775932203]
-visible = false
+[node name="ImportRename" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=1157143713]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 8
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="RenameLabel" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows/Rename" unique_id=919760391]
+[node name="RenameLabel" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content/ImportRename" unique_id=1221716341]
 layout_mode = 2
+mouse_filter = 2
 text = "Rename to"
+size_flags_vertical = 4
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="RootName" type="LineEdit" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows/Rename" unique_id=200201740]
-custom_minimum_size = Vector2(200, 19)
+[node name="ImportRootName" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content/ImportRename" unique_id=417605947 instance=ExtResource("6_field")]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_styles/normal = SubResource("StyleBoxFlat_field")
-theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+custom_minimum_size = Vector2(160, 0)
 max_length = 31
-
-[node name="Error" type="Label" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=1423538286]
-visible = false
-layout_mode = 2
-
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows" unique_id=288978846]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="AddAsNew" type="Button" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows/Buttons" unique_id=434386238]
-visible = false
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Add as new"
-
-[node name="Add" type="Button" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows/Buttons" unique_id=1067767811]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Add"
-
-[node name="Cancel" type="Button" parent="Rows/Body/Categories/ImportBlocker/Prompt/Margins/Rows/Buttons" unique_id=1377886115]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
-
-[node name="ExportBlocker" type="ColorRect" parent="Rows/Body/Categories" unique_id=561729356]
-visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
-layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
-
-[node name="Prompt" type="PanelContainer" parent="Rows/Body/Categories/ExportBlocker" unique_id=1169308360]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
-
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories/ExportBlocker/Prompt" unique_id=1774893345]
-layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="Margins" type="MarginContainer" parent="Rows/Body/Categories/ExportBlocker/Prompt" unique_id=1490994365]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Rows" type="VBoxContainer" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins" unique_id=1864499617]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Heading" type="Label" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows" unique_id=1560701582]
-layout_mode = 2
-text = "Export"
-
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows" unique_id=1058772514]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[node name="Message" type="Label" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows" unique_id=109529196]
-layout_mode = 2
-text = "Copied 0 characters to the clipboard."
-
-[node name="TooLong" type="Label" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows" unique_id=1441243519]
-visible = false
-layout_mode = 2
-text = "Too long for one Discord message; it will still work on the wiki."
-
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows" unique_id=1209605151]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Confirm" type="Button" parent="Rows/Body/Categories/ExportBlocker/Prompt/Margins/Rows/Buttons" unique_id=1951855828]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "OK"
-
-[node name="DeleteBlocker" type="ColorRect" parent="Rows/Body/Categories" unique_id=1270181958]
-visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
-layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
-
-[node name="Prompt" type="PanelContainer" parent="Rows/Body/Categories/DeleteBlocker" unique_id=1861309362]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
-
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories/DeleteBlocker/Prompt" unique_id=1737393578]
-layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="Margins" type="MarginContainer" parent="Rows/Body/Categories/DeleteBlocker/Prompt" unique_id=447940342]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Rows" type="VBoxContainer" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins" unique_id=1546966395]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Heading" type="Label" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows" unique_id=294055928]
-layout_mode = 2
-text = "Delete category"
-
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows" unique_id=214444147]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[node name="Question" type="Label" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows" unique_id=2128665944]
-layout_mode = 2
-
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows" unique_id=1426126996]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Confirm" type="Button" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows/Buttons" unique_id=1867052633]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Delete"
-
-[node name="Cancel" type="Button" parent="Rows/Body/Categories/DeleteBlocker/Prompt/Margins/Rows/Buttons" unique_id=709480926]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
-
-[node name="DuplicatesBlocker" type="ColorRect" parent="Rows/Body/Categories" unique_id=1823155580]
-visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
-layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
-
-[node name="Prompt" type="PanelContainer" parent="Rows/Body/Categories/DuplicatesBlocker" unique_id=1597108997]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
-
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt" unique_id=2118869232]
-layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="Margins" type="MarginContainer" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt" unique_id=170830635]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Rows" type="VBoxContainer" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins" unique_id=164411074]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Heading" type="Label" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows" unique_id=1861446341]
-layout_mode = 2
-text = "Remove duplicate pins"
-
-[node name="Separator" type="ColorRect" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows" unique_id=719085613]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
-
-[node name="Question" type="Label" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows" unique_id=1939830807]
-layout_mode = 2
-
-[node name="Kept" type="Label" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows" unique_id=1501981232]
-layout_mode = 2
-text = "The first copy of each pin is kept."
-
-[node name="Buttons" type="HBoxContainer" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows" unique_id=689306781]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Confirm" type="Button" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows/Buttons" unique_id=1416580239]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Remove"
-
-[node name="Cancel" type="Button" parent="Rows/Body/Categories/DuplicatesBlocker/Prompt/Margins/Rows/Buttons" unique_id=2065996400]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
-
-[node name="Menu" type="PopupMenu" parent="Rows/Body/Categories" unique_id=293570930]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
-
-[node name="Colour" type="PopupMenu" parent="Rows/Body/Categories/Menu" unique_id=1754746528]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
-
-[node name="SendTo" type="PopupMenu" parent="Rows/Body/Categories/Menu" unique_id=952449963]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
-
-[node name="MapFrame" type="Control" parent="Rows/Body" unique_id=1543098227]
-layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Frame" type="NinePatchRect" parent="Rows/Body/MapFrame" unique_id=1171384592]
+[node name="ImportError" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Body/Content" unique_id=875404725]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 0
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout" unique_id=1005184879]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Footer" unique_id=1390256553]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Footer/Centre" unique_id=558439124]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ImportAddAsNew" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=369180158 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Add as new"
+
+[node name="ImportAdd" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1436531163 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Add"
+
+[node name="ImportCancel" parent="Window/Frame/Layout/Body/Cells/Categories/ImportBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=140290986 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="ExportBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1808701016]
+visible = false
+top_level = true
+z_index = 2
+z_as_relative = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
+
+[node name="Window" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker" unique_id=1536521825]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Canvas" type="Control" parent="Rows/Body/MapFrame" unique_id=1489023651]
+[node name="Frame" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window" unique_id=1361185028]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame" unique_id=1567859571]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout" unique_id=1901374398]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Body" unique_id=1712919484]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Body/Content" unique_id=819606996]
+layout_mode = 2
+mouse_filter = 2
+text = "Export"
+script = ExtResource("9_label")
+Colour = 9
+
+[node name="ExportMessage" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Body/Content" unique_id=1360620813]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Copied 0 characters to the clipboard."
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 1
+
+[node name="ExportTooLong" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Body/Content" unique_id=233401628]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Too long for one Discord message; it will still work on the wiki."
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 10
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout" unique_id=412351093]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Footer" unique_id=782845874]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Footer/Centre" unique_id=1414044976]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ExportConfirm" parent="Window/Frame/Layout/Body/Cells/Categories/ExportBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1054867068 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "OK"
+
+[node name="DeleteCategoryBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=951488412]
+visible = false
+top_level = true
+z_index = 2
+z_as_relative = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
+
+[node name="Window" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker" unique_id=678995845]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window" unique_id=407554073]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame" unique_id=975012456]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout" unique_id=1478471942]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Body" unique_id=1810247039]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Body/Content" unique_id=1732901606]
+layout_mode = 2
+mouse_filter = 2
+text = "Delete category"
+script = ExtResource("9_label")
+Colour = 9
+
+[node name="DeleteCategoryQuestion" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Body/Content" unique_id=1414987537]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 1
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout" unique_id=1768468607]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Footer" unique_id=464186165]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Footer/Centre" unique_id=282799433]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="DeleteCategoryConfirm" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=531002367 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Delete"
+
+[node name="DeleteCategoryCancel" parent="Window/Frame/Layout/Body/Cells/Categories/DeleteCategoryBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1825087495 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="DuplicatesBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1339295597]
+visible = false
+top_level = true
+z_index = 2
+z_as_relative = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
+
+[node name="Window" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker" unique_id=1240827361]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window" unique_id=263439061]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame" unique_id=1956492643]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout" unique_id=118667242]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Body" unique_id=1967772891]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Body/Content" unique_id=1018083450]
+layout_mode = 2
+mouse_filter = 2
+text = "Remove duplicate pins"
+script = ExtResource("9_label")
+Colour = 9
+
+[node name="DuplicatesQuestion" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Body/Content" unique_id=1591694087]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = ""
+custom_minimum_size = Vector2(300, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 1
+
+[node name="Kept" type="Label" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Body/Content" unique_id=118319500]
+layout_mode = 2
+mouse_filter = 2
+text = "The first copy of each pin is kept."
+script = ExtResource("9_label")
+Colour = 10
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout" unique_id=1594641222]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Footer" unique_id=695071112]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Footer/Centre" unique_id=581498157]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="DuplicatesConfirm" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1882739787 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Remove"
+
+[node name="DuplicatesCancel" parent="Window/Frame/Layout/Body/Cells/Categories/DuplicatesBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1047937849 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="MergePrompt" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=451255380 instance=ExtResource("12_merge")]
+unique_name_in_owner = true
+
+[node name="Menu" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=986639627 instance=ExtResource("11_menu")]
+
+[node name="ColourMenu" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=869854531 instance=ExtResource("11_menu")]
+
+[node name="MapFrame" type="Container" parent="Window/Frame/Layout/Body/Cells" unique_id=718439420]
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+
+[node name="Canvas" type="Control" parent="Window/Frame/Layout/Body/Cells/MapFrame" unique_id=766887375]
+unique_name_in_owner = true
 texture_filter = 1
 clip_contents = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 6.0
-offset_top = 6.0
-offset_right = -6.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("4_canvas")
-
-[node name="BottomBar" type="HBoxContainer" parent="Rows" unique_id=826091745]
 layout_mode = 2
-theme_override_constants/separation = 8
+script = ExtResource("2_canvas")
 
-[node name="Select" type="Button" parent="Rows/BottomBar" unique_id=1355062874]
-custom_minimum_size = Vector2(52, 19)
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1766355452]
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"TabButton"
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_tools")
-text = "Select"
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
 
-[node name="Pan" type="Button" parent="Rows/BottomBar" unique_id=104738291]
-custom_minimum_size = Vector2(52, 19)
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/Footer" unique_id=745686016]
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"TabButton"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tools")
-text = "Pan"
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="Pin" type="Button" parent="Rows/BottomBar" unique_id=1630284917]
-custom_minimum_size = Vector2(52, 19)
+[node name="Tools" type="HBoxContainer" parent="Window/Frame/Layout/Footer/Cells" unique_id=403911090]
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"TabButton"
-disabled = true
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tools")
-text = "Pin"
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Line" type="Button" parent="Rows/BottomBar" unique_id=520938164]
-custom_minimum_size = Vector2(52, 19)
+[node name="Select" parent="Window/Frame/Layout/Footer/Cells/Tools" unique_id=1105534753 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"TabButton"
-disabled = true
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tools")
-text = "Line"
+Caption = "Select"
 
-[node name="Text" type="Button" parent="Rows/BottomBar" unique_id=1938402215]
-custom_minimum_size = Vector2(52, 19)
+[node name="Pan" parent="Window/Frame/Layout/Footer/Cells/Tools" unique_id=1191596157 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"TabButton"
-disabled = true
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tools")
-text = "Text"
+Caption = "Pan"
 
-[node name="Follow" type="CheckBox" parent="Rows/BottomBar" unique_id=1259381046]
+[node name="Pin" parent="Window/Frame/Layout/Footer/Cells/Tools" unique_id=1889118439 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-text = "Follow player"
+Caption = "Pin"
 
-[node name="EditName" type="LineEdit" parent="Rows/BottomBar" unique_id=299599624]
-visible = false
-custom_minimum_size = Vector2(180, 19)
+[node name="Line" parent="Window/Frame/Layout/Footer/Cells/Tools" unique_id=714264888 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_styles/normal = SubResource("StyleBoxFlat_field")
-theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+Caption = "Line"
+
+[node name="Text" parent="Window/Frame/Layout/Footer/Cells/Tools" unique_id=124506062 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Text"
+
+[node name="Follow" parent="Window/Frame/Layout/Footer/Cells" unique_id=1855718004 instance=ExtResource("4_check")]
+unique_name_in_owner = true
+layout_mode = 2
+Text = "Follow player"
+
+[node name="EditName" parent="Window/Frame/Layout/Footer/Cells" unique_id=302869451 instance=ExtResource("6_field")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
 max_length = 47
-
-[node name="EditSave" type="Button" parent="Rows/BottomBar" unique_id=155159771]
 visible = false
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Save"
 
-[node name="EditCancel" type="Button" parent="Rows/BottomBar" unique_id=1390643508]
+[node name="EditSave" parent="Window/Frame/Layout/Footer/Cells" unique_id=1460331273 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
 visible = false
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
+Caption = "Save"
 
-[node name="Status" type="Label" parent="Rows/BottomBar" unique_id=703619284]
+[node name="EditCancel" parent="Window/Frame/Layout/Footer/Cells" unique_id=1457897297 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
+visible = false
+Caption = "Cancel"
 
-[node name="Spacer" type="Control" parent="Rows/BottomBar" unique_id=1827364019]
+[node name="Status" type="Label" parent="Window/Frame/Layout/Footer/Cells" unique_id=1687589743]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+text = ""
 size_flags_horizontal = 3
-mouse_filter = 2
+clip_text = true
+size_flags_vertical = 4
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Coordinates" type="Label" parent="Rows/BottomBar" unique_id=461927380]
+[node name="Coordinates" type="Label" parent="Window/Frame/Layout/Footer/Cells" unique_id=1098698842]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
 text = "512, 1024"
+size_flags_vertical = 4
+script = ExtResource("9_label")
+Colour = 10
 
-[node name="GripRoom" type="Control" parent="Rows/BottomBar" unique_id=1102938475]
-custom_minimum_size = Vector2(9, 0)
+[node name="ResizeGrip" parent="Window/Frame/Layout/Footer/Cells" unique_id=1025065679 instance=ExtResource("7_grip")]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
+size_flags_vertical = 8
+mouse_filter = 0
 
-[node name="ResizeGrip" type="Control" parent="." unique_id=650192837]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -16.0
-offset_top = -16.0
-offset_right = -7.0
-offset_bottom = -7.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_default_cursor_shape = 12
-script = ExtResource("5_grip")
+[node name="Close" parent="Window" unique_id=574978480 instance=ExtResource("5_close")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
 
-[node name="HelpBlocker" type="ColorRect" parent="." unique_id=1395027461]
+[node name="HelpBlocker" type="ColorRect" parent="." unique_id=936011782]
 visible = false
 top_level = true
 z_index = 2
@@ -888,9 +825,10 @@ z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
 
-[node name="Help" type="PanelContainer" parent="HelpBlocker" unique_id=876243019]
+[node name="Window" type="HBoxContainer" parent="HelpBlocker" unique_id=1622244187]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -899,78 +837,95 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Frame" type="NinePatchRect" parent="HelpBlocker/Help" unique_id=1764029381]
+[node name="Frame" type="Container" parent="HelpBlocker/Window" unique_id=1477176776]
 layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Margins" type="MarginContainer" parent="HelpBlocker/Help" unique_id=294817365]
+[node name="Layout" type="VBoxContainer" parent="HelpBlocker/Window/Frame" unique_id=962608828]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="Rows" type="VBoxContainer" parent="HelpBlocker/Help/Margins" unique_id=1630492817]
+[node name="Body" type="Container" parent="HelpBlocker/Window/Frame/Layout" unique_id=877666132]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="HelpBlocker/Window/Frame/Layout/Body" unique_id=1856101371]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Heading" type="Label" parent="HelpBlocker/Help/Margins/Rows" unique_id=1201938475]
+[node name="Heading" type="Label" parent="HelpBlocker/Window/Frame/Layout/Body/Content" unique_id=872224275]
 layout_mode = 2
+mouse_filter = 2
 text = "World Map Help"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Separator" type="ColorRect" parent="HelpBlocker/Help/Margins/Rows" unique_id=338475610]
-custom_minimum_size = Vector2(0, 1)
+[node name="HelpTitle" type="Label" parent="HelpBlocker/Window/Frame/Layout/Body/Content" unique_id=873417038]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
+text = "Getting around"
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Page" type="VBoxContainer" parent="HelpBlocker/Help/Margins/Rows" unique_id=1093847261]
-custom_minimum_size = Vector2(460, 240)
+[node name="HelpPages" type="MarginContainer" parent="HelpBlocker/Window/Frame/Layout/Body/Content" unique_id=1147066063]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+
+[node name="Footer" type="Container" parent="HelpBlocker/Window/Frame/Layout" unique_id=850826719]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="HelpBlocker/Window/Frame/Layout/Footer" unique_id=951817097]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="HelpBlocker/Window/Frame/Layout/Footer/Centre" unique_id=1635800672]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="HelpBlocker/Help/Margins/Rows/Page" unique_id=1948576302]
+[node name="HelpBack" parent="HelpBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=917171535 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Getting around"
+Caption = "Back"
 
-[node name="Lines" type="VBoxContainer" parent="HelpBlocker/Help/Margins/Rows/Page" unique_id=702938145]
+[node name="HelpPageNumber" type="Label" parent="HelpBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=768970186]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Buttons" type="HBoxContainer" parent="HelpBlocker/Help/Margins/Rows" unique_id=1584930276]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Back" type="Button" parent="HelpBlocker/Help/Margins/Rows/Buttons" unique_id=1023948576]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-disabled = true
-text = "Back"
-
-[node name="Next" type="Button" parent="HelpBlocker/Help/Margins/Rows/Buttons" unique_id=496817230]
-custom_minimum_size = Vector2(52, 19)
-layout_mode = 2
-focus_mode = 0
-text = "Next"
-
-[node name="PageNumber" type="Label" parent="HelpBlocker/Help/Margins/Rows/Buttons" unique_id=1239485760]
-layout_mode = 2
+mouse_filter = 2
 text = "1 / 8"
+size_flags_vertical = 4
+script = ExtResource("9_label")
+Colour = 10
 
-[node name="Close" type="Button" parent="HelpBlocker/Help/Margins/Rows/Buttons" unique_id=857392016]
-custom_minimum_size = Vector2(52, 19)
+[node name="HelpNext" parent="HelpBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1471968287 instance=ExtResource("1_button")]
+unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-text = "Close"
+Caption = "Next"
 
-[node name="LabelBlocker" type="ColorRect" parent="." unique_id=708439001]
+[node name="HelpClose" parent="HelpBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=774752110 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Close"
+
+[node name="LabelBlocker" type="ColorRect" parent="." unique_id=1649783264]
 visible = false
 top_level = true
 z_index = 2
@@ -978,9 +933,10 @@ z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
 
-[node name="Prompt" type="PanelContainer" parent="LabelBlocker" unique_id=578905621]
+[node name="Window" type="HBoxContainer" parent="LabelBlocker" unique_id=648282839]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -989,64 +945,74 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Frame" type="NinePatchRect" parent="LabelBlocker/Prompt" unique_id=668656836]
+[node name="Frame" type="Container" parent="LabelBlocker/Window" unique_id=320299641]
 layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Margins" type="MarginContainer" parent="LabelBlocker/Prompt" unique_id=1916748613]
+[node name="Layout" type="VBoxContainer" parent="LabelBlocker/Window/Frame" unique_id=447754932]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="Rows" type="VBoxContainer" parent="LabelBlocker/Prompt/Margins" unique_id=1802862572]
+[node name="Body" type="Container" parent="LabelBlocker/Window/Frame/Layout" unique_id=1274516067]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="LabelBlocker/Window/Frame/Layout/Body" unique_id=692220043]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Heading" type="Label" parent="LabelBlocker/Prompt/Margins/Rows" unique_id=720288524]
-layout_mode = 2
-text = "Label"
-
-[node name="Separator" type="ColorRect" parent="LabelBlocker/Prompt/Margins/Rows" unique_id=284003339]
-custom_minimum_size = Vector2(0, 1)
+[node name="Heading" type="Label" parent="LabelBlocker/Window/Frame/Layout/Body/Content" unique_id=527050240]
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
+text = "Label"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Name" type="LineEdit" parent="LabelBlocker/Prompt/Margins/Rows" unique_id=1165021917]
-custom_minimum_size = Vector2(220, 19)
+[node name="LabelName" parent="LabelBlocker/Window/Frame/Layout/Body/Content" unique_id=1628756025 instance=ExtResource("6_field")]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/caret_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/selection_color = Color(0.352941, 0.12549, 0.12549, 0.784314)
-theme_override_styles/normal = SubResource("StyleBoxFlat_field")
-theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+custom_minimum_size = Vector2(220, 0)
 max_length = 47
 
-[node name="Buttons" type="HBoxContainer" parent="LabelBlocker/Prompt/Margins/Rows" unique_id=1476296800]
+[node name="Footer" type="Container" parent="LabelBlocker/Window/Frame/Layout" unique_id=706095175]
 layout_mode = 2
-theme_override_constants/separation = 8
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
 
-[node name="Confirm" type="Button" parent="LabelBlocker/Prompt/Margins/Rows/Buttons" unique_id=2015496819]
-custom_minimum_size = Vector2(52, 19)
+[node name="Centre" type="CenterContainer" parent="LabelBlocker/Window/Frame/Layout/Footer" unique_id=1785976929]
 layout_mode = 2
-focus_mode = 0
-text = "OK"
+mouse_filter = 2
 
-[node name="Cancel" type="Button" parent="LabelBlocker/Prompt/Margins/Rows/Buttons" unique_id=1343119479]
-custom_minimum_size = Vector2(52, 19)
+[node name="Buttons" type="HBoxContainer" parent="LabelBlocker/Window/Frame/Layout/Footer/Centre" unique_id=1869252064]
 layout_mode = 2
-focus_mode = 0
-text = "Cancel"
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="DeleteBlocker" type="ColorRect" parent="." unique_id=1029232572]
+[node name="LabelConfirm" parent="LabelBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=463966654 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "OK"
+
+[node name="LabelCancel" parent="LabelBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1190065442 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="DeleteBlocker" type="ColorRect" parent="." unique_id=757938670]
 visible = false
 top_level = true
 z_index = 2
@@ -1054,9 +1020,10 @@ z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0.8, 0.8, 0.8, 0.35)
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("20_backdrop")
 
-[node name="Prompt" type="PanelContainer" parent="DeleteBlocker" unique_id=1612649189]
+[node name="Window" type="HBoxContainer" parent="DeleteBlocker" unique_id=802458376]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1065,80 +1032,77 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Frame" type="NinePatchRect" parent="DeleteBlocker/Prompt" unique_id=351990459]
+[node name="Frame" type="Container" parent="DeleteBlocker/Window" unique_id=793615802]
 layout_mode = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+mouse_filter = 0
+script = ExtResource("13_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Margins" type="MarginContainer" parent="DeleteBlocker/Prompt" unique_id=235690075]
+[node name="Layout" type="VBoxContainer" parent="DeleteBlocker/Window/Frame" unique_id=1696750413]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="Rows" type="VBoxContainer" parent="DeleteBlocker/Prompt/Margins" unique_id=1725683207]
+[node name="Body" type="Container" parent="DeleteBlocker/Window/Frame/Layout" unique_id=858018651]
 layout_mode = 2
+mouse_filter = 2
+script = ExtResource("13_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="DeleteBlocker/Window/Frame/Layout/Body" unique_id=1748857028]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Heading" type="Label" parent="DeleteBlocker/Prompt/Margins/Rows" unique_id=835946353]
-layout_mode = 2
-text = "Delete annotation"
-
-[node name="Separator" type="ColorRect" parent="DeleteBlocker/Prompt/Margins/Rows" unique_id=143467258]
-custom_minimum_size = Vector2(0, 1)
+[node name="Heading" type="Label" parent="DeleteBlocker/Window/Frame/Layout/Body/Content" unique_id=1543653471]
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.458824, 0.415686, 0.266667, 1)
+text = "Delete annotation"
+script = ExtResource("9_label")
+Colour = 9
 
-[node name="Question" type="Label" parent="DeleteBlocker/Prompt/Margins/Rows" unique_id=1706619057]
+[node name="DeleteQuestion" type="Label" parent="DeleteBlocker/Window/Frame/Layout/Body/Content" unique_id=1619174973]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
 text = "Delete this unnamed pin?"
+custom_minimum_size = Vector2(260, 0)
+autowrap_mode = 3
+script = ExtResource("9_label")
+Colour = 1
 
-[node name="Buttons" type="HBoxContainer" parent="DeleteBlocker/Prompt/Margins/Rows" unique_id=706672330]
+[node name="Footer" type="Container" parent="DeleteBlocker/Window/Frame/Layout" unique_id=1219372795]
 layout_mode = 2
-theme_override_constants/separation = 8
+mouse_filter = 2
+script = ExtResource("13_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
 
-[node name="Confirm" type="Button" parent="DeleteBlocker/Prompt/Margins/Rows/Buttons" unique_id=677705010]
-custom_minimum_size = Vector2(52, 19)
+[node name="Centre" type="CenterContainer" parent="DeleteBlocker/Window/Frame/Layout/Footer" unique_id=268559075]
 layout_mode = 2
-focus_mode = 0
-text = "Delete"
+mouse_filter = 2
 
-[node name="Cancel" type="Button" parent="DeleteBlocker/Prompt/Margins/Rows/Buttons" unique_id=1113427689]
-custom_minimum_size = Vector2(52, 19)
+[node name="Buttons" type="HBoxContainer" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre" unique_id=774295570]
 layout_mode = 2
-focus_mode = 0
-text = "Cancel"
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="NoteMenu" type="PopupMenu" parent="." unique_id=667558932]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
+[node name="DeleteConfirm" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1761712321 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Delete"
 
-[node name="ColourMenu" type="PopupMenu" parent="NoteMenu" unique_id=1204124788]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
+[node name="DeleteCancel" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=966561753 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
 
-[node name="SendToMenu" type="PopupMenu" parent="NoteMenu" unique_id=1380966892]
-canvas_item_default_texture_filter = 0
-theme_override_colors/font_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_colors/font_disabled_color = Color(0.282353, 0.317647, 0.317647, 1)
-theme_override_colors/font_hover_color = Color(0.952941, 0.858824, 0.415686, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu")
-theme_override_styles/hover = SubResource("StyleBoxFlat_menu_hover")
-theme_override_styles/separator = SubResource("StyleBoxLine_menu_separator")
+[node name="NoteMenu" parent="." unique_id=1636832307 instance=ExtResource("11_menu")]
+
+[node name="NoteColourMenu" parent="." unique_id=1217523860 instance=ExtResource("11_menu")]

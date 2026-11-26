@@ -573,38 +573,6 @@ public class WorldMapEditorTests
     }
 
     [TestCase]
-    public void SendTo_MovesTheNoteAndStopsEditingIt()
-    {
-        var category = UseCategory();
-        var other = notes.AddCategory("Other", 1);
-        var pin = notes.AddPoint(category, NoteKind.Pin, 500, 1000, "Camp");
-        editor.BeginEdit(notes, pin);
-
-        editor.SendTo(notes, pin, other);
-
-        AssertThat(notes.OwnerOf(pin)!.Id).IsEqual(other);
-        AssertThat(editor.Edited).IsNull();
-    }
-
-    [TestCase]
-    public void SendTo_SaysWhenThatCategoryIsFull()
-    {
-        var category = UseCategory();
-        var other = notes.AddCategory("Other", 1);
-        for (var count = 0; count < NoteLimits.NotesPerCategory; count++)
-        {
-            notes.AddPoint(other, NoteKind.Pin, 10, count, "");
-        }
-
-        var pin = notes.AddPoint(category, NoteKind.Pin, 500, 1000, "Camp");
-
-        editor.SendTo(notes, pin, other);
-
-        AssertThat(notes.OwnerOf(pin)!.Id).IsEqual(category);
-        AssertThat(problems).ContainsExactly("That category is full.");
-    }
-
-    [TestCase]
     public void ARightClick_FindsTheNoteForItsMenu()
     {
         var category = UseCategory();

@@ -175,28 +175,6 @@ public sealed class NoteSet
         return true;
     }
 
-    public bool MoveNote(int noteId, int categoryId)
-    {
-        if (OwnerOf(noteId) is not { } source
-            || FindCategory(categoryId) is not { } target
-            || target == source
-            || target.NoteList.Count >= NoteLimits.NotesPerCategory)
-        {
-            return false;
-        }
-
-        var note = FindNote(noteId)!;
-        if (target.SegmentTotal + note.Segments.Count > NoteLimits.SegmentsPerCategory)
-        {
-            return false;
-        }
-
-        source.NoteList.Remove(note);
-        target.NoteList.Add(note);
-        Changed = true;
-        return true;
-    }
-
     // An edit changes the label and where the note is; its id, kind and colour stay. Text must keep a label, and a
     // path its category's segment limit.
     public bool ReplaceNote(int noteId, Note edited)
@@ -340,42 +318,125 @@ public sealed class NoteSet
         return true;
     }
 
-    // A category can't move under itself, and its whole subtree must still fit within eight levels.
-    public bool CanMoveCategory(int categoryId, int newParentId) =>
-        FindCategory(categoryId) is { } category
-        && newParentId != category.ParentId
-        && (newParentId == 0 || FindCategory(newParentId) != null)
-        && !IsWithin(newParentId, categoryId)
-        && Depth(newParentId) + SubtreeHeight(categoryId) <= NoteLimits.Depth;
-
-    public bool MoveCategory(int categoryId, int newParentId)
+    // The category's own parent is allowed: moving there reorders it.
+    public NoteMoveRefusal CheckCategoryMove(int categoryId, int newParentId)
     {
-        if (!CanMoveCategory(categoryId, newParentId))
+        if (FindCategory(categoryId) == null || (newParentId != 0 && FindCategory(newParentId) == null))
+        {
+            return NoteMoveRefusal.Missing;
+        }
+
+        if (IsWithin(newParentId, categoryId))
+        {
+            return NoteMoveRefusal.IntoItself;
+        }
+
+        return Depth(newParentId) + SubtreeHeight(categoryId) > NoteLimits.Depth
+            ? NoteMoveRefusal.TooDeep
+            : NoteMoveRefusal.None;
+    }
+
+    // Siblings show in their order in the list, so the category goes in just before the sibling now at that index.
+    public bool MoveCategory(int categoryId, int newParentId, int index)
+    {
+        if (CheckCategoryMove(categoryId, newParentId) != NoteMoveRefusal.None)
         {
             return false;
         }
 
         var category = FindCategory(categoryId)!;
+        categories.Remove(category);
         category.Name = UniqueName(newParentId, categoryId, category.Name);
         category.ParentId = newParentId;
+        var siblings = categories.Where(sibling => sibling.ParentId == newParentId).ToList();
+        var place = index >= 0 && index < siblings.Count
+            ? categories.IndexOf(siblings[index])
+            : siblings.Count > 0
+                ? categories.IndexOf(siblings[^1]) + 1
+                : categories.Count;
+        categories.Insert(place, category);
         Changed = true;
         return true;
     }
 
-    public bool CanShiftCategory(int categoryId, int direction) => NeighbourIndex(categoryId, direction) >= 0;
-
-    public bool ShiftCategory(int categoryId, int direction)
+    public NoteMoveRefusal CheckNoteMove(int noteId, int categoryId)
     {
-        var neighbour = NeighbourIndex(categoryId, direction);
-        if (neighbour < 0)
+        if (OwnerOf(noteId) is not { } owner || FindCategory(categoryId) is not { } target)
+        {
+            return NoteMoveRefusal.Missing;
+        }
+
+        return target != owner
+            && (target.NoteList.Count >= NoteLimits.NotesPerCategory
+                || target.SegmentTotal + FindNote(noteId)!.Segments.Count > NoteLimits.SegmentsPerCategory)
+                ? NoteMoveRefusal.CategoryFull
+                : NoteMoveRefusal.None;
+    }
+
+    public bool MoveNote(int noteId, int categoryId, int index)
+    {
+        if (CheckNoteMove(noteId, categoryId) != NoteMoveRefusal.None)
         {
             return false;
         }
 
-        var index = categories.FindIndex(category => category.Id == categoryId);
-        (categories[index], categories[neighbour]) = (categories[neighbour], categories[index]);
+        var note = FindNote(noteId)!;
+        OwnerOf(noteId)!.NoteList.Remove(note);
+        var target = FindCategory(categoryId)!;
+        target.NoteList.Insert(index >= 0 && index < target.NoteList.Count ? index : target.NoteList.Count, note);
         Changed = true;
         return true;
+    }
+
+    public int Clash(int categoryId, int newParentId) =>
+        FindCategory(categoryId) is { } category
+        && FindNamed(newParentId, category.Name, categories.Count, categoryId) is { } match
+            ? match.Id
+            : 0;
+
+    internal NoteSubtree TakeSubtree(int categoryId)
+    {
+        var taken = categories
+            .Select((category, index) => (Index: index, Category: category))
+            .Where(entry => IsWithin(entry.Category.Id, categoryId))
+            .ToList();
+        foreach (var entry in Enumerable.Reverse(taken))
+        {
+            categories.RemoveAt(entry.Index);
+        }
+
+        return new NoteSubtree(taken.First(entry => entry.Category.Id == categoryId).Category, taken);
+    }
+
+    internal void PutBack(NoteSubtree subtree)
+    {
+        foreach (var (index, category) in subtree.Taken)
+        {
+            categories.Insert(index, category);
+        }
+    }
+
+    // An exact name wins; otherwise the first that differs only in ASCII case. Only the first limit categories are
+    // looked at, so an import can leave out the ones it has just added.
+    internal NoteCategory? FindNamed(int parentId, string name, int limit, int ignoredId = 0)
+    {
+        NoteCategory? looseMatch = null;
+        foreach (var category in categories.Take(limit))
+        {
+            if (category.ParentId != parentId || category.Id == parentId || category.Id == ignoredId)
+            {
+                continue;
+            }
+
+            if (category.Name == name)
+            {
+                return category;
+            }
+
+            looseMatch ??= NoteText.SameName(category.Name, name) ? category : null;
+        }
+
+        return looseMatch;
     }
 
     private static bool IsPaletteColour(int colourIndex) => colourIndex is >= 0 and < NotePalette.Size;
@@ -471,25 +532,4 @@ public sealed class NoteSet
     private bool NameInUse(int parentId, int ignoredId, string name) =>
         categories.Any(category =>
             category.Id != ignoredId && category.ParentId == parentId && NoteText.SameName(category.Name, name));
-
-    private int NeighbourIndex(int categoryId, int direction)
-    {
-        var index = categories.FindIndex(category => category.Id == categoryId);
-        if (index < 0 || direction is not (-1 or 1))
-        {
-            return -1;
-        }
-
-        for (var candidate = index + direction;
-            candidate >= 0 && candidate < categories.Count;
-            candidate += direction)
-        {
-            if (categories[candidate].ParentId == categories[index].ParentId)
-            {
-                return candidate;
-            }
-        }
-
-        return -1;
-    }
 }

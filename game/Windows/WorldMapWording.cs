@@ -14,6 +14,12 @@ public static class WorldMapWording
         _ => throw new UnreachableException(),
     };
 
+    public static string MergeQuestion(string moved, string? target) =>
+        target == null ? $"Move \"{moved}\" to the top level?" : $"Move \"{moved}\" into \"{target}\"?";
+
+    public static string MergeClash(string? target, string name) =>
+        $"{(target == null ? "The top level" : $"\"{target}\"")} already has a category called \"{name}\".";
+
     public static string DeleteNoteQuestion(Note note) => note.Label.Length > 0
         ? $"Delete {Noun(note.Kind)} \"{note.Label}\"?"
         : $"Delete this unnamed {Noun(note.Kind)}?";

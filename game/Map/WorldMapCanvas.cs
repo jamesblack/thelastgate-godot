@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 using TheLastGate.Notes;
+using TheLastGate.Profiling;
 using TheLastGate.Windows;
 using NumericsVector = System.Numerics.Vector2;
 
@@ -25,8 +26,9 @@ public partial class WorldMapCanvas : Control
     private const int PathEndOutline = 3;
     private const int PathEndFill = 2;
     private const int PathStartHole = 1;
-    private const int PinSelectionRadius = 6;
     private const float SelectedPathThickness = PathEdgeThickness + 2;
+
+    private const int BlockCount = WorldMapPicture.BlocksAcross * WorldMapPicture.BlocksDown;
 
     private static readonly Color Gold = Color.Color8(243, 219, 106);
     private static readonly Color PathEdge = Color.Color8(0, 0, 0, 200);
@@ -35,7 +37,11 @@ public partial class WorldMapCanvas : Control
     // Lines are drawn through the middle of their pixels.
     private static readonly Vector2 PixelMiddle = new(0.5f, 0.5f);
 
-    private readonly byte[] pixels = new byte[WorldMapPicture.Width * WorldMapPicture.Height * BytesPerPixel];
+    private readonly byte[] blockPixels =
+        new byte[WorldMapPicture.BlockSize * WorldMapPicture.BlockSize * BytesPerPixel];
+
+    private readonly int[] blockRevisions = new int[BlockCount];
+    private readonly ImageTexture?[] blocks = new ImageTexture?[BlockCount];
     private readonly WorldMapView view = new();
 
     private Vector2 mouse;
@@ -47,10 +53,14 @@ public partial class WorldMapCanvas : Control
         namesFor;
 
     private bool panning;
-    private Image? picture;
     private ulong pictureMadeAt;
+    private ExploredMap? pictureOf;
     private int pictureRevision = -1;
-    private ImageTexture? pictureTexture;
+    private ImageTexture? pinFill;
+
+    // Each diamond is one tinted texture, which costs far less to draw than a rectangle per row.
+    private ImageTexture? pinMarker;
+    private ImageTexture? pinSelection;
 
     public ExploredMap? Map { get; set; }
 
@@ -116,6 +126,10 @@ public partial class WorldMapCanvas : Control
                 view.ZoomAt(Size.X, Size.Y, wheel.Position.X, wheel.Position.Y, Math.Pow(WorldMapView.ZoomStep, steps));
                 AcceptEvent();
                 break;
+            case InputEventMouseButton { ButtonIndex: MouseButton.Middle } click:
+                panning = click.Pressed;
+                AcceptEvent();
+                break;
             case InputEventMouseButton { ButtonIndex: MouseButton.Left or MouseButton.Right } click:
                 if (StartsPanning(click.ButtonIndex))
                 {
@@ -164,6 +178,7 @@ public partial class WorldMapCanvas : Control
 
     public override void _Draw()
     {
+        using var timing = Timings.Measure("map.draw");
         DrawRect(new Rect2(Vector2.Zero, Size), Colors.Black);
         DrawWorld();
         DrawNotes();
@@ -179,7 +194,7 @@ public partial class WorldMapCanvas : Control
     private static Color Colour(NoteSet notes, int categoryId) =>
         notes.FindCategory(categoryId) is { } category ? Colour(NotePalette.Rgb(category.ColourIndex)) : Colors.White;
 
-    // Right-drag always pans; with the Pan tool so does the left button.
+    // Right-drag and middle-drag always pan; with the Pan tool so does the left button.
     private bool StartsPanning(MouseButton button) =>
         button == MouseButton.Right || (button == MouseButton.Left && Window?.Tool == WorldMapTool.Pan);
 
@@ -222,29 +237,37 @@ public partial class WorldMapCanvas : Control
         }
     }
 
-    // Only the part of the world inside the panel is drawn, from the matching part of the picture.
+    // Only the part of each block inside the panel is drawn, from the matching part of its picture.
     private void DrawWorld()
     {
-        if (pictureTexture == null)
+        const int blockSize = WorldMapPicture.BlockSize;
+        for (var down = 0; down < WorldMapPicture.BlocksDown; down++)
         {
-            return;
-        }
+            for (var across = 0; across < WorldMapPicture.BlocksAcross; across++)
+            {
+                if (blocks[down * WorldMapPicture.BlocksAcross + across] is not { } block)
+                {
+                    continue;
+                }
 
-        var visibleStart = ToPanel(0, 0).Max(Vector2.Zero);
-        var visibleEnd = ToPanel(WorldMapPicture.Height, WorldMapPicture.Width).Min(Size);
-        if (visibleEnd.X <= visibleStart.X || visibleEnd.Y <= visibleStart.Y)
-        {
-            return;
-        }
+                var (left, top) = (across * blockSize, down * blockSize);
+                var shownStart = ToPanel(top, left).Max(Vector2.Zero);
+                var shownEnd = ToPanel(top + blockSize, left + blockSize).Min(Size);
+                if (shownEnd.X <= shownStart.X || shownEnd.Y <= shownStart.Y)
+                {
+                    continue;
+                }
 
-        var (startTileX, startTileY) = view.PanelToTile(Size.X, Size.Y, visibleStart.X, visibleStart.Y);
-        var (endTileX, endTileY) = view.PanelToTile(Size.X, Size.Y, visibleEnd.X, visibleEnd.Y);
-        var source = new Rect2(
-            (float)startTileY,
-            (float)startTileX,
-            (float)(endTileY - startTileY),
-            (float)(endTileX - startTileX));
-        DrawTextureRectRegion(pictureTexture, new Rect2(visibleStart, visibleEnd - visibleStart), source);
+                var (startTileX, startTileY) = view.PanelToTile(Size.X, Size.Y, shownStart.X, shownStart.Y);
+                var (endTileX, endTileY) = view.PanelToTile(Size.X, Size.Y, shownEnd.X, shownEnd.Y);
+                var source = new Rect2(
+                    (float)(startTileY - left),
+                    (float)(startTileX - top),
+                    (float)(endTileY - startTileY),
+                    (float)(endTileX - startTileX));
+                DrawTextureRectRegion(block, new Rect2(shownStart, shownEnd - shownStart), source);
+            }
+        }
     }
 
     private void DrawNotes()
@@ -307,18 +330,27 @@ public partial class WorldMapCanvas : Control
 
     private void DrawPin(Note pin, Color colour, bool selected)
     {
+        LabelRect? name = nameOffsets.TryGetValue(pin.Id, out var offset) ? offset : null;
+        if (!WorldMapLabels.PinOnPanel(view, Size.X, Size.Y, pin, name))
+        {
+            return;
+        }
+
         var (centreX, centreY) = WorldMapLabels.PinCentre(view, Size.X, Size.Y, pin);
         var centre = new Vector2(centreX, centreY);
         if (selected)
         {
-            DrawDottedDiamond(centre, PinSelectionRadius);
+            pinSelection ??= ImageTexture.CreateFromImage(PixelDiamond.Dotted(WorldMapLabels.PinSelectionRadius));
+            DrawDiamond(centre, pinSelection, Gold);
         }
 
-        DrawDiamond(centre, WorldMapLabels.PinMarkerExtent, Colors.Black);
-        DrawDiamond(centre, WorldMapLabels.PinRadius, colour);
-        if (nameOffsets.TryGetValue(pin.Id, out var name))
+        pinMarker ??= ImageTexture.CreateFromImage(PixelDiamond.Solid(WorldMapLabels.PinMarkerExtent));
+        pinFill ??= ImageTexture.CreateFromImage(PixelDiamond.Solid(WorldMapLabels.PinRadius));
+        DrawDiamond(centre, pinMarker, Colors.Black);
+        DrawDiamond(centre, pinFill, colour);
+        if (name is { } shown)
         {
-            DrawShadowedText(centre + new Vector2(name.Left, name.Top), pin.Label, colour);
+            DrawShadowedText(centre + new Vector2(shown.Left, shown.Top), pin.Label, colour);
         }
     }
 
@@ -326,6 +358,11 @@ public partial class WorldMapCanvas : Control
     {
         var textSize = TextFont.GetStringSize(text.Label, HorizontalAlignment.Left, -1, TextSize);
         var (plate, textX, textY) = WorldMapLabels.TextPlate(view, Size.X, Size.Y, text, (textSize.X, textSize.Y));
+        if (!plate.Overlaps(new LabelRect(0, 0, Size.X, Size.Y)))
+        {
+            return;
+        }
+
         DrawRect(new Rect2(plate.Left, plate.Top, plate.Right - plate.Left, plate.Bottom - plate.Top), TextPlate);
         if (selected)
         {
@@ -447,17 +484,7 @@ public partial class WorldMapCanvas : Control
         }
     }
 
-    // Every other pixel round a diamond or a rectangle, in gold.
-    private void DrawDottedDiamond(Vector2 centre, int radius)
-    {
-        for (var row = -radius; row <= radius; row += 2)
-        {
-            var halfWidth = radius - Math.Abs(row);
-            DrawRect(new Rect2(centre.X - halfWidth, centre.Y + row, 1, 1), Gold);
-            DrawRect(new Rect2(centre.X + halfWidth, centre.Y + row, 1, 1), Gold);
-        }
-    }
-
+    // Every other pixel round a rectangle, in gold.
     private void DrawDottedRect(LabelRect rect)
     {
         var width = (int)Math.Ceiling(rect.Right - rect.Left);
@@ -482,14 +509,8 @@ public partial class WorldMapCanvas : Control
         DrawString(TextFont, baseline, text, HorizontalAlignment.Left, -1, TextSize, colour);
     }
 
-    private void DrawDiamond(Vector2 centre, int radius, Color colour)
-    {
-        for (var row = -radius; row <= radius; row++)
-        {
-            var halfWidth = radius - Math.Abs(row);
-            DrawRect(new Rect2(centre.X - halfWidth, centre.Y + row, halfWidth * 2 + 1, 1), colour);
-        }
-    }
+    private void DrawDiamond(Vector2 centre, Texture2D diamond, Color colour) =>
+        DrawTexture(diamond, centre - (diamond.GetSize() / 2).Floor(), colour);
 
     private void DrawPlayer()
     {
@@ -506,31 +527,57 @@ public partial class WorldMapCanvas : Control
     private void DrawSquare(Vector2 centre, int radius, Color colour) =>
         DrawRect(new Rect2(centre - new Vector2(radius, radius), new Vector2(radius * 2 + 1, radius * 2 + 1)), colour);
 
-    // Remade at most twice a second while the map changes, as the current client does.
+    // Remade at most twice a second while the map changes, and only the blocks that changed.
     private void RefreshPicture()
     {
-        if (Map == null || Map.Revision == pictureRevision
-            || (pictureTexture != null && Time.GetTicksMsec() - pictureMadeAt < RefreshMilliseconds))
+        if (Map == null || (Map == pictureOf
+            && (Map.Revision == pictureRevision || Time.GetTicksMsec() - pictureMadeAt < RefreshMilliseconds)))
         {
             return;
         }
 
-        WorldMapPicture.Render(Map, pixels);
+        using var timing = Timings.Measure("map.picture");
+        if (Map != pictureOf)
+        {
+            Array.Fill(blockRevisions, -1);
+            pictureOf = Map;
+        }
+
         pictureRevision = Map.Revision;
         pictureMadeAt = Time.GetTicksMsec();
-        if (picture == null || pictureTexture == null)
+        for (var down = 0; down < WorldMapPicture.BlocksDown; down++)
         {
-            picture = Image.CreateFromData(
-                WorldMapPicture.Width,
-                WorldMapPicture.Height,
-                false,
-                Image.Format.Rgba8,
-                pixels);
-            pictureTexture = ImageTexture.CreateFromImage(picture);
+            for (var across = 0; across < WorldMapPicture.BlocksAcross; across++)
+            {
+                RefreshBlock(Map, across, down);
+            }
+        }
+    }
+
+    private void RefreshBlock(ExploredMap map, int across, int down)
+    {
+        var index = down * WorldMapPicture.BlocksAcross + across;
+        var revision = map.BlockRevision(down, across);
+        if (blockRevisions[index] == revision)
+        {
             return;
         }
 
-        picture.SetData(WorldMapPicture.Width, WorldMapPicture.Height, false, Image.Format.Rgba8, pixels);
-        pictureTexture.Update(picture);
+        blockRevisions[index] = revision;
+        WorldMapPicture.RenderBlock(map, across, down, blockPixels);
+        var image = Image.CreateFromData(
+            WorldMapPicture.BlockSize,
+            WorldMapPicture.BlockSize,
+            false,
+            Image.Format.Rgba8,
+            blockPixels);
+        if (blocks[index] is { } block)
+        {
+            block.Update(image);
+        }
+        else
+        {
+            blocks[index] = ImageTexture.CreateFromImage(image);
+        }
     }
 }

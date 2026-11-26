@@ -64,7 +64,32 @@ public static class NoteImport
     }
 
     // Matching categories keep their own name, colour and settings and gain the notes they don't already have.
-    public static NoteImportResult Merge(NoteSet set, NoteSet imported, int targetId)
+    public static NoteImportResult Merge(NoteSet set, NoteSet imported, int targetId) =>
+        Merge(set, imported, targetId, true);
+
+    private static NoteImportResult MergeTakenOut(NoteSet set, int categoryId, int targetId, bool applying)
+    {
+        if (set.FindCategory(categoryId) == null || set.FindCategory(targetId) == null
+            || set.IsWithin(targetId, categoryId))
+        {
+            return Failed();
+        }
+
+        var subtree = set.TakeSubtree(categoryId);
+        var result = Merge(set, subtree.AsImport(), targetId, applying);
+        if (!applying || result.Status != NoteImportStatus.Ok)
+        {
+            set.PutBack(subtree);
+        }
+        else
+        {
+            set.Changed = true;
+        }
+
+        return result;
+    }
+
+    private static NoteImportResult Merge(NoteSet set, NoteSet imported, int targetId, bool applying)
     {
         if (Refusal(set, imported) is { } refused)
         {
@@ -84,9 +109,22 @@ public static class NoteImport
             return new NoteImportResult(planned, 0, counting.FullCategory);
         }
 
+        if (!applying)
+        {
+            return new NoteImportResult(NoteImportStatus.Ok, targetId, "");
+        }
+
         var status = new ImportPass(set, imported, true).MergeCategory(imported.Categories[0], target, depth);
         return new NoteImportResult(status, status == NoteImportStatus.Ok ? targetId : 0, "");
     }
+
+    // The dragged tree is taken out first, so it doesn't count against the limits and may merge into a same-named
+    // category that held it; a refused merge puts it back as it was.
+    public static NoteImportResult MergeMoved(NoteSet set, int categoryId, int targetId) =>
+        MergeTakenOut(set, categoryId, targetId, true);
+
+    public static NoteImportResult CheckMergeMoved(NoteSet set, int categoryId, int targetId) =>
+        MergeTakenOut(set, categoryId, targetId, false);
 
     public static string Problem(NoteImportResult result) => result.Status switch
     {
@@ -119,29 +157,8 @@ public static class NoteImport
 
     // Only categories that were there before the import can be matched, so two incoming siblings with the same name
     // and no local match are each added under a name of their own rather than merged into one another.
-    private static NoteCategory? FindMatch(NoteSet set, int parentId, string name, int limit)
-    {
-        NoteCategory? looseMatch = null;
-        foreach (var category in set.Categories.Take(limit))
-        {
-            if (category.ParentId != parentId || category.Id == parentId)
-            {
-                continue;
-            }
-
-            if (category.Name == name)
-            {
-                return category;
-            }
-
-            if (looseMatch == null && NoteText.SameName(category.Name, name))
-            {
-                looseMatch = category;
-            }
-        }
-
-        return looseMatch;
-    }
+    private static NoteCategory? FindMatch(NoteSet set, int parentId, string name, int limit) =>
+        set.FindNamed(parentId, name, limit);
 
     private static bool Same(Note left, Note right) =>
         left.Kind == NoteKind.Pin && right.Kind == NoteKind.Pin ? left.IsSamePin(right) : left.IsIdenticalTo(right);

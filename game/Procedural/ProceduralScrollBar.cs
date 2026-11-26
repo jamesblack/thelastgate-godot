@@ -16,11 +16,7 @@ public partial class ProceduralScrollBar : VScrollBar
 
     private int minimumGrabberLength;
 
-    public ProceduralScrollBar()
-    {
-        Material = ProceduralLook.Panel(ProceduralShape.Box, "", ProceduralFill.Green, ProceduralEdges.None);
-        Theme = look ??= Look();
-    }
+    public ProceduralScrollBar() => Style(this);
 
     // A bar with no page has no grabber length of its own, so it draws this many pixels.
     [Export]
@@ -42,6 +38,12 @@ public partial class ProceduralScrollBar : VScrollBar
                 }
             }
         }
+    }
+
+    public static void Style(ScrollBar bar)
+    {
+        bar.Material = ProceduralLook.Panel(ProceduralShape.Box, "", ProceduralFill.Green, ProceduralEdges.None);
+        bar.Theme = look ??= Look();
     }
 
     public override void _ValidateProperty(Dictionary property)
