@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://4k2jies0030j"]
+
+[ext_resource type="FontFile" uid="uid://skd4pxfsid0b" path="res://fonts/silkscreen.ttf" id="1_silk"]
+
+[resource]
+base_font = ExtResource("1_silk")
+spacing_top = -3
+spacing_bottom = -3

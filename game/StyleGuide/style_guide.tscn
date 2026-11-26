@@ -1263,7 +1263,7 @@ Colour = 9
 [node name="Text" type="Label" parent="Page/Text/Notes" unique_id=334871800]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
-text = "Use a Label with HudLabel.cs for all window text, so it follows the HUD font set. Colour picks the colour; never set a font or font colour on the label itself."
+text = "Use a Label with HudLabel.cs for all window text, so it follows the HUD font set. Colour picks the colour; never set a font or font colour on the label itself. Tick Caption on text that names a slot or box (the gear slots, the smith's Input and Out): every font set draws captions in Silkscreen, in the same colours, so they stay the same when the player swaps the body font."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -1360,6 +1360,13 @@ layout_mode = 2
 text = "12 Engraved"
 script = ExtResource("3_label")
 Colour = 12
+
+[node name="EngravedCaption" type="Label" parent="Page/Text/Examples/Column1" unique_id=1306558395]
+layout_mode = 2
+text = "12 Engraved caption"
+script = ExtResource("3_label")
+Colour = 12
+Caption = true
 
 [node name="Recipe" type="HBoxContainer" parent="Page" unique_id=250714061]
 layout_mode = 2

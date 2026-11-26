@@ -9,6 +9,9 @@ script = ExtResource("1_3y2u6")
 unique_name_in_owner = true
 offset_top = -68.0
 offset_bottom = -68.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
 text = "Name 100%"
 
 [node name="HealthBar" type="Control" parent="." unique_id=897053067]

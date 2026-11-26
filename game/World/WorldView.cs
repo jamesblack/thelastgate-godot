@@ -533,6 +533,7 @@ public partial class WorldView : Node2D
             (int)Math.Ceiling(Math.Max(windowSize.X / virtualSize.X, windowSize.Y / virtualSize.Y)));
         worldCanvas.Size = (Vector2I)(virtualSize * scale);
         worldCanvas.CanvasTransform = Transform2D.Identity.Scaled(new Vector2(scale, scale));
+        worldCanvas.OversamplingOverride = scale;
         worldPicture.Scale = new Vector2(1f / scale, 1f / scale);
     }
 

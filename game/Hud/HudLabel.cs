@@ -9,6 +9,7 @@ namespace TheLastGate.Hud;
 [Tool]
 public partial class HudLabel : Label
 {
+    private bool caption;
     private TextColour colour = TextColour.Yellow;
 
     public HudLabel()
@@ -24,7 +25,19 @@ public partial class HudLabel : Label
         set
         {
             colour = value;
-            ThemeTypeVariation = HudTextTheme.Variation(colour);
+            ShowVariation();
+        }
+    }
+
+    // Captions name a slot or a box rather than saying something, and draw in the font set's caption font.
+    [Export]
+    public bool Caption
+    {
+        get => caption;
+        set
+        {
+            caption = value;
+            ShowVariation();
         }
     }
 
@@ -38,4 +51,7 @@ public partial class HudLabel : Label
 
         property["usage"] = (int)(property["usage"].As<PropertyUsageFlags>() & ~PropertyUsageFlags.Storage);
     }
+
+    private void ShowVariation() =>
+        ThemeTypeVariation = caption ? HudTextTheme.CaptionVariation(colour) : HudTextTheme.Variation(colour);
 }

@@ -131,6 +131,8 @@ public partial class HudView : Control
 
     public PlannerChoicesKeeper? PlannerChoices { get; set; }
 
+    public IReadOnlyList<FontOption> FontChoices { get; set; } = [];
+
     public IFontSet? Fonts
     {
         get => fonts;
@@ -140,6 +142,7 @@ public partial class HudView : Control
             if (value != null && !Engine.IsEditorHint())
             {
                 HudTextTheme.Apply(HudTextTheme.Load(), value);
+                GetNodeOrNull<ChatView>("%Chat")?.Log.ShowFonts(value);
             }
 
             ShowContext();
@@ -424,6 +427,7 @@ public partial class HudView : Control
         });
         optionsWindow.ScreenGammaChanged += gamma => ChangeClientSettings(settings => settings.ScreenGamma = gamma);
         optionsWindow.WorldGammaChanged += gamma => ChangeClientSettings(settings => settings.WorldGamma = gamma);
+        optionsWindow.FontChosen += id => ChangeClientSettings(settings => settings.FontId = id);
         optionsWindow.BackgroundOpacityChanged += (window, opacity) =>
             ChangeClientSettings(settings => settings.BackgroundOpacity[window] = opacity);
         optionsWindow.AccessibilityChanged += (option, isOn) => ChangeClientSettings(settings =>
@@ -1358,8 +1362,12 @@ public partial class HudView : Control
     {
         if (gameSession != null)
         {
-            GetNode<OptionsWindowView>("%OptionsWindow")
-                .ShowOptions(gameSession.OptionsWindow, ClientSettings, Settings);
+            var optionsWindow = GetNode<OptionsWindowView>("%OptionsWindow");
+            optionsWindow.ShowOptions(gameSession.OptionsWindow, ClientSettings, Settings);
+            if (ClientSettings != null && FontChoices.Count > 0)
+            {
+                optionsWindow.ShowFontChoices(FontChoices, ClientSettings.FontId);
+            }
         }
     }
 

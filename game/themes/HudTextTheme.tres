@@ -11,6 +11,8 @@
 [ext_resource type="FontFile" uid="uid://nhq14etxtvp0" path="res://fonts/classic/teal.tres" id="9_4texh"]
 [ext_resource type="FontFile" uid="uid://wtd46rgt8pnn" path="res://fonts/classic/yellow.tres" id="10_6ulsq"]
 
+[ext_resource type="FontVariation" uid="uid://4k2jies0030j" path="res://fonts/caption.tres" id="11_caption"]
+
 [resource]
 default_font = ExtResource("2_k3nyo")
 default_font_size = 9
@@ -66,3 +68,55 @@ HudYellow/base_type = &"Label"
 HudYellow/colors/font_color = Color(1, 1, 1, 1)
 HudYellow/font_sizes/font_size = 9
 HudYellow/fonts/font = ExtResource("10_6ulsq")
+HudCaptionBlue/base_type = &"Label"
+HudCaptionBlue/colors/font_color = Color(0.24705882, 0.74117649, 0.88627452, 1)
+HudCaptionBlue/font_sizes/font_size = 8
+HudCaptionBlue/fonts/font = ExtResource("11_caption")
+HudCaptionDim/base_type = &"Label"
+HudCaptionDim/colors/font_color = Color(0.49411765, 0.52941179, 0.52941179, 1)
+HudCaptionDim/font_sizes/font_size = 8
+HudCaptionDim/fonts/font = ExtResource("11_caption")
+HudCaptionEngraved/base_type = &"Label"
+HudCaptionEngraved/colors/font_color = Color(0.29803923, 0.29803923, 0.26274511, 1)
+HudCaptionEngraved/font_sizes/font_size = 8
+HudCaptionEngraved/fonts/font = ExtResource("11_caption")
+HudCaptionGreen/base_type = &"Label"
+HudCaptionGreen/colors/font_color = Color(0.27450982, 0.88627452, 0.28627452, 1)
+HudCaptionGreen/font_sizes/font_size = 8
+HudCaptionGreen/fonts/font = ExtResource("11_caption")
+HudCaptionGrey/base_type = &"Label"
+HudCaptionGrey/colors/font_color = Color(0.24705882, 0.27843139, 0.27843139, 1)
+HudCaptionGrey/font_sizes/font_size = 8
+HudCaptionGrey/fonts/font = ExtResource("11_caption")
+HudCaptionLime/base_type = &"Label"
+HudCaptionLime/colors/font_color = Color(0.61960787, 0.88627452, 0.27450982, 1)
+HudCaptionLime/font_sizes/font_size = 8
+HudCaptionLime/fonts/font = ExtResource("11_caption")
+HudCaptionOrange/base_type = &"Label"
+HudCaptionOrange/colors/font_color = Color(0.99215686, 0.627451, 0.37254903, 1)
+HudCaptionOrange/font_sizes/font_size = 8
+HudCaptionOrange/fonts/font = ExtResource("11_caption")
+HudCaptionPink/base_type = &"Label"
+HudCaptionPink/colors/font_color = Color(0.98039216, 0.44313726, 0.7764706, 1)
+HudCaptionPink/font_sizes/font_size = 8
+HudCaptionPink/fonts/font = ExtResource("11_caption")
+HudCaptionPurple/base_type = &"Label"
+HudCaptionPurple/colors/font_color = Color(0.73725492, 0.44313726, 0.97647059, 1)
+HudCaptionPurple/font_sizes/font_size = 8
+HudCaptionPurple/fonts/font = ExtResource("11_caption")
+HudCaptionRed/base_type = &"Label"
+HudCaptionRed/colors/font_color = Color(1, 0.4627451, 0.43529412, 1)
+HudCaptionRed/font_sizes/font_size = 8
+HudCaptionRed/fonts/font = ExtResource("11_caption")
+HudCaptionTeal/base_type = &"Label"
+HudCaptionTeal/colors/font_color = Color(0.24705882, 0.88627452, 0.70980394, 1)
+HudCaptionTeal/font_sizes/font_size = 8
+HudCaptionTeal/fonts/font = ExtResource("11_caption")
+HudCaptionWhite/base_type = &"Label"
+HudCaptionWhite/colors/font_color = Color(0.87843138, 0.87843138, 0.87843138, 1)
+HudCaptionWhite/font_sizes/font_size = 8
+HudCaptionWhite/fonts/font = ExtResource("11_caption")
+HudCaptionYellow/base_type = &"Label"
+HudCaptionYellow/colors/font_color = Color(0.95294118, 0.85882354, 0.41568628, 1)
+HudCaptionYellow/font_sizes/font_size = 8
+HudCaptionYellow/fonts/font = ExtResource("11_caption")

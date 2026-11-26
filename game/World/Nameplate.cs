@@ -15,6 +15,7 @@ public partial class Nameplate : Node2D
     private ColorRect barReserved = null!;
     private float fullBarWidth;
     private Label nameLabel = null!;
+    private Color shadowColour;
 
     private (string Text, NameplateFont Font, int HealthPercent, int ReservedPercent, bool ShowText, bool ShowBar)
         shown;
@@ -22,6 +23,7 @@ public partial class Nameplate : Node2D
     public override void _Ready()
     {
         nameLabel = GetNode<Label>("%NameLabel");
+        shadowColour = nameLabel.GetThemeColor("font_shadow_color");
         bar = GetNode<Control>("%HealthBar");
         barBorder = GetNode<ColorRect>("%BarBorder");
         barBackground = GetNode<ColorRect>("%BarBackground");
@@ -51,6 +53,11 @@ public partial class Nameplate : Node2D
             nameLabel.AddThemeFontOverride("font", font.Font);
             nameLabel.AddThemeFontSizeOverride("font_size", font.Size);
             nameLabel.AddThemeColorOverride("font_color", font.Colour);
+
+            // The current client's letters carry their own black outline in the font sheet.
+            nameLabel.AddThemeColorOverride(
+                "font_shadow_color",
+                font.CentresLikeTheCurrentClient ? Colors.Transparent : shadowColour);
             var left = font.CentresLikeTheCurrentClient
                 ? NameplateText.LeftOffset(text)
                 : -Mathf.RoundToInt(font.Font.GetStringSize(text, fontSize: font.Size).X / 2);

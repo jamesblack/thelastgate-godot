@@ -46,6 +46,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Head" parent="Column/Cells/HeadCell" unique_id=1959531721 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -66,6 +67,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Body" parent="Column/Cells/BodyCell" unique_id=887495721 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -86,6 +88,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Belt" parent="Column/Cells/BeltCell" unique_id=263603966 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -106,6 +109,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Feet" parent="Column/Cells/FeetCell" unique_id=774377273 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -143,6 +147,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="MainHand" parent="LeftWing/Cells/MainHandCell" unique_id=2097230892 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -163,6 +168,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Arms" parent="LeftWing/Cells/ArmsCell" unique_id=1450864432 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -200,6 +206,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Cloak" parent="RightWing/Cells/CloakCell" unique_id=913074739 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -220,6 +227,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="OffHand" parent="RightWing/Cells/OffHandCell" unique_id=1335979496 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -243,6 +251,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Neck" parent="NeckBox" unique_id=1612726254 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -266,6 +275,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="RightRing" parent="RightRingBox" unique_id=1902233203 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -289,6 +299,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="LeftRing" parent="LeftRingBox" unique_id=1756433752 instance=ExtResource("4_slot")]
 unique_name_in_owner = true
@@ -322,6 +333,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_label")
 Colour = 12
+Caption = true
 
 [node name="Charm" parent="CharmBox/Cards" unique_id=1333647085 instance=ExtResource("4_slot")]
 unique_name_in_owner = true

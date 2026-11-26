@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Godot;
+using TheLastGate.Assets;
 using TheLastGate.Hotkeys;
 using TheLastGate.Launcher;
 using TheLastGate.Net;
@@ -73,6 +74,7 @@ public sealed class ClientSettings
             LargestCursorScale);
         ScreenGamma = Gamma.Clamp(file.GetValue(DisplaySection, "screen_gamma", Gamma.Normal).AsSingle());
         WorldGamma = Gamma.Clamp(file.GetValue(DisplaySection, "world_gamma", Gamma.Normal).AsSingle());
+        FontId = file.GetValue(DisplaySection, "font", FontChoice.ClassicId).AsString();
         foreach (var row in AccessibilityOptions.Rows.Where(row =>
             file.GetValue(AccessibilitySection, row.SettingKey, false).AsBool()))
         {
@@ -108,6 +110,8 @@ public sealed class ClientSettings
     public float CursorScale { get; set; }
     public float ScreenGamma { get; set; }
     public float WorldGamma { get; set; }
+
+    public string FontId { get; set; }
     public HashSet<AccessibilityOption> AccessibilityOn { get; } = [];
     public Dictionary<WindowBackground, int> BackgroundOpacity { get; } = [];
 
@@ -204,6 +208,7 @@ public sealed class ClientSettings
             case OptionsTab.Display:
                 ScreenGamma = Gamma.Normal;
                 WorldGamma = Gamma.Normal;
+                FontId = FontChoice.ClassicId;
                 AccessibilityOn.Clear();
                 foreach (var row in WindowBackgrounds.Rows)
                 {
@@ -233,6 +238,7 @@ public sealed class ClientSettings
         file.SetValue(DisplaySection, "cursor_scale", CursorScale);
         file.SetValue(DisplaySection, "screen_gamma", ScreenGamma);
         file.SetValue(DisplaySection, "world_gamma", WorldGamma);
+        file.SetValue(DisplaySection, "font", FontId);
         foreach (var row in AccessibilityOptions.Rows)
         {
             file.SetValue(AccessibilitySection, row.SettingKey, AccessibilityOn.Contains(row.Option));

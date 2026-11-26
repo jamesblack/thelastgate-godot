@@ -33,6 +33,19 @@ public class HudTextThemeApplyTests
     }
 
     [TestCase]
+    public void Apply_WritesEachSetsCaptionFont()
+    {
+        var theme = (Theme)HudTextTheme.Load().Duplicate();
+
+        HudTextTheme.Apply(theme, new OtherFonts());
+
+        var variation = HudTextTheme.CaptionVariation(TextColour.Engraved);
+        AssertThat(theme.GetFont("font", variation)).IsSame(ClassicFonts.SavedCaption(TextColour.Engraved).Font);
+        AssertThat(theme.GetColor("font_color", variation))
+            .IsEqual(ClassicFonts.SavedCaption(TextColour.Engraved).Tint);
+    }
+
+    [TestCase]
     public void ClassicSet_ChangesNothing()
     {
         var original = HudTextTheme.Load();
@@ -76,10 +89,25 @@ public class HudTextThemeApplyTests
         AssertThat(changes).IsEqual(0);
     }
 
+    [TestCase]
+    public void ASwap_AnnouncesItselfOnce()
+    {
+        var theme = (Theme)HudTextTheme.Load().Duplicate();
+        var changes = 0;
+        theme.Changed += () => changes++;
+
+        HudTextTheme.Apply(theme, new OtherFonts());
+
+        AssertThat(changes).IsEqual(1);
+        AssertThat(theme.IsBlockingSignals()).IsFalse();
+    }
+
     private sealed class OtherFonts : IFontSet
     {
         public bool CentresLikeTheCurrentClient => false;
 
         public GameFont For(TextColour colour) => new(OtherFont, OtherSize, OtherColour);
+
+        public GameFont Caption(TextColour colour) => ClassicFonts.SavedCaption(colour);
     }
 }

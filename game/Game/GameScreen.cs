@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Godot;
 using TheLastGate.Assets;
@@ -22,6 +23,7 @@ namespace TheLastGate.Game;
 
 public partial class GameScreen : Control
 {
+    private const string ClassicFontName = "Classic";
     private const string LauncherScene = "res://Launcher/launcher.tscn";
     private const string SpriteProbeScene = "res://World/sprite_probe.tscn";
     private const long SpriteCacheBudgetBytes = 256L * 1024 * 1024;
@@ -37,6 +39,7 @@ public partial class GameScreen : Control
     private readonly Stopwatch sessionClock = Stopwatch.StartNew();
     private ServerConnection connection = null!;
     private ExploredMapKeeper? exploredMap;
+    private FontSets? fontSets;
     private HudView hudView = null!;
     private ConnectionState lastConnectionState;
     private LoginHandoff login = null!;
@@ -197,7 +200,22 @@ public partial class GameScreen : Control
             worldView.PlainInfravision = settings.AccessibilityOn.Contains(AccessibilityOption.PlainInfravision);
         }
 
+        ShowFonts(settings);
         ShowSwaps(settings);
+    }
+
+    private void ShowFonts(ClientSettings settings)
+    {
+        if (fontSets?.For(settings.FontId) is not { } fonts || fonts == hudView.Fonts)
+        {
+            return;
+        }
+
+        hudView.Fonts = fonts;
+        if (worldView != null)
+        {
+            worldView.Fonts = fonts;
+        }
     }
 
     private void ShowSwaps(ClientSettings settings)
@@ -237,9 +255,10 @@ public partial class GameScreen : Control
             return;
         }
 
-        var fonts = new ClassicFonts();
         var characterSettings = login.Record.Settings();
         var clientSettings = ClientSettings.Load();
+        fontSets = new FontSets(FontSets.ReadCatalogue(DataPaths.Root()), DataPaths.Root());
+        var fonts = fontSets.For(clientSettings.FontId);
         worldView = new WorldView
         {
             State = gameState,
@@ -266,6 +285,11 @@ public partial class GameScreen : Control
         hudView.Settings = characterSettings;
         hudView.ClientSettings = clientSettings;
         hudView.PlannerChoices = new PlannerChoicesKeeper(() => login.Record.Key.UserNumber);
+        hudView.FontChoices =
+        [
+            new FontOption(FontChoice.ClassicId, ClassicFontName),
+            .. fontSets.Available.Select(entry => new FontOption(entry.Id, entry.Name)),
+        ];
         hudView.ClientSettingsChanged += () => ApplyClientSettings(clientSettings);
         hudView.SettingsChanged += () => ApplyCharacterSettings(characterSettings);
         hudView.PlayClick = soundEffects.PlayClick;

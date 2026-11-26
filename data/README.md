@@ -9,5 +9,6 @@ It is stored in Git LFS, so run `git lfs pull` after cloning. The client reads i
 | `overrides/` | Loose sprites drawn instead of the sprite with the same number. A player's own sprites go in `user://overrides` and win over these. |
 | `ui/` | UI images |
 | `sounds/` | `.wav` sound effects |
+| `fonts/` | Fonts players can choose in the options, with their licences and the list in `fonts.json` |
 
 File names are lower case so they resolve the same way on Windows and Linux.

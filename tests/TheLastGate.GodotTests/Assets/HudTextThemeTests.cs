@@ -12,6 +12,7 @@ public class HudTextThemeTests
     private const string ThemePath = "res://themes/HudTextTheme.tres";
     private const string WhiteFontPath = "res://fonts/classic/white.tres";
     private const int FontSize = 9;
+    private const int CaptionSize = 8;
 
     private static readonly Vector2I CacheSize = new(FontSize, 0);
 
@@ -24,6 +25,37 @@ public class HudTextThemeTests
         {
             AssertThat(Theme.GetTypeVariationBase("Hud" + colour).ToString()).IsEqual("Label");
         }
+    }
+
+    [TestCase]
+    public void EveryColour_HasACaptionVariationInSilkscreen()
+    {
+        foreach (var colour in Enum.GetValues<TextColour>())
+        {
+            var variation = HudTextTheme.CaptionVariation(colour);
+            AssertThat(Theme.GetTypeVariationBase(variation).ToString()).IsEqual("Label");
+            AssertThat(Theme.GetFont("font", variation).ResourcePath).IsEqual("res://fonts/caption.tres");
+            AssertThat(Theme.GetFontSize("font_size", variation)).IsEqual(CaptionSize);
+        }
+    }
+
+    [TestCase]
+    public void TheCaptionFont_IsSilkscreenWithItsLinesTightened()
+    {
+        var caption = GD.Load<FontVariation>("res://fonts/caption.tres");
+        var silkscreen = (FontFile)caption.BaseFont;
+
+        AssertThat(silkscreen.ResourcePath).IsEqual("res://fonts/silkscreen.ttf");
+        AssertThat(silkscreen.Antialiasing).IsEqual(TextServer.FontAntialiasing.None);
+        AssertThat(caption.SpacingTop).IsEqual(-3);
+        AssertThat(caption.SpacingBottom).IsEqual(-3);
+    }
+
+    [TestCase]
+    public void CaptionColours_MatchTheClassicLetters()
+    {
+        AssertThat(Theme.GetColor("font_color", "HudCaptionYellow")).IsEqual(Color.Color8(243, 219, 106));
+        AssertThat(Theme.GetColor("font_color", "HudCaptionEngraved")).IsEqual(Color.Color8(76, 76, 67));
     }
 
     [TestCase]

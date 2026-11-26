@@ -59,17 +59,32 @@ public partial class ChatLog : Control
 
     public void Show(TextLog shownLog, IFontSet fontSet)
     {
-        fonts = fontSet;
         log = shownLog;
+        ShowAllLines(fontSet);
+        log.LineAdded += Add;
+    }
+
+    public void ShowFonts(IFontSet fontSet)
+    {
+        if (log != null && fontSet != fonts)
+        {
+            ShowAllLines(fontSet);
+        }
+    }
+
+    private void ShowAllLines(IFontSet fontSet)
+    {
+        fonts = fontSet;
         var defaultFont = fonts.For(TextColour.Yellow);
         text.AddThemeFontOverride("normal_font", defaultFont.Font);
         text.AddThemeFontSizeOverride("normal_font_size", defaultFont.Size);
-        foreach (var line in log.Lines)
+        text.Clear();
+        hasLines = false;
+        foreach (var line in log!.Lines)
         {
             Append(line);
         }
 
-        log.LineAdded += Add;
         scroll.LinesChanged(0, OldestLinesBack());
         ScrollToShown();
     }

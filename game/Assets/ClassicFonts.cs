@@ -12,12 +12,15 @@ public sealed class ClassicFonts : IFontSet
 
     public bool CentresLikeTheCurrentClient => true;
 
-    public GameFont For(TextColour colour)
-    {
-        var variation = HudTextTheme.Variation(colour);
-        return new GameFont(
+    public GameFont For(TextColour colour) => Read(HudTextTheme.Variation(colour));
+
+    public GameFont Caption(TextColour colour) => SavedCaption(colour);
+
+    public static GameFont SavedCaption(TextColour colour) => Read(HudTextTheme.CaptionVariation(colour));
+
+    private static GameFont Read(string variation) =>
+        new(
             Saved.GetFont("font", variation),
             Saved.GetFontSize("font_size", variation),
             Saved.GetColor("font_color", variation));
-    }
 }

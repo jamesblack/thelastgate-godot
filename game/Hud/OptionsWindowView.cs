@@ -96,6 +96,8 @@ public partial class OptionsWindowView : Panel, IHudContextUser
 
     public event Action<WindowBackground, int>? BackgroundOpacityChanged;
 
+    public event Action<string>? FontChosen;
+
     public override void _Notification(int what) => themePreview?.Notify(what);
 
     public override void _Ready()
@@ -238,6 +240,36 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         ShowKeybinds(KeybindsTab.Sections(characterSettings), bindings, settings.EnterToTalk, window);
         ShowTypingWarning(BindingRules.TypingHotkeysWarning(bindings, settings.EnterToTalk));
         ShowFooter(window);
+    }
+
+    public void ShowFontChoices(IReadOnlyList<FontOption> choices, string chosenId)
+    {
+        var rows = GetNode("%FontOptions");
+        if (rows.GetChildCount() == 0)
+        {
+            var rowScene = GD.Load<PackedScene>(OptionRowScenePath);
+            var group = new ButtonGroup();
+            foreach (var choice in choices)
+            {
+                var row = CheckRow(rowScene, choice.Id, choice.Name);
+                var box = row.GetNode<CheckBox>("Line/Box");
+                box.ButtonGroup = group;
+                box.Toggled += isOn =>
+                {
+                    if (isOn)
+                    {
+                        FontChosen?.Invoke(choice.Id);
+                    }
+                };
+                rows.AddChild(row);
+            }
+        }
+
+        var shownId = choices.Any(choice => choice.Id == chosenId) ? chosenId : FontChoice.ClassicId;
+        foreach (var row in rows.GetChildren())
+        {
+            row.GetNode<CheckBox>("Line/Box").SetPressedNoSignal(row.Name == shownId);
+        }
     }
 
     // A ScrollContainer makes its own bars, so they can't be given a theme variation in the scene.
