@@ -15,7 +15,7 @@ script = ExtResource("1_view")
 [node name="Window" type="HBoxContainer" parent="." unique_id=423946139]
 layout_mode = 0
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=947876999]
 layout_mode = 2
@@ -341,6 +341,10 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "   Buy for:       12G 50S"
 script = ExtResource("3_label")
+
+[node name="CloseGap" type="Control" parent="Window" unique_id=1094145033]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 
 [node name="CloseButton" parent="Window" unique_id=1073206040 instance=ExtResource("5_close")]
 unique_name_in_owner = true

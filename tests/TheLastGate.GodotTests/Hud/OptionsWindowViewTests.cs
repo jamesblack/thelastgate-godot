@@ -58,6 +58,14 @@ public class OptionsWindowViewTests
     }
 
     [TestCase]
+    public void TheGapBesideTheCloseButton_KeepsClicksOffTheWorld()
+    {
+        var frame = view.GetNode<Control>("Window/Frame").GetGlobalRect();
+
+        AssertThat(ClickThrough.ReachesTheWorldAt(new Vector2(frame.End.X + 0.5f, frame.Position.Y + 5))).IsFalse();
+    }
+
+    [TestCase]
     public void Window_KeepsClicksOffTheWorld()
     {
         var frame = view.GetNode<Control>("Window/Frame").GetGlobalRect();

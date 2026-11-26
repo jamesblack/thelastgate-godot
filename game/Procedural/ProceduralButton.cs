@@ -14,6 +14,7 @@ public partial class ProceduralButton : ProceduralPanel
     private string caption = "";
     private bool disabled;
     private bool on;
+    private Color shade = Colors.White;
     private bool warning;
 
     [Export]
@@ -94,8 +95,9 @@ public partial class ProceduralButton : ProceduralPanel
             return;
         }
 
-        click.ShadeChanged += shade =>
+        click.ShadeChanged += newShade =>
         {
+            shade = newShade;
             if (!disabled)
             {
                 Modulate = shade;
@@ -113,7 +115,7 @@ public partial class ProceduralButton : ProceduralPanel
     private void ShowOn()
     {
         Fill = on ? ProceduralFill.Selected : ProceduralFill.Red;
-        Modulate = disabled ? Colors.White with { A = DisabledAlpha } : Colors.White;
+        Modulate = disabled ? Colors.White with { A = DisabledAlpha } : shade;
         if (GetNodeOrNull<HudLabel>("Label") is { } label)
         {
             label.Colour = disabled ? TextColour.Dim

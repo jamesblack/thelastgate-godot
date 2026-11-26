@@ -172,7 +172,7 @@ public partial class ProceduralPanel : Container, IHudContextUser
         var largest = Vector2.Zero;
         foreach (var child in GetChildren())
         {
-            if (child is Control { Visible: true, TopLevel: false } control)
+            if (child is Control { Visible: true, TopLevel: false } control && !control.IsInGroup(WindowOverlays.Group))
             {
                 largest = largest.Max(control.GetCombinedMinimumSize());
             }
@@ -191,7 +191,7 @@ public partial class ProceduralPanel : Container, IHudContextUser
         var inside = new Rect2(InsetBefore, Size - InsetBefore - InsetAfter);
         foreach (var child in GetChildren())
         {
-            if (child is Control { TopLevel: false } control)
+            if (child is Control { TopLevel: false } control && !control.IsInGroup(WindowOverlays.Group))
             {
                 FitChildInRect(control, inside);
             }

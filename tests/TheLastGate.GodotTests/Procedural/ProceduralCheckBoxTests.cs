@@ -55,6 +55,16 @@ public class ProceduralCheckBoxTests
     }
 
     [TestCase]
+    public void AClickWhileHovered_KeepsTheHover()
+    {
+        box.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
+
+        box.Toggle();
+
+        AssertThat(box.Modulate).IsEqual(ClickArea.Hovered);
+    }
+
+    [TestCase]
     public void Click_TogglesAndRaisesToggled()
     {
         ClickIt();

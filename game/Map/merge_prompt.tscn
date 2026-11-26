@@ -8,9 +8,6 @@
 
 [node name="MergePrompt" type="ColorRect" unique_id=1104578960]
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0

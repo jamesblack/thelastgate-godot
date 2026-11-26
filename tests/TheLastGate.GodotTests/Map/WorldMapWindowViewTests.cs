@@ -61,13 +61,48 @@ public class WorldMapWindowViewTests
     }
 
     [TestCase]
+    public void MenusAndPrompts_FloatInTheWindowsLastChild()
+    {
+        var overlays = view.GetNode<Control>("Overlays");
+
+        AssertThat(overlays.GetIndex()).IsEqual(view.GetChildCount() - 1);
+        foreach (var name in (string[])["%HelpBlocker", "%NewBlocker", "%MergePrompt", "%Menu", "%NoteMenu"])
+        {
+            var overlay = view.GetNode<Control>(name);
+            AssertThat(overlay.GetParent()).IsEqual(overlays);
+            AssertThat(overlay.TopLevel).IsFalse();
+            AssertThat(overlay.ZAsRelative).IsTrue();
+        }
+    }
+
+    [TestCase]
+    public void AWindowAddedLater_DrawsAboveTheMapsMenus()
+    {
+        var later = new Control();
+        view.GetParent().AddChild(later);
+
+        AssertThat(later.GetIndex()).IsGreater(view.GetIndex());
+        AssertThat(view.GetNode<CanvasItem>("%NoteMenu").ZIndex).IsEqual(0);
+        later.Free();
+    }
+
+    [TestCase]
+    public void APromptBackdrop_CoversTheScreen()
+    {
+        var help = view.GetNode<Control>("%HelpBlocker");
+        help.Visible = true;
+
+        AssertThat(help.GetGlobalRect()).IsEqual(view.GetViewportRect());
+    }
+
+    [TestCase]
     public void Escape_WithTheHelpUp_ClosesOnlyTheHelp()
     {
         OpenTheHelp();
 
         Keyboard.Press(Key.Escape);
 
-        AssertThat(view.GetNode<Control>("HelpBlocker").Visible).IsFalse();
+        AssertThat(view.GetNode<Control>("%HelpBlocker").Visible).IsFalse();
         AssertThat(window.IsOpen).IsTrue();
     }
 
@@ -81,14 +116,14 @@ public class WorldMapWindowViewTests
         window.OpenAtPlayer();
         view.ShowWindow(window, null, notes, (0, 0));
 
-        AssertThat(view.GetNode<Control>("HelpBlocker").Visible).IsFalse();
+        AssertThat(view.GetNode<Control>("%HelpBlocker").Visible).IsFalse();
     }
 
     [TestCase]
     public void TheHelp_IsTheSameHeightOnEveryPage()
     {
         OpenTheHelp();
-        var frame = view.GetNode<Control>("HelpBlocker/Window/Frame");
+        var frame = view.GetNode<Control>("%HelpBlocker/Window/Frame");
         var firstHeight = frame.GetCombinedMinimumSize().Y;
 
         for (var page = 1; page < WorldMapHelp.Pages.Count; page++)
@@ -116,6 +151,6 @@ public class WorldMapWindowViewTests
     private void OpenTheHelp()
     {
         view.GetNode<ClickArea>("%Help").EmitSignal(ClickArea.SignalName.Released, Variant.From(MapButton.Left));
-        AssertThat(view.GetNode<Control>("HelpBlocker").Visible).IsTrue();
+        AssertThat(view.GetNode<Control>("%HelpBlocker").Visible).IsTrue();
     }
 }

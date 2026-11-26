@@ -10,6 +10,7 @@ namespace TheLastGate.Procedural;
 public partial class KeyButton : ProceduralPanel
 {
     private string caption = "";
+    private Color shade = Colors.White;
     private bool waiting;
 
     [Export]
@@ -68,7 +69,11 @@ public partial class KeyButton : ProceduralPanel
             return;
         }
 
-        click.ShadeChanged += shade => Modulate = waiting ? ClickArea.Hovered : shade;
+        click.ShadeChanged += newShade =>
+        {
+            shade = newShade;
+            Modulate = waiting ? ClickArea.Hovered : shade;
+        };
         click.Released += button =>
         {
             if (button == MapButton.Left)
@@ -81,7 +86,7 @@ public partial class KeyButton : ProceduralPanel
     private void ShowWaiting()
     {
         Fill = waiting ? ProceduralFill.Selected : ProceduralFill.Blue;
-        Modulate = waiting ? ClickArea.Hovered : Colors.White;
+        Modulate = waiting ? ClickArea.Hovered : shade;
         if (GetNodeOrNull<HudLabel>("Label") is { } label)
         {
             label.Colour = waiting ? TextColour.White : TextColour.Yellow;

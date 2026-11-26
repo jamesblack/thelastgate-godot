@@ -32,7 +32,7 @@ public partial class WorldMapWindowView : Control
 
     private WorldMapCanvas Canvas => GetNode<WorldMapCanvas>("%Canvas");
 
-    private Control Help => GetNode<Control>("HelpBlocker");
+    private Control Help => GetNode<Control>("%HelpBlocker");
 
     private ProceduralCheckBox ShowOnMinimapBox => GetNode<ProceduralCheckBox>("%ShowOnMinimap");
 
@@ -42,11 +42,11 @@ public partial class WorldMapWindowView : Control
 
     private WorldMapEditor? Editor => window?.Editor;
 
-    private Control LabelPrompt => GetNode<Control>("LabelBlocker");
+    private Control LabelPrompt => GetNode<Control>("%LabelBlocker");
 
     private LineEdit LabelName => GetNode<LineEdit>("%LabelName");
 
-    private Control DeletePrompt => GetNode<Control>("DeleteBlocker");
+    private Control DeletePrompt => GetNode<Control>("%DeleteBlocker");
 
     private LineEdit EditName => GetNode<LineEdit>("%EditName");
 
@@ -54,9 +54,9 @@ public partial class WorldMapWindowView : Control
 
     private ProceduralButton EditCancel => GetNode<ProceduralButton>("%EditCancel");
 
-    private ProceduralMenu NoteMenu => GetNode<ProceduralMenu>("NoteMenu");
+    private ProceduralMenu NoteMenu => GetNode<ProceduralMenu>("%NoteMenu");
 
-    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("NoteColourMenu");
+    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("%NoteColourMenu");
 
     private static double Now => Time.GetTicksMsec() / 1000.0;
 
@@ -70,6 +70,7 @@ public partial class WorldMapWindowView : Control
             return;
         }
 
+        WindowOverlays.Lift(this);
         GetNode<ClickArea>("%Close").Released += _ =>
         {
             window?.Close();

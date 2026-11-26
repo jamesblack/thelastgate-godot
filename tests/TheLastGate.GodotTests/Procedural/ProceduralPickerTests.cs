@@ -18,7 +18,7 @@ public class ProceduralPickerTests
 
     private static SceneTree Tree => (SceneTree)Engine.GetMainLoop();
 
-    private ProceduralMenu Menu => picker.GetNode<ProceduralMenu>("Menu");
+    private ProceduralMenu Menu => picker.Menu;
 
     [BeforeTest]
     public async Task ShowAPicker()

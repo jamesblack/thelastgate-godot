@@ -81,6 +81,17 @@ public class KeyButtonTests
         AssertThat(button.Modulate).IsEqual(ClickArea.Hovered);
     }
 
+    [TestCase]
+    public void AStateChangeWhileHovered_KeepsTheHover()
+    {
+        button.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
+
+        button.Waiting = true;
+        button.Waiting = false;
+
+        AssertThat(button.Modulate).IsEqual(ClickArea.Hovered);
+    }
+
     private void Release(MapButton which) =>
         button.GetNode<ClickArea>("Click").EmitSignal(ClickArea.SignalName.Released, Variant.From(which));
 }

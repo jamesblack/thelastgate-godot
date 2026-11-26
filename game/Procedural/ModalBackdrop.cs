@@ -2,10 +2,30 @@ using Godot;
 
 namespace TheLastGate.Procedural;
 
-// Godot stops passing a click up at a top_level control before it checks for Stop, so a top_level backdrop has to
-// accept its clicks itself or the world under it takes them as well.
+// A window lifts its backdrops into its overlays, where each covers the whole screen. It accepts its clicks itself
+// so the world under it never takes them.
 public partial class ModalBackdrop : ColorRect
 {
+    public ModalBackdrop() => AddToGroup(WindowOverlays.Group);
+
+    public override void _EnterTree() => GetViewport().SizeChanged += CoverTheScreen;
+
+    public override void _ExitTree() => GetViewport().SizeChanged -= CoverTheScreen;
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationVisibilityChanged && Visible)
+        {
+            CoverTheScreen();
+        }
+    }
+
+    private void CoverTheScreen()
+    {
+        GlobalPosition = Vector2.Zero;
+        Size = GetViewportRect().Size;
+    }
+
     public override void _GuiInput(InputEvent inputEvent)
     {
         if (inputEvent is InputEventMouseButton)

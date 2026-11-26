@@ -36,7 +36,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=670199465]
 layout_mode = 2
@@ -144,10 +144,8 @@ layout_mode = 2
 Caption = "Export"
 
 [node name="NewBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1138708136]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -249,10 +247,8 @@ layout_mode = 2
 Caption = "Cancel"
 
 [node name="ImportBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1776111756]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -412,10 +408,8 @@ layout_mode = 2
 Caption = "Cancel"
 
 [node name="ExportBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1808701016]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -508,10 +502,8 @@ layout_mode = 2
 Caption = "OK"
 
 [node name="DeleteCategoryBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=951488412]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -599,10 +591,8 @@ layout_mode = 2
 Caption = "Cancel"
 
 [node name="DuplicatesBlocker" type="ColorRect" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=1339295597]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -700,8 +690,10 @@ Caption = "Cancel"
 unique_name_in_owner = true
 
 [node name="Menu" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=986639627 instance=ExtResource("11_menu")]
+unique_name_in_owner = true
 
 [node name="ColourMenu" parent="Window/Frame/Layout/Body/Cells/Categories" unique_id=869854531 instance=ExtResource("11_menu")]
+unique_name_in_owner = true
 
 [node name="MapFrame" type="Container" parent="Window/Frame/Layout/Body/Cells" unique_id=718439420]
 layout_mode = 2
@@ -812,16 +804,18 @@ layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 0
 
+[node name="CloseGap" type="Control" parent="Window" unique_id=2113029300]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+
 [node name="Close" parent="Window" unique_id=574978480 instance=ExtResource("5_close")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 
 [node name="HelpBlocker" type="ColorRect" parent="." unique_id=936011782]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -926,10 +920,8 @@ layout_mode = 2
 Caption = "Close"
 
 [node name="LabelBlocker" type="ColorRect" parent="." unique_id=1649783264]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -1013,10 +1005,8 @@ layout_mode = 2
 Caption = "Cancel"
 
 [node name="DeleteBlocker" type="ColorRect" parent="." unique_id=757938670]
+unique_name_in_owner = true
 visible = false
-top_level = true
-z_index = 2
-z_as_relative = false
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -1104,5 +1094,7 @@ layout_mode = 2
 Caption = "Cancel"
 
 [node name="NoteMenu" parent="." unique_id=1636832307 instance=ExtResource("11_menu")]
+unique_name_in_owner = true
 
 [node name="NoteColourMenu" parent="." unique_id=1217523860 instance=ExtResource("11_menu")]
+unique_name_in_owner = true

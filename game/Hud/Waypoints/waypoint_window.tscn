@@ -16,7 +16,7 @@ script = ExtResource("1_view")
 [node name="Window" type="HBoxContainer" parent="." unique_id=1658333016]
 layout_mode = 0
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=1525589016]
 unique_name_in_owner = true
@@ -102,6 +102,10 @@ focus_neighbor_top = NodePath(".")
 focus_previous = NodePath(".")
 placeholder_text = "Type to find a waypoint"
 max_length = 31
+
+[node name="CloseGap" type="Control" parent="Window" unique_id=1377735399]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 
 [node name="CloseButton" parent="Window" unique_id=1493988146 instance=ExtResource("4_close")]
 unique_name_in_owner = true

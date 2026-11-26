@@ -58,6 +58,33 @@ public class PlannerWindowViewTests
     }
 
     [TestCase]
+    public void TheGapBesideTheCloseButton_KeepsClicksOffTheWorld()
+    {
+        var frame = view.GetNode<Control>("Window/Frame").GetGlobalRect();
+
+        AssertThat(ClickThrough.ReachesTheWorldAt(new Vector2(frame.End.X + 0.5f, frame.Position.Y + 5))).IsFalse();
+    }
+
+    [TestCase]
+    public void ThePickersMenus_FloatInTheWindowsLastChild()
+    {
+        var overlays = view.GetNode<Control>("Overlays");
+
+        AssertThat(overlays.GetIndex()).IsEqual(view.GetChildCount() - 1);
+        AssertThat(view.GetNode<ProceduralPicker>("%Weapon").Menu.GetParent()).IsEqual(overlays);
+    }
+
+    [TestCase]
+    public void TheSkillRows_LeaveRoomBeforeTheScrollBar()
+    {
+        var scroll = view.GetNode<ScrollContainer>("%SkillScroll");
+        var bar = scroll.GetVScrollBar();
+        var barWidth = bar.Visible ? bar.Size.X : 0;
+
+        AssertThat(view.GetNode<Control>("%SkillRows").Size.X).IsLessEqual(scroll.Size.X - barWidth - 4);
+    }
+
+    [TestCase]
     public void Window_KeepsClicksOffTheWorld()
     {
         var frame = Frame.GetGlobalRect();
@@ -82,7 +109,7 @@ public class PlannerWindowViewTests
         var weapon = view.GetNode<ProceduralPicker>("%Weapon");
         weapon.GetNode<ClickArea>("Click").EmitSignal(ClickArea.SignalName.Released, Variant.From(MapButton.Left));
 
-        weapon.GetNode<ClickArea>($"Menu/Frame/Items/Item{(int)CombatWeapon.Sword}/Click")
+        weapon.Menu.GetNode<ClickArea>($"Frame/Items/Item{(int)CombatWeapon.Sword}/Click")
             .EmitSignal(ClickArea.SignalName.Released, Variant.From(MapButton.Left));
 
         AssertThat(weapons).ContainsExactly(CombatWeapon.Sword);

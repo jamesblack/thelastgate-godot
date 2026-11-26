@@ -26,22 +26,22 @@ public partial class WorldMapCategories : Control
 
     private CategoryListView List => GetNode<CategoryListView>("%List");
 
-    private ProceduralMenu Menu => GetNode<ProceduralMenu>("Menu");
+    private ProceduralMenu Menu => GetNode<ProceduralMenu>("%Menu");
 
-    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("ColourMenu");
+    private ProceduralMenu ColourMenu => GetNode<ProceduralMenu>("%ColourMenu");
 
 
-    private Control NewPrompt => GetNode<Control>("NewBlocker");
+    private Control NewPrompt => GetNode<Control>("%NewBlocker");
 
-    private Control ImportPrompt => GetNode<Control>("ImportBlocker");
+    private Control ImportPrompt => GetNode<Control>("%ImportBlocker");
 
-    private Control ExportPrompt => GetNode<Control>("ExportBlocker");
+    private Control ExportPrompt => GetNode<Control>("%ExportBlocker");
 
-    private Control DeletePrompt => GetNode<Control>("DeleteCategoryBlocker");
+    private Control DeletePrompt => GetNode<Control>("%DeleteCategoryBlocker");
 
     private MergePrompt MergePrompt => GetNode<MergePrompt>("%MergePrompt");
 
-    private Control DuplicatesPrompt => GetNode<Control>("DuplicatesBlocker");
+    private Control DuplicatesPrompt => GetNode<Control>("%DuplicatesBlocker");
 
     private Control[] Prompts => [NewPrompt, ImportPrompt, ExportPrompt, DeletePrompt, DuplicatesPrompt, MergePrompt];
 

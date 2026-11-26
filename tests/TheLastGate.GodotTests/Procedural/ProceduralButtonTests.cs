@@ -32,6 +32,18 @@ public class ProceduralButtonTests
     }
 
     [TestCase]
+    public void AStateChangeWhileHovered_KeepsTheHover()
+    {
+        var button = Show<ProceduralButton>("res://Procedural/text_button.tscn");
+        button.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
+
+        button.Warning = true;
+
+        AssertThat(button.Modulate).IsEqual(ClickArea.Hovered);
+        button.Free();
+    }
+
+    [TestCase]
     public void TheTextButton_PadsItsLabelByTwoPixels()
     {
         var button = Show<ProceduralButton>("res://Procedural/text_button.tscn");

@@ -17,7 +17,7 @@ script = ExtResource("1_view")
 [node name="Window" type="HBoxContainer" parent="." unique_id=781527401]
 layout_mode = 0
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=531556292]
 custom_minimum_size = Vector2(560, 600)
@@ -60,111 +60,121 @@ unique_name_in_owner = true
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Sections" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll" unique_id=1209875332]
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Scroll" unique_id=1424032128]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_right = 4
+
+[node name="Sections" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room" unique_id=1209875332]
 layout_mode = 2
 mouse_filter = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 1
 
-[node name="SpellsHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1471800501 instance=ExtResource("5_heading")]
+[node name="SpellsHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1471800501 instance=ExtResource("5_heading")]
 layout_mode = 2
 Text = "Spells"
 
-[node name="Spells" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=883257748]
+[node name="Spells" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=883257748]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="CardsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1996152210]
+[node name="CardsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1996152210]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CardsHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=590072628 instance=ExtResource("5_heading")]
+[node name="CardsHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=590072628 instance=ExtResource("5_heading")]
 layout_mode = 2
 Text = "Tarot cards"
 
-[node name="Cards" type="HBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=485008125]
+[node name="Cards" type="HBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=485008125]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="CardsLeft" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections/Cards" unique_id=1991021571]
+[node name="CardsLeft" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections/Cards" unique_id=1991021571]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 1
 
-[node name="CardsRight" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections/Cards" unique_id=777656541]
+[node name="CardsRight" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections/Cards" unique_id=777656541]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 1
 
-[node name="TreeGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1096176577]
+[node name="TreeGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1096176577]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TreeHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=117649298 instance=ExtResource("5_heading")]
+[node name="TreeHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=117649298 instance=ExtResource("5_heading")]
 unique_name_in_owner = true
 layout_mode = 2
 Text = "Skill tree"
 
-[node name="TreeRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=646995878]
+[node name="TreeRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=646995878]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="CorruptorsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1859791543]
+[node name="CorruptorsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1859791543]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CorruptorsHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=2080214413 instance=ExtResource("5_heading")]
+[node name="CorruptorsHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=2080214413 instance=ExtResource("5_heading")]
 layout_mode = 2
 Text = "Corruptors"
 
-[node name="Corruptors" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=247789019]
+[node name="Corruptors" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=247789019]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="EnchantsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=2054775252]
+[node name="EnchantsGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=2054775252]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="EnchantsHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1989987089 instance=ExtResource("5_heading")]
+[node name="EnchantsHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1989987089 instance=ExtResource("5_heading")]
 layout_mode = 2
 Text = "Enchantments"
 
-[node name="Enchants" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1211911209]
+[node name="Enchants" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1211911209]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="GearGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1234439706]
+[node name="GearGap" type="Control" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1234439706]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="GearHeading" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=1849126615 instance=ExtResource("5_heading")]
+[node name="GearHeading" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=1849126615 instance=ExtResource("5_heading")]
 layout_mode = 2
 Text = "Gear"
 
-[node name="Gear" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Sections" unique_id=2054828650]
+[node name="Gear" type="VBoxContainer" parent="Window/Frame/Layout/Body/Scroll/Room/Sections" unique_id=2054828650]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
+
+[node name="CloseGap" type="Control" parent="Window" unique_id=238840513]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 
 [node name="Close" parent="Window" unique_id=1925209281 instance=ExtResource("4_close")]
 unique_name_in_owner = true

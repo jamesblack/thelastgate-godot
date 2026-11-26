@@ -147,14 +147,25 @@ public class ProceduralMenuTests
     }
 
     [TestCase]
-    public void Menu_DrawsAboveTheWindowPrompts()
+    public void Lifting_PutsMenusAbovePrompts()
     {
+        var window = new Control();
+        var deep = new Control();
+        window.AddChild(deep);
+        var later = Load();
+        deep.AddChild(later);
         var prompt = GD.Load<PackedScene>("res://Map/merge_prompt.tscn").Instantiate<Control>();
+        window.AddChild(prompt);
+        Tree.Root.AddChild(window);
 
-        AssertThat(menu.ZAsRelative).IsFalse();
-        AssertThat(menu.ZIndex).IsGreater(prompt.ZIndex);
-        AssertThat(prompt.ZAsRelative).IsFalse();
-        prompt.Free();
+        WindowOverlays.Lift(window);
+
+        var overlays = window.GetNode("Overlays");
+        AssertThat(prompt.GetParent()).IsEqual(overlays);
+        AssertThat(later.GetParent()).IsEqual(overlays);
+        AssertThat(later.GetIndex()).IsGreater(prompt.GetIndex());
+        AssertThat(later.TopLevel || prompt.TopLevel).IsFalse();
+        window.Free();
     }
 
     private static ProceduralMenu Load() =>

@@ -16,7 +16,7 @@ script = ExtResource("1_view")
 [node name="Window" type="HBoxContainer" parent="." unique_id=472159959]
 layout_mode = 0
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=1550235050]
 unique_name_in_owner = true
@@ -203,6 +203,10 @@ layout_mode = 2
 [node name="Button6" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=404129571 instance=ExtResource("5_button")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 2
+
+[node name="CloseGap" type="Control" parent="Window" unique_id=215086191]
+custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
 
 [node name="CloseButton" parent="Window" unique_id=1470795098 instance=ExtResource("6_close")]

@@ -85,6 +85,8 @@ public partial class PlannerWindowView : Control
             return;
         }
 
+        WindowOverlays.Lift(this);
+
         Visible = false;
         foreach (var stat in Enum.GetValues<CombatStat>())
         {

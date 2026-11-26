@@ -14,6 +14,7 @@ public partial class ProceduralCheckBox : MarginContainer
 
     private bool isChecked;
     private bool round;
+    private Color shade = Colors.White;
     private string text = "";
 
     [Export]
@@ -91,8 +92,9 @@ public partial class ProceduralCheckBox : MarginContainer
             return;
         }
 
-        click.ShadeChanged += shade =>
+        click.ShadeChanged += newShade =>
         {
+            shade = newShade;
             if (!disabled)
             {
                 Modulate = shade;
@@ -133,6 +135,6 @@ public partial class ProceduralCheckBox : MarginContainer
         label.Text = text;
         label.Visible = text.Length > 0;
         label.Colour = disabled ? TextColour.Dim : TextColour.Yellow;
-        Modulate = disabled ? Colors.White with { A = DisabledAlpha } : Colors.White;
+        Modulate = disabled ? Colors.White with { A = DisabledAlpha } : shade;
     }
 }

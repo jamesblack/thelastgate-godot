@@ -21,7 +21,7 @@ script = ExtResource("1_view")
 [node name="Window" type="HBoxContainer" parent="." unique_id=1596748863]
 layout_mode = 0
 mouse_filter = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Frame" type="Container" parent="Window" unique_id=1735038099]
 custom_minimum_size = Vector2(680, 670)
@@ -108,7 +108,7 @@ Padding = 6
 [node name="Columns" type="HBoxContainer" parent="Window/Frame/Layout/Body" unique_id=969078137]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 11
+theme_override_constants/separation = 7
 
 [node name="Left" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns" unique_id=913504819]
 layout_mode = 2
@@ -244,7 +244,13 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MathLines" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left/MathScroll" unique_id=1404029170]
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Columns/Left/MathScroll" unique_id=1483145661]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_right = 4
+
+[node name="MathLines" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left/MathScroll/Room" unique_id=1404029170]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
@@ -406,11 +412,21 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="SkillRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/SkillScroll" unique_id=1696562531]
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Columns/Right/SkillScroll" unique_id=1624434426]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_right = 4
+
+[node name="SkillRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/SkillScroll/Room" unique_id=1696562531]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
+
+[node name="CloseGap" type="Control" parent="Window" unique_id=319133035]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 
 [node name="Close" parent="Window" unique_id=1778551403 instance=ExtResource("5_close")]
 unique_name_in_owner = true

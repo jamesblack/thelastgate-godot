@@ -13,6 +13,7 @@ public partial class ProceduralPicker : ProceduralPanel
     private const float DisabledAlpha = 0.6f;
 
     private bool disabled;
+    private ProceduralMenu? menu;
     private IReadOnlyList<string> names = [];
     private bool shownOpen;
 
@@ -49,7 +50,8 @@ public partial class ProceduralPicker : ProceduralPanel
         set => GetNode<Control>("Click").TooltipText = value;
     }
 
-    private ProceduralMenu Menu => GetNode<ProceduralMenu>("Menu");
+    // The window lifts the menu into its overlays, so the picker keeps hold of it.
+    public ProceduralMenu Menu => menu ??= GetNode<ProceduralMenu>("Menu");
 
     public event Action<int>? ItemChosen;
 

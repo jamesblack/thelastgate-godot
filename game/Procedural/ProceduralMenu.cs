@@ -27,6 +27,7 @@ public partial class ProceduralMenu : Control
     private bool isSubmenu;
     private ProceduralMenu? openSubmenu;
     private PackedScene? rowScene;
+    public ProceduralMenu() => AddToGroup(WindowOverlays.Group);
 
     public bool IsOpen => Visible;
 

@@ -24,9 +24,9 @@ public class WorldMapMenusTests
 
     private WorldMapCategories Categories => view.GetNode<WorldMapCategories>("%Categories");
 
-    private ProceduralMenu CategoryMenu => Categories.GetNode<ProceduralMenu>("Menu");
+    private ProceduralMenu CategoryMenu => view.GetNode<ProceduralMenu>("%Menu");
 
-    private ProceduralMenu NoteMenu => view.GetNode<ProceduralMenu>("NoteMenu");
+    private ProceduralMenu NoteMenu => view.GetNode<ProceduralMenu>("%NoteMenu");
 
     [BeforeTest]
     public async Task ShowTheMap()
@@ -104,7 +104,7 @@ public class WorldMapMenusTests
         var places = notes.AddCategory("Places", 0);
         Categories.OpenCategoryMenu(places, Somewhere);
 
-        var picker = Categories.GetNode<ProceduralMenu>("ColourMenu")
+        var picker = view.GetNode<ProceduralMenu>("%ColourMenu")
             .FindChildren("*", nameof(GridContainer), true, false)
             .Cast<ColourPicker>()
             .Single();
