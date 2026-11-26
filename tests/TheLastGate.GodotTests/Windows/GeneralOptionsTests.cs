@@ -8,36 +8,22 @@ namespace TheLastGate.GodotTests.Windows;
 public class GeneralOptionsTests
 {
     [TestCase]
-    public void Rows_ListTheCurrentClientsOptionsFirstThenTheGodotOnesThenTheExperimentalOnes()
+    public void Rows_AreGroupedChatInformationalNetworkingMiscellaneousThenExperimental()
     {
-        AssertThat(GeneralOptions.Rows.Select(row => row.Option))
+        AssertThat(GeneralOptions.Rows.Select(row => (row.Option, row.Section)))
             .ContainsExactly(
-                GeneralOption.EscapeClosesWindowsFirst,
-                GeneralOption.GiveMore,
-                GeneralOption.UseQueue,
-                GeneralOption.EnterToTalk,
-                GeneralOption.ExpandedQuickStats,
-                GeneralOption.SkillPlanner,
-                GeneralOption.AdaptivePacing,
-                GeneralOption.ItemTooltips,
-                GeneralOption.ItemTooltipsAlways,
-                GeneralOption.GlideMovement,
-                GeneralOption.PickTileDrawnUnderMouse,
-                GeneralOption.StubbornUse);
-        AssertThat(GeneralOptions.Rows.Select(row => row.Section))
-            .ContainsExactly(
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Classic,
-                OptionSection.Godot,
-                OptionSection.Godot,
-                OptionSection.Experimental);
+                (GeneralOption.EnterToTalk, OptionSection.Chat),
+                (GeneralOption.ExpandedQuickStats, OptionSection.Informational),
+                (GeneralOption.SkillPlanner, OptionSection.Informational),
+                (GeneralOption.ItemTooltips, OptionSection.Informational),
+                (GeneralOption.ItemTooltipsAlways, OptionSection.Informational),
+                (GeneralOption.AdaptivePacing, OptionSection.Networking),
+                (GeneralOption.GlideMovement, OptionSection.Networking),
+                (GeneralOption.PickTileDrawnUnderMouse, OptionSection.Networking),
+                (GeneralOption.EscapeClosesWindowsFirst, OptionSection.Miscellaneous),
+                (GeneralOption.GiveMore, OptionSection.Miscellaneous),
+                (GeneralOption.UseQueue, OptionSection.Miscellaneous),
+                (GeneralOption.StubbornUse, OptionSection.Experimental));
     }
 
     [TestCase(GeneralOption.EscapeClosesWindowsFirst, "Escape closes windows before canceling movement.", true)]
@@ -129,7 +115,7 @@ public class GeneralOptionsTests
     }
 
     [TestCase]
-    public void TheSkillPlannerOption_IsTheCurrentClientsAndStartsOff()
+    public void TheSkillPlannerOption_IsInformationalAndStartsOff()
     {
         var rows = GeneralOptions.Rows.Select(row => row.Option).ToList();
         var row = GeneralOptions.Rows.Single(row => row.Option == GeneralOption.SkillPlanner);
@@ -137,7 +123,7 @@ public class GeneralOptionsTests
         AssertThat(row.Label)
             .IsEqual("Enable the skill planner: the Planner button below the skill list and its hotkey.");
         AssertThat(row.Default).IsFalse();
-        AssertThat(row.Section).IsEqual(OptionSection.Classic);
+        AssertThat(row.Section).IsEqual(OptionSection.Informational);
         AssertThat(rows.IndexOf(GeneralOption.SkillPlanner))
             .IsEqual(rows.IndexOf(GeneralOption.ExpandedQuickStats) + 1);
     }

@@ -1,410 +1,386 @@
 [gd_scene format=3 uid="uid://datd803sos88d"]
 
 [ext_resource type="Script" uid="uid://hsct2t2clvpi" path="res://Hud/OptionsWindowView.cs" id="1_view"]
-[ext_resource type="Theme" uid="uid://bxevvm0ssb2pb" path="res://themes/OptionsTheme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="4_button"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="5_close"]
+[ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="6_heading"]
+[ext_resource type="Script" uid="uid://gcmhjswbbvbj" path="res://Procedural/ProceduralTabs.cs" id="7_tabs"]
+[ext_resource type="PackedScene" uid="uid://bh62qsp0bli60" path="res://Hud/option_row.tscn" id="8_option"]
+[ext_resource type="PackedScene" uid="uid://dsl1derr0wbgx" path="res://Hud/slider_row.tscn" id="9_slider"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_tabs"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_root"]
-
-[node name="OptionsWindow" type="Panel" unique_id=882502596]
+[node name="OptionsWindow" type="Control" unique_id=135923456]
 visible = false
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
+layout_mode = 3
+anchors_preset = 0
 offset_right = 516.0
-offset_bottom = 340.0
-theme = ExtResource("2_theme")
-theme_override_styles/panel = SubResource("StyleBoxEmpty_root")
+offset_bottom = 362.0
+mouse_filter = 2
 script = ExtResource("1_view")
 
-[node name="Window" type="HBoxContainer" parent="." unique_id=1000228081]
+[node name="Window" type="HBoxContainer" parent="." unique_id=1779423682]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="Frame" type="PanelContainer" parent="Window" unique_id=621040175]
+[node name="Frame" type="Container" parent="Window" unique_id=1953120056]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"DarkWindowFrame"
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1170060096]
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=263565791]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Body" type="PanelContainer" parent="Window/Frame/Layout" unique_id=699439970]
+[node name="TitleBar" type="Container" parent="Window/Frame/Layout" unique_id=2005398894]
 layout_mode = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 4
+Padding = 3
+
+[node name="Title" type="Label" parent="Window/Frame/Layout/TitleBar" unique_id=120426947]
+layout_mode = 2
+text = "Options"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Body" type="Container" parent="Window/Frame/Layout" unique_id=1717722084]
+layout_mode = 2
+mouse_filter = 2
 size_flags_vertical = 3
-theme_type_variation = &"DarkWindowPanel"
+script = ExtResource("2_panel")
+Fill = 0
+Padding = 4
 
-[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body" unique_id=467349512]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="TabStrip" type="PanelContainer" parent="Window/Frame/Layout/Body/Content" unique_id=301928742]
-layout_mode = 2
-theme_type_variation = &"OptionsTabStrip"
-
-[node name="Tabs" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/TabStrip" unique_id=1072354599]
+[node name="Pages" type="Container" parent="Window/Frame/Layout/Body" unique_id=1127785523]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 18
+mouse_filter = 2
+script = ExtResource("7_tabs")
+Titles = PackedStringArray("General", "Audio", "Keybinds", "Display", "Experimental")
 
-[node name="GeneralTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=1495784883]
+[node name="Page" type="Container" parent="Window/Frame/Layout/Body/Pages" unique_id=518180564]
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"OptionsTab"
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_tabs")
-text = "General"
-
-[node name="AudioTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=710427860]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"OptionsTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tabs")
-text = "Audio"
-
-[node name="KeybindsTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=1647750390]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"OptionsTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tabs")
-text = "Keybinds"
-
-[node name="DisplayTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=1305829461]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"OptionsTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tabs")
-text = "Display"
-
-[node name="ExperimentalTab" type="Button" parent="Window/Frame/Layout/Body/Content/TabStrip/Tabs" unique_id=1592637410]
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"OptionsTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_tabs")
-text = "Experimental"
-
-[node name="Pages" type="TabContainer" parent="Window/Frame/Layout/Body/Content" unique_id=1045340498]
-unique_name_in_owner = true
-layout_mode = 2
+mouse_filter = 2
 size_flags_vertical = 3
-current_tab = 0
-tabs_visible = false
+script = ExtResource("2_panel")
+Fill = 0
+Profile = "GBG"
+Padding = 4
 
-[node name="General" type="ScrollContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=1494194119]
+[node name="General" type="ScrollContainer" parent="Window/Frame/Layout/Body/Pages/Page" unique_id=2065664799]
 layout_mode = 2
 horizontal_scroll_mode = 0
-metadata/_tab_index = 0
 
-[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/General" unique_id=1850155754]
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Pages/Page/General" unique_id=1528285352]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/margin_right = 4
 
-[node name="ClientHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows" unique_id=504759676]
+[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/General/Room" unique_id=735029327]
 layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Classic Client"
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
 
-[node name="ClientOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows" unique_id=557309005]
+[node name="ChatHeading" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=1177434877 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Chat"
+
+[node name="ChatOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=1111835499]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/separation = 5
 
-[node name="GodotHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows" unique_id=608309846]
+[node name="InformationalGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=978826955]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Godot Client"
+mouse_filter = 2
 
-[node name="GodotOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows" unique_id=120612640]
+[node name="InformationalHeading" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=373431355 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Informational"
+
+[node name="InformationalOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=1413747322]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/separation = 5
 
-[node name="CursorRow" type="PanelContainer" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows" unique_id=1738460304]
+[node name="NetworkingGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=405052770]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
-theme_type_variation = &"TableRow"
+mouse_filter = 2
 
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows/CursorRow" unique_id=608107811]
+[node name="NetworkingHeading" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=678250695 instance=ExtResource("6_heading")]
 layout_mode = 2
-theme_override_constants/separation = 10
+Text = "Networking"
 
-[node name="CursorLabel" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows/CursorRow/Line" unique_id=905621382]
+[node name="NetworkingOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=705584197]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="MiscellaneousGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=936682744]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MiscellaneousHeading" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=360031661 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Miscellaneous"
+
+[node name="MiscellaneousOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/General/Room/Rows" unique_id=1827112532]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Audio" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page" unique_id=1249890362]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="SoundHeading" parent="Window/Frame/Layout/Body/Pages/Page/Audio" unique_id=1386869354 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Sound"
+
+[node name="SoundRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Audio" unique_id=407312291]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="SoundRow" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows" unique_id=698001879 instance=ExtResource("8_option")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Text" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows/SoundRow/Line" unique_id=1006832197]
+text = "Audio Enabled?"
+
+[node name="VolumeRow" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows" unique_id=425519745 instance=ExtResource("9_slider")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Text" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows/VolumeRow/Line" unique_id=1372275141]
+text = "Audio Volume"
+
+[node name="Slider" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows/VolumeRow/Line" unique_id=808819239]
+max_value = 10.0
+step = 1.0
+value = 10.0
+rounded = true
+
+[node name="Value" parent="Window/Frame/Layout/Body/Pages/Page/Audio/SoundRows/VolumeRow/Line" unique_id=1758937385]
+text = "10"
+
+[node name="Keybinds" type="ScrollContainer" parent="Window/Frame/Layout/Body/Pages/Page" unique_id=2011385741]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Pages/Page/Keybinds" unique_id=473804034]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
+mouse_filter = 2
+theme_override_constants/margin_right = 4
+
+[node name="Sections" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Keybinds/Room" unique_id=605158671]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Display" type="ScrollContainer" parent="Window/Frame/Layout/Body/Pages/Page" unique_id=1822881029]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display" unique_id=1847437758]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_right = 4
+
+[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room" unique_id=2103653165]
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="GammaHeading" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=840822112 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Gamma"
+
+[node name="GammaRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=1826728254]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="ScreenGammaRow" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows" unique_id=1905205492 instance=ExtResource("9_slider")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Text" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/ScreenGammaRow/Line" unique_id=636702142]
+text = "Screen Gamma"
+
+[node name="Slider" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/ScreenGammaRow/Line" unique_id=1154520547]
+min_value = 1.0
+max_value = 1.2
+step = 0.01
+value = 1.0
+
+[node name="Value" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/ScreenGammaRow/Line" unique_id=208145857]
+text = "1.00"
+
+[node name="WorldGammaRow" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows" unique_id=1226206054 instance=ExtResource("9_slider")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Text" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/WorldGammaRow/Line" unique_id=1090856482]
+text = "World Gamma"
+
+[node name="Slider" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/WorldGammaRow/Line" unique_id=1051321714]
+min_value = 1.0
+max_value = 1.2
+step = 0.01
+value = 1.0
+
+[node name="Value" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/GammaRows/WorldGammaRow/Line" unique_id=1445027282]
+text = "1.00"
+
+[node name="FontGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=426323495]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FontHeading" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=313999711 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Font"
+
+[node name="FontOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=999809798]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="AccessibilityGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=485154616]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AccessibilityHeading" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=970492443 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Accessibility"
+
+[node name="AccessibilityOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=1886543546]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="CursorRow" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/AccessibilityOptions" unique_id=460571344 instance=ExtResource("9_slider")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Text" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/AccessibilityOptions/CursorRow/Line" unique_id=225345119]
 text = "Cursor Size"
 
-[node name="CursorScale" type="HSlider" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows/CursorRow/Line" unique_id=1441114981]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 16)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"OptionsSlider"
+[node name="Slider" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/AccessibilityOptions/CursorRow/Line" unique_id=1979380541]
 min_value = 0.5
 max_value = 4.0
 step = 0.5
 value = 1.0
 
-[node name="Value" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/General/Rows/CursorRow/Line" unique_id=721080746]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_type_variation = &"OptionsValue"
+[node name="Value" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows/AccessibilityOptions/CursorRow/Line" unique_id=782629460]
 text = "1.0x"
-horizontal_alignment = 2
 
-[node name="Audio" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=1733750324]
-visible = false
+[node name="BackgroundGap" type="Control" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=1389744538]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
-theme_override_constants/separation = 0
-metadata/_tab_index = 1
+mouse_filter = 2
 
-[node name="SoundHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Audio" unique_id=965889090]
+[node name="BackgroundHeading" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=511889329 instance=ExtResource("6_heading")]
 layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Sound"
+Text = "Window Backgrounds"
 
-[node name="SoundRow" type="PanelContainer" parent="Window/Frame/Layout/Body/Content/Pages/Audio" unique_id=608138092]
-layout_mode = 2
-theme_type_variation = &"TableRow"
-
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Audio/SoundRow" unique_id=312552753]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="SoundLabel" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Audio/SoundRow/Line" unique_id=684417658]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
-text = "Audio Enabled?"
-
-[node name="SoundEnabled" type="CheckBox" parent="Window/Frame/Layout/Body/Content/Pages/Audio/SoundRow/Line" unique_id=608601566]
+[node name="BackgroundOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Display/Room/Rows" unique_id=997393781]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-button_pressed = true
+mouse_filter = 2
+theme_override_constants/separation = 5
 
-[node name="VolumeRow" type="PanelContainer" parent="Window/Frame/Layout/Body/Content/Pages/Audio" unique_id=1985627937]
-layout_mode = 2
-theme_type_variation = &"TableRow"
-
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Audio/VolumeRow" unique_id=516303347]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="VolumeLabel" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Audio/VolumeRow/Line" unique_id=1145731362]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
-text = "Audio Volume"
-
-[node name="Volume" type="HSlider" parent="Window/Frame/Layout/Body/Content/Pages/Audio/VolumeRow/Line" unique_id=853474521]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 16)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"OptionsSlider"
-max_value = 10.0
-value = 10.0
-rounded = true
-
-[node name="Value" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Audio/VolumeRow/Line" unique_id=932787854]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_type_variation = &"OptionsValue"
-text = "10"
-horizontal_alignment = 2
-
-[node name="Keybinds" type="ScrollContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=1770377513]
-visible = false
+[node name="Experimental" type="ScrollContainer" parent="Window/Frame/Layout/Body/Pages/Page" unique_id=1651465572]
 layout_mode = 2
 horizontal_scroll_mode = 0
-metadata/_tab_index = 2
 
-[node name="Sections" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Keybinds" unique_id=1610883451]
-unique_name_in_owner = true
+[node name="Room" type="MarginContainer" parent="Window/Frame/Layout/Body/Pages/Page/Experimental" unique_id=287399858]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/margin_right = 4
 
-[node name="Display" type="ScrollContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=871460352]
-visible = false
+[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Experimental/Room" unique_id=1402478929]
 layout_mode = 2
-horizontal_scroll_mode = 0
-metadata/_tab_index = 3
-
-[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display" unique_id=1736804251]
-layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+theme_override_constants/separation = 1
 
-[node name="GammaHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=132924779]
+[node name="ExperimentalHeading" parent="Window/Frame/Layout/Body/Pages/Page/Experimental/Room/Rows" unique_id=1536964079 instance=ExtResource("6_heading")]
 layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Gamma"
+Text = "Experimental"
 
-[node name="ScreenGammaRow" type="PanelContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1499302718]
-layout_mode = 2
-theme_type_variation = &"TableRow"
-
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/ScreenGammaRow" unique_id=146363409]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="ScreenGammaLabel" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/ScreenGammaRow/Line" unique_id=209457721]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
-text = "Screen Gamma"
-
-[node name="ScreenGamma" type="HSlider" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/ScreenGammaRow/Line" unique_id=640185927]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 16)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"OptionsSlider"
-min_value = 1.0
-max_value = 1.2
-step = 0.01
-value = 1.0
-
-[node name="Value" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/ScreenGammaRow/Line" unique_id=1762048315]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_type_variation = &"OptionsValue"
-text = "1.00"
-horizontal_alignment = 2
-
-[node name="WorldGammaRow" type="PanelContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1938571064]
-layout_mode = 2
-theme_type_variation = &"TableRow"
-
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/WorldGammaRow" unique_id=165785619]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="WorldGammaLabel" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/WorldGammaRow/Line" unique_id=1621937480]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
-text = "World Gamma"
-
-[node name="WorldGamma" type="HSlider" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/WorldGammaRow/Line" unique_id=1153870266]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 16)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"OptionsSlider"
-min_value = 1.0
-max_value = 1.2
-step = 0.01
-value = 1.0
-
-[node name="Value" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows/WorldGammaRow/Line" unique_id=388612590]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_type_variation = &"OptionsValue"
-text = "1.00"
-horizontal_alignment = 2
-
-[node name="FontHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1584195680]
-visible = false
-layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Font"
-
-[node name="FontOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1656884535]
-visible = false
+[node name="ExperimentalOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Pages/Page/Experimental/Room/Rows" unique_id=1758774300]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/separation = 5
 
-[node name="AccessibilityHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1388205174]
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1684656601]
 layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Accessibility"
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
 
-[node name="AccessibilityOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=297461832]
-unique_name_in_owner = true
+[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Footer" unique_id=1988518294]
 layout_mode = 2
-theme_override_constants/separation = 0
+mouse_filter = 2
+theme_override_constants/separation = 6
 
-[node name="BackgroundsHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=605938217]
-layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Window Backgrounds"
-
-[node name="BackgroundOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Display/Rows" unique_id=1164028873]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Experimental" type="ScrollContainer" parent="Window/Frame/Layout/Body/Content/Pages" unique_id=1307751926]
-visible = false
-layout_mode = 2
-horizontal_scroll_mode = 0
-metadata/_tab_index = 4
-
-[node name="Rows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Experimental" unique_id=1846029153]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="ExperimentalHeading" type="Label" parent="Window/Frame/Layout/Body/Content/Pages/Experimental/Rows" unique_id=1729384056]
-layout_mode = 2
-theme_type_variation = &"OptionsCaption"
-text = "Experimental"
-
-[node name="ExperimentalOptions" type="VBoxContainer" parent="Window/Frame/Layout/Body/Content/Pages/Experimental/Rows" unique_id=1418273645]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Footer" type="PanelContainer" parent="Window/Frame/Layout" unique_id=796294982]
-layout_mode = 2
-theme_type_variation = &"DarkWindowFooter"
-
-[node name="Line" type="HBoxContainer" parent="Window/Frame/Layout/Footer" unique_id=1128221242]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="FooterHint" type="Label" parent="Window/Frame/Layout/Footer/Line" unique_id=406147498]
+[node name="FooterHint" type="Label" parent="Window/Frame/Layout/Footer/Line" unique_id=508638904]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_type_variation = &"OptionsCaption"
-theme_override_styles/normal = SubResource("StyleBoxEmpty_root")
+script = ExtResource("3_label")
+Colour = 10
 
-[node name="Reset" type="Button" parent="Window/Frame/Layout/Footer/Line" unique_id=1846200773]
+[node name="Reset" parent="Window/Frame/Layout/Footer/Line" unique_id=1446839270 instance=ExtResource("4_button")]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"DarkButton"
-text = "Reset General to Defaults"
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Reset General to Defaults"
 
-[node name="CloseButton" type="Button" parent="Window" unique_id=1870376445]
+[node name="CloseButton" parent="Window" unique_id=105175056 instance=ExtResource("5_close")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(14, 14)
 layout_mode = 2
 size_flags_vertical = 0
-focus_mode = 0
-tooltip_text = "Close"
-theme_type_variation = &"DarkCloseButton"

@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://kblocvnlfgbh"]
+
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="1_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="3_click"]
+
+[node name="Tab" type="Container" unique_id=1843250917]
+size_flags_vertical = 8
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 11
+Padding = 2
+
+[node name="Inside" type="VBoxContainer" parent="." unique_id=571993420]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Inside" unique_id=1268405532]
+layout_mode = 2
+text = "Tab"
+horizontal_alignment = 1
+script = ExtResource("2_label")
+Colour = 10
+
+[node name="Join" type="Control" parent="Inside" unique_id=1950371224]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Click" type="Control" parent="." unique_id=322180647]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("3_click")
+
+[node name="JoinLeft" type="Control" parent="Click" unique_id=1488215036]
+visible = false
+clip_contents = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -1.0
+offset_right = -2.0
+offset_bottom = 2.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Corner" type="Container" parent="Click/JoinLeft" unique_id=1027395841]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"
+
+[node name="JoinRight" type="Control" parent="Click" unique_id=630285741]
+visible = false
+clip_contents = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -1.0
+offset_right = 5.0
+offset_bottom = 2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Corner" type="Container" parent="Click/JoinRight" unique_id=1719342480]
+layout_mode = 0
+offset_top = -3.0
+offset_right = 6.0
+offset_bottom = 3.0
+mouse_filter = 2
+script = ExtResource("1_panel")
+Fill = 2
+Profile = "GBG"

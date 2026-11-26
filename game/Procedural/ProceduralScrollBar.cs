@@ -9,9 +9,12 @@ namespace TheLastGate.Procedural;
 [Tool]
 public partial class ProceduralScrollBar : VScrollBar
 {
+    // A bar with no column to fill takes this width, the column bars' 9 pixels less their padding.
+    public const int FreeWidth = 7;
     private static readonly StringName[] GrabberStyles = ["grabber", "grabber_highlight", "grabber_pressed"];
     private static readonly Color[] GrabberShades = [Colors.White, ClickArea.Hovered, ClickArea.Held];
 
+    private static Theme? freeLook;
     private static Theme? look;
 
     private int minimumGrabberLength;
@@ -40,10 +43,21 @@ public partial class ProceduralScrollBar : VScrollBar
         }
     }
 
+    public static void StyleScrollContainer(ScrollContainer scroll) => StyleFree(scroll.GetVScrollBar());
+
+    // A ScrollContainer makes room for its bar by the bar's theme minimum, not its custom one, so the width is in
+    // the track's style.
+    public static void StyleFree(ScrollBar bar)
+    {
+        Style(bar);
+        bar.UseParentMaterial = false;
+        bar.Theme = freeLook ??= Look(FreeWidth);
+    }
+
     public static void Style(ScrollBar bar)
     {
         bar.Material = ProceduralLook.Panel(ProceduralShape.Box, "", ProceduralFill.Green, ProceduralEdges.None);
-        bar.Theme = look ??= Look();
+        bar.Theme = look ??= Look(0);
     }
 
     public override void _ValidateProperty(Dictionary property)
@@ -59,10 +73,10 @@ public partial class ProceduralScrollBar : VScrollBar
         property["usage"] = (int)(property["usage"].As<PropertyUsageFlags>() & ~PropertyUsageFlags.Storage);
     }
 
-    private static Theme Look()
+    private static Theme Look(int width)
     {
         var theme = new Theme();
-        var track = new StyleBoxEmpty();
+        var track = new StyleBoxEmpty { ContentMarginLeft = width };
         theme.SetStylebox("scroll", "VScrollBar", track);
         theme.SetStylebox("scroll_focus", "VScrollBar", track);
         for (var style = 0; style < GrabberStyles.Length; style++)

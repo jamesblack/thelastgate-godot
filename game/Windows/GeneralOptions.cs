@@ -22,8 +22,10 @@ public enum GeneralOption
 
 public enum OptionSection
 {
-    Classic,
-    Godot,
+    Chat,
+    Informational,
+    Networking,
+    Miscellaneous,
     Experimental,
 }
 
@@ -32,68 +34,66 @@ public sealed record OptionRow(GeneralOption Option, string Label, bool Default,
     public GeneralOption? Under { get; init; }
 }
 
-// The General tab's checkboxes: the current client's in its own words, then this client's own, which start off.
+// The General tab's checkboxes by section, then the Experimental tab's.
 public static class GeneralOptions
 {
-    public const string GodotHeading = "Godot Client";
-
     public static IReadOnlyList<OptionRow> Rows { get; } =
     [
-        new(
-            GeneralOption.EscapeClosesWindowsFirst,
-            "Escape closes windows before canceling movement.",
-            true,
-            OptionSection.Classic),
-        new(
-            GeneralOption.GiveMore,
-            "Holding Ctrl+Shift when giving an item will attempt to reload that item.",
-            false,
-            OptionSection.Classic),
-        new(
-            GeneralOption.UseQueue,
-            "Queued Actions: holding Ctrl+Shift when using or taking an item queues it. Limit 5.",
-            false,
-            OptionSection.Classic),
         new(
             GeneralOption.EnterToTalk,
             "Press Enter to activate chat mode before typing. Press Enter again to send, or ESC to cancel.",
             false,
-            OptionSection.Classic),
+            OptionSection.Chat),
         new(
             GeneralOption.ExpandedQuickStats,
             "Show Hit/Parry Score with Weapon/Armor value.",
             true,
-            OptionSection.Classic),
+            OptionSection.Informational),
         new(
             GeneralOption.SkillPlanner,
             "Enable the skill planner: the Planner button below the skill list and its hotkey.",
             false,
-            OptionSection.Classic),
-        new(
-            GeneralOption.AdaptivePacing,
-            "Adaptive network smoothing: lower delay on steady connections, more buffering when the connection is uneven.",
-            false,
-            OptionSection.Classic),
+            OptionSection.Informational),
         new(
             GeneralOption.ItemTooltips,
             "Show item tooltips for inventory and equipped gear.",
             true,
-            OptionSection.Classic),
+            OptionSection.Informational),
         new(
             GeneralOption.ItemTooltipsAlways,
             "Always show tooltips on hover. When off, hold the Item Tooltip hotkey to show them.",
             true,
-            OptionSection.Classic) { Under = GeneralOption.ItemTooltips },
+            OptionSection.Informational) { Under = GeneralOption.ItemTooltips },
+        new(
+            GeneralOption.AdaptivePacing,
+            "Adaptive network smoothing: lower delay on steady connections, more buffering when the connection is uneven.",
+            false,
+            OptionSection.Networking),
         new(
             GeneralOption.GlideMovement,
             "Interpolate character/map movement for smoothness",
             false,
-            OptionSection.Godot),
+            OptionSection.Networking),
         new(
             GeneralOption.PickTileDrawnUnderMouse,
             "When walking, click the tile drawn under the mouse rather than where the map was.",
             false,
-            OptionSection.Godot),
+            OptionSection.Networking),
+        new(
+            GeneralOption.EscapeClosesWindowsFirst,
+            "Escape closes windows before canceling movement.",
+            true,
+            OptionSection.Miscellaneous),
+        new(
+            GeneralOption.GiveMore,
+            "Holding Ctrl+Shift when giving an item will attempt to reload that item.",
+            false,
+            OptionSection.Miscellaneous),
+        new(
+            GeneralOption.UseQueue,
+            "Queued Actions: holding Ctrl+Shift when using or taking an item queues it. Limit 5.",
+            false,
+            OptionSection.Miscellaneous),
         new(
             GeneralOption.StubbornUse,
             $"Keep retrying a use that doesn't go through, up to {StubbornUse.MostFailures} times (Stubborn use).",

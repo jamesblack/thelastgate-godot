@@ -30,7 +30,7 @@ public partial class PlannerAdvancedWindowView : Control
 
     public override void _Ready()
     {
-        ProceduralScrollBar.Style(GetNode<ScrollContainer>("%Scroll").GetVScrollBar());
+        ProceduralScrollBar.StyleScrollContainer(GetNode<ScrollContainer>("%Scroll"));
         rowScene = GD.Load<PackedScene>(RowScenePath);
         AddSpellRows();
         AddCardRows();

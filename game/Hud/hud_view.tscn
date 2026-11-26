@@ -333,9 +333,9 @@ mouse_filter = 2
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 382.0
-offset_top = 190.0
+offset_top = 179.0
 offset_right = 898.0
-offset_bottom = 530.0
+offset_bottom = 541.0
 
 [node name="HotbarMenu" type="PopupMenu" parent="." unique_id=1133469277]
 unique_name_in_owner = true

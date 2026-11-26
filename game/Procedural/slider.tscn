@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://pblwkqjitlib"]
+
+[ext_resource type="Script" uid="uid://emrjtckkvuvq" path="res://Procedural/ProceduralSlider.cs" id="1_slider"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+
+[node name="Slider" type="Range" unique_id=1308264075]
+custom_minimum_size = Vector2(0, 11)
+size_flags_horizontal = 3
+size_flags_vertical = 4
+script = ExtResource("1_slider")
+
+[node name="Groove" type="Container" parent="." unique_id=1740395622]
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "G"
+
+[node name="Filled" type="ColorRect" parent="." unique_id=902667354]
+layout_mode = 0
+mouse_filter = 2
+color = Color(0.952941, 0.858824, 0.415686, 1)
+
+[node name="Grabber" type="Container" parent="." unique_id=1477209835]
+layout_mode = 0
+offset_right = 7.0
+offset_bottom = 11.0
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"

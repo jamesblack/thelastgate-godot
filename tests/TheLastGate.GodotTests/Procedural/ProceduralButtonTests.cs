@@ -1,5 +1,6 @@
 using GdUnit4;
 using Godot;
+using TheLastGate.Assets;
 using TheLastGate.Hud;
 using TheLastGate.Procedural;
 using static GdUnit4.Assertions;
@@ -16,6 +17,19 @@ public class ProceduralButtonTests
     private static readonly Vector2 Outside = new(-5, -5);
 
     private static SceneTree Tree => (SceneTree)Engine.GetMainLoop();
+
+    [TestCase]
+    public void Warning_TurnsTheTextRed()
+    {
+        var button = Show<ProceduralButton>("res://Procedural/text_button.tscn");
+
+        button.Warning = true;
+        AssertThat(button.GetNode<HudLabel>("Label").Colour).IsEqual(TextColour.Red);
+
+        button.Warning = false;
+        AssertThat(button.GetNode<HudLabel>("Label").Colour).IsEqual(TextColour.Grey);
+        button.Free();
+    }
 
     [TestCase]
     public void TheTextButton_PadsItsLabelByTwoPixels()

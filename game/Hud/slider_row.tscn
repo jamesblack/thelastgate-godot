@@ -1,30 +1,38 @@
 [gd_scene format=3 uid="uid://dsl1derr0wbgx"]
 
-[node name="SliderRow" type="PanelContainer" unique_id=1820463517]
-theme_type_variation = &"TableRow"
+[ext_resource type="Script" uid="uid://soshrvatjiiv" path="res://Procedural/SettingsRow.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="PackedScene" uid="uid://pblwkqjitlib" path="res://Procedural/slider.tscn" id="3_slider"]
+
+[node name="SliderRow" type="Container" unique_id=1820463517]
+mouse_filter = 1
+script = ExtResource("1_row")
+Fill = 2
+Padding = 2
 
 [node name="Line" type="HBoxContainer" parent="." unique_id=1093664105]
 layout_mode = 2
-theme_override_constants/separation = 10
+mouse_filter = 2
+theme_override_constants/separation = 6
 
 [node name="Text" type="Label" parent="Line" unique_id=1590247815]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"OptionsRowText"
-text = "Shop / Grave"
-
-[node name="Slider" type="HSlider" parent="Line" unique_id=932716408]
-custom_minimum_size = Vector2(200, 16)
-layout_mode = 2
 size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"OptionsSlider"
+text = "Shop / Grave"
+script = ExtResource("2_label")
+
+[node name="Slider" parent="Line" unique_id=932716408 instance=ExtResource("3_slider")]
+custom_minimum_size = Vector2(200, 11)
+layout_mode = 2
+size_flags_horizontal = 0
 step = 5.0
 value = 100.0
 
 [node name="Value" type="Label" parent="Line" unique_id=1473390265]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-theme_type_variation = &"OptionsValue"
+size_flags_vertical = 4
 text = "100%"
 horizontal_alignment = 2
+script = ExtResource("2_label")

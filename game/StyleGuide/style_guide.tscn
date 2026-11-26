@@ -21,6 +21,9 @@
 [ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="19_heading"]
 [ext_resource type="PackedScene" uid="uid://vfrcujuqvvmt" path="res://Procedural/picker.tscn" id="20_choice"]
 [ext_resource type="PackedScene" uid="uid://fshowwslwpiw" path="res://Procedural/tooltip.tscn" id="21_tooltip"]
+[ext_resource type="Script" uid="uid://gcmhjswbbvbj" path="res://Procedural/ProceduralTabs.cs" id="22_tabs"]
+[ext_resource type="PackedScene" uid="uid://knipevkdmiii" path="res://Procedural/key_button.tscn" id="23_key"]
+[ext_resource type="PackedScene" uid="uid://pblwkqjitlib" path="res://Procedural/slider.tscn" id="24_slider"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focused_example"]
 content_margin_left = 4.0
@@ -2840,5 +2843,335 @@ text = "Fists of the Heavens uses your best weapon skill,\nso the weapon is not 
 [node name="Caption" type="Label" parent="Page/Tooltip/Examples/Example75" unique_id=1894808065]
 layout_mode = 2
 text = "two lines"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Tabs" type="HBoxContainer" parent="Page" unique_id=497739999]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Tabs" unique_id=749830503]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Tabs/Notes" unique_id=311559390]
+layout_mode = 2
+text = "Tabs"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Tabs/Notes" unique_id=1680796036]
+layout_mode = 2
+text = "Give a Container game/Procedural/ProceduralTabs.cs, with one child: Page, a ProceduralPanel with Profile GBG, Fill Red and Padding 4 holding one child per page. Set Titles, one per page. It adds a tab per title and lays them over the top ring of the page, layering them by tree order, not z_index: no tab has a bottom ring, so the page's top ring runs unbroken over the closed tabs, which are blue with Grey text and light up when hovered; the open tab is red with Yellow text and drawn in front, so it opens into the page, its sides turning into the page's ring at its bottom corners. Select shows a page without a signal; TabChosen fires when a closed tab is clicked."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Tabs" unique_id=1884383015]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example76" type="VBoxContainer" parent="Page/Tabs/Examples" unique_id=411404387]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Tabs" type="Container" parent="Page/Tabs/Examples/Example76" unique_id=560065692]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("22_tabs")
+Titles = PackedStringArray("General", "Audio", "Keybinds")
+
+[node name="Page" type="Container" parent="Page/Tabs/Examples/Example76/Tabs" unique_id=491986836]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 0
+Profile = "GBG"
+Padding = 4
+
+[node name="General" type="Label" parent="Page/Tabs/Examples/Example76/Tabs/Page" unique_id=200586902]
+layout_mode = 2
+text = "The General page."
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Audio" type="Label" parent="Page/Tabs/Examples/Example76/Tabs/Page" unique_id=1400874004]
+layout_mode = 2
+text = "The Audio page."
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Keybinds" type="Label" parent="Page/Tabs/Examples/Example76/Tabs/Page" unique_id=1796675094]
+layout_mode = 2
+text = "The Keybinds page."
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Caption" type="Label" parent="Page/Tabs/Examples/Example76" unique_id=157113458]
+layout_mode = 2
+text = "General open, the others closed"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="KeyButton" type="HBoxContainer" parent="Page" unique_id=572227373]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/KeyButton" unique_id=1412578640]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/KeyButton/Notes" unique_id=1151074312]
+layout_mode = 2
+text = "Key button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/KeyButton/Notes" unique_id=1473307720]
+layout_mode = 2
+text = "Instance game/Procedural/key_button.tscn for a key that can be rebound. It is a 96 wide field-like box, Profile GBG and Fill Blue, with the name of the key centred in Yellow. Set Caption and Tooltip, wire Pressed to start listening, and set Waiting while it listens: it turns steel blue, lit, with White text."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/KeyButton" unique_id=1439468929]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example77" type="VBoxContainer" parent="Page/KeyButton/Examples" unique_id=1958091990]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Key" parent="Page/KeyButton/Examples/Example77" unique_id=1513419024 instance=ExtResource("23_key")]
+layout_mode = 2
+size_flags_horizontal = 0
+Caption = "F8"
+
+[node name="Caption" type="Label" parent="Page/KeyButton/Examples/Example77" unique_id=118471667]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example78" type="VBoxContainer" parent="Page/KeyButton/Examples" unique_id=974444240]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Key" parent="Page/KeyButton/Examples/Example78" unique_id=1052354931 instance=ExtResource("23_key")]
+layout_mode = 2
+size_flags_horizontal = 0
+Caption = "Press key..."
+Waiting = true
+
+[node name="Caption" type="Label" parent="Page/KeyButton/Examples/Example78" unique_id=337750950]
+layout_mode = 2
+text = "waiting"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Slider" type="HBoxContainer" parent="Page" unique_id=2075891779]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Slider" unique_id=366508938]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Slider/Notes" unique_id=1896724958]
+layout_mode = 2
+text = "Slider"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Slider/Notes" unique_id=272641162]
+layout_mode = 2
+text = "Instance game/Procedural/slider.tscn for a value picked along a line. It is a Range, so set MinValue, MaxValue and Step, read Value, connect ValueChanged and use SetValueNoSignal as with any slider. A gold groove fills in gold up to the value, with a small blue grabber that lights while hovered or dragged. Put a Yellow HudLabel after it for the value."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Slider" unique_id=1157948081]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example79" type="VBoxContainer" parent="Page/Slider/Examples" unique_id=2128888027]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Slider" parent="Page/Slider/Examples/Example79" unique_id=320305158 instance=ExtResource("24_slider")]
+custom_minimum_size = Vector2(120, 11)
+layout_mode = 2
+max_value = 100.0
+value = 0.0
+
+[node name="Caption" type="Label" parent="Page/Slider/Examples/Example79" unique_id=1064586920]
+layout_mode = 2
+text = "empty"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example80" type="VBoxContainer" parent="Page/Slider/Examples" unique_id=1814145601]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Slider" parent="Page/Slider/Examples/Example80" unique_id=1836439212 instance=ExtResource("24_slider")]
+custom_minimum_size = Vector2(120, 11)
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+
+[node name="Caption" type="Label" parent="Page/Slider/Examples/Example80" unique_id=998162142]
+layout_mode = 2
+text = "half"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example81" type="VBoxContainer" parent="Page/Slider/Examples" unique_id=646073712]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Slider" parent="Page/Slider/Examples/Example81" unique_id=329667971 instance=ExtResource("24_slider")]
+custom_minimum_size = Vector2(120, 11)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="Caption" type="Label" parent="Page/Slider/Examples/Example81" unique_id=916532978]
+layout_mode = 2
+text = "full"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="RoundCheckBox" type="HBoxContainer" parent="Page" unique_id=161542837]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/RoundCheckBox" unique_id=1219792708]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/RoundCheckBox/Notes" unique_id=773218760]
+layout_mode = 2
+text = "Round marks"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/RoundCheckBox/Notes" unique_id=1034841523]
+layout_mode = 2
+text = "Turn on Round on a check box for one choice among several: the box is a circle and the mark a round gold dot. The window clears the other choices when one is picked, and picking the chosen one does nothing."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/RoundCheckBox" unique_id=241064227]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example82" type="VBoxContainer" parent="Page/RoundCheckBox/Examples" unique_id=1947469739]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Choice" parent="Page/RoundCheckBox/Examples/Example82" unique_id=1095856650 instance=ExtResource("9_check")]
+layout_mode = 2
+size_flags_horizontal = 0
+Text = "Classic"
+Round = true
+Checked = true
+
+[node name="Caption" type="Label" parent="Page/RoundCheckBox/Examples/Example82" unique_id=1323267166]
+layout_mode = 2
+text = "chosen"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example83" type="VBoxContainer" parent="Page/RoundCheckBox/Examples" unique_id=2046319659]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Choice" parent="Page/RoundCheckBox/Examples/Example83" unique_id=2106671312 instance=ExtResource("9_check")]
+layout_mode = 2
+size_flags_horizontal = 0
+Text = "Classic"
+Round = true
+
+[node name="Caption" type="Label" parent="Page/RoundCheckBox/Examples/Example83" unique_id=2130961296]
+layout_mode = 2
+text = "not chosen"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="WarningButton" type="HBoxContainer" parent="Page" unique_id=1036603792]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/WarningButton" unique_id=2096784541]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/WarningButton/Notes" unique_id=1704344876]
+layout_mode = 2
+text = "Warning button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/WarningButton/Notes" unique_id=462074708]
+layout_mode = 2
+text = "Turn on Warning on a text button while it asks to be clicked again, such as Reset waiting for its confirmation: its text turns Red until Warning is turned off."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/WarningButton" unique_id=1700705894]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example84" type="VBoxContainer" parent="Page/WarningButton/Examples" unique_id=757798338]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Reset" parent="Page/WarningButton/Examples/Example84" unique_id=1117832426 instance=ExtResource("5_button")]
+layout_mode = 2
+size_flags_horizontal = 0
+Caption = "Confirm?"
+Warning = true
+
+[node name="Caption" type="Label" parent="Page/WarningButton/Examples/Example84" unique_id=934563297]
+layout_mode = 2
+text = "waiting for the second click"
 script = ExtResource("3_label")
 Colour = 10

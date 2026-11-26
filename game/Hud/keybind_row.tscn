@@ -1,42 +1,46 @@
 [gd_scene format=3 uid="uid://b1cfx8gn11rg1"]
 
-[node name="KeybindRow" type="PanelContainer" unique_id=1394817265]
-theme_type_variation = &"TableRow"
+[ext_resource type="Script" uid="uid://soshrvatjiiv" path="res://Procedural/SettingsRow.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://ttelvsaavpid" path="res://Procedural/WarningMark.cs" id="3_warning"]
+[ext_resource type="PackedScene" uid="uid://knipevkdmiii" path="res://Procedural/key_button.tscn" id="4_key"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="5_button"]
+
+[node name="KeybindRow" type="Container" unique_id=1394817265]
+mouse_filter = 1
+script = ExtResource("1_row")
+Fill = 2
+Padding = 2
 
 [node name="Line" type="HBoxContainer" parent="." unique_id=965946888]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 6
 
 [node name="Text" type="Label" parent="Line" unique_id=807316594]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_type_variation = &"OptionsRowText"
 text = "Toggle Health Bars"
 autowrap_mode = 3
+script = ExtResource("2_label")
 
 [node name="Warning" type="Label" parent="Line" unique_id=1877405213]
 visible = false
-custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 0
-theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 text = "!"
-horizontal_alignment = 1
+script = ExtResource("3_warning")
+Colour = 0
+Caption = true
 
-[node name="Key" type="Button" parent="Line" unique_id=1730658321]
-custom_minimum_size = Vector2(100, 0)
+[node name="Key" parent="Line" unique_id=1730658321 instance=ExtResource("4_key")]
 layout_mode = 2
 size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"DarkButton"
-text = "F8"
-clip_text = true
+Caption = "F8"
 
-[node name="Reset" type="Button" parent="Line" unique_id=440597118]
+[node name="Reset" parent="Line" unique_id=440597118 instance=ExtResource("5_button")]
 layout_mode = 2
 size_flags_vertical = 4
-focus_mode = 0
-theme_type_variation = &"DarkButton"
-text = "Reset"
+Caption = "Reset"

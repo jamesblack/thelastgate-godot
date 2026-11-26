@@ -1,15 +1,25 @@
 [gd_scene format=3 uid="uid://bh62qsp0bli60"]
 
-[node name="OptionRow" type="PanelContainer" unique_id=542300771]
-theme_type_variation = &"TableRow"
+[ext_resource type="Script" uid="uid://soshrvatjiiv" path="res://Procedural/SettingsRow.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://ttelvsaavpid" path="res://Procedural/WarningMark.cs" id="3_warning"]
+[ext_resource type="PackedScene" uid="uid://oind5rho0m21" path="res://Procedural/check_box.tscn" id="4_check"]
+
+[node name="OptionRow" type="Container" unique_id=542300771]
+mouse_filter = 1
+script = ExtResource("1_row")
+Fill = 2
+Padding = 2
+Toggles = true
 
 [node name="Line" type="HBoxContainer" parent="." unique_id=686114000]
 layout_mode = 2
-theme_override_constants/separation = 8
+mouse_filter = 2
+theme_override_constants/separation = 6
 
 [node name="Indent" type="Control" parent="Line" unique_id=1688410273]
 visible = false
-custom_minimum_size = Vector2(13, 0)
+custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 mouse_filter = 2
 
@@ -17,21 +27,21 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_type_variation = &"OptionsRowText"
 text = "Escape closes windows before canceling movement."
 autowrap_mode = 3
+script = ExtResource("2_label")
 
 [node name="Warning" type="Label" parent="Line" unique_id=2093315517]
 visible = false
-custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 0
-theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 text = "!"
-horizontal_alignment = 1
+script = ExtResource("3_warning")
+Colour = 0
+Caption = true
 
-[node name="Box" type="CheckBox" parent="Line" unique_id=1525886319]
+[node name="Box" parent="Line" unique_id=1525886319 instance=ExtResource("4_check")]
 layout_mode = 2
 size_flags_vertical = 4
-focus_mode = 0
+Text = ""

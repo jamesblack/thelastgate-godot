@@ -14,6 +14,7 @@ public partial class ProceduralButton : ProceduralPanel
     private string caption = "";
     private bool disabled;
     private bool on;
+    private bool warning;
 
     [Export]
     public bool Disabled
@@ -61,13 +62,29 @@ public partial class ProceduralButton : ProceduralPanel
         }
     }
 
+    [Export]
+    public bool Warning
+    {
+        get => warning;
+        set
+        {
+            if (value == warning)
+            {
+                return;
+            }
+
+            warning = value;
+            ShowOn();
+        }
+    }
+
     public event Action? Pressed;
 
     // ClickArea is not a tool script, so in the editor the click area is a plain Control and there is nothing to follow.
     public override void _Ready()
     {
         Caption = caption;
-        if (on || disabled)
+        if (on || disabled || warning)
         {
             ShowOn();
         }
@@ -99,7 +116,10 @@ public partial class ProceduralButton : ProceduralPanel
         Modulate = disabled ? Colors.White with { A = DisabledAlpha } : Colors.White;
         if (GetNodeOrNull<HudLabel>("Label") is { } label)
         {
-            label.Colour = disabled ? TextColour.Dim : on ? TextColour.Yellow : TextColour.Grey;
+            label.Colour = disabled ? TextColour.Dim
+                : on ? TextColour.Yellow
+                : warning ? TextColour.Red
+                : TextColour.Grey;
         }
     }
 }

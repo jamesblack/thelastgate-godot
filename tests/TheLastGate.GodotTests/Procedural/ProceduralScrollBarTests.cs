@@ -25,6 +25,19 @@ public class ProceduralScrollBarTests
     public void FreeTheBar() => bar.Free();
 
     [TestCase]
+    public void AScrollContainersBar_IsStyledAndWideEnoughToSee()
+    {
+        var scroll = new ScrollContainer();
+        Tree.Root.AddChild(scroll);
+
+        ProceduralScrollBar.StyleScrollContainer(scroll);
+
+        AssertThat(scroll.GetVScrollBar().Material).IsNotNull();
+        AssertThat(scroll.GetVScrollBar().GetMinimumSize().X).IsGreaterEqual(7f);
+        scroll.Free();
+    }
+
+    [TestCase]
     public void TheGrabber_IsTheShadersGreenWithNoRings()
     {
         var material = (ShaderMaterial)bar.Material;

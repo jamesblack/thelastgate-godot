@@ -193,7 +193,6 @@ public sealed class ClientSettings
         {
             case OptionsTab.General:
                 ResetRows(row => row.Section != OptionSection.Experimental);
-                CursorScale = DefaultCursorScale;
                 break;
             case OptionsTab.Audio:
                 SoundEnabled = true;
@@ -206,6 +205,7 @@ public sealed class ClientSettings
                 ResetRows(row => row.Section == OptionSection.Experimental);
                 break;
             case OptionsTab.Display:
+                CursorScale = DefaultCursorScale;
                 ScreenGamma = Gamma.Normal;
                 WorldGamma = Gamma.Normal;
                 FontId = FontChoice.ClassicId;

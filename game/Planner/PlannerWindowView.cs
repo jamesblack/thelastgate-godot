@@ -73,7 +73,7 @@ public partial class PlannerWindowView : Control
     {
         foreach (var scroll in (string[])["%MathScroll", "%SkillScroll"])
         {
-            ProceduralScrollBar.Style(GetNode<ScrollContainer>(scroll).GetVScrollBar());
+            ProceduralScrollBar.StyleScrollContainer(GetNode<ScrollContainer>(scroll));
         }
 
         statRowScene = GD.Load<PackedScene>(StatRowScenePath);

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://knipevkdmiii"]
+
+[ext_resource type="Script" uid="uid://hofvqmbnacqf" path="res://Procedural/KeyButton.cs" id="1_button"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="3_click"]
+
+[node name="KeyButton" type="Container" unique_id=1406983255]
+custom_minimum_size = Vector2(96, 0)
+mouse_filter = 2
+script = ExtResource("1_button")
+Fill = 1
+Profile = "GBG"
+Padding = 2
+
+[node name="Label" type="Label" parent="." unique_id=1731294066]
+layout_mode = 2
+text = "Key"
+horizontal_alignment = 1
+clip_text = true
+script = ExtResource("2_label")
+
+[node name="Click" type="Control" parent="." unique_id=827119634]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("3_click")
+StyledTooltip = true

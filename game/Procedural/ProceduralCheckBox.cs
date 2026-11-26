@@ -13,6 +13,7 @@ public partial class ProceduralCheckBox : MarginContainer
     private bool disabled;
 
     private bool isChecked;
+    private bool round;
     private string text = "";
 
     [Export]
@@ -63,6 +64,22 @@ public partial class ProceduralCheckBox : MarginContainer
         }
     }
 
+    [Export]
+    public bool Round
+    {
+        get => round;
+        set
+        {
+            if (value == round)
+            {
+                return;
+            }
+
+            round = value;
+            ShowState();
+        }
+    }
+
     public event Action<bool>? Toggled;
 
     // ClickArea is not a tool script, so in the editor the click area is a plain Control and there is nothing to follow.
@@ -90,7 +107,7 @@ public partial class ProceduralCheckBox : MarginContainer
         };
     }
 
-    private void Toggle()
+    public void Toggle()
     {
         if (disabled)
         {
@@ -109,6 +126,9 @@ public partial class ProceduralCheckBox : MarginContainer
         }
 
         GetNode<Control>("Row/Box/Mark").Visible = isChecked;
+        var shape = round ? ProceduralShape.Circle : ProceduralShape.Box;
+        GetNode<ProceduralPanel>("Row/Box").Shape = shape;
+        GetNode<ProceduralPanel>("Row/Box/Mark/Gold").Shape = shape;
         var label = GetNode<HudLabel>("Row/Label");
         label.Text = text;
         label.Visible = text.Length > 0;

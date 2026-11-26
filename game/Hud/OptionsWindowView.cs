@@ -8,14 +8,15 @@ using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.Config;
 using TheLastGate.Hotkeys;
+using TheLastGate.Procedural;
 using TheLastGate.Windows;
 using TheLastGate.World;
 
 namespace TheLastGate.Hud;
 
-// The current client's Options window: a Dear ImGui window with game-sprite buttons, rebuilt as themed controls.
+// The Options window: its pages of settings rows, the key bindings, and the Reset button in its footer.
 [Tool]
-public partial class OptionsWindowView : Panel, IHudContextUser
+public partial class OptionsWindowView : Control
 {
     private const string OptionRowScenePath = "res://Hud/option_row.tscn";
     private const string SliderRowScenePath = "res://Hud/slider_row.tscn";
@@ -27,42 +28,30 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private const string ResetText = "Reset {0} to Defaults";
     private const string ConfirmResetText = "Confirm?";
     private const string WarningMark = "!";
-    private const string RowVariation = "TableRow";
-    private const string HoveredRowVariation = "TableRowHover";
-    private const string ScrollBarVariation = "OptionsScrollBar";
 
-
-    private readonly Dictionary<string, Button> keyButtons = [];
+    private readonly Dictionary<string, KeyButton> keyButtons = [];
     private readonly Dictionary<string, Label> keyWarnings = [];
-    private readonly Dictionary<HSlider, Label> valueLabels = [];
+    private readonly Dictionary<ProceduralSlider, Label> valueLabels = [];
     private string? capturing;
     private IReadOnlyList<KeybindRow> shownKeybindRows = [];
-    private SpriteLoader? sprites;
-    private EditorThemePreview? themePreview;
 
-    public OptionsWindowView() => AddToGroup(HudContext.Group);
+    private ProceduralCheckBox SoundEnabled => GetNode<ProceduralCheckBox>("%SoundRow/Line/Box");
 
-    private CheckBox SoundEnabled => GetNode<CheckBox>("%SoundEnabled");
+    private ProceduralSlider Volume => GetNode<ProceduralSlider>("%VolumeRow/Line/Slider");
 
-    private HSlider Volume => GetNode<HSlider>("%Volume");
-
-    private HSlider CursorScale => GetNode<HSlider>("%CursorScale");
+    private ProceduralSlider CursorScale => GetNode<ProceduralSlider>("%CursorRow/Line/Slider");
 
     private Node KeybindSections => GetNode("%Sections");
 
-    private HSlider ScreenGamma => GetNode<HSlider>("%ScreenGamma");
+    private ProceduralSlider ScreenGamma => GetNode<ProceduralSlider>("%ScreenGammaRow/Line/Slider");
 
-    private HSlider WorldGamma => GetNode<HSlider>("%WorldGamma");
+    private ProceduralSlider WorldGamma => GetNode<ProceduralSlider>("%WorldGammaRow/Line/Slider");
 
-    private Button Reset => GetNode<Button>("%Reset");
+    private ProceduralButton Reset => GetNode<ProceduralButton>("%Reset");
+
+    private ProceduralTabs Pages => GetNode<ProceduralTabs>("%Pages");
 
     private Label TypingWarning => OptionRow(GeneralOption.EnterToTalk).GetNode<Label>("Line/Warning");
-
-    public void ShowContext(HudContext context)
-    {
-        sprites = context.Sprites;
-        ApplySprites();
-    }
 
     public event Action<OptionsTab>? TabChosen;
 
@@ -98,11 +87,8 @@ public partial class OptionsWindowView : Panel, IHudContextUser
 
     public event Action<string>? FontChosen;
 
-    public override void _Notification(int what) => themePreview?.Notify(what);
-
     public override void _Ready()
     {
-        ApplySprites();
         StyleScrollBars();
         AddOptionRows();
         ShowKeybinds(
@@ -112,26 +98,17 @@ public partial class OptionsWindowView : Panel, IHudContextUser
             new OptionsWindow());
         if (Engine.IsEditorHint())
         {
-            themePreview = EditorThemePreview.Show(this);
             return;
         }
 
-        foreach (var tab in Enum.GetValues<OptionsTab>())
-        {
-            TabButton(tab).Pressed += () => TabChosen?.Invoke(tab);
-        }
+        Pages.TabChosen += index => TabChosen?.Invoke((OptionsTab)index);
 
         foreach (var row in GeneralOptions.Rows)
         {
             OptionBox(row.Option).Toggled += isOn => OptionChanged?.Invoke(row.Option, isOn);
         }
 
-        foreach (var row in GetNode("%Pages").FindChildren("*Row", nameof(PanelContainer), true, false))
-        {
-            ShowHoverBand((Control)row);
-        }
-
-        GetNode<BaseButton>("%CloseButton").Pressed += () => CloseChosen?.Invoke();
+        GetNode<ClickArea>("%CloseButton").Released += _ => CloseChosen?.Invoke();
         SoundEnabled.Toggled += enabled => SoundEnabledChanged?.Invoke(enabled);
         Volume.ValueChanged += volume =>
         {
@@ -207,17 +184,16 @@ public partial class OptionsWindowView : Panel, IHudContextUser
             return;
         }
 
-        TabButton(window.Tab).SetPressedNoSignal(true);
-        GetNode<TabContainer>("%Pages").CurrentTab = (int)window.Tab;
+        Pages.Select((int)window.Tab);
         foreach (var row in GeneralOptions.Rows)
         {
-            OptionBox(row.Option).SetPressedNoSignal(settings[row.Option]);
+            OptionBox(row.Option).Checked = settings[row.Option];
             OptionRow(row.Option).Visible = GeneralOptions.IsShown(row, option => settings[option]);
         }
 
         CursorScale.SetValueNoSignal(settings.CursorScale);
         ShowCursorScale(settings.CursorScale);
-        SoundEnabled.SetPressedNoSignal(settings.SoundEnabled);
+        SoundEnabled.Checked = settings.SoundEnabled;
         Volume.SetValueNoSignal(settings.SoundVolume);
         ShowValue(Volume, settings.SoundVolume.ToString(CultureInfo.InvariantCulture));
         ScreenGamma.SetValueNoSignal(settings.ScreenGamma);
@@ -226,7 +202,7 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         ShowValue(WorldGamma, Gamma.Text(settings.WorldGamma));
         foreach (var row in AccessibilityOptions.Rows)
         {
-            AccessibilityBox(row.Option).SetPressedNoSignal(settings.AccessibilityOn.Contains(row.Option));
+            AccessibilityBox(row.Option).Checked = settings.AccessibilityOn.Contains(row.Option);
         }
 
         foreach (var row in WindowBackgrounds.Rows)
@@ -248,47 +224,50 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         if (rows.GetChildCount() == 0)
         {
             var rowScene = GD.Load<PackedScene>(OptionRowScenePath);
-            var group = new ButtonGroup();
             foreach (var choice in choices)
             {
                 var row = CheckRow(rowScene, choice.Id, choice.Name);
-                var box = row.GetNode<CheckBox>("Line/Box");
-                box.ButtonGroup = group;
-                box.Toggled += isOn =>
-                {
-                    if (isOn)
-                    {
-                        FontChosen?.Invoke(choice.Id);
-                    }
-                };
+                var box = row.GetNode<ProceduralCheckBox>("Line/Box");
+                box.Round = true;
+                box.Toggled += isOn => ChooseFont(rows, box, isOn, choice.Id);
                 rows.AddChild(row);
             }
+
+            SeparateRows(rows);
         }
 
         var shownId = choices.Any(choice => choice.Id == chosenId) ? chosenId : FontChoice.ClassicId;
         foreach (var row in rows.GetChildren())
         {
-            row.GetNode<CheckBox>("Line/Box").SetPressedNoSignal(row.Name == shownId);
+            row.GetNode<ProceduralCheckBox>("Line/Box").Checked = row.Name == shownId;
         }
     }
 
-    // A ScrollContainer makes its own bars, so they can't be given a theme variation in the scene.
+    // Choosing the chosen font keeps it chosen; choosing another clears the rest.
+    private void ChooseFont(Node rows, ProceduralCheckBox box, bool isOn, string id)
+    {
+        if (!isOn)
+        {
+            box.Checked = true;
+            return;
+        }
+
+        foreach (var row in rows.GetChildren())
+        {
+            var other = row.GetNode<ProceduralCheckBox>("Line/Box");
+            other.Checked = other == box;
+        }
+
+        FontChosen?.Invoke(id);
+    }
+
+    // A ScrollContainer makes its own bars, so they are styled here rather than in the scene.
     private void StyleScrollBars()
     {
         foreach (var scroll in GetNode("%Pages").FindChildren("*", nameof(ScrollContainer), true, false))
         {
-            ((ScrollContainer)scroll).GetVScrollBar().ThemeTypeVariation = ScrollBarVariation;
+            ProceduralScrollBar.StyleScrollContainer((ScrollContainer)scroll);
         }
-    }
-
-    private void ApplySprites()
-    {
-        if (Engine.IsEditorHint() || Theme == null || sprites == null)
-        {
-            return;
-        }
-
-        ThemeSprites.Apply(Theme, sprites);
     }
 
     // The rows come from the Core table so their wording is kept in one place; they are never saved into the scene.
@@ -318,33 +297,41 @@ public partial class OptionsWindowView : Panel, IHudContextUser
             var rowNode = sliderScene.Instantiate<Control>();
             rowNode.Name = row.Window.ToString();
             rowNode.GetNode<Label>("Line/Text").Text = row.Label;
-            if (!Engine.IsEditorHint())
-            {
-                ShowHoverBand(rowNode);
-            }
-
             GetNode("%BackgroundOptions").AddChild(rowNode);
         }
+
+        GetNode("%AccessibilityOptions").MoveChild(GetNode("%CursorRow"), -1);
+        foreach (var list in (string[])
+            [
+                "%NetworkingOptions", "%ChatOptions", "%InformationalOptions", "%MiscellaneousOptions",
+                "%ExperimentalOptions", "%AccessibilityOptions", "%BackgroundOptions", "%SoundRows", "%GammaRows",
+            ])
+        {
+            SeparateRows(GetNode(list));
+        }
     }
+
+    // Rows are ruled apart, except a linked setting, which hangs from the row above it on a tree line.
+    private static void SeparateRows(Node list)
+    {
+        var rows = list.GetChildren().OfType<SettingsRow>().ToArray();
+        for (var index = 0; index < rows.Length; index++)
+        {
+            var linked = IsLinked(rows[index]);
+            rows[index].RuleAbove = index > 0 && !linked;
+            rows[index].Tree = !linked ? SettingsTree.None
+                : index + 1 < rows.Length && IsLinked(rows[index + 1]) ? SettingsTree.Branch
+                : SettingsTree.Last;
+        }
+    }
+
+    private static bool IsLinked(Node row) => row.GetNodeOrNull<CanvasItem>("Line/Indent")?.Visible == true;
 
     private static Control CheckRow(PackedScene rowScene, string name, string label)
     {
         var rowNode = rowScene.Instantiate<Control>();
         rowNode.Name = name;
         rowNode.GetNode<Label>("Line/Text").Text = label;
-        var box = rowNode.GetNode<CheckBox>("Line/Box");
-        rowNode.GuiInput += inputEvent =>
-        {
-            if (inputEvent is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true })
-            {
-                box.ButtonPressed = !box.ButtonPressed;
-            }
-        };
-        if (!Engine.IsEditorHint())
-        {
-            ShowHoverBand(rowNode);
-        }
-
         return rowNode;
     }
 
@@ -365,8 +352,9 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         {
             var waiting = row.Id == window.Capturing;
             var keyButton = keyButtons[row.Id];
-            keyButton.Text = waiting ? WaitingText : BindingRules.LongName(bindings[row.Id]);
-            keyButton.TooltipText = waiting ? WaitingHint : "";
+            keyButton.Caption = waiting ? WaitingText : BindingRules.LongName(bindings[row.Id]);
+            keyButton.Waiting = waiting;
+            keyButton.Tooltip = waiting ? WaitingHint : "";
             var warning = BindingRules.TypingHotkeyWarning(bindings, row.Id, enterToTalk);
             keyWarnings[row.Id].Visible = warning != null;
             keyWarnings[row.Id].TooltipText = warning ?? "";
@@ -389,24 +377,22 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         foreach (var section in sections)
         {
             var sectionNode = sectionScene.Instantiate<Control>();
-            sectionNode.GetNode<Label>("Heading").Text = section.Heading;
+            sectionNode.GetNode<RuledHeading>("Heading").Text = section.Heading;
             foreach (var row in section.Rows)
             {
                 var rowNode = rowScene.Instantiate<Control>();
                 rowNode.Name = row.Id;
                 rowNode.GetNode<Label>("Line/Text").Text = row.Label;
-                var keyButton = rowNode.GetNode<Button>("Line/Key");
+                var keyButton = rowNode.GetNode<KeyButton>("Line/Key");
                 keyButton.Pressed += () => CaptureChosen?.Invoke(row.Id);
                 keyButtons[row.Id] = keyButton;
                 keyWarnings[row.Id] = rowNode.GetNode<Label>("Line/Warning");
-                rowNode.GetNode<Button>("Line/Reset").Pressed += () => BindingResetChosen?.Invoke(row.Id);
-                if (!Engine.IsEditorHint())
-                {
-                    ShowHoverBand(rowNode);
-                }
+                rowNode.GetNode<ProceduralButton>("Line/Reset").Pressed += () => BindingResetChosen?.Invoke(row.Id);
 
                 sectionNode.GetNode("Rows").AddChild(rowNode);
             }
+
+            SeparateRows(sectionNode.GetNode("Rows"));
 
             KeybindSections.AddChild(sectionNode);
         }
@@ -415,7 +401,8 @@ public partial class OptionsWindowView : Panel, IHudContextUser
     private void ShowFooter(OptionsWindow window)
     {
         var onKeybinds = window.Tab == OptionsTab.Keybinds;
-        Reset.Text = window.ConfirmingReset
+        Reset.Warning = window.ConfirmingReset;
+        Reset.Caption = window.ConfirmingReset
             ? ConfirmResetText
             : string.Format(CultureInfo.InvariantCulture, ResetText, window.Tab);
         GetNode<Label>("%FooterHint").Text = !onKeybinds ? ""
@@ -429,19 +416,6 @@ public partial class OptionsWindowView : Panel, IHudContextUser
         TypingWarning.TooltipText = warning ?? "";
     }
 
-    // Moving onto a button inside the row also counts as leaving it, so the band only clears once the pointer is out.
-    private static void ShowHoverBand(Control row)
-    {
-        row.MouseEntered += () => row.ThemeTypeVariation = HoveredRowVariation;
-        row.MouseExited += () =>
-        {
-            if (!row.GetGlobalRect().HasPoint(row.GetGlobalMousePosition()))
-            {
-                row.ThemeTypeVariation = RowVariation;
-            }
-        };
-    }
-
     private Control OptionRow(GeneralOption option)
     {
         var row = GeneralOptions.Rows.First(row => row.Option == option);
@@ -450,29 +424,30 @@ public partial class OptionsWindowView : Panel, IHudContextUser
 
     private Node SectionRows(OptionSection section) => section switch
     {
-        OptionSection.Classic => GetNode("%ClientOptions"),
-        OptionSection.Godot => GetNode("%GodotOptions"),
+        OptionSection.Networking => GetNode("%NetworkingOptions"),
+        OptionSection.Chat => GetNode("%ChatOptions"),
+        OptionSection.Informational => GetNode("%InformationalOptions"),
+        OptionSection.Miscellaneous => GetNode("%MiscellaneousOptions"),
         OptionSection.Experimental => GetNode("%ExperimentalOptions"),
         _ => throw new UnreachableException(),
     };
 
-    private CheckBox OptionBox(GeneralOption option) => OptionRow(option).GetNode<CheckBox>("Line/Box");
+    private ProceduralCheckBox OptionBox(GeneralOption option) =>
+        OptionRow(option).GetNode<ProceduralCheckBox>("Line/Box");
 
-    private CheckBox AccessibilityBox(AccessibilityOption option) =>
-        GetNode("%AccessibilityOptions").GetNode<CheckBox>($"{option}/Line/Box");
+    private ProceduralCheckBox AccessibilityBox(AccessibilityOption option) =>
+        GetNode("%AccessibilityOptions").GetNode<ProceduralCheckBox>($"{option}/Line/Box");
 
-    private HSlider BackgroundSlider(WindowBackground window) =>
-        GetNode("%BackgroundOptions").GetNode<HSlider>($"{window}/Line/Slider");
-
-    private Button TabButton(OptionsTab tab) => GetNode("%Tabs").GetNode<Button>($"{tab}Tab");
+    private ProceduralSlider BackgroundSlider(WindowBackground window) =>
+        GetNode("%BackgroundOptions").GetNode<ProceduralSlider>($"{window}/Line/Slider");
 
     private void ShowCursorScale(float scale) =>
         ShowValue(CursorScale, scale.ToString("0.0", CultureInfo.InvariantCulture) + "x");
 
-    private void ShowValue(HSlider slider, string text) => ValueLabel(slider).Text = text;
+    private void ShowValue(ProceduralSlider slider, string text) => ValueLabel(slider).Text = text;
 
     // Each slider shares a line with the label that shows its value.
-    private Label ValueLabel(HSlider slider)
+    private Label ValueLabel(ProceduralSlider slider)
     {
         if (!valueLabels.TryGetValue(slider, out var label))
         {

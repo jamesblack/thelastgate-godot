@@ -2,6 +2,7 @@ using GdUnit4;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Hud;
+using TheLastGate.Procedural;
 using TheLastGate.State;
 using static GdUnit4.Assertions;
 
@@ -24,12 +25,16 @@ public class FontChoiceRowsTests
         window.ShowFontChoices(Choices, "dogicapixel");
         var rows = window.GetNode("%FontOptions").GetChildren().Cast<Control>().ToList();
         AssertThat(rows.Select(row => row.GetNode<Label>("Line/Text").Text)).ContainsExactly("Classic", "Dogica Pixel");
-        AssertThat(Box(rows[1]).ButtonPressed).IsTrue();
+        AssertThat(Box(rows[1]).Checked).IsTrue();
         AssertThat(picked).IsEmpty();
 
-        Box(rows[0]).ButtonPressed = true;
+        Box(rows[0]).Toggle();
         AssertThat(picked).ContainsExactly(FontChoice.ClassicId);
-        AssertThat(Box(rows[1]).ButtonPressed).IsFalse();
+        AssertThat(Box(rows[1]).Checked).IsFalse();
+
+        Box(rows[0]).Toggle();
+        AssertThat(picked).ContainsExactly(FontChoice.ClassicId);
+        AssertThat(Box(rows[0]).Checked).IsTrue();
         window.Free();
     }
 
@@ -40,7 +45,7 @@ public class FontChoiceRowsTests
 
         window.ShowFontChoices(Choices, "vt323");
 
-        AssertThat(Box((Control)window.GetNode("%FontOptions").GetChild(0)).ButtonPressed).IsTrue();
+        AssertThat(Box((Control)window.GetNode("%FontOptions").GetChild(0)).Checked).IsTrue();
         window.Free();
     }
 
@@ -58,7 +63,7 @@ public class FontChoiceRowsTests
         chat.Free();
     }
 
-    private static CheckBox Box(Control row) => row.GetNode<CheckBox>("Line/Box");
+    private static ProceduralCheckBox Box(Control row) => row.GetNode<ProceduralCheckBox>("Line/Box");
 
     private sealed class OtherFonts : IFontSet
     {

@@ -33,6 +33,16 @@ public class ProceduralCheckBoxTests
     public void FreeTheCheckBox() => box.Free();
 
     [TestCase]
+    public void Round_MakesTheBoxACircle()
+    {
+        box.Round = true;
+        box.Checked = true;
+
+        AssertThat(box.GetNode<ProceduralPanel>("Row/Box").Shape).IsEqual(ProceduralShape.Circle);
+        AssertThat(box.GetNode<ProceduralPanel>("Row/Box/Mark/Gold").Shape).IsEqual(ProceduralShape.Circle);
+    }
+
+    [TestCase]
     public void SettingTheSameState_KeepsTheHover()
     {
         box.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
