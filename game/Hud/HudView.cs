@@ -1898,7 +1898,6 @@ public partial class HudView : Control
         var sheet = shown ? PlannerSheet() : null;
         plannerWindow.ShowWindow(
             shown,
-            DarkMode,
             state.Player.Points - statPlan.PointsUsed,
             statPlan.PointsUsed,
             sheet);
@@ -1914,7 +1913,6 @@ public partial class HudView : Control
 
         plannerAdvanced?.ShowWindow(
             gameSession.PlannerWindow.AdvancedOpen,
-            DarkMode,
             PlannerChoices.Choices,
             AdvancedSheet.For(sheet));
 

@@ -430,6 +430,18 @@ public class GameSessionTests
     }
 
     [TestCase]
+    public void Escape_WithTheAdvancedWindowOpen_LeavesThePlannerOpen()
+    {
+        session.PlannerWindow.Toggle();
+        session.PlannerWindow.AdvancedOpen = true;
+
+        AssertThat(session.CloseWindowsByEscape()).IsTrue();
+
+        AssertThat(session.PlannerWindow.AdvancedOpen).IsFalse();
+        AssertThat(session.PlannerWindow.IsOpen).IsTrue();
+    }
+
+    [TestCase]
     public void Escape_ClosesTheWorldMap()
     {
         session.WorldMapWindow.OpenAtPlayer();

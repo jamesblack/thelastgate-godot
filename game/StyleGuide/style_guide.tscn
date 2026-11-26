@@ -17,6 +17,10 @@
 [ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="15_menu"]
 [ext_resource type="PackedScene" uid="uid://b18j726rnfcj" path="res://Map/category_row.tscn" id="16_row"]
 [ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Map/category_list.tscn" id="17_list"]
+[ext_resource type="PackedScene" uid="uid://kaamqjccgmjc" path="res://Procedural/glyph_button.tscn" id="18_glyph"]
+[ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="19_heading"]
+[ext_resource type="PackedScene" uid="uid://vfrcujuqvvmt" path="res://Procedural/picker.tscn" id="20_choice"]
+[ext_resource type="PackedScene" uid="uid://fshowwslwpiw" path="res://Procedural/tooltip.tscn" id="21_tooltip"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focused_example"]
 content_margin_left = 4.0
@@ -52,7 +56,7 @@ Colour = 9
 [node name="Intro" type="Label" parent="Page" unique_id=889541096]
 custom_minimum_size = Vector2(980, 0)
 layout_mode = 2
-text = "Every themed window is built from these parts. Select an example and change it in the Inspector to try a setting. Panels and lines are game/Procedural/ProceduralPanel.cs and ProceduralLine.cs; the shared buttons are game/Procedural/text_button.tscn and close_button.tscn; item cells are game/Hud/item_cell.tscn; text is game/Hud/HudLabel.cs. The finished windows live in game/Hud/ (Shop, Depot, Smith, Waypoints, TextWindow, SkillTree) and game/Map/ (WorldMap)."
+text = "Every themed window is built from these parts. Select an example and change it in the Inspector to try a setting. Panels and lines are game/Procedural/ProceduralPanel.cs and ProceduralLine.cs; the shared buttons are game/Procedural/text_button.tscn and close_button.tscn; item cells are game/Hud/item_cell.tscn; text is game/Hud/HudLabel.cs. The finished windows live in game/Hud/ (Shop, Depot, Smith, Waypoints, TextWindow, SkillTree) , game/Map/ (WorldMap) and game/Planner/ (the planner and its Advanced window)."
 script = ExtResource("3_label")
 Colour = 1
 autowrap_mode = 3
@@ -2526,3 +2530,315 @@ text = "the drop line"
 script = ExtResource("3_label")
 Colour = 10
 
+[node name="GlyphButton" type="HBoxContainer" parent="Page" unique_id=977218056]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/GlyphButton" unique_id=273359983]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/GlyphButton/Notes" unique_id=365599509]
+layout_mode = 2
+text = "Glyph button"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/GlyphButton/Notes" unique_id=275505541]
+layout_mode = 2
+text = "Instance game/Procedural/glyph_button.tscn for a one-character button, such as the planner's raise and lower. It is an 11 by 11 panel, Profile G (one gold ring) and Fill Blue, with the glyph in Yellow in the caption font. Set Glyph and Disabled, and wire Pressed, which a left click fires. It lights up while hovered; disabled fades and dims the glyph."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/GlyphButton" unique_id=679525957]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example68" type="VBoxContainer" parent="Page/GlyphButton/Examples" unique_id=2068599188]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Pair" type="HBoxContainer" parent="Page/GlyphButton/Examples/Example68" unique_id=802277829]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Lower" parent="Page/GlyphButton/Examples/Example68/Pair" unique_id=1816876647 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+Glyph = "-"
+
+[node name="Raise" parent="Page/GlyphButton/Examples/Example68/Pair" unique_id=364932394 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+Glyph = "+"
+
+[node name="Caption" type="Label" parent="Page/GlyphButton/Examples/Example68" unique_id=934901420]
+layout_mode = 2
+text = "normal"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example69" type="VBoxContainer" parent="Page/GlyphButton/Examples" unique_id=1824639598]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Pair" type="HBoxContainer" parent="Page/GlyphButton/Examples/Example69" unique_id=2066788630]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Lower" parent="Page/GlyphButton/Examples/Example69/Pair" unique_id=184220538 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+modulate = Color(1.6, 1.6, 1.6, 1)
+Glyph = "-"
+
+[node name="Raise" parent="Page/GlyphButton/Examples/Example69/Pair" unique_id=1200408118 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+modulate = Color(1.6, 1.6, 1.6, 1)
+Glyph = "+"
+
+[node name="Caption" type="Label" parent="Page/GlyphButton/Examples/Example69" unique_id=243841893]
+layout_mode = 2
+text = "hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example70" type="VBoxContainer" parent="Page/GlyphButton/Examples" unique_id=577032456]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Pair" type="HBoxContainer" parent="Page/GlyphButton/Examples/Example70" unique_id=1688495472]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Lower" parent="Page/GlyphButton/Examples/Example70/Pair" unique_id=1975305813 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+Disabled = true
+Glyph = "-"
+
+[node name="Raise" parent="Page/GlyphButton/Examples/Example70/Pair" unique_id=1676155292 instance=ExtResource("18_glyph")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+Disabled = true
+Glyph = "+"
+
+[node name="Caption" type="Label" parent="Page/GlyphButton/Examples/Example70" unique_id=2135379498]
+layout_mode = 2
+text = "disabled"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="RuledHeading" type="HBoxContainer" parent="Page" unique_id=1713641317]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/RuledHeading" unique_id=1587837584]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/RuledHeading/Notes" unique_id=1773195297]
+layout_mode = 2
+text = "Ruled heading"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/RuledHeading/Notes" unique_id=1599759180]
+layout_mode = 2
+text = "Instance game/Procedural/ruled_heading.tscn above each section of a window's body. Set Text; the title is White, with a gold rule 2 pixels under it that spans the heading's width, so give it the column's width."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/RuledHeading" unique_id=137148295]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example71" type="VBoxContainer" parent="Page/RuledHeading/Examples" unique_id=987842567]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Sample" type="VBoxContainer" parent="Page/RuledHeading/Examples/Example71" unique_id=411719722]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(240, 0)
+theme_override_constants/separation = 2
+
+[node name="Heading" parent="Page/RuledHeading/Examples/Example71/Sample" unique_id=613359357 instance=ExtResource("19_heading")]
+layout_mode = 2
+Text = "Attributes"
+
+[node name="Row" type="Label" parent="Page/RuledHeading/Examples/Example71/Sample" unique_id=1724311807]
+layout_mode = 2
+text = "Braveness            100  176"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Caption" type="Label" parent="Page/RuledHeading/Examples/Example71" unique_id=552244063]
+layout_mode = 2
+text = "a heading over a row"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Picker" type="HBoxContainer" parent="Page" unique_id=1161490497]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Picker" unique_id=1359597863]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Picker/Notes" unique_id=1802923400]
+layout_mode = 2
+text = "Picker"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Picker/Notes" unique_id=1107766403]
+layout_mode = 2
+text = "Instance game/Procedural/picker.tscn where the player picks one of a few named choices, such as a weapon. It is a field-like box, Profile GBG and Fill Blue, showing the choice and a v. Give it a width, call SetChoices with the names and Select to show one without a signal, and connect ItemChosen. A left click opens its own menu straight under it, as wide as the box; Escape or a click outside closes it. Set Tooltip for a styled tooltip, and Disabled to fade it. PreviewChoice and PreviewOpen are for this page."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Picker" unique_id=1162203268]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example72" type="VBoxContainer" parent="Page/Picker/Examples" unique_id=793705196]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Picker" parent="Page/Picker/Examples/Example72" unique_id=1409270570 instance=ExtResource("20_choice")]
+layout_mode = 2
+size_flags_horizontal = 0
+PreviewChoice = "Unarmed"
+
+[node name="Caption" type="Label" parent="Page/Picker/Examples/Example72" unique_id=131905869]
+layout_mode = 2
+text = "closed"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example73" type="VBoxContainer" parent="Page/Picker/Examples" unique_id=715198382]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Picker" parent="Page/Picker/Examples/Example73" unique_id=119493208 instance=ExtResource("20_choice")]
+layout_mode = 2
+size_flags_horizontal = 0
+Disabled = true
+PreviewChoice = "Unarmed"
+
+[node name="Caption" type="Label" parent="Page/Picker/Examples/Example73" unique_id=2092846606]
+layout_mode = 2
+text = "disabled"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Example74" type="VBoxContainer" parent="Page/Picker/Examples" unique_id=719846320]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Open" type="VBoxContainer" parent="Page/Picker/Examples/Example74" unique_id=1356240860]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Picker" parent="Page/Picker/Examples/Example74/Open" unique_id=1761402660 instance=ExtResource("20_choice")]
+layout_mode = 2
+size_flags_horizontal = 0
+PreviewChoice = "Unarmed"
+PreviewOpen = true
+
+[node name="Menu" parent="Page/Picker/Examples/Example74/Open" unique_id=974733868 instance=ExtResource("15_menu")]
+layout_mode = 2
+size_flags_horizontal = 0
+Preview = 3
+
+[node name="Caption" type="Label" parent="Page/Picker/Examples/Example74" unique_id=383521910]
+layout_mode = 2
+text = "open, Sword hovered"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Tooltip" type="HBoxContainer" parent="Page" unique_id=1713469518]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/Tooltip" unique_id=1496965338]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/Tooltip/Notes" unique_id=1786667077]
+layout_mode = 2
+text = "Tooltip"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/Tooltip/Notes" unique_id=228147111]
+layout_mode = 2
+text = "A styled tooltip is a GBG red panel with Padding 4 and Yellow text, which breaks lines where the text has them. Turn on StyledTooltip on a ClickArea and set its tooltip_text; on any other control, return ProceduralTooltip.Make(text) from _MakeCustomTooltip."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/Tooltip" unique_id=270933470]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example75" type="VBoxContainer" parent="Page/Tooltip/Examples" unique_id=948218880]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Tooltip" parent="Page/Tooltip/Examples/Example75" unique_id=1914897023 instance=ExtResource("21_tooltip")]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Text" parent="Page/Tooltip/Examples/Example75/Tooltip" index="0" unique_id=233983346]
+text = "Fists of the Heavens uses your best weapon skill,\nso the weapon is not yours to pick."
+
+[node name="Caption" type="Label" parent="Page/Tooltip/Examples/Example75" unique_id=1894808065]
+layout_mode = 2
+text = "two lines"
+script = ExtResource("3_label")
+Colour = 10

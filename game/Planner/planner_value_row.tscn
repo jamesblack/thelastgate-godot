@@ -1,57 +1,36 @@
 [gd_scene format=3 uid="uid://gnrt5ug31fqn"]
 
-[ext_resource type="Script" uid="uid://iaxankllorhj" path="res://Planner/PlannerValueRow.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://h9w9nkllorhj" path="res://Planner/PlannerValueRow.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
 
-[node name="PlannerValueRow" type="Control" unique_id=1170431254]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 3
-anchors_preset = 0
-offset_right = 290.0
-offset_bottom = 14.0
+[node name="PlannerValueRow" type="Container" unique_id=1170431254]
+custom_minimum_size = Vector2(0, 15)
 mouse_filter = 2
 script = ExtResource("1_row")
+Fill = 2
+Padding = 1
 
-[node name="Name" type="Label" parent="." unique_id=1811146893]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 140.0
-offset_bottom = 14.0
-text = "Hit Score"
-vertical_alignment = 1
-
-[node name="Value" type="Label" parent="." unique_id=325160677]
-layout_mode = 0
-offset_left = 88.0
-offset_right = 148.0
-offset_bottom = 14.0
-text = "100"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="Planned" type="HBoxContainer" parent="." unique_id=1990236411]
-layout_mode = 0
-offset_left = 182.0
-offset_right = 288.0
-offset_bottom = 14.0
+[node name="Cells" type="HBoxContainer" parent="." unique_id=1489263617]
+layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Shown" type="Label" parent="Planned" unique_id=727383180]
+[node name="Lead" type="Control" parent="Cells" unique_id=1702938145]
+custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "104"
-vertical_alignment = 1
+mouse_filter = 2
 
-[node name="Difference" type="Label" parent="Planned" unique_id=1543872096]
+[node name="Name" type="Label" parent="Cells" unique_id=1906221347]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.352941, 0.705882, 1, 1)
-text = " +4"
+text = "Hit Score"
 vertical_alignment = 1
+clip_text = true
+script = ExtResource("2_label")
 
-[node name="Outline" type="ReferenceRect" parent="." unique_id=811600921]
-visible = false
+[node name="NameClick" type="Control" parent="Cells/Name" unique_id=1232094871]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,11 +38,34 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-border_color = Color(0.952941, 0.858824, 0.415686, 1)
-editor_only = false
 
-[node name="NameClick" type="Control" parent="." unique_id=1139727805]
-layout_mode = 0
-offset_right = 118.0
-offset_bottom = 14.0
+[node name="Value" type="Label" parent="Cells" unique_id=1341590272]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "297"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("2_label")
+
+[node name="Planned" type="Label" parent="Cells" unique_id=668120374]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("2_label")
+Colour = 9
+
+[node name="DifferenceGap" type="Control" parent="Cells" unique_id=1610934471]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
 mouse_filter = 2
+
+[node name="Difference" type="Label" parent="Cells" unique_id=1170880235]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+vertical_alignment = 1
+script = ExtResource("2_label")
+Colour = 3

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://evikuhwcdff"]
+
+[ext_resource type="Script" uid="uid://updfwwtpvqht" path="res://Procedural/RuledHeading.cs" id="1_heading"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="3_line"]
+
+[node name="RuledHeading" type="VBoxContainer" unique_id=1460381297]
+mouse_filter = 2
+theme_override_constants/separation = 2
+script = ExtResource("1_heading")
+
+[node name="Title" type="Label" parent="." unique_id=903561842]
+layout_mode = 2
+text = "Heading"
+script = ExtResource("2_label")
+Colour = 9
+
+[node name="Rule" type="Control" parent="." unique_id=1127730594]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Line" type="Line2D" parent="Rule" unique_id=356204718]
+points = PackedVector2Array(0, 0.5, 100, 0.5)
+width = 1.0
+script = ExtResource("3_line")
+Profile = "G"

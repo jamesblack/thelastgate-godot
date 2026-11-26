@@ -33,6 +33,18 @@ public class ProceduralCheckBoxTests
     public void FreeTheCheckBox() => box.Free();
 
     [TestCase]
+    public void SettingTheSameState_KeepsTheHover()
+    {
+        box.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
+
+        box.Checked = false;
+        box.Disabled = false;
+        box.Text = box.Text;
+
+        AssertThat(box.Modulate).IsEqual(ClickArea.Hovered);
+    }
+
+    [TestCase]
     public void Click_TogglesAndRaisesToggled()
     {
         ClickIt();

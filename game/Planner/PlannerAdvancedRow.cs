@@ -1,23 +1,22 @@
 using System;
 using System.Linq;
 using Godot;
+using TheLastGate.Assets;
+using TheLastGate.Hud;
+using TheLastGate.Procedural;
 
 namespace TheLastGate.Planner;
 
 // One row of the planner's Advanced window: a tick and its name, and for the rows that have them, what one copy does,
 // how many copies there are and how many the skill tree adds.
 [Tool]
-public partial class PlannerAdvancedRow : Control
+public partial class PlannerAdvancedRow : HBoxContainer
 {
-    private static readonly Color Gold = Color.Color8(243, 219, 106);
-    private static readonly Color Hint = Color.Color8(72, 81, 81);
+    private ProceduralCheckBox Tick => GetNode<ProceduralCheckBox>("%Tick");
 
-    // A disabled tick is drawn faded, as the current client's are.
-    private static readonly Color Faded = new(1, 1, 1, 0.6f);
+    private LineEdit Count => GetNode<LineEdit>("%Count");
 
-    private CheckBox Tick => GetNode<CheckBox>("Tick");
-
-    private LineEdit Count => GetNode<LineEdit>("Count");
+    private HudLabel Effect => GetNode<HudLabel>("%Effect");
 
     public event Action? Toggled;
 
@@ -41,21 +40,25 @@ public partial class PlannerAdvancedRow : Control
         };
     }
 
-    public void Show(string name, bool ticked, bool enabled) => ShowTick(name, ticked, enabled, enabled ? Gold : Hint);
+    public void Show(string name, bool ticked, bool enabled) => ShowTick(name, ticked, enabled);
 
     // A row the planner always counts, such as the skill tree's.
-    public void ShowAlwaysOn(string name) => ShowTick(name, true, false, Gold);
+    public void ShowAlwaysOn(string name) => ShowTick(name, true, false);
 
     // A line under a row, such as a spell's warning.
     public void ShowNote(string text)
     {
         Tick.Visible = false;
-        var label = GetNode<Label>("Name");
-        label.Text = text;
-        label.AddThemeColorOverride("font_color", Hint);
+        var note = GetNode<Label>("%Note");
+        note.Visible = true;
+        note.Text = text;
     }
 
-    public void ShowEffect(string effect) => GetNode<Label>("Effect").Text = effect;
+    public void ShowEffect(string effect)
+    {
+        Effect.Text = effect;
+        Effect.Visible = effect.Length > 0;
+    }
 
     // The count being typed is left alone until the typing ends.
     public void ShowCount(int copies, bool enabled, string help)
@@ -69,17 +72,15 @@ public partial class PlannerAdvancedRow : Control
         }
     }
 
-    public void ShowTree(string text) => GetNode<Label>("Tree").Text = text;
+    public void ShowTree(string text) => GetNode<Label>("%Tree").Text = text;
 
-    private void ShowTick(string name, bool ticked, bool enabled, Color colour)
+    private void ShowTick(string name, bool ticked, bool enabled)
     {
         Tick.Visible = true;
-        Tick.SetPressedNoSignal(ticked);
+        Tick.Text = name;
+        Tick.Checked = ticked;
         Tick.Disabled = !enabled;
-        Tick.Modulate = enabled ? Colors.White : Faded;
-        var label = GetNode<Label>("Name");
-        label.Text = name;
-        label.AddThemeColorOverride("font_color", colour);
+        Effect.Colour = enabled ? TextColour.Grey : TextColour.Dim;
     }
 
     // Only digits can be typed. A count takes effect as it is typed; an empty box or 0 waits for the typing to end,

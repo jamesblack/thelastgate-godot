@@ -1,408 +1,418 @@
 [gd_scene format=3 uid="uid://g4078uc11v8r"]
 
 [ext_resource type="Script" uid="uid://usd3shgqiub" path="res://Planner/PlannerWindowView.cs" id="1_view"]
-[ext_resource type="Theme" uid="uid://bxevvm0ssb2pb" path="res://themes/OptionsTheme.tres" id="2_theme"]
-[ext_resource type="PackedScene" uid="uid://f8ob5sl7bt4g" path="res://Planner/planner_stat_row.tscn" id="3_row"]
-[ext_resource type="PackedScene" uid="uid://gnrt5ug31fqn" path="res://Planner/planner_value_row.tscn" id="4_value"]
-[ext_resource type="Theme" uid="uid://cutkkse75jg5" path="res://themes/GameDropdownTheme.tres" id="5_dropdown"]
-[ext_resource type="PackedScene" uid="uid://x64mt3tr32cj" path="res://Planner/planner_focus_line.tscn" id="6_focus"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="4_button"]
+[ext_resource type="PackedScene" uid="uid://pew1yckprspw" path="res://Procedural/close_button.tscn" id="5_close"]
+[ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="6_heading"]
+[ext_resource type="PackedScene" uid="uid://vfrcujuqvvmt" path="res://Procedural/picker.tscn" id="7_picker"]
+[ext_resource type="PackedScene" uid="uid://f8ob5sl7bt4g" path="res://Planner/planner_stat_row.tscn" id="8_stat"]
+[ext_resource type="PackedScene" uid="uid://gnrt5ug31fqn" path="res://Planner/planner_value_row.tscn" id="9_value"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
-bg_color = Color(0.164706, 0.0588235, 0.0392157, 0.941176)
-
-[node name="PlannerWindow" type="Panel" unique_id=1284086976]
-offset_left = 326.0
+[node name="PlannerWindow" type="Control" unique_id=1774915910]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 300.0
 offset_top = 25.0
-offset_right = 954.0
-offset_bottom = 695.0
-theme = ExtResource("2_theme")
-theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+mouse_filter = 2
 script = ExtResource("1_view")
 
-[node name="Frame" type="NinePatchRect" parent="." unique_id=1349039553]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="Header" type="Control" parent="." unique_id=909513893]
-anchors_preset = 0
-offset_top = 10.0
-offset_right = 628.0
-offset_bottom = 36.0
+[node name="Window" type="HBoxContainer" parent="." unique_id=1596748863]
+layout_mode = 0
 mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Points" type="Label" parent="Header" unique_id=567259165]
-layout_mode = 0
-offset_left = 12.0
-offset_right = 400.0
-offset_bottom = 26.0
-text = "Exp left 0    Planned 0"
-vertical_alignment = 1
+[node name="Frame" type="Container" parent="Window" unique_id=1735038099]
+custom_minimum_size = Vector2(680, 670)
+layout_mode = 2
+mouse_filter = 0
+size_flags_vertical = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="Commit" type="Button" parent="Header" unique_id=764713996]
-layout_mode = 0
-offset_left = 442.0
-offset_top = 3.0
-offset_right = 498.0
-offset_bottom = 22.0
-focus_mode = 0
-text = "Commit"
-
-[node name="Reset" type="Button" parent="Header" unique_id=658605960]
-layout_mode = 0
-offset_left = 502.0
-offset_top = 3.0
-offset_right = 558.0
-offset_bottom = 22.0
-focus_mode = 0
-text = "Reset"
-
-[node name="Close" type="Button" parent="Header" unique_id=1214660830]
-layout_mode = 0
-offset_left = 562.0
-offset_top = 3.0
-offset_right = 618.0
-offset_bottom = 22.0
-focus_mode = 0
-text = "Close"
-
-[node name="Left" type="VBoxContainer" parent="." unique_id=1211718545]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 36.0
-offset_right = 300.0
-offset_bottom = 660.0
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1931839102]
+layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="AttributesHeading" type="Control" parent="Left" unique_id=234694200]
-custom_minimum_size = Vector2(290, 14)
+[node name="TitleBar" type="Container" parent="Window/Frame/Layout" unique_id=242541727]
+layout_mode = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 4
+Padding = 3
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/TitleBar" unique_id=961737220]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="Left/AttributesHeading" unique_id=378650639]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 290.0
-offset_bottom = 14.0
-theme_type_variation = &"HeadingLabel"
-text = "Attributes"
+[node name="Title" type="Label" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=263130827]
+layout_mode = 2
+text = "Planner"
 vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 9
 
-[node name="Braveness" parent="Left" unique_id=856500165 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Willpower" parent="Left" unique_id=436501052 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Intuition" parent="Left" unique_id=952225196 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Agility" parent="Left" unique_id=778543000 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Strength" parent="Left" unique_id=1567423318 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Hitpoints" parent="Left" unique_id=2111122110 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="Mana" parent="Left" unique_id=1598631709 instance=ExtResource("3_row")]
-layout_mode = 2
-
-[node name="CombatGap" type="Control" parent="Left" unique_id=1586348330]
-custom_minimum_size = Vector2(290, 14)
+[node name="TitleGap" type="Control" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=493698869]
+custom_minimum_size = Vector2(6, 0)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CombatHeading" type="Control" parent="Left" unique_id=1778860719]
-custom_minimum_size = Vector2(290, 14)
+[node name="PointsLeft" type="Label" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=1638040129]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="Left/CombatHeading" unique_id=446509138]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 290.0
-offset_bottom = 14.0
-theme_type_variation = &"HeadingLabel"
-text = "Combat (current)"
+text = "Exp left 0"
 vertical_alignment = 1
+script = ExtResource("3_label")
 
-[node name="Equipment" type="Control" parent="Left" unique_id=1838238627]
-custom_minimum_size = Vector2(290, 16)
+[node name="Planned" type="Label" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=1495749103]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Planned 0"
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Spacer" type="Control" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=1148790179]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="Commit" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=982039098 instance=ExtResource("4_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Commit"
+
+[node name="Reset" parent="Window/Frame/Layout/TitleBar/Cells" unique_id=455285444 instance=ExtResource("4_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Reset"
+
+[node name="Body" type="Container" parent="Window/Frame/Layout" unique_id=1365428659]
+layout_mode = 2
+mouse_filter = 2
+size_flags_vertical = 3
+script = ExtResource("2_panel")
+Fill = 0
+Padding = 6
+
+[node name="Columns" type="HBoxContainer" parent="Window/Frame/Layout/Body" unique_id=969078137]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 11
+
+[node name="Left" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns" unique_id=913504819]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(312, 0)
+theme_override_constants/separation = 1
+
+[node name="AttributesHeading" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=386839264 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Attributes"
+
+[node name="Braveness" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=220147213 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Willpower" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1579121298 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Intuition" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=723523177 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Agility" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1832706200 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Strength" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=550667701 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Hitpoints" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=2106866565 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Mana" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=375017021 instance=ExtResource("8_stat")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CombatGap" type="Control" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1634093331]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="WeaponLabel" type="Label" parent="Left/Equipment" unique_id=728631151]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 46.0
-offset_bottom = 16.0
+[node name="CombatHeading" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=659361394 instance=ExtResource("6_heading")]
+unique_name_in_owner = true
+layout_mode = 2
+Text = "Combat (current)"
+
+[node name="Equipment" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=964950164]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="WeaponLabel" type="Label" parent="Window/Frame/Layout/Body/Columns/Left/Equipment" unique_id=1975275367]
+layout_mode = 2
 text = "Weapon"
 vertical_alignment = 1
+script = ExtResource("3_label")
 
-[node name="Weapon" type="OptionButton" parent="Left/Equipment" unique_id=1928883133]
-layout_mode = 0
-offset_left = 46.0
-offset_right = 138.0
-offset_bottom = 16.0
-focus_mode = 0
-theme = ExtResource("5_dropdown")
-clip_text = true
+[node name="Weapon" parent="Window/Frame/Layout/Body/Columns/Left/Equipment" unique_id=1763620051 instance=ExtResource("7_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
 
-[node name="OffhandLabel" type="Label" parent="Left/Equipment" unique_id=364234993]
-layout_mode = 0
-offset_left = 146.0
-offset_right = 198.0
-offset_bottom = 16.0
+[node name="EquipmentGap" type="Control" parent="Window/Frame/Layout/Body/Columns/Left/Equipment" unique_id=1495224381]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OffhandLabel" type="Label" parent="Window/Frame/Layout/Body/Columns/Left/Equipment" unique_id=1032927818]
+layout_mode = 2
 text = "Off-hand"
 vertical_alignment = 1
+script = ExtResource("3_label")
 
-[node name="Offhand" type="OptionButton" parent="Left/Equipment" unique_id=1071212714]
-layout_mode = 0
-offset_left = 198.0
-offset_right = 290.0
-offset_bottom = 16.0
-focus_mode = 0
-theme = ExtResource("5_dropdown")
-clip_text = true
+[node name="Offhand" parent="Window/Frame/Layout/Body/Columns/Left/Equipment" unique_id=225486813 instance=ExtResource("7_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
 
-[node name="HitScore" parent="Left" unique_id=192237873 instance=ExtResource("4_value")]
+[node name="HitScore" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1362733720 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ParryScore" parent="Left" unique_id=1087404368 instance=ExtResource("4_value")]
+[node name="ParryScore" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=819047068 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="WeaponValue" parent="Left" unique_id=242109944 instance=ExtResource("4_value")]
+[node name="WeaponValue" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1512956418 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ArmorValue" parent="Left" unique_id=626536839 instance=ExtResource("4_value")]
+[node name="ArmorValue" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=615533876 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SpellMultiplier" parent="Left" unique_id=964078843 instance=ExtResource("4_value")]
+[node name="SpellMultiplier" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1188502163 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SpellAptitude" parent="Left" unique_id=1071398323 instance=ExtResource("4_value")]
+[node name="SpellAptitude" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1099044547 instance=ExtResource("9_value")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MathGap" type="Control" parent="Left" unique_id=370130990]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="MathHeader" type="Control" parent="Left" unique_id=753906166]
-custom_minimum_size = Vector2(290, 21)
+[node name="MathGap" type="Control" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1107004319]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Left/MathHeader" unique_id=398364089]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 3.0
-offset_right = 200.0
-offset_bottom = 17.0
-theme_type_variation = &"HeadingLabel"
-text = "In the math"
-vertical_alignment = 1
-
-[node name="Advanced" type="Button" parent="Left/MathHeader" unique_id=1695239263]
-layout_mode = 0
-offset_left = 208.0
-offset_right = 288.0
-offset_bottom = 19.0
-focus_mode = 0
-text = "Advanced..."
-
-[node name="MathScroll" type="ScrollContainer" parent="Left" unique_id=918341557]
-custom_minimum_size = Vector2(290, 70)
+[node name="MathHeader" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=106393561]
 layout_mode = 2
-horizontal_scroll_mode = 0
+mouse_filter = 2
+theme_override_constants/separation = 6
 
-[node name="Indent" type="MarginContainer" parent="Left/MathScroll" unique_id=674154773]
+[node name="MathHeading" parent="Window/Frame/Layout/Body/Columns/Left/MathHeader" unique_id=1265199750 instance=ExtResource("6_heading")]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/margin_left = 10
+Text = "In the math"
 
-[node name="MathLines" type="VBoxContainer" parent="Left/MathScroll/Indent" unique_id=986190509]
+[node name="Advanced" parent="Window/Frame/Layout/Body/Columns/Left/MathHeader" unique_id=536781069 instance=ExtResource("4_button")]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+size_flags_vertical = 0
+Caption = "Advanced..."
 
-[node name="FocusGap" type="Control" parent="Left" unique_id=704403207]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="FocusHeading" type="Control" parent="Left" unique_id=1972082315]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="Left/FocusHeading" unique_id=903505798]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 290.0
-offset_bottom = 14.0
-theme_type_variation = &"HeadingLabel"
-text = "Focus"
-vertical_alignment = 1
-
-[node name="FocusLines" type="VBoxContainer" parent="Left" unique_id=903937317]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 0
-
-[node name="PlanRow" type="Control" parent="Left" unique_id=706662266]
-custom_minimum_size = Vector2(290, 21)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="PlanIt" type="Button" parent="Left/PlanRow" unique_id=780407432]
-layout_mode = 0
-offset_left = 228.0
-offset_top = 2.0
-offset_right = 288.0
-offset_bottom = 21.0
-focus_mode = 0
-text = "Plan it"
-
-[node name="Right" type="VBoxContainer" parent="." unique_id=965235590]
-layout_mode = 0
-offset_left = 314.0
-offset_top = 36.0
-offset_right = 618.0
-offset_bottom = 660.0
-mouse_filter = 2
-theme_override_constants/separation = 0
-
-[node name="KeyHeading" type="Control" parent="Right" unique_id=1300489583]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="Right/KeyHeading" unique_id=1722958671]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 290.0
-offset_bottom = 14.0
-theme_type_variation = &"HeadingLabel"
-text = "Key"
-vertical_alignment = 1
-
-[node name="BoughtKey" type="Control" parent="Right" unique_id=455127533]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Band" type="ColorRect" parent="Right/BoughtKey" unique_id=1304187674]
-layout_mode = 0
-offset_right = 290.0
-offset_bottom = 14.0
-mouse_filter = 2
-color = Color(0.952941, 0.858824, 0.415686, 0.219608)
-
-[node name="Sample" type="Label" parent="Right/BoughtKey" unique_id=616558624]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 24.0
-offset_bottom = 14.0
-theme_override_colors/font_color = Color(0.490196, 0.862745, 0.415686, 1)
-text = "+N"
-vertical_alignment = 1
-
-[node name="Meaning" type="Label" parent="Right/BoughtKey" unique_id=1113343013]
-layout_mode = 0
-offset_left = 24.0
-offset_right = 290.0
-offset_bottom = 14.0
-text = "points you bought for it"
-vertical_alignment = 1
-
-[node name="GainKey" type="Control" parent="Right" unique_id=1280230111]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Marker" type="ColorRect" parent="Right/GainKey" unique_id=2066185488]
-layout_mode = 0
-offset_right = 2.0
-offset_bottom = 14.0
-mouse_filter = 2
-color = Color(0.352941, 0.705882, 1, 1)
-
-[node name="Sample" type="Label" parent="Right/GainKey" unique_id=396793570]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 24.0
-offset_bottom = 14.0
-theme_override_colors/font_color = Color(0.352941, 0.705882, 1, 1)
-text = "+N"
-vertical_alignment = 1
-
-[node name="Meaning" type="Label" parent="Right/GainKey" unique_id=1378042460]
-layout_mode = 0
-offset_left = 24.0
-offset_right = 290.0
-offset_bottom = 14.0
-text = "from raised attributes"
-vertical_alignment = 1
-
-[node name="BaseKey" type="Control" parent="Right" unique_id=1853894222]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Sample" type="Label" parent="Right/BaseKey" unique_id=1544559580]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 24.0
-offset_bottom = 14.0
-theme_override_colors/font_color = Color(0.627451, 0.627451, 0.627451, 1)
-text = "N"
-vertical_alignment = 1
-
-[node name="Meaning" type="Label" parent="Right/BaseKey" unique_id=246399817]
-layout_mode = 0
-offset_left = 24.0
-offset_right = 290.0
-offset_bottom = 14.0
-text = "base, before gear and buffs"
-vertical_alignment = 1
-
-[node name="Gap" type="Control" parent="Right" unique_id=1395973494]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="SkillsHeading" type="Control" parent="Right" unique_id=177224889]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="Right/SkillsHeading" unique_id=399044968]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 290.0
-offset_bottom = 14.0
-theme_type_variation = &"HeadingLabel"
-text = "Skills"
-vertical_alignment = 1
-
-[node name="SkillScroll" type="ScrollContainer" parent="Right" unique_id=314210658]
+[node name="MathScroll" type="ScrollContainer" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=411483424]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="SkillRows" type="VBoxContainer" parent="Right/SkillScroll" unique_id=1434772398]
+[node name="MathLines" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left/MathScroll" unique_id=1404029170]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="FocusGap" type="Control" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1654492352]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FocusHeading" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1876767725 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Focus"
+
+[node name="FocusLines" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=987784537]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
+
+[node name="PlanRow" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Left" unique_id=1523001630]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+theme_override_constants/separation = 0
+
+[node name="PlanIt" parent="Window/Frame/Layout/Body/Columns/Left/PlanRow" unique_id=1214797152 instance=ExtResource("4_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Plan it"
+
+[node name="Right" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns" unique_id=1941970409]
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="KeyHeading" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=1371654742 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Key"
+
+[node name="BoughtKey" type="Container" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=2118907841]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 3
+Padding = 1
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/BoughtKey" unique_id=187953297]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Lead" type="Control" parent="Window/Frame/Layout/Body/Columns/Right/BoughtKey/Cells" unique_id=944344970]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Sample" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/BoughtKey/Cells" unique_id=559790530]
+layout_mode = 2
+custom_minimum_size = Vector2(28, 0)
+text = "+N"
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 2
+
+[node name="Meaning" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/BoughtKey/Cells" unique_id=317724747]
+layout_mode = 2
+text = "points you bought for it"
+vertical_alignment = 1
+script = ExtResource("3_label")
+
+[node name="GainKey" type="Container" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=1591133099]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Padding = 1
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/GainKey" unique_id=1136404679]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Lead" type="Control" parent="Window/Frame/Layout/Body/Columns/Right/GainKey/Cells" unique_id=1452536705]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Marker" type="ColorRect" parent="Window/Frame/Layout/Body/Columns/Right/GainKey/Cells/Lead" unique_id=239950503]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 2.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.352941, 0.705882, 1, 1)
+
+[node name="Sample" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/GainKey/Cells" unique_id=987678325]
+layout_mode = 2
+custom_minimum_size = Vector2(28, 0)
+text = "+N"
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 3
+
+[node name="Meaning" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/GainKey/Cells" unique_id=1742645906]
+layout_mode = 2
+text = "from raised attributes"
+vertical_alignment = 1
+script = ExtResource("3_label")
+
+[node name="BaseKey" type="Container" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=469093942]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 2
+Padding = 1
+
+[node name="Cells" type="HBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/BaseKey" unique_id=1886195577]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Lead" type="Control" parent="Window/Frame/Layout/Body/Columns/Right/BaseKey/Cells" unique_id=2144835563]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Sample" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/BaseKey/Cells" unique_id=907269034]
+layout_mode = 2
+custom_minimum_size = Vector2(28, 0)
+text = "N"
+vertical_alignment = 1
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="Meaning" type="Label" parent="Window/Frame/Layout/Body/Columns/Right/BaseKey/Cells" unique_id=580053960]
+layout_mode = 2
+text = "base, before gear and buffs"
+vertical_alignment = 1
+script = ExtResource("3_label")
+
+[node name="SkillsGap" type="Control" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=890467693]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SkillsHeading" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=1346929589 instance=ExtResource("6_heading")]
+layout_mode = 2
+Text = "Skills"
+
+[node name="SkillScroll" type="ScrollContainer" parent="Window/Frame/Layout/Body/Columns/Right" unique_id=131196169]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SkillRows" type="VBoxContainer" parent="Window/Frame/Layout/Body/Columns/Right/SkillScroll" unique_id=1696562531]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Close" parent="Window" unique_id=1778551403 instance=ExtResource("5_close")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0

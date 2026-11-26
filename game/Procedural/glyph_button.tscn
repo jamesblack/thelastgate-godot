@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://kaamqjccgmjc"]
+
+[ext_resource type="Script" uid="uid://iaasbsneisvh" path="res://Procedural/GlyphButton.cs" id="1_button"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="3_click"]
+
+[node name="GlyphButton" type="Container" unique_id=1739204581]
+custom_minimum_size = Vector2(11, 11)
+mouse_filter = 2
+script = ExtResource("1_button")
+Profile = "G"
+Fill = 1
+
+[node name="Inside" type="Control" parent="." unique_id=482915377]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Glyph" type="Label" parent="Inside" unique_id=1205583914]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_label")
+Caption = true
+
+[node name="Click" type="Control" parent="." unique_id=1873350246]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("3_click")

@@ -25,6 +25,21 @@ public class PlannerWindowTests
     }
 
     [TestCase]
+    public void Escape_ClosesTheAdvancedWindowFirst()
+    {
+        window.Toggle();
+        window.AdvancedOpen = true;
+
+        AssertThat(window.CloseByEscape()).IsTrue();
+        AssertThat(window.AdvancedOpen).IsFalse();
+        AssertThat(window.IsOpen).IsTrue();
+
+        AssertThat(window.CloseByEscape()).IsTrue();
+        AssertThat(window.IsOpen).IsFalse();
+        AssertThat(window.CloseByEscape()).IsFalse();
+    }
+
+    [TestCase]
     public void Toggle_TellsWhetherItOpened()
     {
         AssertThat(window.Toggle()).IsTrue();
@@ -72,11 +87,5 @@ public class PlannerWindowTests
         window.ClearFocus();
 
         AssertThat(window.Focus).IsNull();
-    }
-
-    [TestCase]
-    public void TheHeader_SaysWhatIsLeftAndWhatIsPlanned()
-    {
-        AssertThat(PlannerWindow.Header(1200, 300)).IsEqual("Exp left 1200    Planned 300");
     }
 }

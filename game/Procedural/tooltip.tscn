@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://fshowwslwpiw"]
+
+[ext_resource type="Script" uid="uid://owrllaqteppn" path="res://Procedural/ProceduralTooltip.cs" id="1_tooltip"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+
+[node name="Tooltip" type="Container" unique_id=1093476215]
+mouse_filter = 2
+script = ExtResource("1_tooltip")
+Profile = "GBG"
+Fill = 0
+Padding = 4
+
+[node name="Text" type="Label" parent="." unique_id=1542307861]
+layout_mode = 2
+text = "Tooltip"
+script = ExtResource("2_label")

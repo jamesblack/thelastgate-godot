@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using TheLastGate.Procedural;
 using TheLastGate.World;
 
 namespace TheLastGate.Hud;
@@ -45,6 +46,9 @@ public partial class ClickArea : Control
 
     private CanvasItem Lit => LitContent.IsEmpty ? this : GetNode<CanvasItem>(LitContent);
 
+    // Shows the tooltip in the procedural look instead of Godot's own.
+    [Export] public bool StyledTooltip { get; set; }
+
     // For areas whose tooltip depends on where in them the mouse is.
     public Func<Vector2, string>? TooltipFor { get; set; }
 
@@ -53,6 +57,9 @@ public partial class ClickArea : Control
     public void ClearHover() => ShowHeld(false, false);
 
     public override string _GetTooltip(Vector2 atPosition) => TooltipFor?.Invoke(atPosition) ?? TooltipText;
+
+    public override GodotObject? _MakeCustomTooltip(string forText) =>
+        StyledTooltip ? ProceduralTooltip.Make(forText) : null;
 
     public override void _GuiInput(InputEvent inputEvent)
     {

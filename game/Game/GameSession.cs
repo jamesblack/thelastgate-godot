@@ -88,7 +88,7 @@ public sealed class GameSession
         var closedTree = SkillTreeWindow.Close();
         var closedOptions = OptionsWindow.Close();
         var closedWorldMap = WorldMapWindow.CloseByEscape();
-        var closedPlanner = PlannerWindow.Close();
+        var closedPlanner = PlannerWindow.CloseByEscape();
         var closedShop = CloseShop();
         var closedSessionStats = SessionStatsOpen;
         SessionStatsOpen = false;

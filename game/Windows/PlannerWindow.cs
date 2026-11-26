@@ -3,7 +3,7 @@ using TheLastGate.Planner;
 namespace TheLastGate.Windows;
 
 // The skill planner, opened by its button under the skill list or its hotkey while the option is on, and its Advanced
-// window. Closing the planner closes both.
+// window. Closing the planner closes both; Escape closes the Advanced window first.
 public sealed class PlannerWindow
 {
     public bool IsOpen { get; private set; }
@@ -29,6 +29,17 @@ public sealed class PlannerWindow
         return true;
     }
 
+    public bool CloseByEscape()
+    {
+        if (!AdvancedOpen)
+        {
+            return Close();
+        }
+
+        AdvancedOpen = false;
+        return true;
+    }
+
     public bool Close()
     {
         var wasOpen = IsOpen || AdvancedOpen;
@@ -36,6 +47,4 @@ public sealed class PlannerWindow
         AdvancedOpen = false;
         return wasOpen;
     }
-
-    public static string Header(int pointsLeft, int planned) => $"Exp left {pointsLeft}    Planned {planned}";
 }

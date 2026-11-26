@@ -1,29 +1,34 @@
 [gd_scene format=3 uid="uid://x64mt3tr32cj"]
 
 [ext_resource type="Script" uid="uid://ej83v4s2pgpy" path="res://Planner/PlannerFocusLine.cs" id="1_line"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
 
-[node name="PlannerFocusLine" type="Control" unique_id=477957181]
-custom_minimum_size = Vector2(290, 14)
-layout_mode = 3
-anchors_preset = 0
-offset_right = 290.0
-offset_bottom = 14.0
+[node name="PlannerFocusLine" type="HBoxContainer" unique_id=477957181]
+custom_minimum_size = Vector2(0, 14)
 mouse_filter = 2
+theme_override_constants/separation = 0
 script = ExtResource("1_line")
 
+[node name="Indent" type="Control" parent="." unique_id=1287365016]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+mouse_filter = 2
+
 [node name="Text" type="Label" parent="." unique_id=903557310]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 288.0
-offset_bottom = 14.0
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Cheapest +1"
 vertical_alignment = 1
+clip_text = true
+script = ExtResource("2_label")
 
 [node name="Value" type="Label" parent="." unique_id=921230311]
-layout_mode = 0
-offset_left = 188.0
-offset_right = 288.0
-offset_bottom = 14.0
+unique_name_in_owner = true
+layout_mode = 2
 text = "4800 exp"
 horizontal_alignment = 2
 vertical_alignment = 1
+script = ExtResource("2_label")
+Colour = 10

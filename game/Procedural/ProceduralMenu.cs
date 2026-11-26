@@ -15,6 +15,8 @@ public partial class ProceduralMenu : Control
     private const int SeparatorInset = 3;
     private const int PickerColumns = 4;
     private const int PreviewPickerChosen = 1;
+    private const int PreviewChoicesWidth = 110;
+    private const int PreviewChoicesHovered = 2;
 
     private static readonly Color HoveredRow = new(1.3f, 1.3f, 1.3f);
 
@@ -299,6 +301,18 @@ public partial class ProceduralMenu : Control
                 AddPicker(ColourPicker.Load(PreviewPickerChosen));
                 AddSeparator();
                 AddCheckItem("Use category colour", 0, false);
+                break;
+            case MenuPreview.Choices:
+                string[] choices = ["Unarmed", "Dagger", "Sword", "Two-Handed"];
+                for (var index = 0; index < choices.Length; index++)
+                {
+                    AddItem(choices[index], index);
+                }
+
+                var chosen = Items.GetNode<ProceduralPanel>($"Item{PreviewChoicesHovered}");
+                chosen.Fill = ProceduralFill.Selected;
+                chosen.Modulate = HoveredRow;
+                Frame.CustomMinimumSize = new Vector2(PreviewChoicesWidth, 0);
                 break;
             case MenuPreview.None:
                 return;

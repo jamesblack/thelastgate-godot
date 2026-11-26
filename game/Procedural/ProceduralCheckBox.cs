@@ -21,6 +21,11 @@ public partial class ProceduralCheckBox : MarginContainer
         get => isChecked;
         set
         {
+            if (value == isChecked)
+            {
+                return;
+            }
+
             isChecked = value;
             ShowState();
         }
@@ -32,6 +37,11 @@ public partial class ProceduralCheckBox : MarginContainer
         get => disabled;
         set
         {
+            if (value == disabled)
+            {
+                return;
+            }
+
             disabled = value;
             ShowState();
         }
@@ -43,6 +53,11 @@ public partial class ProceduralCheckBox : MarginContainer
         get => text;
         set
         {
+            if (value == text)
+            {
+                return;
+            }
+
             text = value;
             ShowState();
         }

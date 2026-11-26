@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using TheLastGate.Assets;
 using TheLastGate.Buffs;
 using TheLastGate.Hud;
+using TheLastGate.Procedural;
 using TheLastGate.Rules;
 
 namespace TheLastGate.Planner;
@@ -12,25 +12,16 @@ namespace TheLastGate.Planner;
 // The skill planner's Advanced window: which spells, tarot cards, corruptors, enchantments and gear the planner's
 // numbers count, and the skill tree's rows it counts already. The HUD tells it what to show and saves what is changed.
 [Tool]
-public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
+public partial class PlannerAdvancedWindowView : Control
 {
     private const string RowScenePath = "res://Planner/planner_advanced_row.tscn";
     private const int CardsPerColumn = 5;
 
     private PackedScene? rowScene;
-    private SpriteLoader? sprites;
 
-    public PlannerAdvancedWindowView() => AddToGroup(HudContext.Group);
+    private Container Spells => GetNode<Container>("%Spells");
 
-    private Container Spells => GetNode<Container>("Body/Sections/Spells");
-
-    private Container TreeRows => GetNode<Container>("Body/Sections/TreeRows");
-
-    public void ShowContext(HudContext context)
-    {
-        sprites = context.Sprites;
-        PlannerLook.ApplyFrameSprite(this, sprites);
-    }
+    private Container TreeRows => GetNode<Container>("%TreeRows");
 
     public event Action? ClosePressed;
 
@@ -39,7 +30,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
 
     public override void _Ready()
     {
-        PlannerLook.ApplyFrameSprite(this, sprites);
+        ProceduralScrollBar.Style(GetNode<ScrollContainer>("%Scroll").GetVScrollBar());
         rowScene = GD.Load<PackedScene>(RowScenePath);
         AddSpellRows();
         AddCardRows();
@@ -53,20 +44,20 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
             return;
         }
 
-        GetNode<Button>("Header/Close").Pressed += () => ClosePressed?.Invoke();
+        Visible = false;
+        GetNode<ClickArea>("%Close").Released += _ => ClosePressed?.Invoke();
     }
 
-    public void ShowWindow(bool shown, bool darkMode, PlannerChoices choices, AdvancedSheet sheet)
+    public void ShowWindow(bool shown, PlannerChoices choices, AdvancedSheet sheet)
     {
         Visible = shown;
-        PlannerLook.ShowBackground(this, darkMode);
         if (!shown)
         {
             return;
         }
 
         ShowSpells(sheet.Spells, choices);
-        var cards = Rows("Body/Sections/Cards/Left").Concat(Rows("Body/Sections/Cards/Right")).ToArray();
+        var cards = Rows("%CardsLeft").Concat(Rows("%CardsRight")).ToArray();
         for (var index = 0; index < cards.Length; index++)
         {
             var card = TarotMath.ModelledCards[index];
@@ -74,7 +65,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
         }
 
         ShowTreeRows(sheet.TreeRows);
-        var corruptors = Rows("Body/Sections/Corruptors");
+        var corruptors = Rows("%Corruptors");
         for (var corruptor = 0; corruptor < corruptors.Length; corruptor++)
         {
             var row = corruptors[corruptor];
@@ -84,7 +75,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
             row.ShowTree(AdvancedSheet.TreeCopiesText(sheet.TreeCopies[corruptor]));
         }
 
-        var enchants = Rows("Body/Sections/Enchants");
+        var enchants = Rows("%Enchants");
         for (var enchant = 0; enchant < enchants.Length; enchant++)
         {
             var ticked = (choices.EnchantTicks & (1u << enchant)) != 0;
@@ -95,7 +86,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
             }
         }
 
-        var gears = Rows("Body/Sections/Gear");
+        var gears = Rows("%Gear");
         for (var gear = 0; gear < gears.Length; gear++)
         {
             gears[gear].Show(ItemEffects.Gears[gear].Name, (choices.GearTicks & (1u << gear)) != 0, true);
@@ -124,14 +115,14 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
         {
             var card = TarotMath.ModelledCards[index];
             var column = GetNode<Container>(
-                index < CardsPerColumn ? "Body/Sections/Cards/Left" : "Body/Sections/Cards/Right");
+                index < CardsPerColumn ? "%CardsLeft" : "%CardsRight");
             AddRow(column, choices => choices.ToggleCard(card)).Show(AdvancedSheet.CardLabel(card), false, true);
         }
     }
 
     private void AddCorruptorRows()
     {
-        var parent = GetNode<Container>("Body/Sections/Corruptors");
+        var parent = GetNode<Container>("%Corruptors");
         for (var corruptor = 0; corruptor < TreeEffects.CorruptorCount; corruptor++)
         {
             var index = corruptor;
@@ -145,7 +136,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
 
     private void AddEnchantRows()
     {
-        var parent = GetNode<Container>("Body/Sections/Enchants");
+        var parent = GetNode<Container>("%Enchants");
         for (var enchant = 0; enchant < ItemEffects.EnchantCount; enchant++)
         {
             var index = enchant;
@@ -163,7 +154,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
 
     private void AddGearRows()
     {
-        var parent = GetNode<Container>("Body/Sections/Gear");
+        var parent = GetNode<Container>("%Gear");
         for (var gear = 0; gear < ItemEffects.GearCount; gear++)
         {
             var index = gear;
@@ -187,7 +178,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
     // visibility is set once.
     private void ShowSpells(IReadOnlyList<AdvancedSpell> spells, PlannerChoices choices)
     {
-        var rows = Rows("Body/Sections/Spells");
+        var rows = Rows("%Spells");
         foreach (var kind in Enum.GetValues<BuffKind>())
         {
             var spell = spells.FirstOrDefault(known => known.Kind == kind);
@@ -208,7 +199,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
     {
         foreach (var name in (string[])["TreeGap", "TreeHeading", "TreeRows"])
         {
-            GetNode<CanvasItem>("Body/Sections/" + name).Visible = names.Count > 0;
+            GetNode<CanvasItem>("%" + name).Visible = names.Count > 0;
         }
 
         var treeRows = TreeRows;
@@ -217,7 +208,7 @@ public partial class PlannerAdvancedWindowView : Panel, IHudContextUser
             AddRow(treeRows, null);
         }
 
-        var rows = Rows("Body/Sections/TreeRows");
+        var rows = Rows("%TreeRows");
         for (var index = 0; index < rows.Length; index++)
         {
             rows[index].Visible = index < names.Count;

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://vfrcujuqvvmt"]
+
+[ext_resource type="Script" uid="uid://tttwtngtufga" path="res://Procedural/ProceduralPicker.cs" id="1_picker"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://bsuu4hjc2626f" path="res://Hud/ClickArea.cs" id="3_click"]
+[ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="4_menu"]
+
+[node name="Picker" type="Container" unique_id=1820553914]
+custom_minimum_size = Vector2(110, 0)
+mouse_filter = 2
+script = ExtResource("1_picker")
+Profile = "GBG"
+Fill = 1
+Padding = 2
+
+[node name="Cells" type="HBoxContainer" parent="." unique_id=377024681]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Value" type="Label" parent="Cells" unique_id=1964820357]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Choice"
+clip_text = true
+script = ExtResource("2_label")
+
+[node name="Arrow" type="Label" parent="Cells" unique_id=588239016]
+unique_name_in_owner = true
+layout_mode = 2
+text = "v"
+script = ExtResource("2_label")
+
+[node name="Click" type="Control" parent="." unique_id=1251967340]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("3_click")
+StyledTooltip = true
+
+[node name="Menu" parent="." unique_id=713384520 instance=ExtResource("4_menu")]
