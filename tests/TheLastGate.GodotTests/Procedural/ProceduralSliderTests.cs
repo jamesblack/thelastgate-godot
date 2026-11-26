@@ -68,6 +68,16 @@ public class ProceduralSliderTests
     }
 
     [TestCase]
+    public void MotionWithoutTheButtonHeld_DoesNotDrag()
+    {
+        Press(Width / 2);
+
+        slider._GuiInput(new InputEventMouseMotion { Position = new Vector2(Width, 5) });
+
+        AssertThat(slider.Value).IsEqual(50d);
+    }
+
+    [TestCase]
     public async Task SetValueNoSignal_MovesTheGrabber()
     {
         slider.SetValueNoSignal(100);
@@ -75,6 +85,21 @@ public class ProceduralSliderTests
 
         AssertThat(slider.GetNode<Control>("Grabber").Position.X).IsEqual(Width - GrabberWidth);
         AssertThat(values).IsEmpty();
+    }
+
+    [TestCase]
+    public void TheSlider_DoesNoWorkEachFrame() => AssertThat(slider.IsProcessing()).IsFalse();
+
+    [TestCase]
+    public async Task ChangingTheRange_MovesTheGrabber()
+    {
+        slider.SetValueNoSignal(50);
+        await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
+
+        slider.MaxValue = 50;
+        await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
+
+        AssertThat(slider.GetNode<Control>("Grabber").Position.X).IsEqual(Width - GrabberWidth);
     }
 
     [TestCase]

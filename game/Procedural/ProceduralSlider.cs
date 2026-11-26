@@ -10,8 +10,6 @@ public partial class ProceduralSlider : Range
 
     private bool dragging;
     private bool hovered;
-    private double placedRatio = -1;
-    private Vector2 placedSize;
 
     private Control Grabber => GetNode<Control>("Grabber");
 
@@ -24,14 +22,9 @@ public partial class ProceduralSlider : Range
         Place();
     }
 
-    // SetValueNoSignal raises nothing, so the parts follow the value here.
-    public override void _Process(double delta)
-    {
-        if (Ratio != placedRatio || Size != placedSize)
-        {
-            Place();
-        }
-    }
+    // Range redraws on every change of value, range or size, including SetValueNoSignal, which raises no signal, so
+    // the parts follow from here.
+    public override void _Draw() => Place();
 
     public override void _GuiInput(InputEvent inputEvent)
     {
@@ -46,6 +39,12 @@ public partial class ProceduralSlider : Range
 
                 ShowHover(hovered);
                 AcceptEvent();
+                break;
+            // A release can be missed, such as when the window closes mid-drag, so a drag lasts only while the button
+            // is still down.
+            case InputEventMouseMotion motion when dragging && !motion.ButtonMask.HasFlag(MouseButtonMask.Left):
+                dragging = false;
+                ShowHover(hovered);
                 break;
             case InputEventMouseMotion motion when dragging:
                 MoveTo(motion.Position.X);
@@ -69,8 +68,6 @@ public partial class ProceduralSlider : Range
 
     private void Place()
     {
-        placedRatio = Ratio;
-        placedSize = Size;
         var middle = Mathf.Floor(Size.Y / 2);
         var grabber = Grabber;
         var left = Mathf.Round((float)Ratio * Travel);
