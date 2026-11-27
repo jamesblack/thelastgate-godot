@@ -16,7 +16,6 @@ public partial class HudDemo : Control
         var state = new GameState();
         var hud = GD.Load<PackedScene>("res://Hud/hud_view.tscn").Instantiate<HudView>();
         AddChild(hud);
-        hud.DarkMode = true;
         hud.Sprites = new SpriteLoader(DataPaths.Root(), SpriteCacheBytes);
         hud.Show(state, new GameSession(state), new ClassicFonts(), _ => { });
         hud.Refresh(0);

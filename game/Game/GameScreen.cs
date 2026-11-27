@@ -280,7 +280,6 @@ public partial class GameScreen : Control
         AddChild(worldView);
         MoveChild(worldView, WorldViewIndex);
         ShowSwaps(clientSettings);
-        hudView.DarkMode = clientSettings.DarkMode;
         hudView.Sprites = sprites;
         hudView.Settings = characterSettings;
         hudView.ClientSettings = clientSettings;

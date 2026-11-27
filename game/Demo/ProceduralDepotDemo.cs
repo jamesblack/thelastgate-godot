@@ -23,7 +23,7 @@ public partial class ProceduralDepotDemo : Control
             return;
         }
 
-        var context = new HudContext(new ClassicFonts(), sprites, null, true);
+        var context = new HudContext(new ClassicFonts(), sprites, null);
         foreach (var node in FindChildren("*", "", true, false))
         {
             if (node is IHudContextUser user)

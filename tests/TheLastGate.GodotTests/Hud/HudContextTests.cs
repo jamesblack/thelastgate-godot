@@ -73,17 +73,6 @@ public partial class HudContextTests
         user.Free();
     }
 
-    [TestCase]
-    public void ChangingDarkMode_ShowsTheNewContext()
-    {
-        var user = new ContextRecorder();
-        hud.AddChild(user);
-
-        hud.DarkMode = !hud.DarkMode;
-
-        AssertThat(user.Contexts[^1].DarkMode).IsEqual(hud.DarkMode);
-    }
-
     private sealed partial class ContextRecorder : Node, IHudContextUser
     {
         public ContextRecorder() => AddToGroup(HudContext.Group);

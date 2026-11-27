@@ -38,7 +38,7 @@ public class SkillTreeWindowSceneTests
         window.Visible = true;
         var dataFolder = Path.GetFullPath(Path.Combine(ProjectSettings.GlobalizePath("res://"), "..", "..", "data"));
         sprites = new SpriteLoader(dataFolder, SpriteCacheBytes);
-        var context = new HudContext(new ClassicFonts(), sprites, null, true);
+        var context = new HudContext(new ClassicFonts(), sprites, null);
         foreach (var user in window.FindChildren("*", "", true, false).OfType<IHudContextUser>())
         {
             user.ShowContext(context);
@@ -119,7 +119,7 @@ public class SkillTreeWindowSceneTests
     {
         var settings = ClientSettings.Load();
         settings.BackgroundOpacity[WindowBackground.SkillTree] = WindowBackgrounds.Clear;
-        var context = new HudContext(null, null, settings, true);
+        var context = new HudContext(null, null, settings);
         foreach (var user in window.FindChildren("*", "", true, false).OfType<IHudContextUser>())
         {
             user.ShowContext(context);

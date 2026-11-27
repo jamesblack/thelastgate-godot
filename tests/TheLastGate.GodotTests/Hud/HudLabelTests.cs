@@ -42,7 +42,9 @@ public class HudLabelTests
     [TestCase]
     public void InsideAWindowWithItsOwnLabelColour_TheVariationStillWins()
     {
-        var window = new Control { Theme = GD.Load<Theme>("res://themes/OptionsTheme.tres") };
+        var windowTheme = new Theme();
+        windowTheme.SetColor("font_color", "Label", Colors.Magenta);
+        var window = new Control { Theme = windowTheme };
         var engraved = new HudLabel { Colour = TextColour.Engraved };
         window.AddChild(engraved);
         Tree.Root.AddChild(window);

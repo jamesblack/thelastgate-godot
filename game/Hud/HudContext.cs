@@ -3,8 +3,8 @@ using TheLastGate.Config;
 
 namespace TheLastGate.Hud;
 
-// What HudView hands down to the nodes inside it that draw with its fonts, sprites, settings or dark mode.
-public sealed record HudContext(IFontSet? Fonts, SpriteLoader? Sprites, ClientSettings? ClientSettings, bool DarkMode)
+// What HudView hands down to the nodes inside it that draw with its fonts, sprites or settings.
+public sealed record HudContext(IFontSet? Fonts, SpriteLoader? Sprites, ClientSettings? ClientSettings)
 {
     public const string Group = "hud_context";
 }

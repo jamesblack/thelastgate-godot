@@ -38,7 +38,6 @@ public sealed class ClientSettings
         this.file = file;
         Windowed = file.GetValue(DisplaySection, "windowed", true).AsBool();
         Shadows = file.GetValue(DisplaySection, "shadows", true).AsBool();
-        DarkMode = file.GetValue(DisplaySection, "dark_mode", false).AsBool();
         SoundEnabled = file.GetValue(AudioSection, "sound_enabled", true).AsBool();
         SoundVolume = Math.Clamp(
             file.GetValue(AudioSection, "sound_volume", MaxSoundVolume).AsInt32(),
@@ -90,7 +89,6 @@ public sealed class ClientSettings
 
     public bool Windowed { get; set; }
     public bool Shadows { get; set; }
-    public bool DarkMode { get; set; }
     public bool SoundEnabled { get; set; }
     public int SoundVolume { get; set; }
     public CharacterHistory CharacterHistory { get; }
@@ -232,7 +230,6 @@ public sealed class ClientSettings
     {
         file.SetValue(DisplaySection, "windowed", Windowed);
         file.SetValue(DisplaySection, "shadows", Shadows);
-        file.SetValue(DisplaySection, "dark_mode", DarkMode);
         file.SetValue(AudioSection, "sound_enabled", SoundEnabled);
         file.SetValue(AudioSection, "sound_volume", SoundVolume);
         file.SetValue(DisplaySection, "cursor_scale", CursorScale);

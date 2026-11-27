@@ -127,7 +127,7 @@ public class ProceduralPanelTests
         var settings = ClientSettings.Load();
         settings.BackgroundOpacity[WindowBackground.SkillTree] = 25;
 
-        panel.ShowContext(new HudContext(null, null, settings, true));
+        panel.ShowContext(new HudContext(null, null, settings));
 
         AssertThat(panel.SelfModulate.A).IsEqual(0.25f);
         AssertThat(panel.Modulate.A).IsEqual(1f);
@@ -176,7 +176,7 @@ public class ProceduralPanelTests
         var settings = ClientSettings.Load();
         settings.BackgroundOpacity[WindowBackground.SkillTree] = 40;
 
-        line.ShowContext(new HudContext(null, null, settings, true));
+        line.ShowContext(new HudContext(null, null, settings));
 
         AssertThat(line.SelfModulate.A).IsEqual(0.4f);
         line.Free();

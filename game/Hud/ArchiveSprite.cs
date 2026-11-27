@@ -10,7 +10,6 @@ public partial class ArchiveSprite : TextureRect, IHudContextUser
     private static readonly System.Collections.Generic.Dictionary<Texture2D, AtlasTexture> Trimmed = [];
 
     private HudContext? context;
-    private int darkSpriteNumber;
     private int spriteNumber;
     private bool trimToDrawnArea;
 
@@ -23,17 +22,6 @@ public partial class ArchiveSprite : TextureRect, IHudContextUser
         set
         {
             spriteNumber = value;
-            LoadSprite();
-        }
-    }
-
-    [Export]
-    public int DarkSpriteNumber
-    {
-        get => darkSpriteNumber;
-        set
-        {
-            darkSpriteNumber = value;
             LoadSprite();
         }
     }
@@ -70,19 +58,18 @@ public partial class ArchiveSprite : TextureRect, IHudContextUser
         property["usage"] = (int)(usage | PropertyUsageFlags.ReadOnly);
     }
 
-    // In the editor a scene opened on its own has no HUD to hand it sprites, so it shows the dark sprite from the
+    // In the editor a scene opened on its own has no HUD to hand it sprites, so it shows its sprite from the
     // editor's own loader.
     public void LoadSprite()
     {
-        if (context is { Sprites: { } sprites } shown)
+        if (context is { Sprites: { } sprites })
         {
-            Texture = Shown(
-                sprites.GetTexture(shown.DarkMode && darkSpriteNumber != 0 ? darkSpriteNumber : spriteNumber));
+            Texture = Shown(sprites.GetTexture(spriteNumber));
             ApplyFade();
         }
         else if (EditorSprites.Shared is { } editorSprites)
         {
-            Texture = Shown(editorSprites.GetTexture(darkSpriteNumber != 0 ? darkSpriteNumber : spriteNumber));
+            Texture = Shown(editorSprites.GetTexture(spriteNumber));
         }
     }
 

@@ -90,6 +90,6 @@ public class WindowBackdropTests
     private void ShowAt(int opacity)
     {
         settings.BackgroundOpacity[WindowBackground.Depot] = opacity;
-        backdrop.ShowContext(new HudContext(null, null, settings, true));
+        backdrop.ShowContext(new HudContext(null, null, settings));
     }
 }

@@ -32,7 +32,6 @@ public partial class LauncherScreen : Control
     private Label confirmQuestion = null!;
     private Label confirmTitle = null!;
     private Label confirmWarning = null!;
-    private CheckBox darkGuiCheck = null!;
     private TextEdit descriptionField = null!;
     private OptionButton gameModeOption = null!;
     private FileDialog loadDialog = null!;
@@ -126,7 +125,6 @@ public partial class LauncherScreen : Control
         soundCheck = GetNode<CheckBox>("%SoundCheck");
         volumeSlider = GetNode<HSlider>("%VolumeSlider");
         volumeValue = GetNode<Label>("%VolumeValue");
-        darkGuiCheck = GetNode<CheckBox>("%DarkGuiCheck");
         modalDim = GetNode<ColorRect>("%ModalDim");
         messageDialog = GetNode<AcceptDialog>("%MessageDialog");
         messageTitle = GetNode<Label>("%MessageTitle");
@@ -170,7 +168,6 @@ public partial class LauncherScreen : Control
             ApplyWindowMode);
         shadowsCheck.Toggled += pressed => ChangeSetting(() => settings.Shadows = pressed);
         soundCheck.Toggled += pressed => ChangeSetting(() => settings.SoundEnabled = pressed);
-        darkGuiCheck.Toggled += pressed => ChangeSetting(() => settings.DarkMode = pressed);
         volumeSlider.ValueChanged += value => ChangeSetting(
             () => settings.SoundVolume = (int)value,
             () => volumeValue.Text = settings.SoundVolume.ToString());
@@ -194,7 +191,6 @@ public partial class LauncherScreen : Control
         windowTypeOption.Select(windowTypeOption.GetItemIndex(settings.Windowed ? WindowedOptionId : 0));
         shadowsCheck.ButtonPressed = settings.Shadows;
         soundCheck.ButtonPressed = settings.SoundEnabled;
-        darkGuiCheck.ButtonPressed = settings.DarkMode;
         volumeSlider.Value = settings.SoundVolume;
         volumeValue.Text = settings.SoundVolume.ToString();
     }

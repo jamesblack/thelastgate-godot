@@ -72,7 +72,6 @@ public partial class HudView : Control
     private readonly SkillShortcut skillShortcut = new();
     private ClientSettings? clientSettings;
 
-    private bool darkMode;
     private IFontSet? fonts;
     private GameSession? gameSession;
     private int? hoveredShopCell;
@@ -95,17 +94,6 @@ public partial class HudView : Control
     private GameState? state;
     private TimingsView? timingsView;
     private WorldMapWindowView? worldMapWindow;
-
-    [Export]
-    public bool DarkMode
-    {
-        get => darkMode;
-        set
-        {
-            darkMode = value;
-            ShowContext();
-        }
-    }
 
     public SpriteLoader? Sprites
     {
@@ -177,7 +165,7 @@ public partial class HudView : Control
 
     private bool HoldingItem => Player.HeldItem.Sprite != 0;
 
-    private HudContext Context => new(fonts, sprites, clientSettings, darkMode);
+    private HudContext Context => new(fonts, sprites, clientSettings);
 
     // Each slot says it is hovered through its own mouse signals, so the HUD never works it out from the tree.
     private void WatchCursor(ClickArea area, Func<MouseCursor> cursor)
