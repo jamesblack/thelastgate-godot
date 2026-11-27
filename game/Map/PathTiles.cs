@@ -4,6 +4,8 @@ using TheLastGate.Notes;
 
 namespace TheLastGate.Map;
 
+public readonly record struct ShownPath(IReadOnlyList<PathSegment> Segments, uint Colour);
+
 public static class PathTiles
 {
     // After a number of steps along the longer axis, Bresenham's offset on the shorter one is
@@ -32,9 +34,9 @@ public static class PathTiles
         }
     }
 
-    public static Dictionary<(int X, int Y), uint> Colours(NoteSet notes)
+    public static List<ShownPath> Shown(NoteSet notes)
     {
-        var colours = new Dictionary<(int X, int Y), uint>();
+        var paths = new List<ShownPath>();
         foreach (var category in notes.Categories)
         {
             if (!notes.IsShown(category))
@@ -44,18 +46,26 @@ public static class PathTiles
 
             foreach (var note in category.Notes)
             {
-                if (note.Kind != NoteKind.Path)
+                if (note.Kind == NoteKind.Path)
                 {
-                    continue;
+                    paths.Add(new ShownPath(note.Segments, NoteSet.Rgb(category, note)));
                 }
+            }
+        }
 
-                var colour = NoteSet.Rgb(category, note);
-                foreach (var segment in note.Segments)
+        return paths;
+    }
+
+    public static Dictionary<(int X, int Y), uint> Colours(IReadOnlyList<ShownPath> paths)
+    {
+        var colours = new Dictionary<(int X, int Y), uint>();
+        foreach (var path in paths)
+        {
+            foreach (var segment in path.Segments)
+            {
+                foreach (var tile in Walk(segment))
                 {
-                    foreach (var tile in Walk(segment))
-                    {
-                        colours[tile] = colour;
-                    }
+                    colours[tile] = path.Colour;
                 }
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Game;
@@ -48,6 +49,7 @@ public partial class WorldView : Node2D
     private readonly Dictionary<int, Nameplate> nameplatesByCharacter = [];
     private readonly SpriteLayer objects = new();
     private readonly PathOverlay pathOverlay = new();
+    private readonly PathTileJob pathTiles = new(PathTiles.Colours, work => Task.Run(work));
     private readonly Dictionary<Node, Node> placedUnder = [];
     private readonly List<Sprite2D> queuedNumberMarkers = [];
     private readonly List<Sprite2D> queuedUseMarkers = [];
@@ -74,6 +76,7 @@ public partial class WorldView : Node2D
     private (int X, int Y) areaEnd;
     private (int X, int Y)? areaStart;
     private Node2D floorLayer = null!;
+    private Func<int, bool> floorShown = null!;
     private MovementGlide glide = new();
     private bool glideMovement;
     private bool glideRecorded;
@@ -82,7 +85,6 @@ public partial class WorldView : Node2D
     private Vector2I mapShift = new(IsometricProjection.BaseMapShiftX, 0);
     private PackedScene nameplateScene = null!;
     private Node2D objectLayer = null!;
-    private Dictionary<(int X, int Y), uint> pathColours = [];
     private (NoteSet? Notes, int Revision, bool Shown) pathColoursFrom;
     private bool plainInfravision;
     private int[] queuedTiles = [];
@@ -192,6 +194,7 @@ public partial class WorldView : Node2D
         }
 
         floorLayer.AddChild(pathOverlay);
+        floorShown = tileIndex => floors.Nodes[tileIndex].Visible;
         foreach (var marker in (Sprite2D[])[walkMarker, attackMarker, giveMarker, actionMarker, stubbornUseMarker])
         {
             PutUnder(marker, floorLayer);
@@ -452,12 +455,8 @@ public partial class WorldView : Node2D
 
         ReleaseUnusedNameplates();
         PlaceMarkers(markerTiles);
-        pathOverlay.Show(
-            PathOverlay.TilesInView(
-                State.Map,
-                PathColours(),
-                WorldGamma,
-                tileIndex => floors.Nodes[tileIndex].Visible));
+        TakePathColours();
+        pathOverlay.Show(PathOverlay.TilesInView(State.Map, pathTiles.Current, WorldGamma, floorShown));
         if (!selectedIsShown)
         {
             SelectedCharacter = 0;
@@ -1040,16 +1039,23 @@ public partial class WorldView : Node2D
         objectLayer.Position = offset;
     }
 
-    private Dictionary<(int X, int Y), uint> PathColours()
+    private void TakePathColours()
     {
         var from = (MapNotes, MapNotes?.Revision ?? 0, MapNotes?.ShowInWorld == true);
         if (from != pathColoursFrom)
         {
             pathColoursFrom = from;
-            pathColours = MapNotes is { ShowInWorld: true } notes ? PathTiles.Colours(notes) : [];
+            if (MapNotes is { ShowInWorld: true } notes)
+            {
+                pathTiles.Rebuild(PathTiles.Shown(notes));
+            }
+            else
+            {
+                pathTiles.Clear();
+            }
         }
 
-        return pathColours;
+        pathTiles.TakeReady();
     }
 
     private void Show(SpriteLayer layer, int tileIndex, int spriteNumber, SpriteLook look)

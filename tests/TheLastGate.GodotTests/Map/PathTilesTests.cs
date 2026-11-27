@@ -66,7 +66,7 @@ public class PathTilesTests
         var noteId = notes.AddPath(categoryId, [new PathSegment(1, 1, 3, 1)], "Gate");
         var colour = NoteSet.Rgb(notes.FindCategory(categoryId)!, notes.FindNote(noteId)!);
 
-        var colours = PathTiles.Colours(notes);
+        var colours = PathTiles.Colours(PathTiles.Shown(notes));
 
         AssertThat(colours.Count).IsEqual(3);
         AssertThat(colours[(1, 1)]).IsEqual(colour);
@@ -85,7 +85,7 @@ public class PathTilesTests
         notes.SetNoteColour(secondId, 5);
         var category = notes.FindCategory(categoryId)!;
 
-        var colours = PathTiles.Colours(notes);
+        var colours = PathTiles.Colours(PathTiles.Shown(notes));
 
         AssertThat(colours[(2, 2)]).IsEqual(NoteSet.Rgb(category, notes.FindNote(secondId)!));
         AssertThat(colours[(0, 2)]).IsEqual(NoteSet.Rgb(category, notes.FindNote(firstId)!));
@@ -100,7 +100,7 @@ public class PathTilesTests
         notes.AddPath(childId, [new PathSegment(1, 1, 3, 1)], "Gate");
         notes.FindCategory(parentId)!.Visible = false;
 
-        AssertThat(PathTiles.Colours(notes).Count).IsEqual(0);
+        AssertThat(PathTiles.Colours(PathTiles.Shown(notes)).Count).IsEqual(0);
     }
 
     [TestCase]
@@ -111,6 +111,6 @@ public class PathTilesTests
         notes.AddPoint(categoryId, NoteKind.Pin, 4, 4, "Key");
         notes.AddPoint(categoryId, NoteKind.Text, 5, 5, "Beware");
 
-        AssertThat(PathTiles.Colours(notes).Count).IsEqual(0);
+        AssertThat(PathTiles.Colours(PathTiles.Shown(notes)).Count).IsEqual(0);
     }
 }

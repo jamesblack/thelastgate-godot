@@ -18,7 +18,7 @@ public partial class PathOverlay : Node2D
     private static readonly Vector2 DiamondCentre = new(0, -7.5f);
 
     private readonly Vector2[] corners = new Vector2[4];
-    private List<PathTile> shown = [];
+    private IReadOnlyList<PathTile> shown = [];
 
     public int ShownTiles => shown.Count;
 
@@ -29,17 +29,18 @@ public partial class PathOverlay : Node2D
             (byte)rgb / 255f * brightness,
             Alpha);
 
-    public static List<PathTile> TilesInView(
+    public static IReadOnlyList<PathTile> TilesInView(
         WorldMap map,
         IReadOnlyDictionary<(int X, int Y), uint> colours,
         float worldGamma,
         Func<int, bool> floorShown)
     {
-        var tiles = new List<PathTile>();
         if (colours.Count == 0)
         {
-            return tiles;
+            return [];
         }
+
+        var tiles = new List<PathTile>();
 
         for (var tileIndex = 0; tileIndex < WorldMap.TileCount; tileIndex++)
         {
@@ -57,7 +58,7 @@ public partial class PathOverlay : Node2D
         return tiles;
     }
 
-    public void Show(List<PathTile> tiles)
+    public void Show(IReadOnlyList<PathTile> tiles)
     {
         if (tiles.SequenceEqual(shown))
         {
