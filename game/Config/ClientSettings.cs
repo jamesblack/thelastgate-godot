@@ -276,6 +276,22 @@ public sealed class ClientSettings
             LauncherSection,
             "character_files",
             CharacterHistory.Entries.Select(entry => entry.FilePath).ToArray());
+        file.SetValue(
+            LauncherSection,
+            "character_classes",
+            CharacterHistory.Entries.Select(entry => entry.Class).ToArray());
+        file.SetValue(
+            LauncherSection,
+            "character_game_modes",
+            CharacterHistory.Entries.Select(entry => entry.GameMode).ToArray());
+        file.SetValue(
+            LauncherSection,
+            "character_seasons",
+            CharacterHistory.Entries.Select(entry => entry.Season).ToArray());
+        file.SetValue(
+            LauncherSection,
+            "character_fact_files",
+            CharacterHistory.Entries.Select(entry => entry.FilePath).ToArray());
         // Only bindings that differ from the defaults are kept, so one put back to its default, or one this client no
         // longer has such as the old gamma key, comes out of the file.
         var savedBindings = BindingRules.Saved(BindingActions.Defaults(), BindingActions.Current());
@@ -309,14 +325,45 @@ public sealed class ClientSettings
                 .ToDictionary(id => id, id => file.GetValue(KeybindsSection, id, "").AsString())
             : [];
 
-    private static IEnumerable<PreviousCharacter> SavedCharacters(ConfigFile file)
+    // Older clients rewrite the names and files but not the facts, so the facts carry their own file list.
+    public static IEnumerable<PreviousCharacter> SavedCharacters(ConfigFile file)
     {
-        var names = file.GetValue(LauncherSection, "character_names", Array.Empty<string>()).AsStringArray();
-        var filePaths = file.GetValue(LauncherSection, "character_files", Array.Empty<string>()).AsStringArray();
-        return filePaths.Select((filePath, entryIndex) => new PreviousCharacter(
-            entryIndex < names.Length ? names[entryIndex] : "",
-            filePath));
+        var names = SavedTexts(file, "character_names");
+        var facts = SavedFacts(file);
+        return SavedTexts(file, "character_files")
+            .Select((filePath, entryIndex) =>
+            {
+                var character = new PreviousCharacter(names.ElementAtOrDefault(entryIndex) ?? "", filePath);
+                return facts.TryGetValue(filePath, out var known)
+                    ? character with { Class = known.Class, GameMode = known.GameMode, Season = known.Season }
+                    : character;
+            });
     }
+
+    private static Dictionary<string, PreviousCharacter> SavedFacts(ConfigFile file)
+    {
+        var classes = SavedTexts(file, "character_classes");
+        var gameModes = SavedTexts(file, "character_game_modes");
+        var seasons = SavedTexts(file, "character_seasons");
+        var facts = new Dictionary<string, PreviousCharacter>(StringComparer.OrdinalIgnoreCase);
+        var factFiles = SavedTexts(file, "character_fact_files");
+        for (var entryIndex = 0; entryIndex < factFiles.Length; entryIndex++)
+        {
+            facts.TryAdd(
+                factFiles[entryIndex],
+                new PreviousCharacter(
+                    "",
+                    factFiles[entryIndex],
+                    classes.ElementAtOrDefault(entryIndex) ?? "",
+                    gameModes.ElementAtOrDefault(entryIndex) ?? "",
+                    seasons.ElementAtOrDefault(entryIndex) ?? ""));
+        }
+
+        return facts;
+    }
+
+    private static string[] SavedTexts(ConfigFile file, string key) =>
+        file.GetValue(LauncherSection, key, Array.Empty<string>()).AsStringArray();
 
     private static IEnumerable<PreviousCharacter> SdlClientCharacters()
     {

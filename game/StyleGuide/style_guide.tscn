@@ -3196,7 +3196,7 @@ Colour = 9
 
 [node name="Text" type="Label" parent="Page/DataTable/Notes" unique_id=1336119661]
 layout_mode = 2
-text = "Give a VBoxContainer game/Procedural/DataTable.cs and call SetColumns with the header of each column, its share of the width and its group, then ShowRows. Groups get a White caption with a gold rule across their columns; the headers are White with a gold rule under them; each row is a settings row, ruled apart and filled while hovered. The first column is the name, the rest are right-aligned, and the tone of a cell colours it: Positive Green, Negative Red, Zero Dim, Dim Grey, Normal Yellow. Preview fills it for this page."
+text = "Give a VBoxContainer game/Procedural/DataTable.cs and call SetColumns with the header of each column, its share of the width and its group, then ShowRows. Groups get a White caption with a gold rule across their columns; the headers are White with a gold rule under them; each row is a settings row, ruled apart and filled while hovered. The first column is the name, the rest are right-aligned, and the tone of a cell colours it: Positive Green, Negative Red, Zero Dim, Dim Grey, Normal Yellow. Selectable makes the rows take clicks: RowClicked gives the row's index, and the row SelectedRow names stays filled with every cell Yellow (-1 for none). ScrollRows puts the rows in a scroll area of their own that takes the table's spare height, so the headers stay put. Preview fills it for this page."
 custom_minimum_size = Vector2(380, 0)
 autowrap_mode = 3
 script = ExtResource("3_label")
@@ -3222,5 +3222,24 @@ Preview = true
 [node name="Caption" type="Label" parent="Page/DataTable/Examples/Example85" unique_id=2041386302]
 layout_mode = 2
 text = "groups, headers and three rows"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="ExampleSelectable" type="VBoxContainer" parent="Page/DataTable/Examples" unique_id=1267407601]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Table" type="VBoxContainer" parent="Page/DataTable/Examples/ExampleSelectable" unique_id=786322604]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("25_table")
+Preview = true
+Selectable = true
+
+[node name="Caption" type="Label" parent="Page/DataTable/Examples/ExampleSelectable" unique_id=567686310]
+layout_mode = 2
+text = "Selectable: click a row"
 script = ExtResource("3_label")
 Colour = 10

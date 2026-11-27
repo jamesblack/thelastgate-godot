@@ -1,13 +1,23 @@
 [gd_scene format=3 uid="uid://dsbtkbupxg7sp"]
 
 [ext_resource type="Theme" uid="uid://cca5jb3y02bv3" path="res://themes/LauncherTheme.tres" id="1_theme"]
-[ext_resource type="Texture2D" uid="uid://cxiy108mu58wx" path="res://images/launcher-background.png" id="2_background"]
-[ext_resource type="Script" uid="uid://d67a2myk3bsw" path="res://Launcher/LauncherScreen.cs" id="3_script"]
-[ext_resource type="PackedScene" uid="uid://cmqqt3xuysrn" path="res://Launcher/update_window.tscn" id="4_update_window"]
-[ext_resource type="Script" uid="uid://dw3k8qnupx5ra" path="res://Launcher/UpdateButtonView.cs" id="5_update_button"]
-[ext_resource type="PackedScene" uid="uid://da79wvuny6ya" path="res://Launcher/rollback_window.tscn" id="6_rollback_window"]
+[ext_resource type="Script" uid="uid://d67a2myk3bsw" path="res://Launcher/LauncherScreen.cs" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://cmqqt3xuysrn" path="res://Launcher/update_window.tscn" id="3_update_window"]
+[ext_resource type="PackedScene" uid="uid://fddmjvlfoiaa" path="res://Launcher/update_status.tscn" id="4_update_status"]
+[ext_resource type="PackedScene" uid="uid://da79wvuny6ya" path="res://Launcher/rollback_window.tscn" id="5_rollback_window"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="6_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="7_label"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="8_button"]
+[ext_resource type="PackedScene" uid="uid://oind5rho0m21" path="res://Procedural/check_box.tscn" id="9_check"]
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="10_field"]
+[ext_resource type="PackedScene" uid="uid://xqwh1vaukyyr" path="res://Procedural/text_box.tscn" id="11_textbox"]
+[ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="12_heading"]
+[ext_resource type="PackedScene" uid="uid://vfrcujuqvvmt" path="res://Procedural/picker.tscn" id="13_picker"]
+[ext_resource type="PackedScene" uid="uid://pblwkqjitlib" path="res://Procedural/slider.tscn" id="14_slider"]
+[ext_resource type="Script" uid="uid://b6cgbafpweqjd" path="res://Procedural/DataTable.cs" id="15_table"]
+[ext_resource type="PackedScene" uid="uid://prooqsgfqput" path="res://Launcher/launcher_prompt.tscn" id="16_prompt"]
 
-[node name="Launcher" type="Control" unique_id=1439109952]
+[node name="Launcher" type="Control" unique_id=355808012]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,376 +25,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
-script = ExtResource("3_script")
+script = ExtResource("2_script")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1383821468]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_background")
-
-[node name="CharacterHeader" type="Label" parent="." unique_id=2026973249]
-layout_mode = 0
-offset_left = 110.0
-offset_top = 74.0
-offset_right = 636.0
-offset_bottom = 110.0
-theme_type_variation = &"HeaderLabel"
-text = "Character Selection"
-horizontal_alignment = 1
-
-[node name="AccountRow" type="HBoxContainer" parent="." unique_id=726743336]
-layout_mode = 0
-offset_left = 177.0
-offset_top = 146.0
-offset_right = 575.0
-offset_bottom = 168.0
-theme_override_constants/separation = 8
-
-[node name="AccountName" type="Label" parent="AccountRow" unique_id=1708597157]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "New Account"
-vertical_alignment = 1
-
-[node name="CreateAccountButton" type="Button" parent="AccountRow" unique_id=1845176280]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-text = "Create New Account"
-
-[node name="CharacterForm" type="GridContainer" parent="." unique_id=1094878513]
-layout_mode = 0
-offset_left = 177.0
-offset_top = 176.0
-offset_right = 575.0
-offset_bottom = 412.0
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 2
-
-[node name="NameLabel" type="Label" parent="CharacterForm" unique_id=116167804]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Name"
-vertical_alignment = 1
-
-[node name="NameField" type="LineEdit" parent="CharacterForm" unique_id=2099874088]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-max_length = 79
-
-[node name="PasswordLabel" type="Label" parent="CharacterForm" unique_id=803657883]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Password"
-vertical_alignment = 1
-
-[node name="PasswordField" type="LineEdit" parent="CharacterForm" unique_id=1541889403]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-max_length = 14
-secret = true
-
-[node name="DescriptionLabel" type="Label" parent="CharacterForm" unique_id=1447762133]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-size_flags_vertical = 0
-text = "Description"
-vertical_alignment = 1
-
-[node name="DescriptionField" type="TextEdit" parent="CharacterForm" unique_id=1221959043]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 80)
-layout_mode = 2
-size_flags_horizontal = 0
-wrap_mode = 1
-
-[node name="ClassLabel" type="Label" parent="CharacterForm" unique_id=1607283343]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Class"
-vertical_alignment = 1
-
-[node name="ClassOption" type="OptionButton" parent="CharacterForm" unique_id=8105109]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 0
-item_count = 3
-popup/item_0/text = "Templar"
-popup/item_0/id = 0
-popup/item_1/text = "Mercenary"
-popup/item_1/id = 1
-popup/item_2/text = "Harakim"
-popup/item_2/id = 2
-
-[node name="BodyLabel" type="Label" parent="CharacterForm" unique_id=535272796]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Body"
-vertical_alignment = 1
-
-[node name="BodyOption" type="OptionButton" parent="CharacterForm" unique_id=978233466]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 0
-item_count = 2
-popup/item_0/text = "Masculine"
-popup/item_0/id = 0
-popup/item_1/text = "Feminine"
-popup/item_1/id = 1
-
-[node name="GameModeLabel" type="Label" parent="CharacterForm" unique_id=133048277]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Game Mode"
-vertical_alignment = 1
-
-[node name="GameModeOption" type="OptionButton" parent="CharacterForm" unique_id=1245462479]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 0
-item_count = 2
-popup/item_0/text = "Normal"
-popup/item_0/id = 0
-popup/item_1/text = "Hard Mode"
-popup/item_1/id = 1
-
-[node name="SeasonLabel" type="Label" parent="CharacterForm" unique_id=428645059]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Season"
-vertical_alignment = 1
-
-[node name="SeasonOption" type="OptionButton" parent="CharacterForm" unique_id=683560613]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 1
-item_count = 2
-popup/item_0/text = "Legacy"
-popup/item_0/id = 0
-popup/item_1/text = "Current"
-popup/item_1/id = 1
-
-[node name="PreviousCharacters" type="PanelContainer" parent="." unique_id=1921633038]
-layout_mode = 0
-offset_left = 110.0
-offset_top = 452.0
-offset_right = 636.0
-offset_bottom = 652.0
-
-[node name="Contents" type="VBoxContainer" parent="PreviousCharacters" unique_id=910484305]
-layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="Title" type="Label" parent="PreviousCharacters/Contents" unique_id=684675186]
-layout_mode = 2
-theme_type_variation = &"SubheaderLabel"
-text = "Previous Characters"
-horizontal_alignment = 1
-
-[node name="Scroll" type="ScrollContainer" parent="PreviousCharacters/Contents" unique_id=1603966596]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
-
-[node name="PreviousCharacterList" type="VBoxContainer" parent="PreviousCharacters/Contents/Scroll" unique_id=965063190]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="OptionsHeader" type="Label" parent="." unique_id=532959438]
-layout_mode = 0
-offset_left = 644.0
-offset_top = 74.0
-offset_right = 1170.0
-offset_bottom = 94.0
-theme_type_variation = &"SectionLabel"
-text = "Options"
-horizontal_alignment = 1
-
-[node name="OptionsForm" type="GridContainer" parent="." unique_id=2017096188]
-layout_mode = 0
-offset_left = 711.0
-offset_top = 130.0
-offset_right = 1025.0
-offset_bottom = 256.0
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 2
-
-[node name="WindowTypeLabel" type="Label" parent="OptionsForm" unique_id=1676202744]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Window Type"
-vertical_alignment = 1
-
-[node name="WindowTypeOption" type="OptionButton" parent="OptionsForm" unique_id=816910663]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 1
-item_count = 2
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Windowed"
-popup/item_1/id = 1
-
-[node name="ShadowsLabel" type="Label" parent="OptionsForm" unique_id=274309052]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Shadows"
-vertical_alignment = 1
-
-[node name="ShadowsCheck" type="CheckBox" parent="OptionsForm" unique_id=1969564329]
-unique_name_in_owner = true
-texture_filter = 2
-custom_minimum_size = Vector2(22, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-button_pressed = true
-
-[node name="SoundLabel" type="Label" parent="OptionsForm" unique_id=520770281]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Sounds Enabled?"
-vertical_alignment = 1
-
-[node name="SoundCheck" type="CheckBox" parent="OptionsForm" unique_id=1878381205]
-unique_name_in_owner = true
-texture_filter = 2
-custom_minimum_size = Vector2(22, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-button_pressed = true
-
-[node name="VolumeLabel" type="Label" parent="OptionsForm" unique_id=542382582]
-custom_minimum_size = Vector2(150, 22)
-layout_mode = 2
-text = "Volume Level"
-vertical_alignment = 1
-
-[node name="VolumeFrame" type="PanelContainer" parent="OptionsForm" unique_id=1687337910]
-custom_minimum_size = Vector2(156, 22)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_type_variation = &"SliderFrame"
-
-[node name="VolumeSlider" type="HSlider" parent="OptionsForm/VolumeFrame" unique_id=1835715431]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 10.0
-value = 10.0
-
-[node name="VolumeValue" type="Label" parent="OptionsForm/VolumeFrame" unique_id=1798992616]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "10"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ClearMapButton" type="Button" parent="." unique_id=1158664624]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 711.0
-offset_top = 272.0
-offset_right = 1025.0
-offset_bottom = 302.0
-text = "Clear saved map data (destructive)"
-
-[node name="FolderRow" type="HBoxContainer" parent="." unique_id=430585449]
-layout_mode = 0
-offset_left = 711.0
-offset_top = 310.0
-offset_right = 1025.0
-offset_bottom = 340.0
-theme_override_constants/separation = 10
-
-[node name="OpenDataFolderButton" type="Button" parent="FolderRow" unique_id=772298444]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Open data folder"
-
-[node name="OpenOverridesFolderButton" type="Button" parent="FolderRow" unique_id=427049097]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Open sprite overrides"
-
-[node name="ButtonRow" type="HBoxContainer" parent="." unique_id=1148077398]
-layout_mode = 0
-offset_left = 255.0
-offset_top = 659.0
-offset_right = 1025.0
-offset_bottom = 689.0
-theme_override_constants/separation = 10
-
-[node name="StartButton" type="Button" parent="ButtonRow" unique_id=1279184659]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-text = "Start"
-
-[node name="UpdateButton" type="Button" parent="ButtonRow" unique_id=779654049]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-disabled = true
-text = "Checking..."
-script = ExtResource("5_update_button")
-
-[node name="LoadButton" type="Button" parent="ButtonRow" unique_id=471641441]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-text = "Load"
-
-[node name="SaveButton" type="Button" parent="ButtonRow" unique_id=1058437555]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-text = "Save"
-
-[node name="DiscordButton" type="Button" parent="ButtonRow" unique_id=1315888137]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-text = "Discord"
-
-[node name="ExitButton" type="Button" parent="ButtonRow" unique_id=2113884880]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 30)
-layout_mode = 2
-text = "Exit"
-
-[node name="ModalDim" type="ColorRect" parent="." unique_id=1318526168]
-unique_name_in_owner = true
-visible = false
+[node name="Frame" type="Container" parent="." unique_id=786087736]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -392,117 +35,525 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.8, 0.8, 0.8, 0.35)
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "GBGGBG"
 
-[node name="UpdateWindow" parent="." unique_id=427394217 instance=ExtResource("4_update_window")]
-unique_name_in_owner = true
-visible = false
-
-[node name="RollbackWindow" parent="." unique_id=1469071643 instance=ExtResource("6_rollback_window")]
-unique_name_in_owner = true
-visible = false
-
-[node name="MessageDialog" type="AcceptDialog" parent="." unique_id=887065322]
-unique_name_in_owner = true
-initial_position = 2
-size = Vector2i(400, 200)
-borderless = true
-ok_button_text = "Ok"
-
-[node name="Content" type="VBoxContainer" parent="MessageDialog" unique_id=1263287636]
+[node name="Layout" type="VBoxContainer" parent="Frame" unique_id=1179144365]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="TitleBar" type="PanelContainer" parent="MessageDialog/Content" unique_id=1378019366]
-custom_minimum_size = Vector2(0, 22)
+[node name="TitleBar" type="Container" parent="Frame/Layout" unique_id=2142992638]
 layout_mode = 2
-theme_type_variation = &"DialogTitleBar"
+mouse_filter = 2
+script = ExtResource("6_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 4
+Padding = 3
 
-[node name="MessageTitle" type="Label" parent="MessageDialog/Content/TitleBar" unique_id=1327925070]
+[node name="Row" type="HBoxContainer" parent="Frame/Layout/TitleBar" unique_id=1199130909]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="Frame/Layout/TitleBar/Row" unique_id=1489847499]
+layout_mode = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+text = "The Last Gate"
+script = ExtResource("7_label")
+Colour = 9
+
+[node name="Version" type="Label" parent="Frame/Layout/TitleBar/Row" unique_id=1946837192]
 unique_name_in_owner = true
 layout_mode = 2
-text = "FYI"
-vertical_alignment = 1
+mouse_filter = 2
+text = "Client Version RC"
+script = ExtResource("7_label")
+Colour = 10
 
-[node name="Text" type="MarginContainer" parent="MessageDialog/Content" unique_id=454557493]
+[node name="Body" type="Container" parent="Frame/Layout" unique_id=2146445860]
 layout_mode = 2
+mouse_filter = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 23
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 23
+script = ExtResource("6_panel")
+Fill = 0
+Padding = 16
 
-[node name="MessageText" type="Label" parent="MessageDialog/Content/Text" unique_id=2095065583]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
+[node name="Columns" type="HBoxContainer" parent="Frame/Layout/Body" unique_id=320410946]
 layout_mode = 2
-theme_type_variation = &"DialogText"
-horizontal_alignment = 1
-autowrap_mode = 3
+mouse_filter = 2
+theme_override_constants/separation = 40
 
-[node name="Separator" type="HSeparator" parent="MessageDialog/Content" unique_id=1133153601]
+[node name="Left" type="VBoxContainer" parent="Frame/Layout/Body/Columns" unique_id=1998632805]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.2
 
-[node name="ConfirmDialog" type="ConfirmationDialog" parent="." unique_id=162356980]
-unique_name_in_owner = true
-initial_position = 2
-size = Vector2i(400, 200)
-borderless = true
-ok_button_text = "Yes"
+[node name="CharacterHeading" parent="Frame/Layout/Body/Columns/Left" unique_id=579499921 instance=ExtResource("12_heading")]
+layout_mode = 2
+Text = "Character"
 
-[node name="Content" type="VBoxContainer" parent="ConfirmDialog" unique_id=1964410861]
+[node name="Form" type="GridContainer" parent="Frame/Layout/Body/Columns/Left" unique_id=2021583681]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+columns = 2
 
-[node name="TitleBar" type="PanelContainer" parent="ConfirmDialog/Content" unique_id=1758551100]
-custom_minimum_size = Vector2(0, 22)
+[node name="AccountCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1390703502]
 layout_mode = 2
-theme_type_variation = &"DialogTitleBar"
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Account"
+script = ExtResource("7_label")
+Colour = 10
 
-[node name="ConfirmTitle" type="Label" parent="ConfirmDialog/Content/TitleBar" unique_id=599251773]
+[node name="Account" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1434626946]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="AccountName" type="Label" parent="Frame/Layout/Body/Columns/Left/Form/Account" unique_id=1295201396]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Are you sure?"
-vertical_alignment = 1
+mouse_filter = 2
+size_flags_vertical = 4
+text = "New Account"
+script = ExtResource("7_label")
 
-[node name="Text" type="MarginContainer" parent="ConfirmDialog/Content" unique_id=955355382]
+[node name="CreateAccountButton" parent="Frame/Layout/Body/Columns/Left/Form/Account" unique_id=1003263729 instance=ExtResource("8_button")]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Create new account"
+
+[node name="NameCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1782281530]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Name"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="NameField" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1329582151 instance=ExtResource("10_field")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 0
+max_length = 79
+
+[node name="PasswordCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1276416139]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Password"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="PasswordField" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1909043942 instance=ExtResource("10_field")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 0
+placeholder_text = "Type your password"
+max_length = 14
+secret = true
+
+[node name="DescriptionCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1668820540]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 0
+text = "Description"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="DescriptionField" parent="Frame/Layout/Body/Columns/Left/Form" unique_id=1767676916 instance=ExtResource("11_textbox")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(300, 46)
+size_flags_horizontal = 0
+wrap_mode = 1
+
+[node name="Facts" type="GridContainer" parent="Frame/Layout/Body/Columns/Left" unique_id=1749515103]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 3
+columns = 4
+
+[node name="ClassCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=1154209172]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Class"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="Class" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=1712815966]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+custom_minimum_size = Vector2(130, 0)
+
+[node name="ClassPicker" parent="Frame/Layout/Body/Columns/Left/Facts/Class" unique_id=1760161149 instance=ExtResource("13_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(130, 0)
+
+[node name="ClassText" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts/Class" unique_id=1359543923]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+visible = false
+size_flags_vertical = 4
+text = ""
+script = ExtResource("7_label")
+
+[node name="GameModeCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=1047244293]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Game mode"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="GameMode" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=615254513]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+custom_minimum_size = Vector2(130, 0)
+
+[node name="GameModePicker" parent="Frame/Layout/Body/Columns/Left/Facts/GameMode" unique_id=105443529 instance=ExtResource("13_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(130, 0)
+
+[node name="GameModeText" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts/GameMode" unique_id=1418993654]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+visible = false
+size_flags_vertical = 4
+text = ""
+script = ExtResource("7_label")
+
+[node name="BodyCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=273352760]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Body"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="Body" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=337804922]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+custom_minimum_size = Vector2(130, 0)
+
+[node name="BodyPicker" parent="Frame/Layout/Body/Columns/Left/Facts/Body" unique_id=716843656 instance=ExtResource("13_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(130, 0)
+
+[node name="BodyText" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts/Body" unique_id=1853981654]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+visible = false
+size_flags_vertical = 4
+text = ""
+script = ExtResource("7_label")
+
+[node name="SeasonCaption" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=310564253]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Season"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="Season" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Left/Facts" unique_id=1065626409]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+custom_minimum_size = Vector2(130, 0)
+
+[node name="SeasonPicker" parent="Frame/Layout/Body/Columns/Left/Facts/Season" unique_id=124672076 instance=ExtResource("13_picker")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(130, 0)
+
+[node name="SeasonText" type="Label" parent="Frame/Layout/Body/Columns/Left/Facts/Season" unique_id=1849689547]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+visible = false
+size_flags_vertical = 4
+text = ""
+script = ExtResource("7_label")
+
+[node name="Gap" type="Control" parent="Frame/Layout/Body/Columns/Left" unique_id=2013329923]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PreviousHeading" parent="Frame/Layout/Body/Columns/Left" unique_id=1571408688 instance=ExtResource("12_heading")]
+layout_mode = 2
+Text = "Previous characters"
+
+[node name="List" type="Container" parent="Frame/Layout/Body/Columns/Left" unique_id=1152882747]
+layout_mode = 2
+mouse_filter = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 23
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 23
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "G"
+Padding = 3
 
-[node name="Lines" type="VBoxContainer" parent="ConfirmDialog/Content/Text" unique_id=1133012211]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="ConfirmQuestion" type="Label" parent="ConfirmDialog/Content/Text/Lines" unique_id=550432452]
+[node name="PreviousCharacters" type="VBoxContainer" parent="Frame/Layout/Body/Columns/Left/List" unique_id=1558976648]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-horizontal_alignment = 1
-autowrap_mode = 3
+mouse_filter = 2
+script = ExtResource("15_table")
+Selectable = true
+ScrollRows = true
 
-[node name="ExplanationGap" type="MarginContainer" parent="ConfirmDialog/Content/Text/Lines" unique_id=1772434429]
+[node name="Right" type="VBoxContainer" parent="Frame/Layout/Body/Columns" unique_id=774810503]
 layout_mode = 2
-theme_override_constants/margin_top = 4
+mouse_filter = 2
+theme_override_constants/separation = 6
+size_flags_horizontal = 3
 
-[node name="ConfirmExplanation" type="Label" parent="ConfirmDialog/Content/Text/Lines/ExplanationGap" unique_id=491137288]
+[node name="OptionsHeading" parent="Frame/Layout/Body/Columns/Right" unique_id=551454016 instance=ExtResource("12_heading")]
+layout_mode = 2
+Text = "Options"
+
+[node name="Options" type="GridContainer" parent="Frame/Layout/Body/Columns/Right" unique_id=953017878]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+columns = 2
+
+[node name="WindowCaption" type="Label" parent="Frame/Layout/Body/Columns/Right/Options" unique_id=640120286]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Window"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="WindowPicker" parent="Frame/Layout/Body/Columns/Right/Options" unique_id=846589540 instance=ExtResource("13_picker")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-theme_type_variation = &"DialogText"
-autowrap_mode = 3
+custom_minimum_size = Vector2(150, 0)
+size_flags_horizontal = 0
 
-[node name="ConfirmWarning" type="Label" parent="ConfirmDialog/Content/Text/Lines" unique_id=916408411]
+[node name="VolumeCaption" type="Label" parent="Frame/Layout/Body/Columns/Right/Options" unique_id=2095693702]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+text = "Volume"
+script = ExtResource("7_label")
+Colour = 10
+
+[node name="Volume" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Right/Options" unique_id=865870089]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="VolumeSlider" parent="Frame/Layout/Body/Columns/Right/Options/Volume" unique_id=1829016176 instance=ExtResource("14_slider")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-theme_type_variation = &"DialogWarning"
-horizontal_alignment = 1
-autowrap_mode = 3
+custom_minimum_size = Vector2(150, 11)
+size_flags_vertical = 4
+max_value = 10.0
+step = 1.0
+value = 10.0
 
-[node name="Separator" type="HSeparator" parent="ConfirmDialog/Content" unique_id=1252086974]
+[node name="VolumeValue" type="Label" parent="Frame/Layout/Body/Columns/Right/Options/Volume" unique_id=908193637]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+size_flags_vertical = 4
+text = "10"
+script = ExtResource("7_label")
+
+[node name="Checks" type="VBoxContainer" parent="Frame/Layout/Body/Columns/Right" unique_id=1701958196]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="ShadowsCheck" parent="Frame/Layout/Body/Columns/Right/Checks" unique_id=1202920858 instance=ExtResource("9_check")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+Text = "Shadows"
+
+[node name="SoundCheck" parent="Frame/Layout/Body/Columns/Right/Checks" unique_id=1469487814 instance=ExtResource("9_check")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+Text = "Sound"
+
+[node name="Gap" type="Control" parent="Frame/Layout/Body/Columns/Right" unique_id=263895737]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DataHeading" parent="Frame/Layout/Body/Columns/Right" unique_id=1652871148 instance=ExtResource("12_heading")]
+layout_mode = 2
+Text = "Game data"
+
+[node name="Folders" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Right" unique_id=830991786]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="OpenDataFolderButton" parent="Frame/Layout/Body/Columns/Right/Folders" unique_id=292554048 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Open data folder"
+
+[node name="OpenOverridesFolderButton" parent="Frame/Layout/Body/Columns/Right/Folders" unique_id=1297115911 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Open sprite overrides"
+
+[node name="Map" type="HBoxContainer" parent="Frame/Layout/Body/Columns/Right" unique_id=1255485198]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="ClearMapButton" parent="Frame/Layout/Body/Columns/Right/Map" unique_id=727326944 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Clear saved map data"
+
+[node name="Gap2" type="Control" parent="Frame/Layout/Body/Columns/Right" unique_id=717620462]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="NotesHeading" parent="Frame/Layout/Body/Columns/Right" unique_id=1082361665 instance=ExtResource("12_heading")]
+layout_mode = 2
+Text = "Update notes"
+
+[node name="Notes" type="Container" parent="Frame/Layout/Body/Columns/Right" unique_id=402555436]
+layout_mode = 2
+mouse_filter = 2
+size_flags_vertical = 3
+script = ExtResource("6_panel")
+Fill = 2
+Profile = "G"
+Padding = 6
+
+[node name="UpdateNotes" type="RichTextLabel" parent="Frame/Layout/Body/Columns/Right/Notes" unique_id=1982215314]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = true
+
+[node name="Footer" type="Container" parent="Frame/Layout" unique_id=1484686813]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("6_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Row" type="HBoxContainer" parent="Frame/Layout/Footer" unique_id=1611775962]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="StartButton" parent="Frame/Layout/Footer/Row" unique_id=1638490248 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Start"
+
+[node name="LoadButton" parent="Frame/Layout/Footer/Row" unique_id=1340007224 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Load"
+
+[node name="SaveButton" parent="Frame/Layout/Footer/Row" unique_id=763569678 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Save"
+
+[node name="StatusCentre" type="CenterContainer" parent="Frame/Layout/Footer/Row" unique_id=153127243]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="UpdateStatus" parent="Frame/Layout/Footer/Row/StatusCentre" unique_id=1920624324 instance=ExtResource("4_update_status")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LoadDialog" type="FileDialog" parent="." unique_id=500698866]
+[node name="DiscordButton" parent="Frame/Layout/Footer/Row" unique_id=1626565232 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Discord"
+
+[node name="ExitButton" parent="Frame/Layout/Footer/Row" unique_id=892087753 instance=ExtResource("8_button")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Exit"
+
+[node name="Prompt" parent="." unique_id=880701006 instance=ExtResource("16_prompt")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="UpdateWindow" parent="." unique_id=1090145697 instance=ExtResource("3_update_window")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="RollbackWindow" parent="." unique_id=1006705172 instance=ExtResource("5_rollback_window")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="LoadDialog" type="FileDialog" parent="." unique_id=294742841]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Select your MOA"
@@ -513,7 +564,7 @@ access = 2
 filters = PackedStringArray("*.moa ; Astonia Save File")
 use_native_dialog = true
 
-[node name="SaveDialog" type="FileDialog" parent="." unique_id=1958207379]
+[node name="SaveDialog" type="FileDialog" parent="." unique_id=956359187]
 unique_name_in_owner = true
 title = "Save your character"
 mode_overrides_title = false

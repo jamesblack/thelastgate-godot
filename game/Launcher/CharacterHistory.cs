@@ -29,18 +29,27 @@ public sealed class CharacterHistory
 
     public string? LastFolder => entries.Count > 0 ? Path.GetDirectoryName(entries[0].FilePath) : null;
 
-    public void Use(string name, string filePath)
+    public void Use(PreviousCharacter character)
     {
-        var knownIndex = IndexOf(filePath);
+        var knownIndex = IndexOf(character.FilePath);
         if (knownIndex >= 0)
         {
             entries.RemoveAt(knownIndex);
         }
 
-        entries.Insert(0, new PreviousCharacter(name, filePath));
+        entries.Insert(0, character);
         if (entries.Count > MaxEntries)
         {
             entries.RemoveRange(MaxEntries, entries.Count - MaxEntries);
+        }
+    }
+
+    public void Describe(PreviousCharacter character)
+    {
+        var knownIndex = IndexOf(character.FilePath);
+        if (knownIndex >= 0)
+        {
+            entries[knownIndex] = character;
         }
     }
 

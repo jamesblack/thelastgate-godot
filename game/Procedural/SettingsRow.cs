@@ -20,8 +20,10 @@ public partial class SettingsRow : ProceduralPanel
 
     private readonly ProceduralLine rule = new() { Name = "Rule", Profile = "G", Width = 1, Visible = false };
     private readonly ProceduralLine treeLine = new() { Name = "TreeLine", Profile = "G", Width = 1, Visible = false };
+    private bool hovered;
 
     private bool ruleAbove;
+    private bool selected;
     private SettingsTree tree;
 
     [Export] public bool Toggles { get; set; }
@@ -39,6 +41,23 @@ public partial class SettingsRow : ProceduralPanel
 
             ruleAbove = value;
             DrawLines();
+        }
+    }
+
+    // A selected row stays filled after the pointer leaves it.
+    [Export]
+    public bool Selected
+    {
+        get => selected;
+        set
+        {
+            if (value == selected)
+            {
+                return;
+            }
+
+            selected = value;
+            Fill = value || hovered ? ProceduralFill.Selected : ProceduralFill.None;
         }
     }
 
@@ -70,12 +89,22 @@ public partial class SettingsRow : ProceduralPanel
             return;
         }
 
-        MouseEntered += () => Fill = ProceduralFill.Selected;
+        MouseEntered += () =>
+        {
+            hovered = true;
+            Fill = ProceduralFill.Selected;
+        };
 
         // Moving onto a control inside the row counts as leaving it, so the fill only clears once the pointer is out.
         MouseExited += () =>
         {
-            if (!GetGlobalRect().HasPoint(GetGlobalMousePosition()))
+            if (GetGlobalRect().HasPoint(GetGlobalMousePosition()))
+            {
+                return;
+            }
+
+            hovered = false;
+            if (!selected)
             {
                 Fill = ProceduralFill.None;
             }

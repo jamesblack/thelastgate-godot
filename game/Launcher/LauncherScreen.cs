@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Characters;
 using TheLastGate.Config;
 using TheLastGate.Game;
+using TheLastGate.Hud;
 using TheLastGate.Map;
 using TheLastGate.Net;
+using TheLastGate.Procedural;
 using TheLastGate.Updates;
 
 namespace TheLastGate.Launcher;
@@ -18,47 +21,50 @@ public partial class LauncherScreen : Control
     private const string StartAsArgument = "--start-as=";
     private const string DiscordInvite = "https://discord.gg/jJbPv2R";
     private const int MaxDescriptionLength = 159;
-    private const int WindowedOptionId = 1;
-    private const int DialogButtonGap = 10;
+    private const int WindowedChoice = 1;
+    private const string ClearMapText = "Clear saved map data";
+    private const string ConfirmClearMapText = "Click again to clear the map";
 
-    private static readonly Color LockedRowColour = new(1, 1, 1, 0.6f);
-    private static readonly Vector2 PreviousCharacterButtonSize = new(240, 24);
+    private static readonly CharacterClass[] NewClasses =
+        [CharacterClass.Templar, CharacterClass.Mercenary, CharacterClass.Harakim];
+
+    private static readonly Body[] Bodies = [Body.Masculine, Body.Feminine];
+    private static readonly GameMode[] NewGameModes = [GameMode.Normal, GameMode.Hard];
+    private static readonly Season[] Seasons = [Season.Legacy, Season.Current];
+
+    private static readonly TableColumn[] PreviousCharacterColumns =
+        [new("Name", 1.4f), new("Class"), new("Game mode"), new("Season")];
 
     private Label accountName = null!;
-    private OptionButton bodyOption = null!;
-    private OptionButton classOption = null!;
-    private ConfirmationDialog confirmDialog = null!;
-    private Label confirmExplanation = null!;
-    private Label confirmQuestion = null!;
-    private Label confirmTitle = null!;
-    private Label confirmWarning = null!;
+    private ProceduralPicker bodyPicker = null!;
+    private Label bodyText = null!;
+    private ProceduralPicker classPicker = null!;
+    private Label classText = null!;
+    private ProceduralButton clearMapButton = null!;
+    private bool confirmingClearMap;
     private TextEdit descriptionField = null!;
-    private OptionButton gameModeOption = null!;
+    private ProceduralPicker gameModePicker = null!;
+    private Label gameModeText = null!;
     private FileDialog loadDialog = null!;
-    private AcceptDialog messageDialog = null!;
-    private Label messageText = null!;
-    private Label messageTitle = null!;
-    private ColorRect modalDim = null!;
     private LineEdit nameField = null!;
     private LineEdit passwordField = null!;
-    private Action? pendingConfirmation;
-    private VBoxContainer previousCharacterList = null!;
-    private (Label Label, OptionButton Option)[] raceRows = [];
+    private DataTable previousCharacters = null!;
+    private LauncherPrompt prompt = null!;
     private CharacterRecord record = null!;
     private RollbackWindowView rollbackWindow = null!;
     private FileDialog saveDialog = null!;
-    private OptionButton seasonOption = null!;
-    private int selectableClassCount;
-    private int selectableGameModeCount;
+    private ProceduralPicker seasonPicker = null!;
+    private Label seasonText = null!;
     private ClientSettings settings = null!;
-    private CheckBox shadowsCheck = null!;
+    private ProceduralCheckBox shadowsCheck = null!;
     private bool showingCharacter;
-    private CheckBox soundCheck = null!;
+    private IReadOnlyList<PreviousCharacter> shownCharacters = [];
+    private ProceduralCheckBox soundCheck = null!;
     private LoginHandoff? startingSession;
     private UpdateWindowView updateWindow = null!;
-    private HSlider volumeSlider = null!;
+    private ProceduralSlider volumeSlider = null!;
     private Label volumeValue = null!;
-    private OptionButton windowTypeOption = null!;
+    private ProceduralPicker windowPicker = null!;
 
     private string ServerLabel => $"{settings.Server.Host}:{settings.Server.Port}";
 
@@ -74,18 +80,23 @@ public partial class LauncherScreen : Control
 
         ApplyFonts();
         FindNodes();
+        WindowOverlays.Lift(this);
+        GetNode<Label>("%Version").Text = ClientVersion.Text(
+            typeof(LauncherScreen).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                ?.InformationalVersion ?? "");
 
         settings = ClientSettings.Load();
         ApplyWindowMode();
         ShowOptions();
+        ShowChoices();
 
         record = CharacterStore.Load() ?? CharacterRecords.CreateNew();
         CharacterStore.Save(record);
-        selectableClassCount = classOption.ItemCount;
-        selectableGameModeCount = gameModeOption.ItemCount;
-        AddDescriptions();
         ShowCharacter();
-        ShowPreviousCharacters();
+        previousCharacters.SetColumns(PreviousCharacterColumns);
+        var loadedFile = LoadedOnStart();
+        DescribeCreatedCharacter(loadedFile);
+        ShowPreviousCharacters(loadedFile);
 
         ConnectSignals();
         StartUpdates();
@@ -100,6 +111,7 @@ public partial class LauncherScreen : Control
         themed.SetFont("font", "Button", Fonts.Bold);
         themed.SetFont("font", "OptionButton", Fonts.Regular);
         Theme = themed;
+        HudTextTheme.Apply(HudTextTheme.Load(), new LauncherPartFonts(Fonts));
     }
 
     private void FindNodes()
@@ -108,90 +120,71 @@ public partial class LauncherScreen : Control
         nameField = GetNode<LineEdit>("%NameField");
         passwordField = GetNode<LineEdit>("%PasswordField");
         descriptionField = GetNode<TextEdit>("%DescriptionField");
-        classOption = GetNode<OptionButton>("%ClassOption");
-        bodyOption = GetNode<OptionButton>("%BodyOption");
-        gameModeOption = GetNode<OptionButton>("%GameModeOption");
-        seasonOption = GetNode<OptionButton>("%SeasonOption");
-        raceRows =
-        [
-            (GetNode<Label>("%ClassLabel"), classOption),
-            (GetNode<Label>("%BodyLabel"), bodyOption),
-            (GetNode<Label>("%GameModeLabel"), gameModeOption),
-            (GetNode<Label>("%SeasonLabel"), seasonOption),
-        ];
-        previousCharacterList = GetNode<VBoxContainer>("%PreviousCharacterList");
-        windowTypeOption = GetNode<OptionButton>("%WindowTypeOption");
-        shadowsCheck = GetNode<CheckBox>("%ShadowsCheck");
-        soundCheck = GetNode<CheckBox>("%SoundCheck");
-        volumeSlider = GetNode<HSlider>("%VolumeSlider");
+        classPicker = GetNode<ProceduralPicker>("%ClassPicker");
+        bodyPicker = GetNode<ProceduralPicker>("%BodyPicker");
+        gameModePicker = GetNode<ProceduralPicker>("%GameModePicker");
+        seasonPicker = GetNode<ProceduralPicker>("%SeasonPicker");
+        classText = GetNode<Label>("%ClassText");
+        bodyText = GetNode<Label>("%BodyText");
+        gameModeText = GetNode<Label>("%GameModeText");
+        seasonText = GetNode<Label>("%SeasonText");
+        previousCharacters = GetNode<DataTable>("%PreviousCharacters");
+        windowPicker = GetNode<ProceduralPicker>("%WindowPicker");
+        shadowsCheck = GetNode<ProceduralCheckBox>("%ShadowsCheck");
+        soundCheck = GetNode<ProceduralCheckBox>("%SoundCheck");
+        volumeSlider = GetNode<ProceduralSlider>("%VolumeSlider");
         volumeValue = GetNode<Label>("%VolumeValue");
-        modalDim = GetNode<ColorRect>("%ModalDim");
-        messageDialog = GetNode<AcceptDialog>("%MessageDialog");
-        messageTitle = GetNode<Label>("%MessageTitle");
-        messageText = GetNode<Label>("%MessageText");
-        confirmDialog = GetNode<ConfirmationDialog>("%ConfirmDialog");
-        confirmTitle = GetNode<Label>("%ConfirmTitle");
-        confirmQuestion = GetNode<Label>("%ConfirmQuestion");
-        confirmExplanation = GetNode<Label>("%ConfirmExplanation");
-        confirmWarning = GetNode<Label>("%ConfirmWarning");
+        clearMapButton = GetNode<ProceduralButton>("%ClearMapButton");
+        prompt = GetNode<LauncherPrompt>("%Prompt");
         loadDialog = GetNode<FileDialog>("%LoadDialog");
         saveDialog = GetNode<FileDialog>("%SaveDialog");
         updateWindow = GetNode<UpdateWindowView>("%UpdateWindow");
         rollbackWindow = GetNode<RollbackWindowView>("%RollbackWindow");
     }
 
+    private ProceduralButton Button(string path) => GetNode<ProceduralButton>(path);
+
     private void ConnectSignals()
     {
-        GetNode<Button>("%CreateAccountButton").Pressed += OnCreateAccountPressed;
-        GetNode<Button>("%LoadButton").Pressed += () => OpenInLastFolder(loadDialog);
-        GetNode<Button>("%SaveButton").Pressed += () => OpenInLastFolder(saveDialog);
-        GetNode<Button>("%DiscordButton").Pressed += () => OS.ShellOpen(DiscordInvite);
-        GetNode<Button>("%ExitButton").Pressed += () => GetTree().Quit();
-        GetNode<Button>("%StartButton").Pressed += OnStartPressed;
-        GetNode<Button>("%ClearMapButton").Pressed += () => Confirm(
-            "Clear saved map?",
-            $"Do you really want to clear the saved map for {ServerLabel}?",
-            "",
-            "Every area explored on this server, by all of your characters, will be forgotten.",
-            ClearSavedMap);
-        GetNode<Button>("%OpenDataFolderButton").Pressed += () => OpenFolder(DataPaths.PlayerData());
-        GetNode<Button>("%OpenOverridesFolderButton").Pressed += () => OpenFolder(DataPaths.PlayerOverrides());
+        Button("%CreateAccountButton").Pressed += OnCreateAccountPressed;
+        Button("%LoadButton").Pressed += () => OpenInLastFolder(loadDialog);
+        Button("%SaveButton").Pressed += () => OpenInLastFolder(saveDialog);
+        Button("%DiscordButton").Pressed += () => OS.ShellOpen(DiscordInvite);
+        Button("%ExitButton").Pressed += () => GetTree().Quit();
+        Button("%StartButton").Pressed += OnStartPressed;
+        Button("%OpenDataFolderButton").Pressed += () => OpenFolder(DataPaths.PlayerData());
+        Button("%OpenOverridesFolderButton").Pressed += () => OpenFolder(DataPaths.PlayerOverrides());
+        clearMapButton.Pressed += OnClearMapPressed;
+        clearMapButton.GetNode<Control>("Click").MouseExited += () => ShowClearMapConfirming(false);
 
         nameField.TextChanged += OnNameChanged;
         descriptionField.TextChanged += OnDescriptionChanged;
-        classOption.ItemSelected += _ => ShowSelectedDescription(classOption);
-        gameModeOption.ItemSelected += _ => ShowSelectedDescription(gameModeOption);
-        seasonOption.ItemSelected += _ => ShowSelectedDescription(seasonOption);
+        classPicker.ItemChosen += _ => ShowChoiceDescriptions();
+        gameModePicker.ItemChosen += _ => ShowChoiceDescriptions();
+        seasonPicker.ItemChosen += _ => ShowChoiceDescriptions();
+        previousCharacters.RowClicked += index => Import(shownCharacters[index].FilePath);
 
-        windowTypeOption.ItemSelected += _ => ChangeSetting(
-            () => settings.Windowed = windowTypeOption.GetSelectedId() == WindowedOptionId,
+        windowPicker.ItemChosen += choice => ChangeSetting(
+            () => settings.Windowed = choice == WindowedChoice,
             ApplyWindowMode);
-        shadowsCheck.Toggled += pressed => ChangeSetting(() => settings.Shadows = pressed);
-        soundCheck.Toggled += pressed => ChangeSetting(() => settings.SoundEnabled = pressed);
+        shadowsCheck.Toggled += isChecked => ChangeSetting(() => settings.Shadows = isChecked);
+        soundCheck.Toggled += isChecked => ChangeSetting(() => settings.SoundEnabled = isChecked);
         volumeSlider.ValueChanged += value => ChangeSetting(
             () => settings.SoundVolume = (int)value,
             () => volumeValue.Text = settings.SoundVolume.ToString());
 
         loadDialog.FileSelected += OnLoadFileSelected;
         saveDialog.FileSelected += OnSaveFileSelected;
-        confirmDialog.Confirmed += OnConfirmed;
-        confirmDialog.Canceled += () => pendingConfirmation = null;
-        confirmDialog.VisibilityChanged += () => KeepButtonsTogetherWhenShown(confirmDialog);
-        updateWindow.VisibilityChanged += () => KeepButtonsTogetherWhenShown(updateWindow);
-        rollbackWindow.VisibilityChanged += () => KeepButtonsTogetherWhenShown(rollbackWindow);
-        messageDialog.VisibilityChanged += ShowModalDim;
-        confirmDialog.VisibilityChanged += ShowModalDim;
-        updateWindow.VisibilityChanged += ShowModalDim;
-        rollbackWindow.VisibilityChanged += ShowModalDim;
         StartIfAsked();
     }
 
     private void ShowOptions()
     {
-        windowTypeOption.Select(windowTypeOption.GetItemIndex(settings.Windowed ? WindowedOptionId : 0));
-        shadowsCheck.ButtonPressed = settings.Shadows;
-        soundCheck.ButtonPressed = settings.SoundEnabled;
-        volumeSlider.Value = settings.SoundVolume;
+        windowPicker.SetChoices(["Fullscreen", "Windowed"]);
+        windowPicker.Select(settings.Windowed ? WindowedChoice : 0);
+        shadowsCheck.Checked = settings.Shadows;
+        soundCheck.Checked = settings.SoundEnabled;
+        volumeSlider.SetValueNoSignal(settings.SoundVolume);
         volumeValue.Text = settings.SoundVolume.ToString();
     }
 
@@ -214,28 +207,24 @@ public partial class LauncherScreen : Control
         }
     }
 
-    private void AddDescriptions()
+    private void ShowChoices()
     {
-        AddDescriptions(classOption, CharacterChoiceText.ClassDescriptions);
-        AddDescriptions(gameModeOption, CharacterChoiceText.GameModeDescriptions);
-        AddDescriptions(seasonOption, CharacterChoiceText.SeasonDescriptions);
+        classPicker.SetChoices(NewClasses.Select(choice => CharacterChoiceText.ClassNames[choice]).ToList());
+        bodyPicker.SetChoices(Bodies.Select(choice => choice.ToString()).ToList());
+        gameModePicker.SetChoices(NewGameModes.Select(choice => CharacterChoiceText.GameModeNames[choice]).ToList());
+        seasonPicker.SetChoices(Seasons.Select(choice => choice.ToString()).ToList());
+        ResetNewCharacterChoices();
     }
 
-    private static void AddDescriptions<TChoice>(OptionButton option, IReadOnlyDictionary<TChoice, string> descriptions)
-        where TChoice : struct, Enum
+    private void ShowChoiceDescriptions()
     {
-        foreach (var (choice, description) in descriptions)
-        {
-            var index = option.GetItemIndex(Convert.ToInt32(choice));
-            if (index >= 0)
-            {
-                option.SetItemTooltip(index, description);
-            }
-        }
+        classPicker.Tooltip =
+            CharacterChoiceText.ClassDescriptions.GetValueOrDefault(NewClasses[classPicker.Selected], "");
+        gameModePicker.Tooltip =
+            CharacterChoiceText.GameModeDescriptions.GetValueOrDefault(NewGameModes[gameModePicker.Selected], "");
+        seasonPicker.Tooltip =
+            CharacterChoiceText.SeasonDescriptions.GetValueOrDefault(Seasons[seasonPicker.Selected], "");
     }
-
-    private static void ShowSelectedDescription(OptionButton option) =>
-        option.TooltipText = option.Selected >= 0 ? option.GetItemTooltip(option.Selected) : "";
 
     private void ShowCharacter()
     {
@@ -248,59 +237,33 @@ public partial class LauncherScreen : Control
         if (existingCharacter)
         {
             var race = CharacterRace.FromNumber(record.Key.Race);
-            SelectOrAdd(classOption, (int)race.Class, CharacterChoiceText.ClassNames[race.Class]);
-            SelectOrAdd(bodyOption, (int)race.Body, race.Body.ToString());
-            SelectOrAdd(
-                gameModeOption,
-                (int)race.GameMode,
-                CharacterChoiceText.GameModeNames.GetValueOrDefault(race.GameMode, race.GameMode.ToString()));
-            SelectOrAdd(seasonOption, (int)race.Season, race.Season.ToString());
-        }
-        else
-        {
-            RemoveLockedItems(classOption, selectableClassCount);
-            RemoveLockedItems(gameModeOption, selectableGameModeCount);
+            classText.Text = CharacterChoiceText.ClassNames[race.Class];
+            bodyText.Text = race.Body.ToString();
+            gameModeText.Text =
+                CharacterChoiceText.GameModeNames.GetValueOrDefault(race.GameMode, race.GameMode.ToString());
+            seasonText.Text = race.Season.ToString();
         }
 
-        foreach (var (label, option) in raceRows)
+        foreach (var (picker, text) in (ReadOnlySpan<(Control, Control)>)
+            [
+                (classPicker, classText), (bodyPicker, bodyText), (gameModePicker, gameModeText),
+                (seasonPicker, seasonText),
+            ])
         {
-            option.Disabled = existingCharacter;
-            label.Modulate = existingCharacter ? LockedRowColour : Colors.White;
-            ShowSelectedDescription(option);
+            picker.Visible = !existingCharacter;
+            text.Visible = existingCharacter;
         }
 
+        ShowChoiceDescriptions();
         showingCharacter = false;
-    }
-
-    private static void SelectOrAdd(OptionButton option, int id, string name)
-    {
-        if (option.GetItemIndex(id) < 0)
-        {
-            option.AddItem(name, id);
-        }
-
-        option.Select(option.GetItemIndex(id));
-    }
-
-    private static void RemoveLockedItems(OptionButton option, int selectableCount)
-    {
-        while (option.ItemCount > selectableCount)
-        {
-            option.RemoveItem(option.ItemCount - 1);
-        }
-
-        if (option.Selected < 0)
-        {
-            option.Select(0);
-        }
     }
 
     private void ResetNewCharacterChoices()
     {
-        classOption.Select(classOption.GetItemIndex((int)CharacterClass.Templar));
-        bodyOption.Select(bodyOption.GetItemIndex((int)Body.Masculine));
-        gameModeOption.Select(gameModeOption.GetItemIndex((int)GameMode.Normal));
-        seasonOption.Select(seasonOption.GetItemIndex((int)Season.Current));
+        classPicker.Select(Array.IndexOf(NewClasses, CharacterClass.Templar));
+        bodyPicker.Select(Array.IndexOf(Bodies, Body.Masculine));
+        gameModePicker.Select(Array.IndexOf(NewGameModes, GameMode.Normal));
+        seasonPicker.Select(Array.IndexOf(Seasons, Season.Current));
     }
 
     private void OnNameChanged(string name)
@@ -372,26 +335,23 @@ public partial class LauncherScreen : Control
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             GD.PushError($"Couldn't read or save the unique id: {exception.Message}");
-            ShowMessage("FYI", "Could not read or save this computer's unique id.");
+            prompt.Tell("FYI", "Could not read or save this computer's unique id.");
             return;
         }
 
-        var newCharacterRace = new CharacterRace(
-            (CharacterClass)classOption.GetSelectedId(),
-            (Body)bodyOption.GetSelectedId(),
-            (GameMode)gameModeOption.GetSelectedId(),
-            (Season)seasonOption.GetSelectedId());
-        var handshake = new LoginHandshake(
-            record.Key,
-            newCharacterRace.ToNumber(),
-            passwordField.Text,
-            uniqueId.Low,
-            uniqueId.High);
+        var race = record.Key.UserNumber != 0
+            ? record.Key.Race
+            : new CharacterRace(
+                NewClasses[classPicker.Selected],
+                Bodies[bodyPicker.Selected],
+                NewGameModes[gameModePicker.Selected],
+                Seasons[seasonPicker.Selected]).ToNumber();
+        var handshake = new LoginHandshake(record.Key, race, passwordField.Text, uniqueId.Low, uniqueId.High);
         var connection = new ServerConnection();
         startingSession = new LoginHandoff(record, handshake, settings.Server, connection);
         connection.Start(settings.Server, handshake);
-        ShowMessage("Connection", "STATUS: Connecting...");
-        LetMessageClose(false);
+        prompt.Tell("Connection", "STATUS: Connecting...");
+        prompt.CanClose = false;
         SetProcess(true);
     }
 
@@ -407,7 +367,7 @@ public partial class LauncherScreen : Control
         var state = session.Connection.State;
         while (session.Connection.TryDequeueMessage(out var message))
         {
-            messageText.Text = $"STATUS: {message}";
+            prompt.ShowText($"STATUS: {message}");
         }
 
         if (state == ConnectionState.Connected)
@@ -420,7 +380,7 @@ public partial class LauncherScreen : Control
         {
             EndStarting();
             session.Connection.Dispose();
-            LetMessageClose(true);
+            prompt.CanClose = true;
         }
     }
 
@@ -428,12 +388,6 @@ public partial class LauncherScreen : Control
     {
         startingSession = null;
         SetProcess(false);
-    }
-
-    private void LetMessageClose(bool canClose)
-    {
-        messageDialog.GetOkButton().Disabled = !canClose;
-        messageDialog.DialogCloseOnEscape = canClose;
     }
 
     private void OnCreateAccountPressed() =>
@@ -446,6 +400,7 @@ public partial class LauncherScreen : Control
                 passwordField.Text = "";
                 ResetNewCharacterChoices();
                 ShowCharacter();
+                ShowPreviousCharacters(null);
             });
 
     private void OnLoadFileSelected(string filePath) =>
@@ -464,11 +419,10 @@ public partial class LauncherScreen : Control
             or InvalidDataException)
         {
             GD.PushError($"Couldn't open the character file {filePath}: {exception.Message}");
-            ShowMessage("FYI", $"Could not open file {filePath}");
+            prompt.Tell("FYI", $"Could not open file {filePath}");
             return;
         }
 
-        record.Changed = true;
         CharacterStore.Save(record);
         RememberCharacterFile(filePath);
         passwordField.Text = "";
@@ -484,12 +438,12 @@ public partial class LauncherScreen : Control
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             GD.PushError($"Couldn't save the character file {filePath}: {exception.Message}");
-            ShowMessage("FYI", $"Could not save file {filePath}");
+            prompt.Tell("FYI", $"Could not save file {filePath}");
             return;
         }
 
         RememberCharacterFile(filePath);
-        ShowMessage("FYI", $"Saved file as {filePath}");
+        prompt.Tell("FYI", $"Saved file as {filePath}");
     }
 
     private void OpenInLastFolder(FileDialog dialog)
@@ -505,58 +459,120 @@ public partial class LauncherScreen : Control
 
     private void RememberCharacterFile(string filePath)
     {
-        settings.CharacterHistory.Use(record.Key.Name, filePath);
+        settings.CharacterHistory.Use(PreviousCharacter.Of(record, filePath));
         settings.Save();
-        ShowPreviousCharacters();
+        ShowPreviousCharacters(filePath);
     }
 
-    private void ShowPreviousCharacters()
+    // The launcher keeps its own copy of the character, so the file it came from is found by the character's name.
+    private string? LoadedOnStart() =>
+        settings.CharacterHistory.Entries.FirstOrDefault(entry => entry.Name == record.Key.Name)?.FilePath;
+
+    // A character saved before its first Start has no facts in its file, so they come from the created one.
+    private void DescribeCreatedCharacter(string? loadedFile)
     {
-        foreach (var child in previousCharacterList.GetChildren())
+        if (loadedFile is null || record.Key.UserNumber == 0)
         {
-            child.QueueFree();
+            return;
         }
 
-        foreach (var entry in settings.CharacterHistory.Entries)
+        var described = PreviousCharacter.Of(record, loadedFile);
+        if (settings.CharacterHistory.Entries.Contains(described))
         {
-            var button = new Button
+            return;
+        }
+
+        settings.CharacterHistory.Describe(described);
+        settings.Save();
+    }
+
+    private void ShowPreviousCharacters(string? loadedFile)
+    {
+        shownCharacters = settings.CharacterHistory.Entries.Select(WithFacts).ToList();
+        previousCharacters.ShowRows(shownCharacters.Select(PreviousCharacterRow).ToList());
+        previousCharacters.SelectedRow = shownCharacters.ToList()
+            .FindIndex(entry => string.Equals(
+                entry.FilePath,
+                loadedFile,
+                StringComparison.OrdinalIgnoreCase));
+    }
+
+    // Entries saved before the history kept a character's facts get them from its file.
+    private static PreviousCharacter WithFacts(PreviousCharacter entry)
+    {
+        if (entry.Class.Length > 0)
+        {
+            return entry;
+        }
+
+        try
+        {
+            return PreviousCharacter.Of(CharacterRecords.Read(entry.FilePath), entry.FilePath) with
             {
-                Text = entry.Name.Length > 0 ? entry.Name : Path.GetFileNameWithoutExtension(entry.FilePath),
-                TooltipText = entry.FilePath,
-                CustomMinimumSize = PreviousCharacterButtonSize,
-                SizeFlagsHorizontal = SizeFlags.ShrinkCenter,
+                Name = entry.Name,
             };
-            var filePath = entry.FilePath;
-            button.Pressed += () => Import(filePath);
-            previousCharacterList.AddChild(button);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException
+            or InvalidDataException)
+        {
+            return entry;
         }
     }
+
+    private static TableRow PreviousCharacterRow(PreviousCharacter entry) =>
+        new(
+        [
+            new TableCell(entry.Name.Length > 0 ? entry.Name : Path.GetFileNameWithoutExtension(entry.FilePath)),
+            new TableCell(entry.Class, CellTone.Dim),
+            new TableCell(entry.GameMode, CellTone.Dim),
+            new TableCell(entry.Season, CellTone.Dim),
+        ]);
 
     private void StartUpdates()
     {
         updateWindow.Fonts = Fonts;
         rollbackWindow.Fonts = Fonts;
-        var updateButton = GetNode<UpdateButtonView>("%UpdateButton");
+        var updateStatus = GetNode<UpdateStatusView>("%UpdateStatus");
+        updateStatus.NotesFound += notes => ChangelogText.Fill(GetNode<RichTextLabel>("%UpdateNotes"), notes, Fonts);
         var updater = Updaters.Choose(OS.GetCmdlineUserArgs());
         if (updater is PreviewUpdater preview)
         {
             preview.Applied += version =>
-                ShowMessage("Preview", $"A real update would now restart the launcher on version {version}.");
+                prompt.Tell("Preview", $"A real update would now restart the launcher on version {version}.");
         }
         else
         {
-            updateButton.Restarting += () => GetTree().Quit();
+            updateStatus.Restarting += () => GetTree().Quit();
         }
 
-        updateButton.Start(updater, updateWindow, rollbackWindow);
+        updateStatus.Start(updater, updateWindow, rollbackWindow);
     }
 
-    private void ClearSavedMap() =>
-        ShowMessage(
+    private void OnClearMapPressed()
+    {
+        if (!confirmingClearMap)
+        {
+            ShowClearMapConfirming(true);
+            return;
+        }
+
+        ShowClearMapConfirming(false);
+        prompt.Tell(
             "FYI",
             ExploredMapKeeper.ClearSaved(settings.Server)
                 ? $"Saved map data for {ServerLabel} has been cleared."
                 : $"Could not clear the saved map data for {ServerLabel}.");
+    }
+
+    private void ShowClearMapConfirming(bool confirming)
+    {
+        confirmingClearMap = confirming;
+        clearMapButton.Warning = confirming;
+        clearMapButton.Caption = confirming ? ConfirmClearMapText : ClearMapText;
+        clearMapButton.GetNode<Control>("Click").TooltipText = confirming
+            ? $"Every area explored on {ServerLabel}, by all of your characters, will be forgotten."
+            : "";
+    }
 
     private void OpenFolder(string folder)
     {
@@ -567,7 +583,7 @@ public partial class LauncherScreen : Control
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             GD.PushError($"Couldn't create the folder {folder}: {exception.Message}");
-            ShowMessage("FYI", $"Could not open the folder {folder}");
+            prompt.Tell("FYI", $"Could not open the folder {folder}");
             return;
         }
 
@@ -575,75 +591,20 @@ public partial class LauncherScreen : Control
         if (opened != Error.Ok)
         {
             GD.PushError($"Couldn't open the folder {folder}: {opened}");
-            ShowMessage("FYI", $"Could not open the folder {folder}");
+            prompt.Tell("FYI", $"Could not open the folder {folder}");
         }
     }
 
-    private void ShowMessage(string title, string text)
-    {
-        messageTitle.Text = title;
-        messageText.Text = text;
-        messageDialog.PopupCentered();
-    }
-
     private void ConfirmTwice(string question, Action onYes) =>
-        Confirm(
+        prompt.Ask(
             "Are you sure?",
             question,
             "Your old account will no longer be accessible, unless you remembered to save it.",
             "You did save it, didn't you?",
-            () => Confirm(
+            () => prompt.Ask(
                 "Are you really sure?",
                 "No Really!",
                 "This will replace your current character.",
                 "This action cannot be undone.",
                 onYes));
-
-    private void Confirm(string title, string question, string explanation, string warning, Action onYes)
-    {
-        pendingConfirmation = onYes;
-        confirmTitle.Text = title;
-        confirmQuestion.Text = question;
-        confirmExplanation.Text = explanation;
-        confirmExplanation.Visible = explanation.Length > 0;
-        confirmWarning.Text = warning;
-        confirmDialog.CallDeferred(Window.MethodName.PopupCentered);
-    }
-
-    private void ShowModalDim() =>
-        modalDim.Visible = messageDialog.Visible || confirmDialog.Visible || updateWindow.Visible
-            || rollbackWindow.Visible;
-
-    private static void KeepButtonsTogetherWhenShown(ConfirmationDialog dialog)
-    {
-        if (dialog.Visible)
-        {
-            Callable.From(() => KeepButtonsTogether(dialog)).CallDeferred();
-        }
-    }
-
-    private static void KeepButtonsTogether(ConfirmationDialog dialog)
-    {
-        var buttonRow = dialog.GetChildren(true)
-            .OfType<HBoxContainer>()
-            .First(row => row.IsAncestorOf(dialog.GetOkButton()));
-        buttonRow.AddThemeConstantOverride("separation", DialogButtonGap);
-        var okIndex = dialog.GetOkButton().GetIndex();
-        var cancelIndex = dialog.GetCancelButton().GetIndex();
-        for (var childIndex = 0; childIndex < buttonRow.GetChildCount(); childIndex++)
-        {
-            if (buttonRow.GetChild(childIndex) is Control spacer and not Button)
-            {
-                spacer.Visible = childIndex < Math.Min(okIndex, cancelIndex)
-                    || childIndex > Math.Max(okIndex, cancelIndex);
-            }
-        }
-    }
-
-    private void OnConfirmed()
-    {
-        var confirmed = pendingConfirmation;
-        pendingConfirmation = null;
-        confirmed?.Invoke();
-    }
 }

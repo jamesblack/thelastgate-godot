@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -43,10 +44,34 @@ public partial class DataTable : VBoxContainer
     ];
 
     private readonly List<SettingsRow> rows = [];
+    private VBoxContainer body = new();
     private IReadOnlyList<TableColumn> columns = [];
+    private int selectedRow = -1;
+    private IReadOnlyList<TableRow> shownRows = [];
 
     // For the style guide: fills the table with sample rows.
     [Export] public bool Preview { get; set; }
+
+    [Export] public bool Selectable { get; set; }
+
+    [Export] public bool ScrollRows { get; set; }
+
+    public int SelectedRow
+    {
+        get => selectedRow;
+        set
+        {
+            if (value == selectedRow)
+            {
+                return;
+            }
+
+            selectedRow = value;
+            ShowAll();
+        }
+    }
+
+    public event Action<int>? RowClicked;
 
     public override void _Ready()
     {
@@ -54,6 +79,11 @@ public partial class DataTable : VBoxContainer
         {
             SetColumns(PreviewColumns);
             ShowRows(PreviewRows);
+            if (Selectable)
+            {
+                RowClicked += index => SelectedRow = index;
+                SelectedRow = 0;
+            }
         }
     }
 
@@ -74,38 +104,65 @@ public partial class DataTable : VBoxContainer
 
         AddChild(HeaderRow());
         AddChild(Rule("HeaderRule", 0));
-        var body = new VBoxContainer { Name = "Body", MouseFilter = MouseFilterEnum.Ignore };
+        body = new VBoxContainer
+        {
+            Name = "Body",
+            MouseFilter = MouseFilterEnum.Ignore,
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+        };
         body.AddThemeConstantOverride("separation", SettingsRow.RowGap);
-        AddChild(body);
+        if (ScrollRows)
+        {
+            var scroll = new ScrollContainer
+            {
+                Name = "Rows",
+                HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
+                SizeFlagsVertical = SizeFlags.ExpandFill,
+            };
+            ProceduralScrollBar.StyleScrollContainer(scroll);
+            scroll.AddChild(body);
+            AddChild(scroll);
+        }
+        else
+        {
+            AddChild(body);
+        }
     }
 
-    public void ShowRows(IReadOnlyList<TableRow> shownRows)
+    public void ShowRows(IReadOnlyList<TableRow> rowsToShow)
     {
-        var body = GetNode("Body");
+        shownRows = rowsToShow;
         while (rows.Count < shownRows.Count)
         {
-            var row = BodyRow(rows.Count > 0);
+            var row = BodyRow(rows.Count);
             rows.Add(row);
             body.AddChild(row);
         }
 
+        ShowAll();
+    }
+
+    private void ShowAll()
+    {
         for (var index = 0; index < rows.Count; index++)
         {
-            rows[index].Visible = index < shownRows.Count;
-            if (index < shownRows.Count)
+            var shown = index < shownRows.Count;
+            rows[index].Visible = shown;
+            rows[index].Selected = shown && index == selectedRow;
+            if (shown)
             {
-                Fill(rows[index], shownRows[index]);
+                Fill(rows[index], shownRows[index], index == selectedRow);
             }
         }
     }
 
-    private static void Fill(SettingsRow row, TableRow shown)
+    private static void Fill(SettingsRow row, TableRow shown, bool selected)
     {
         var cells = row.GetNode("Cells").GetChildren().OfType<HudLabel>().ToList();
         for (var column = 0; column < cells.Count && column < shown.Cells.Count; column++)
         {
             cells[column].Text = shown.Cells[column].Text;
-            cells[column].Colour = Colour(shown.Cells[column].Tone);
+            cells[column].Colour = selected ? TextColour.Yellow : Colour(shown.Cells[column].Tone);
         }
     }
 
@@ -181,9 +238,17 @@ public partial class DataTable : VBoxContainer
         return row;
     }
 
-    private SettingsRow BodyRow(bool ruled)
+    private SettingsRow BodyRow(int index)
     {
         var row = new SettingsRow { Padding = RowPadding, Fill = ProceduralFill.None };
+        row.GuiInput += inputEvent =>
+        {
+            if (Selectable && inputEvent is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true })
+            {
+                RowClicked?.Invoke(index);
+                row.AcceptEvent();
+            }
+        };
         var cells = new HBoxContainer { Name = "Cells", MouseFilter = MouseFilterEnum.Ignore };
         cells.AddThemeConstantOverride("separation", 0);
         for (var column = 0; column < columns.Count; column++)
@@ -192,7 +257,7 @@ public partial class DataTable : VBoxContainer
         }
 
         row.AddChild(cells);
-        row.RuleAbove = ruled;
+        row.RuleAbove = index > 0;
         return row;
     }
 

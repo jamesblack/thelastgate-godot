@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://fddmjvlfoiaa"]
+
+[ext_resource type="Script" uid="uid://dw3k8qnupx5ra" path="res://Launcher/UpdateStatusView.cs" id="1_status"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="3_button"]
+
+[node name="UpdateStatus" type="HBoxContainer" unique_id=2016340777]
+mouse_filter = 2
+theme_override_constants/separation = 8
+script = ExtResource("1_status")
+
+[node name="Message" type="Label" parent="." unique_id=1534417462]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Checking for updates..."
+script = ExtResource("2_label")
+
+[node name="Button" parent="." unique_id=644665624 instance=ExtResource("3_button")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+Caption = "Update"

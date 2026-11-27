@@ -26,6 +26,27 @@ public class SettingsRowTests
     public void FreeTheRow() => row.Free();
 
     [TestCase]
+    public void DeselectingTheRowUnderThePointer_KeepsItLit()
+    {
+        row.EmitSignal(Control.SignalName.MouseEntered);
+        row.Selected = true;
+
+        row.Selected = false;
+
+        AssertThat(row.Fill).IsEqual(ProceduralFill.Selected);
+    }
+
+    [TestCase]
+    public void DeselectingARowThePointerLeft_ClearsIt()
+    {
+        row.Selected = true;
+
+        row.Selected = false;
+
+        AssertThat(row.Fill).IsEqual(ProceduralFill.None);
+    }
+
+    [TestCase]
     public void RuleAbove_DrawsAFadedLineInTheGapAbove()
     {
         row.RuleAbove = true;

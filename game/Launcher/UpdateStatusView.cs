@@ -1,20 +1,25 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
+using TheLastGate.Hud;
+using TheLastGate.Procedural;
 using TheLastGate.Updates;
 
 namespace TheLastGate.Launcher;
 
-public partial class UpdateButtonView : Button
+public partial class UpdateStatusView : HBoxContainer
 {
-    private const int TooltipGap = 4;
-
+    private ProceduralButton button = null!;
+    private ClickArea buttonClick = null!;
     private UpdateCatalog? catalog;
     private bool ctrlHeld;
     private Version? current;
-    private UpdateButtonLook look = UpdateButtonLook.For(UpdateCheckState.Checking, false, false, null);
+    private int? downloadPercent;
+    private UpdateStatusLook look = new("", null, "", UpdateButtonAction.None);
+    private HudLabel message = null!;
     private RollbackWindowView? rollbackWindow;
     private UpdateCheckState state = UpdateCheckState.Checking;
     private UpdateWindowView? updateWindow;
@@ -22,15 +27,16 @@ public partial class UpdateButtonView : Button
 
     public event Action? Restarting;
 
-    public override void _Ready() => Pressed += OnPressed;
+    public event Action<IReadOnlyList<AvailableRelease>>? NotesFound;
 
-    // Godot keeps tooltips on screen by comparing launcher coordinates with the window's real size, which differ
-    // once the launcher is scaled up to fullscreen; at the bottom of the screen the tooltip then runs off it.
-    public override GodotObject _MakeCustomTooltip(string forText)
+    public override void _Ready()
     {
-        var tooltip = new Label { Text = forText, ThemeTypeVariation = "TooltipLabel" };
-        Callable.From(() => PlaceAbove(tooltip)).CallDeferred();
-        return tooltip;
+        message = GetNode<HudLabel>("Message");
+        button = GetNode<ProceduralButton>("Button");
+        buttonClick = button.GetNode<ClickArea>("Click");
+        buttonClick.StyledTooltip = true;
+        button.Pressed += OnPressed;
+        ShowLook();
     }
 
     public override void _Process(double delta)
@@ -60,6 +66,7 @@ public partial class UpdateButtonView : Button
         {
             var releases = await Task.Run(() => chosenUpdater.ListReleases(CancellationToken.None));
             catalog = new UpdateCatalog(current, releases);
+            NotesFound?.Invoke(catalog.NotesToShow);
             ShowState(catalog.Newest is null ? UpdateCheckState.UpToDate : UpdateCheckState.UpdateAvailable);
         }
         catch (Exception exception)
@@ -69,30 +76,38 @@ public partial class UpdateButtonView : Button
         }
     }
 
-    private void PlaceAbove(Control tooltip)
-    {
-        var popup = tooltip.GetWindow();
-        if (popup is null || popup == GetWindow())
-        {
-            return;
-        }
-
-        var button = GetGlobalRect();
-        popup.Position = new Vector2I((int)button.Position.X, (int)button.Position.Y - popup.Size.Y - TooltipGap);
-    }
-
     private void ShowState(UpdateCheckState newState)
     {
         state = newState;
         ShowLook();
     }
 
+    private void ShowDownload(int? percent)
+    {
+        downloadPercent = percent;
+        ShowLook();
+    }
+
     private void ShowLook()
     {
-        look = UpdateButtonLook.For(state, ctrlHeld, catalog?.RollbackChoices.Count > 0, catalog?.Newest?.Version);
-        Text = look.Text;
-        Disabled = !look.Enabled;
-        TooltipText = look.Tooltip;
+        look = UpdateStatusLook.For(
+            state,
+            ctrlHeld,
+            catalog?.RollbackChoices.Count > 0,
+            catalog?.Newest?.Version,
+            downloadPercent);
+        if (message.Text != look.Message)
+        {
+            message.Text = look.Message;
+        }
+
+        button.Visible = look.ButtonText != null;
+        if (look.ButtonText is { } caption && button.Caption != caption)
+        {
+            button.Caption = caption;
+        }
+
+        buttonClick.TooltipText = look.Tooltip;
     }
 
     private void OnPressed()
@@ -121,7 +136,7 @@ public partial class UpdateButtonView : Button
 
         updateWindow.Open(
             catalog.NewerThanCurrent,
-            (progress, cancel) => Task.Run(() => chosenUpdater.Download(newest.Version, progress, cancel), cancel),
+            (progress, cancel) => Download(chosenUpdater, newest.Version, progress, cancel),
             () => Restart(newest.Version));
     }
 
@@ -135,8 +150,34 @@ public partial class UpdateButtonView : Button
         rollbackWindow.Open(
             current,
             catalog,
-            (target, progress, cancel) => Task.Run(() => chosenUpdater.Download(target, progress, cancel), cancel),
+            (target, progress, cancel) => Download(chosenUpdater, target, progress, cancel),
             Restart);
+    }
+
+    // The updater reports progress from its own thread, so the status line follows it on the main thread.
+    private async Task Download(
+        IUpdater chosenUpdater,
+        Version target,
+        Action<int> progress,
+        CancellationToken cancel)
+    {
+        try
+        {
+            await Task.Run(
+                () => chosenUpdater.Download(
+                    target,
+                    percent =>
+                    {
+                        progress(percent);
+                        Callable.From(() => ShowDownload(percent)).CallDeferred();
+                    },
+                    cancel),
+                cancel);
+        }
+        finally
+        {
+            Callable.From(() => ShowDownload(null)).CallDeferred();
+        }
     }
 
     private void Restart(Version target)

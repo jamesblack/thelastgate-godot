@@ -25,6 +25,11 @@ public sealed class UpdateCatalog
     public IReadOnlyList<AvailableRelease> NewerThanCurrent =>
         newestFirst.Where(release => release.Version > current).ToArray();
 
+    public IReadOnlyList<AvailableRelease> NotesToShow =>
+        NewerThanCurrent is { Count: > 0 } newer
+            ? newer
+            : newestFirst.Where(release => release.Version == current).ToArray();
+
     public IReadOnlyList<AvailableRelease> RollbackChoices =>
         newestFirst.Where(release => release.Version < current).Take(RollbackChoiceLimit).ToArray();
 

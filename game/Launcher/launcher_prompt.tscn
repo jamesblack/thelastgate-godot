@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://prooqsgfqput"]
+
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="1_button"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="2_label"]
+[ext_resource type="Script" uid="uid://jmhcqhhblsgel" path="res://Launcher/LauncherPrompt.cs" id="3_prompt"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="4_panel"]
+
+[node name="LauncherPrompt" type="ColorRect" unique_id=1802904873]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("3_prompt")
+
+[node name="Window" type="CenterContainer" parent="." unique_id=499804946]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Frame" type="Container" parent="Window" unique_id=302128585]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("4_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Window/Frame" unique_id=1059051491]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Window/Frame/Layout" unique_id=751549248]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="Window/Frame/Layout/Body" unique_id=404502734]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Window/Frame/Layout/Body/Content" unique_id=294713490]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Are you sure?"
+script = ExtResource("2_label")
+Colour = 9
+
+[node name="Question" type="Label" parent="Window/Frame/Layout/Body/Content" unique_id=1256835503]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Do you really want to create a new account?"
+custom_minimum_size = Vector2(320, 0)
+autowrap_mode = 3
+script = ExtResource("2_label")
+Colour = 1
+
+[node name="Explanation" type="Label" parent="Window/Frame/Layout/Body/Content" unique_id=1838698399]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Your old account will no longer be accessible, unless you remembered to save it."
+custom_minimum_size = Vector2(320, 0)
+autowrap_mode = 3
+script = ExtResource("2_label")
+Colour = 1
+
+[node name="Warning" type="Label" parent="Window/Frame/Layout/Body/Content" unique_id=2012077536]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "You did save it, didn't you?"
+custom_minimum_size = Vector2(320, 0)
+autowrap_mode = 3
+script = ExtResource("2_label")
+Colour = 0
+
+[node name="Footer" type="Container" parent="Window/Frame/Layout" unique_id=1589147795]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Window/Frame/Layout/Footer" unique_id=1462476977]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Footer/Centre" unique_id=189937331]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Yes" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1378690149 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Yes"
+
+[node name="No" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=950747065 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "No"
+
+[node name="Ok" parent="Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1072799061 instance=ExtResource("1_button")]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+Caption = "OK"

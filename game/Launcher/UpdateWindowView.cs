@@ -4,33 +4,40 @@ using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using TheLastGate.Assets;
+using TheLastGate.Hud;
+using TheLastGate.Procedural;
 using TheLastGate.Updates;
 
 namespace TheLastGate.Launcher;
 
-public partial class UpdateWindowView : ConfirmationDialog
+public partial class UpdateWindowView : ModalBackdrop
 {
-    private const string UpdateText = "Update";
-    private const string DownloadingText = "Downloading...";
-    private const string DownloadFailedText = "The download failed. Check your connection and try again.";
-
-    private RichTextLabel changelog = null!;
     private Func<Action<int>, CancellationToken, Task>? download;
     private CancellationTokenSource? downloadCancel;
-    private Label error = null!;
-    private ProgressBar progress = null!;
     private Action? restart;
+
+    private ProceduralButton UpdateButton => GetNode<ProceduralButton>("%ActionButton");
+
+    private Label Progress => GetNode<Label>("%Progress");
+
+    private Label Error => GetNode<Label>("%Error");
 
     public ILauncherFontSet Fonts { get; set; } = new PixelOperatorFonts();
 
     public override void _Ready()
     {
-        changelog = GetNode<RichTextLabel>("%Changelog");
-        progress = GetNode<ProgressBar>("%Progress");
-        error = GetNode<Label>("%Error");
-        error.Text = DownloadFailedText;
-        Confirmed += OnUpdatePressed;
-        Canceled += () => downloadCancel?.Cancel();
+        UpdateButton.Pressed += OnUpdatePressed;
+        GetNode<ProceduralButton>("%FooterClose").Pressed += Close;
+        GetNode<ClickArea>("%CloseButton").Released += _ => Close();
+    }
+
+    public override void _UnhandledKeyInput(InputEvent inputEvent)
+    {
+        if (Visible && inputEvent.IsActionPressed("ui_cancel"))
+        {
+            Close();
+            GetViewport().SetInputAsHandled();
+        }
     }
 
     public void Open(
@@ -40,53 +47,54 @@ public partial class UpdateWindowView : ConfirmationDialog
     {
         this.download = download;
         this.restart = restart;
-        ChangelogText.Fill(changelog, newer, Fonts);
-        progress.Visible = false;
-        error.Visible = false;
-        ShowBusy(false);
-        PopupCentered();
+        ChangelogText.Fill(GetNode<RichTextLabel>("%Changelog"), newer, Fonts);
+        Progress.Text = "";
+        Error.Visible = false;
+        UpdateButton.Disabled = false;
+        GetViewport().GuiReleaseFocus();
+        Visible = true;
+    }
+
+    private void Close()
+    {
+        downloadCancel?.Cancel();
+        Visible = false;
     }
 
     private async void OnUpdatePressed()
     {
-        if (download is null || restart is null)
+        if (download is null || restart is null || downloadCancel != null)
         {
             return;
         }
 
-        ShowBusy(true);
-        error.Visible = false;
-        progress.Value = 0;
-        progress.Visible = true;
+        UpdateButton.Disabled = true;
+        Error.Visible = false;
+        ShowProgress(0);
         using var cancel = new CancellationTokenSource();
         downloadCancel = cancel;
         try
         {
-            await download(percent => Callable.From(() => progress.Value = percent).CallDeferred(), cancel.Token);
-            Hide();
+            await download(percent => Callable.From(() => ShowProgress(percent)).CallDeferred(), cancel.Token);
+            Visible = false;
             restart();
         }
         catch (OperationCanceledException) when (cancel.IsCancellationRequested)
         {
-            progress.Visible = false;
-            ShowBusy(false);
+            Progress.Text = "";
         }
         catch (Exception exception)
         {
             GD.PushWarning($"Update download failed: {exception.Message}");
-            progress.Visible = false;
-            error.Visible = true;
-            ShowBusy(false);
+            Progress.Text = "";
+            Error.Visible = true;
         }
         finally
         {
             downloadCancel = null;
+            UpdateButton.Disabled = false;
         }
     }
 
-    private void ShowBusy(bool busy)
-    {
-        GetOkButton().Disabled = busy;
-        GetOkButton().Text = busy ? DownloadingText : UpdateText;
-    }
+    private void ShowProgress(int percent) => Progress.Text = $"Downloading... {percent}%";
 }

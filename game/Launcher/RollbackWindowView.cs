@@ -1,48 +1,56 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using TheLastGate.Assets;
+using TheLastGate.Hud;
+using TheLastGate.Procedural;
 using TheLastGate.Updates;
 
 namespace TheLastGate.Launcher;
 
-public partial class RollbackWindowView : ConfirmationDialog
+public partial class RollbackWindowView : ModalBackdrop
 {
-    private const string DownloadingText = "Downloading...";
     private const string DownloadFailedText = "The download failed. Check your connection and try again.";
     private const double BytesPerMegabyte = 1_000_000;
 
-    private static readonly Vector2 VersionButtonSize = new(0, 44);
-    private readonly List<(Button Button, Version Version)> choiceButtons = [];
+    private static readonly TableColumn[] VersionColumns = [new("Version"), new("Released")];
 
-    private Label caption = null!;
     private UpdateCatalog? catalog;
     private Version? chosen;
     private Version? current;
     private Func<Version, Action<int>, CancellationToken, Task>? download;
     private CancellationTokenSource? downloadCancel;
-    private Label error = null!;
-    private Label info = null!;
-    private ProgressBar progress = null!;
     private Action<Version>? restart;
-    private RichTextLabel undone = null!;
-    private VBoxContainer versions = null!;
+
+    private ProceduralButton RollbackButton => GetNode<ProceduralButton>("%ActionButton");
+
+    private DataTable Versions => GetNode<DataTable>("%Versions");
+
+    private Label Progress => GetNode<Label>("%Progress");
+
+    private Label Error => GetNode<Label>("%Error");
 
     public ILauncherFontSet Fonts { get; set; } = new PixelOperatorFonts();
 
     public override void _Ready()
     {
-        versions = GetNode<VBoxContainer>("%Versions");
-        caption = GetNode<Label>("%Caption");
-        undone = GetNode<RichTextLabel>("%Undone");
-        info = GetNode<Label>("%Info");
-        progress = GetNode<ProgressBar>("%Progress");
-        error = GetNode<Label>("%Error");
-        Confirmed += OnRollBackPressed;
-        Canceled += () => downloadCancel?.Cancel();
+        Versions.SetColumns(VersionColumns);
+        Versions.RowClicked += OnVersionClicked;
+        RollbackButton.Pressed += OnRollBackPressed;
+        GetNode<ProceduralButton>("%FooterClose").Pressed += Close;
+        GetNode<ClickArea>("%CloseButton").Released += _ => Close();
+    }
+
+    public override void _UnhandledKeyInput(InputEvent inputEvent)
+    {
+        if (Visible && inputEvent.IsActionPressed("ui_cancel"))
+        {
+            Close();
+            GetViewport().SetInputAsHandled();
+        }
     }
 
     public void Open(
@@ -55,77 +63,68 @@ public partial class RollbackWindowView : ConfirmationDialog
         catalog = releases;
         download = downloadRelease;
         restart = restartOn;
-        progress.Visible = false;
-        error.Visible = false;
+        Progress.Text = "";
+        Error.Visible = false;
+        RollbackButton.Disabled = false;
         ShowVersions();
-        Choose(releases.RollbackChoices[0]);
-        ShowBusy(false);
-        PopupCentered();
+        Choose(0);
+        GetViewport().GuiReleaseFocus();
+        Visible = true;
     }
 
+    private void Close()
+    {
+        downloadCancel?.Cancel();
+        Visible = false;
+    }
+
+    // The first row is the version already installed, which can't be chosen.
     private void ShowVersions()
     {
-        foreach (var child in versions.GetChildren())
-        {
-            child.QueueFree();
-        }
-
-        choiceButtons.Clear();
-
-        versions.AddChild(
-            new Button
-            {
-                Text = $"{current} (you have this)",
-                Disabled = true,
-                CustomMinimumSize = VersionButtonSize,
-            });
-
-        var group = new ButtonGroup();
-        foreach (var release in catalog!.RollbackChoices)
-        {
-            var button = new Button
-            {
-                Text = release.Notes.Date is { } date
-                    ? $"{release.Version}\n{date:yyyy-MM-dd}"
-                    : release.Version.ToString(),
-                ToggleMode = true,
-                ButtonGroup = group,
-                CustomMinimumSize = VersionButtonSize,
-            };
-            button.Pressed += () => Choose(release);
-            versions.AddChild(button);
-            choiceButtons.Add((button, release.Version));
-        }
+        var choices = catalog!.RollbackChoices.Select(release => new TableRow(
+        [
+            new TableCell(release.Version.ToString()),
+            new TableCell(release.Notes.Date is { } date ? $"{date:yyyy-MM-dd}" : "", CellTone.Dim),
+        ]));
+        Versions.ShowRows(
+        [
+            new TableRow([new TableCell($"{current}", CellTone.Zero), new TableCell("you have this", CellTone.Zero)]),
+            .. choices,
+        ]);
     }
 
-    private void Choose(AvailableRelease release)
+    private void OnVersionClicked(int row)
     {
-        chosen = release.Version;
-        foreach (var (button, version) in choiceButtons)
+        if (row > 0 && downloadCancel is null)
         {
-            button.SetPressedNoSignal(version == release.Version);
+            Choose(row - 1);
         }
-
-        caption.Text = $"Rolling back to {release.Version} undoes these changes:";
-        ChangelogText.Fill(undone, catalog!.UndoneBy(release.Version), Fonts);
-        var sizeInMegabytes = Math.Round(release.FullSizeBytes / BytesPerMegabyte);
-        info.Text = $"Downloads the full game ({sizeInMegabytes} MB). Your settings, characters and map notes are "
-            + $"kept, and a copy of them is saved in {UserFolderBackup.BackupsFolder(OS.GetUserDataDir())} first. "
-            + "The launcher restarts when it's done.";
-        GetOkButton().Text = RollBackText();
     }
 
-    private string RollBackText() => $"Roll back to {chosen}";
+    private void Choose(int choice)
+    {
+        var release = catalog!.RollbackChoices[choice];
+        chosen = release.Version;
+        Versions.SelectedRow = choice + 1;
+        GetNode<Label>("%Caption").Text = $"Rolling back to {release.Version} undoes these changes:";
+        ChangelogText.Fill(GetNode<RichTextLabel>("%Undone"), catalog.UndoneBy(release.Version), Fonts);
+        var sizeInMegabytes = Math.Round(release.FullSizeBytes / BytesPerMegabyte);
+        GetNode<Label>("%Info").Text = $"Downloads the full game ({sizeInMegabytes} MB). Your settings, characters and "
+            + "map notes are kept, and a copy of them is saved in "
+            + $"{UserFolderBackup.BackupsFolder(OS.GetUserDataDir())} first. The launcher restarts when it's done.";
+        RollbackButton.Caption = $"Roll back to {chosen}";
+    }
 
     private async void OnRollBackPressed()
     {
-        if (chosen is not { } target || current is null || download is null || restart is null)
+        if (chosen is not { } target || current is null || download is null || restart is null
+            || downloadCancel != null)
         {
             return;
         }
 
-        ShowBusy(true);
-        error.Visible = false;
+        RollbackButton.Disabled = true;
+        Error.Visible = false;
         try
         {
             UserFolderBackup.Create(OS.GetUserDataDir(), current, DateTime.Now);
@@ -136,24 +135,19 @@ public partial class RollbackWindowView : ConfirmationDialog
             return;
         }
 
-        progress.Value = 0;
-        progress.Visible = true;
-        GetOkButton().Text = DownloadingText;
+        ShowProgress(0);
         using var cancel = new CancellationTokenSource();
         downloadCancel = cancel;
         try
         {
-            await download(
-                target,
-                percent => Callable.From(() => progress.Value = percent).CallDeferred(),
-                cancel.Token);
-            Hide();
+            await download(target, percent => Callable.From(() => ShowProgress(percent)).CallDeferred(), cancel.Token);
+            Visible = false;
             restart(target);
         }
         catch (OperationCanceledException) when (cancel.IsCancellationRequested)
         {
-            progress.Visible = false;
-            ShowBusy(false);
+            Progress.Text = "";
+            RollbackButton.Disabled = false;
         }
         catch (Exception exception)
         {
@@ -168,23 +162,11 @@ public partial class RollbackWindowView : ConfirmationDialog
 
     private void ShowError(string message)
     {
-        progress.Visible = false;
-        error.Text = message;
-        error.Visible = true;
-        ShowBusy(false);
+        Progress.Text = "";
+        Error.Text = message;
+        Error.Visible = true;
+        RollbackButton.Disabled = false;
     }
 
-    private void ShowBusy(bool busy)
-    {
-        GetOkButton().Disabled = busy;
-        if (!busy)
-        {
-            GetOkButton().Text = RollBackText();
-        }
-
-        foreach (var (button, _) in choiceButtons)
-        {
-            button.Disabled = busy;
-        }
-    }
+    private void ShowProgress(int percent) => Progress.Text = $"Downloading... {percent}%";
 }

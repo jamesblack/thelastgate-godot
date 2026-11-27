@@ -116,6 +116,82 @@ public class DataTableTests
         AssertThat(row.Fill).IsEqual(ProceduralFill.Selected);
     }
 
+    [TestCase]
+    public void TheSelectedRow_StaysLitWithoutHover()
+    {
+        table.SelectedRow = 1;
+        var row = BodyRow(1);
+        row.EmitSignal(Control.SignalName.MouseEntered);
+        row.EmitSignal(Control.SignalName.MouseExited);
+
+        AssertThat(row.Fill).IsEqual(ProceduralFill.Selected);
+        AssertThat(BodyRow(0).Fill).IsEqual(ProceduralFill.None);
+    }
+
+    [TestCase]
+    public void TheSelectedRow_DrawsEveryCellYellow()
+    {
+        table.ShowRows([new TableRow([new TableCell("Aria"), new TableCell("Templar", CellTone.Dim)])]);
+
+        table.SelectedRow = 0;
+        AssertThat(Cells(0)[1].Colour).IsEqual(TextColour.Yellow);
+
+        table.SelectedRow = -1;
+        AssertThat(Cells(0)[1].Colour).IsEqual(TextColour.Grey);
+    }
+
+    [TestCase]
+    public void ClickingARow_RaisesRowClickedWithItsIndex()
+    {
+        table.Selectable = true;
+        var clicked = -1;
+        table.RowClicked += index => clicked = index;
+
+        BodyRow(1).EmitSignal(Control.SignalName.GuiInput, LeftClick());
+
+        AssertThat(clicked).IsEqual(1);
+    }
+
+    [TestCase]
+    public void ANonSelectableTable_IgnoresClicks()
+    {
+        var clicked = false;
+        table.RowClicked += _ => clicked = true;
+
+        BodyRow(1).EmitSignal(Control.SignalName.GuiInput, LeftClick());
+
+        AssertThat(clicked).IsFalse();
+    }
+
+    [TestCase]
+    public void ARefresh_KeepsTheSelection()
+    {
+        table.SelectedRow = 1;
+
+        table.ShowRows(Rows);
+
+        AssertThat(table.SelectedRow).IsEqual(1);
+        AssertThat(BodyRow(1).Fill).IsEqual(ProceduralFill.Selected);
+        AssertThat(Cells(1)[2].Colour).IsEqual(TextColour.Yellow);
+    }
+
+    [TestCase]
+    public void ATableThatScrollsItsRows_KeepsItsHeadersOutOfTheScroll()
+    {
+        var scrolling = AutoFree(new DataTable { ScrollRows = true })!;
+        Tree.Root.AddChild(scrolling);
+
+        scrolling.SetColumns(Columns);
+
+        AssertThat(scrolling.GetNode("Rows/Body")).IsNotNull();
+        AssertThat(scrolling.GetNode("Rows") is ScrollContainer).IsTrue();
+        AssertThat(scrolling.GetNode("Headers").GetParent()).IsEqual(scrolling);
+    }
+
+    private static InputEventMouseButton LeftClick() => new() { ButtonIndex = MouseButton.Left, Pressed = true };
+
+    private SettingsRow BodyRow(int row) => table.GetNode("Body").GetChild<SettingsRow>(row);
+
     private List<HudLabel> Headers() =>
         table.GetNode("Headers/Cells").GetChildren().OfType<HudLabel>().ToList();
 
