@@ -21,8 +21,8 @@ public static class MapIntents
 
     public static byte[] LookAtItem(in MapTile tile) => ForTile(ClientCommand.LookItem, tile);
 
-    public static byte[] AttackOrGive(PlayerState player, int characterNumber) =>
-        player.HeldItem.Sprite != 0 ? Give(characterNumber) : Attack(characterNumber);
+    public static byte[] AttackOrGive(bool holdingItem, int characterNumber) =>
+        holdingItem ? Give(characterNumber) : Attack(characterNumber);
 
     public static byte[] Give(int characterNumber) =>
         MapCommandPackets.ForCharacter(ClientCommand.Give, characterNumber);

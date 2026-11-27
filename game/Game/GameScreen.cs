@@ -189,6 +189,7 @@ public partial class GameScreen : Control
         gameState.ItemLooks.Enabled = settings.ItemTooltips;
         gameSession.UseQueue.Enabled = settings.UseQueue;
         gameSession.StubbornUse.Enabled = settings.StubbornUse;
+        gameSession.DivinerCard.Enabled = settings.DivinerCard;
         gameSession.GiveMore.Enabled = settings.GiveMore;
         pacer.Adaptive = settings.AdaptivePacing;
         screenGamma?.ShowGamma(settings.ScreenGamma);
@@ -311,6 +312,8 @@ public partial class GameScreen : Control
         gameSession.UseQueue.Enabled = clientSettings.UseQueue;
         gameSession.StubbornUse.Enabled = clientSettings.StubbornUse;
         gameSession.StubbornUse.Send = Counted("StubbornUse", connection.SendCommand);
+        gameSession.DivinerCard.Enabled = clientSettings.DivinerCard;
+        gameSession.DivinerCard.Send = Counted("DivinerCard", connection.SendCommand);
 
         // A queued use has already clicked when it was queued.
         gameSession.UseQueue.Send = Counted("UseQueue", SendQueued);
@@ -382,6 +385,7 @@ public partial class GameScreen : Control
             gameSession.Pause.Cancel();
         }
 
+        gameSession.DivinerCard.BeforeSending(packet, gameSession.CardSight());
         connection.SendCommand(packet);
     }
 

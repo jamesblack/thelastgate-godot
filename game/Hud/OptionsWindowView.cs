@@ -304,7 +304,8 @@ public partial class OptionsWindowView : Control
         foreach (var list in (string[])
             [
                 "%NetworkingOptions", "%ChatOptions", "%InformationalOptions", "%MiscellaneousOptions",
-                "%ExperimentalOptions", "%AccessibilityOptions", "%BackgroundOptions", "%SoundRows", "%GammaRows",
+                "%ExperimentalOptions", "%ClassHelpersOptions", "%AccessibilityOptions", "%BackgroundOptions",
+                "%SoundRows", "%GammaRows",
             ])
         {
             SeparateRows(GetNode(list));
@@ -429,6 +430,7 @@ public partial class OptionsWindowView : Control
         OptionSection.Informational => GetNode("%InformationalOptions"),
         OptionSection.Miscellaneous => GetNode("%MiscellaneousOptions"),
         OptionSection.Experimental => GetNode("%ExperimentalOptions"),
+        OptionSection.ClassHelpers => GetNode("%ClassHelpersOptions"),
         _ => throw new UnreachableException(),
     };
 

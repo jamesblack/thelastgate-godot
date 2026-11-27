@@ -62,6 +62,10 @@ public sealed class GameSession
 
     public GiveMore GiveMore { get; } = new();
 
+    public DivinerCard DivinerCard { get; } = new();
+
+    public CardSight CardSight() => World.CardSight.From(state.Player, state.Map);
+
     public bool CloseShop()
     {
         if (!state.CloseShop())
@@ -127,5 +131,6 @@ public sealed class GameSession
         MapFrames.EndOfTick(state.Map, state.ServerTick);
         AutoWalk.EndOfTick(state.Map);
         StubbornUse.EndOfTick(state.Player.Target, UseSight.From(state.Map, StubbornUse.Tile));
+        DivinerCard.EndOfTick(CardSight());
     }
 }

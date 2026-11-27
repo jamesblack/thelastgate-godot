@@ -66,6 +66,7 @@ public sealed class ClientSettings
         PickTileDrawnUnderMouse = file.GetValue(WorldSection, "pick_tile_drawn_under_mouse", false).AsBool();
         GlideMovement = file.GetValue(WorldSection, "glide_movement", false).AsBool();
         StubbornUse = file.GetValue(GeneralSection, "stubborn_use", false).AsBool();
+        DivinerCard = file.GetValue(GeneralSection, "diviner_card", false).AsBool();
         LoadKeyBindings(file);
         CursorScale = Math.Clamp(
             file.GetValue(DisplaySection, "cursor_scale", DefaultCursorScale).AsSingle(),
@@ -105,6 +106,7 @@ public sealed class ClientSettings
     public bool PickTileDrawnUnderMouse { get; set; }
     public bool GlideMovement { get; set; }
     public bool StubbornUse { get; set; }
+    public bool DivinerCard { get; set; }
     public float CursorScale { get; set; }
     public float ScreenGamma { get; set; }
     public float WorldGamma { get; set; }
@@ -129,6 +131,7 @@ public sealed class ClientSettings
             GeneralOption.GlideMovement => GlideMovement,
             GeneralOption.PickTileDrawnUnderMouse => PickTileDrawnUnderMouse,
             GeneralOption.StubbornUse => StubbornUse,
+            GeneralOption.DivinerCard => DivinerCard,
             _ => throw new UnreachableException(),
         };
         set
@@ -171,6 +174,9 @@ public sealed class ClientSettings
                 case GeneralOption.StubbornUse:
                     StubbornUse = value;
                     break;
+                case GeneralOption.DivinerCard:
+                    DivinerCard = value;
+                    break;
                 default:
                     throw new UnreachableException();
             }
@@ -185,12 +191,15 @@ public sealed class ClientSettings
         }
     }
 
+    private static bool IsOnTheExperimentalTab(OptionRow row) =>
+        row.Section is OptionSection.Experimental or OptionSection.ClassHelpers;
+
     public void Reset(OptionsTab tab)
     {
         switch (tab)
         {
             case OptionsTab.General:
-                ResetRows(row => row.Section != OptionSection.Experimental);
+                ResetRows(row => !IsOnTheExperimentalTab(row));
                 break;
             case OptionsTab.Audio:
                 SoundEnabled = true;
@@ -200,7 +209,7 @@ public sealed class ClientSettings
                 BindingActions.ResetAll();
                 break;
             case OptionsTab.Experimental:
-                ResetRows(row => row.Section == OptionSection.Experimental);
+                ResetRows(IsOnTheExperimentalTab);
                 break;
             case OptionsTab.Display:
                 CursorScale = DefaultCursorScale;
@@ -258,6 +267,7 @@ public sealed class ClientSettings
         file.SetValue(WorldSection, "pick_tile_drawn_under_mouse", PickTileDrawnUnderMouse);
         file.SetValue(WorldSection, "glide_movement", GlideMovement);
         file.SetValue(GeneralSection, "stubborn_use", StubbornUse);
+        file.SetValue(GeneralSection, "diviner_card", DivinerCard);
         file.SetValue(
             LauncherSection,
             "character_names",

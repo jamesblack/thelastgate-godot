@@ -52,7 +52,7 @@ public class MapIntentsTests
     {
         Assert.Equal(
             MapCommandPackets.ForCharacter(ClientCommand.Attack, GuardNumber),
-            MapIntents.AttackOrGive(State().Player, GuardNumber));
+            MapIntents.AttackOrGive(State().Player.HeldItem.Sprite != 0, GuardNumber));
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class MapIntentsTests
     {
         Assert.Equal(
             MapCommandPackets.ForCharacter(ClientCommand.Give, GuardNumber),
-            MapIntents.AttackOrGive(State(HeldItem(Candle)).Player, GuardNumber));
+            MapIntents.AttackOrGive(State(HeldItem(Candle)).Player.HeldItem.Sprite != 0, GuardNumber));
     }
 
     [Fact]

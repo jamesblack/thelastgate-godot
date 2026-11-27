@@ -19,6 +19,7 @@ public class MapActionsTests
     private const int Candle = 1500;
     private const int Guard = 3000;
     private const int GuardNumber = 812;
+    private const int TarotCard = 3800;
 
     private const MapKeys QueueKeys = MapKeys.Shift | MapKeys.Ctrl;
     private static readonly (float Column, float Row) OnPlayerTile = (27.5f, 27.5f);
@@ -332,6 +333,38 @@ public class MapActionsTests
             .UInt16(1)
             .UInt16(100);
 
+    [TestCase]
+    public void Ctrl_WithTheDivinerHelpersCardStillAttacks()
+    {
+        var state = State(HeldItem(TarotCard), Character(28, 27));
+
+        var click = Decide(state, NearTheNextTile, MapKeys.Ctrl, MapButton.Left, arrange: HoldTheCard);
+
+        AssertThat(click.Command).IsEqual(MapCommandPackets.ForCharacter(ClientCommand.Attack, GuardNumber));
+        AssertThat(click.Cursor).IsEqual(MouseCursor.Hit);
+    }
+
+    [TestCase]
+    public void Shift_WithTheDivinerHelpersCardDoesNotDropIt()
+    {
+        var state = State(HeldItem(TarotCard));
+
+        var click = Decide(state, OnPlayerTile, MapKeys.Shift, MapButton.Left, arrange: HoldTheCard);
+
+        AssertThat(click.Command)
+            .IsNotEqual(MapCommandPackets.ForTile(ClientCommand.Drop, OriginX + 27, OriginY + 27));
+    }
+
+    private static void HoldTheCard(GameSession session)
+    {
+        var inventory = new int[PlayerState.InventorySlots];
+        inventory[0] = TarotCard;
+        session.DivinerCard.Enabled = true;
+        session.DivinerCard.BeforeSending(
+            SkillPackets.Use(DivinerCard.GhostCompanion, 0),
+            new CardSight(true, 0, inventory, false, false, false));
+    }
+
     private static TestCommand HeldItem(int sprite) =>
         TestCommand.Of(ServerCommand.SetCharacterHeldItem).UInt16((ushort)sprite).UInt16(0).Byte(1);
 
@@ -352,9 +385,11 @@ public class MapActionsTests
         (float Column, float Row)? point,
         MapKeys keys,
         MapButton button,
-        int selectedCharacter = 0)
+        int selectedCharacter = 0,
+        Action<GameSession>? arrange = null)
     {
         var session = new GameSession(state);
+        arrange?.Invoke(session);
         session.GiveMore.Enabled = giveMore;
         session.UseQueue.Enabled = useQueue;
         return MapActions.Decide(state, session, point, keys, button, selectedCharacter);

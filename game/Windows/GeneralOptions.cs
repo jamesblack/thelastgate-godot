@@ -18,6 +18,7 @@ public enum GeneralOption
     GlideMovement,
     PickTileDrawnUnderMouse,
     StubbornUse,
+    DivinerCard,
 }
 
 public enum OptionSection
@@ -27,6 +28,7 @@ public enum OptionSection
     Networking,
     Miscellaneous,
     Experimental,
+    ClassHelpers,
 }
 
 public sealed record OptionRow(GeneralOption Option, string Label, bool Default, OptionSection Section)
@@ -99,6 +101,11 @@ public static class GeneralOptions
             $"Keep retrying a use that doesn't go through, up to {StubbornUse.MostFailures} times (Stubborn use).",
             false,
             OptionSection.Experimental),
+        new(
+            GeneralOption.DivinerCard,
+            "Summoner with Diviner: hold your first tarot card while casting Ghost Companion or Shadow Copy, then put it back.",
+            false,
+            OptionSection.ClassHelpers),
     ];
 
     public static bool IsShown(OptionRow row, Func<GeneralOption, bool> isOn) =>

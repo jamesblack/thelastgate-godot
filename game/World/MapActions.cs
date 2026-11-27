@@ -21,7 +21,9 @@ public static class MapActions
         }
 
         var mouseTile = (int)mouse.Column + (int)mouse.Row * WorldMap.Size;
-        var heldItem = state.Player.HeldItem.Sprite;
+        var heldItem = session.DivinerCard.HoldsItsCard(state.Player.HeldItem.Sprite)
+            ? 0
+            : state.Player.HeldItem.Sprite;
         if (MapIntents.HoldsBuildItem(state.Player))
         {
             return new MapAction(
@@ -41,7 +43,7 @@ public static class MapActions
                 OnTile(state.Map, mouseTile, button, MapIntents.Walk, MapIntents.Turn),
                 null),
             MapKeys.Shift => ItemAction(state.Map, mouse, mouseTile, heldItem != 0, button),
-            MapKeys.Ctrl => CharacterAction(state, mouse, mouseTile, button),
+            MapKeys.Ctrl => CharacterAction(state.Map, mouse, mouseTile, heldItem != 0, button),
             MapKeys.Alt => SelectAction(state.Map, mouse, mouseTile, button, selectedCharacter),
             MapKeys.Shift | MapKeys.Ctrl when session.GiveMore.Enabled && heldItem != 0 =>
                 GiveMoreAction(state.Map, mouse, mouseTile, button),
@@ -154,21 +156,21 @@ public static class MapActions
     }
 
     private static MapAction CharacterAction(
-        GameState state,
+        WorldMap map,
         (float Column, float Row) mouse,
         int mouseTile,
+        bool holdingItem,
         MapButton button)
     {
-        if (CharacterNear(state.Map, mouse, mouseTile) is not { } tileIndex)
+        if (CharacterNear(map, mouse, mouseTile) is not { } tileIndex)
         {
             return MapAction.Nothing;
         }
 
-        var holdingItem = state.Player.HeldItem.Sprite != 0;
-        var number = state.Map.Tiles[tileIndex].CharacterNumber;
+        var number = map.Tiles[tileIndex].CharacterNumber;
         var command = button switch
         {
-            MapButton.Left => MapIntents.AttackOrGive(state.Player, number),
+            MapButton.Left => MapIntents.AttackOrGive(holdingItem, number),
             MapButton.Right => MapIntents.LookAt(number),
             _ => null,
         };

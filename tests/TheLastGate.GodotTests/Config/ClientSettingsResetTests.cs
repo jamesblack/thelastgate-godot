@@ -21,4 +21,17 @@ public class ClientSettingsResetTests
         settings.Reset(OptionsTab.Display);
         AssertThat(settings.CursorScale).IsEqual(1f);
     }
+
+    [TestCase]
+    public void TheDivinerCardHelper_ResetsWithTheExperimentalTab()
+    {
+        var settings = ClientSettings.Load();
+        settings.DivinerCard = true;
+
+        settings.Reset(OptionsTab.General);
+        AssertThat(settings.DivinerCard).IsTrue();
+
+        settings.Reset(OptionsTab.Experimental);
+        AssertThat(settings.DivinerCard).IsFalse();
+    }
 }

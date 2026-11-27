@@ -8,7 +8,7 @@ namespace TheLastGate.GodotTests.Windows;
 public class GeneralOptionsTests
 {
     [TestCase]
-    public void Rows_AreGroupedChatInformationalNetworkingMiscellaneousThenExperimental()
+    public void Rows_AreGroupedChatInformationalNetworkingMiscellaneousExperimentalThenClassHelpers()
     {
         AssertThat(GeneralOptions.Rows.Select(row => (row.Option, row.Section)))
             .ContainsExactly(
@@ -23,7 +23,8 @@ public class GeneralOptionsTests
                 (GeneralOption.EscapeClosesWindowsFirst, OptionSection.Miscellaneous),
                 (GeneralOption.GiveMore, OptionSection.Miscellaneous),
                 (GeneralOption.UseQueue, OptionSection.Miscellaneous),
-                (GeneralOption.StubbornUse, OptionSection.Experimental));
+                (GeneralOption.StubbornUse, OptionSection.Experimental),
+                (GeneralOption.DivinerCard, OptionSection.ClassHelpers));
     }
 
     [TestCase(GeneralOption.EscapeClosesWindowsFirst, "Escape closes windows before canceling movement.", true)]
@@ -60,6 +61,7 @@ public class GeneralOptionsTests
     [TestCase(GeneralOption.GlideMovement)]
     [TestCase(GeneralOption.PickTileDrawnUnderMouse)]
     [TestCase(GeneralOption.StubbornUse)]
+    [TestCase(GeneralOption.DivinerCard)]
     public void Rows_LeaveTheGodotOptionsOffToBehaveLikeTheCurrentClient(GeneralOption option)
     {
         var row = GeneralOptions.Rows.Single(row => row.Option == option);
@@ -73,6 +75,14 @@ public class GeneralOptionsTests
     {
         AssertThat(GeneralOptions.Rows.Single(row => row.Option == GeneralOption.StubbornUse).Label)
             .IsEqual("Keep retrying a use that doesn't go through, up to 8 times (Stubborn use).");
+    }
+
+    [TestCase]
+    public void Rows_SayWhatTheDivinerCardHelperDoes()
+    {
+        AssertThat(GeneralOptions.Rows.Single(row => row.Option == GeneralOption.DivinerCard).Label)
+            .IsEqual(
+                "Summoner with Diviner: hold your first tarot card while casting Ghost Companion or Shadow Copy, then put it back.");
     }
 
     [TestCase]
