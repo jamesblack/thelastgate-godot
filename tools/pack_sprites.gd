@@ -4,7 +4,7 @@
 # Usage: godot --headless --path game --script <this file> -- <output .pck>
 extends SceneTree
 
-const SPRITE_FOLDER := "res://sprites/"
+const SPRITE_FOLDERS: Array[String] = ["res://sprites/", "res://sprites/characters/"]
 const IMPORT_SUFFIX := ".png.import"
 
 
@@ -22,11 +22,13 @@ func _init() -> void:
 		return
 
 	var packed := 0
-	for file in DirAccess.get_files_at(SPRITE_FOLDER):
-		if not file.ends_with(IMPORT_SUFFIX):
-			continue
+	var import_paths: Array[String] = []
+	for folder in SPRITE_FOLDERS:
+		for file in DirAccess.get_files_at(folder):
+			if file.ends_with(IMPORT_SUFFIX):
+				import_paths.append(folder + file)
 
-		var import_path := SPRITE_FOLDER + file
+	for import_path in import_paths:
 		var settings := ConfigFile.new()
 		settings.load(import_path)
 		var imported: String = settings.get_value("remap", "path", "")

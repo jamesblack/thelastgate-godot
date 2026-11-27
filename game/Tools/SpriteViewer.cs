@@ -52,8 +52,7 @@ public partial class SpriteViewer : Control
         }
 
         allSprites = Enumerable.Range(0, SpriteNumbers.MaxSprite).ToArray();
-        presentSprites = allSprites.Where(spriteNumber => loader.FindSource(spriteNumber) != SpriteSource.None)
-            .ToArray();
+        presentSprites = allSprites.Where(loader.HasFrame).ToArray();
         browseList = presentSprites;
 
         BuildInterface();

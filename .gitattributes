@@ -8,4 +8,4 @@ data/**/*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
 data/**/*.[bB][mM][pP] filter=lfs diff=lfs merge=lfs -text
 data/**/*.wav filter=lfs diff=lfs merge=lfs -text
 data/**/*.ttf filter=lfs diff=lfs merge=lfs -text
-game/sprites/*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
+game/sprites/**/*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
