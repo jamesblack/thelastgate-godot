@@ -58,6 +58,36 @@ public sealed class NoteStoreTests
     }
 
     [TestCase]
+    public void ShowInWorld_SurvivesSaveAndLoad()
+    {
+        var loaded = NoteStore.Load(NoteStore.Save(new NoteSet { ShowInWorld = true }))!;
+
+        AssertThat(loaded.ShowInWorld).IsTrue();
+        AssertThat(loaded.ShowOnMinimap).IsFalse();
+    }
+
+    [TestCase]
+    public void BothFlags_SurviveSaveAndLoad()
+    {
+        var loaded = NoteStore.Load(NoteStore.Save(new NoteSet { ShowOnMinimap = true, ShowInWorld = true }))!;
+
+        AssertThat(loaded.ShowOnMinimap).IsTrue();
+        AssertThat(loaded.ShowInWorld).IsTrue();
+    }
+
+    [TestCase]
+    public void OldFlagsByte_LeavesPathsInWorldOff()
+    {
+        var file = NoteStore.Save(new NoteSet { ShowOnMinimap = true });
+        AssertThat(Inflate(file[HeaderSize..])[0]).IsEqual(1);
+
+        var loaded = NoteStore.Load(file)!;
+
+        AssertThat(loaded.ShowOnMinimap).IsTrue();
+        AssertThat(loaded.ShowInWorld).IsFalse();
+    }
+
+    [TestCase]
     public void Load_KeepsTheNestingAndCousinsWithTheSameName()
     {
         var saved = new NoteSet { ShowOnMinimap = true };

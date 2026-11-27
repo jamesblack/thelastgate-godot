@@ -4,6 +4,7 @@ using TheLastGate.GodotTests.Hud;
 using TheLastGate.Hud;
 using TheLastGate.Map;
 using TheLastGate.Notes;
+using TheLastGate.Procedural;
 using TheLastGate.Windows;
 using TheLastGate.World;
 using static GdUnit4.Assertions;
@@ -34,6 +35,24 @@ public class WorldMapWindowViewTests
 
     [AfterTest]
     public void FreeTheMap() => view.Free();
+
+    [TestCase]
+    public void ShowPathsInWorldBox_TurnsTheSettingOn()
+    {
+        view.GetNode<ProceduralCheckBox>("%ShowPathsInWorld").Toggle();
+
+        AssertThat(notes.ShowInWorld).IsTrue();
+        AssertThat(notes.Changed).IsTrue();
+    }
+
+    [TestCase]
+    public async Task ShowPathsInWorldBox_FollowsTheSetting()
+    {
+        notes.ShowInWorld = true;
+        await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
+
+        AssertThat(view.GetNode<ProceduralCheckBox>("%ShowPathsInWorld").Checked).IsTrue();
+    }
 
     [TestCase]
     public void Window_HasNoClassicSpriteNodes()

@@ -36,6 +36,8 @@ public partial class WorldMapWindowView : Control
 
     private ProceduralCheckBox ShowOnMinimapBox => GetNode<ProceduralCheckBox>("%ShowOnMinimap");
 
+    private ProceduralCheckBox ShowPathsInWorldBox => GetNode<ProceduralCheckBox>("%ShowPathsInWorld");
+
     private ProceduralCheckBox FollowBox => GetNode<ProceduralCheckBox>("%Follow");
 
     private WorldMapCategories CategoryColumn => GetNode<WorldMapCategories>("%Categories");
@@ -87,6 +89,7 @@ public partial class WorldMapWindowView : Control
             }
         };
         ShowOnMinimapBox.Toggled += ShowOnMinimap;
+        ShowPathsInWorldBox.Toggled += ShowPathsInWorld;
         foreach (var tool in Enum.GetValues<WorldMapTool>())
         {
             ToolButton(tool).Pressed += () => Editor?.ChooseTool(tool);
@@ -116,6 +119,7 @@ public partial class WorldMapWindowView : Control
         GetNode<Label>("%Coordinates").Text = Canvas.HoveredTile is { } tile ? $"{tile.X}, {tile.Y}" : "";
         FollowBox.Checked = window.Follow;
         ShowOnMinimapBox.Checked = notes?.ShowOnMinimap == true;
+        ShowPathsInWorldBox.Checked = notes?.ShowInWorld == true;
         ShowTools(window.Editor);
         ShowEditControls(window.Editor);
         ShowLabelPrompt(window.Editor);
@@ -179,6 +183,7 @@ public partial class WorldMapWindowView : Control
         }
 
         ShowOnMinimapBox.Disabled = shownNotes == null;
+        ShowPathsInWorldBox.Disabled = shownNotes == null;
         Canvas.Notes = shownNotes;
         Visible = shownWindow.IsOpen;
         Canvas.Window = shownWindow;
@@ -203,6 +208,18 @@ public partial class WorldMapWindowView : Control
         }
 
         notes.ShowOnMinimap = isOn;
+        notes.Changed = true;
+        NotesChanged?.Invoke();
+    }
+
+    private void ShowPathsInWorld(bool isOn)
+    {
+        if (notes == null)
+        {
+            return;
+        }
+
+        notes.ShowInWorld = isOn;
         notes.Changed = true;
         NotesChanged?.Invoke();
     }

@@ -298,6 +298,7 @@ public partial class GameScreen : Control
         hudView.ExploredMap = exploredMap?.Recorder.Map;
         hudView.NotesSetAsideFile = mapNotes is { WasSetAside: true } ? mapNotes.FileName : null;
         hudView.MapNotes = mapNotes?.Notes;
+        worldView.MapNotes = mapNotes?.Notes;
         hudView.SaveMapNotes = mapNotes == null ? null : mapNotes.Save;
         hudView.Show(gameState, gameSession, fonts, Counted("Player", SendAction));
         if (Timings.Recorder != null && packetCounter != null)

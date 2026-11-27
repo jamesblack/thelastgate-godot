@@ -4,6 +4,8 @@ using System.Linq;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Game;
+using TheLastGate.Map;
+using TheLastGate.Notes;
 using TheLastGate.Profiling;
 using TheLastGate.State;
 using GlidePoint = System.Numerics.Vector2;
@@ -45,6 +47,7 @@ public partial class WorldView : Node2D
     private readonly Dictionary<MagicGlow, ShaderMaterial> glowMaterials = [];
     private readonly Dictionary<int, Nameplate> nameplatesByCharacter = [];
     private readonly SpriteLayer objects = new();
+    private readonly PathOverlay pathOverlay = new();
     private readonly Dictionary<Node, Node> placedUnder = [];
     private readonly List<Sprite2D> queuedNumberMarkers = [];
     private readonly List<Sprite2D> queuedUseMarkers = [];
@@ -79,6 +82,8 @@ public partial class WorldView : Node2D
     private Vector2I mapShift = new(IsometricProjection.BaseMapShiftX, 0);
     private PackedScene nameplateScene = null!;
     private Node2D objectLayer = null!;
+    private Dictionary<(int X, int Y), uint> pathColours = [];
+    private (NoteSet? Notes, int Revision, bool Shown) pathColoursFrom;
     private bool plainInfravision;
     private int[] queuedTiles = [];
     private Shader? tintShader;
@@ -87,6 +92,7 @@ public partial class WorldView : Node2D
     public GameState State { get; set; } = null!;
     public GameSession Session { get; set; } = null!;
     public SpriteLoader Sprites { get; set; } = null!;
+    public NoteSet? MapNotes { get; set; }
     public IFontSet Fonts { get; set; } = null!;
     public bool HideWalls { get; set; } = true;
     public bool ShowNames { get; set; } = true;
@@ -185,6 +191,7 @@ public partial class WorldView : Node2D
             }
         }
 
+        floorLayer.AddChild(pathOverlay);
         foreach (var marker in (Sprite2D[])[walkMarker, attackMarker, giveMarker, actionMarker, stubbornUseMarker])
         {
             PutUnder(marker, floorLayer);
@@ -445,6 +452,12 @@ public partial class WorldView : Node2D
 
         ReleaseUnusedNameplates();
         PlaceMarkers(markerTiles);
+        pathOverlay.Show(
+            PathOverlay.TilesInView(
+                State.Map,
+                PathColours(),
+                WorldGamma,
+                tileIndex => floors.Nodes[tileIndex].Visible));
         if (!selectedIsShown)
         {
             SelectedCharacter = 0;
@@ -1025,6 +1038,18 @@ public partial class WorldView : Node2D
         mapShift = offset;
         floorLayer.Position = offset;
         objectLayer.Position = offset;
+    }
+
+    private Dictionary<(int X, int Y), uint> PathColours()
+    {
+        var from = (MapNotes, MapNotes?.Revision ?? 0, MapNotes?.ShowInWorld == true);
+        if (from != pathColoursFrom)
+        {
+            pathColoursFrom = from;
+            pathColours = MapNotes is { ShowInWorld: true } notes ? PathTiles.Colours(notes) : [];
+        }
+
+        return pathColours;
     }
 
     private void Show(SpriteLayer layer, int tileIndex, int spriteNumber, SpriteLook look)

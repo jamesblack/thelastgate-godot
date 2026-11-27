@@ -21,12 +21,17 @@ public static class NoteStore
     private const string SetAsideSuffix = ".bad";
     private const string FirstCategoryName = "My notes";
     private const int FirstCategoryColour = 1;
+    private const byte MinimapFlag = 1;
+    private const byte WorldFlag = 2;
 
     private static ReadOnlySpan<byte> Magic => "TLGA"u8;
 
     public static byte[] Save(NoteSet set)
     {
-        var payload = new List<byte> { set.ShowOnMinimap ? (byte)1 : (byte)0 };
+        var payload = new List<byte>
+        {
+            (byte)((set.ShowOnMinimap ? MinimapFlag : 0) | (set.ShowInWorld ? WorldFlag : 0)),
+        };
         NoteCodec.EncodeTree(set, 0, payload);
 
         using var compressed = new MemoryStream();
@@ -151,7 +156,8 @@ public static class NoteStore
             return null;
         }
 
-        tree!.ShowOnMinimap = payload[0] != 0;
+        tree!.ShowOnMinimap = (payload[0] & MinimapFlag) != 0;
+        tree.ShowInWorld = (payload[0] & WorldFlag) != 0;
         return tree;
     }
 

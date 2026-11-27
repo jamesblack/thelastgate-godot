@@ -32,6 +32,8 @@ public sealed class NoteSet
 
     public bool ShowOnMinimap { get; set; }
 
+    public bool ShowInWorld { get; set; }
+
     public int AddCategory(string name, int colourIndex, int parentId = 0)
     {
         if (!AcceptsChild(parentId) || categories.Count >= NoteLimits.Categories)

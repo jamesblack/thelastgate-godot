@@ -123,6 +123,11 @@ unique_name_in_owner = true
 layout_mode = 2
 Text = "Show on minimap"
 
+[node name="ShowPathsInWorld" parent="Window/Frame/Layout/Body/Cells/Categories/Column" unique_id=1379701315 instance=ExtResource("4_check")]
+unique_name_in_owner = true
+layout_mode = 2
+Text = "Show paths in the world"
+
 [node name="Buttons" type="HBoxContainer" parent="Window/Frame/Layout/Body/Cells/Categories/Column" unique_id=1031290619]
 layout_mode = 2
 mouse_filter = 2
