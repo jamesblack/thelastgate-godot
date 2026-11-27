@@ -143,8 +143,8 @@ public partial class LauncherScreen : Control
     private void ConnectSignals()
     {
         GetNode<Button>("%CreateAccountButton").Pressed += OnCreateAccountPressed;
-        GetNode<Button>("%LoadButton").Pressed += () => loadDialog.PopupCentered();
-        GetNode<Button>("%SaveButton").Pressed += () => saveDialog.PopupCentered();
+        GetNode<Button>("%LoadButton").Pressed += () => OpenInLastFolder(loadDialog);
+        GetNode<Button>("%SaveButton").Pressed += () => OpenInLastFolder(saveDialog);
         GetNode<Button>("%DiscordButton").Pressed += () => OS.ShellOpen(DiscordInvite);
         GetNode<Button>("%ExitButton").Pressed += () => GetTree().Quit();
         GetNode<Button>("%StartButton").Pressed += OnStartPressed;
@@ -490,6 +490,17 @@ public partial class LauncherScreen : Control
 
         RememberCharacterFile(filePath);
         ShowMessage("FYI", $"Saved file as {filePath}");
+    }
+
+    private void OpenInLastFolder(FileDialog dialog)
+    {
+        var lastFolder = settings.CharacterHistory.LastFolder;
+        if (lastFolder != null && Directory.Exists(lastFolder))
+        {
+            dialog.CurrentDir = lastFolder;
+        }
+
+        dialog.PopupCentered();
     }
 
     private void RememberCharacterFile(string filePath)

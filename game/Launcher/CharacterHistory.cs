@@ -27,6 +27,8 @@ public sealed class CharacterHistory
 
     public IReadOnlyList<PreviousCharacter> Entries => entries;
 
+    public string? LastFolder => entries.Count > 0 ? Path.GetDirectoryName(entries[0].FilePath) : null;
+
     public void Use(string name, string filePath)
     {
         var knownIndex = IndexOf(filePath);

@@ -50,6 +50,21 @@ public class CharacterHistoryTests
     }
 
     [TestCase]
+    public void LastFolder_IsTheFolderOfTheNewestFile()
+    {
+        using var older = new TempFolder();
+        using var newer = new TempFolder();
+        var history = new CharacterHistory();
+        history.Use("Ishtar", Path.Combine(older.FolderPath, "ishtar.moa"));
+        history.Use("Bran", Path.Combine(newer.FolderPath, "bran.moa"));
+
+        AssertThat(history.LastFolder).IsEqual(newer.FolderPath);
+    }
+
+    [TestCase]
+    public void LastFolder_IsNullWithNoFiles() => AssertThat(new CharacterHistory().LastFolder).IsNull();
+
+    [TestCase]
     public void Constructor_KeepsTheSavedOrderWithoutDuplicates()
     {
         PreviousCharacter[] saved =
