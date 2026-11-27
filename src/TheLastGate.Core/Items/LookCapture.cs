@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using TheLastGate.Profiling;
 using TheLastGate.State;
@@ -16,17 +17,30 @@ public sealed class LookCapture
     private const int MaxQueued = 16;
 
     private readonly List<LogLine> fetch = [];
-    private readonly Queue<(Role Role, int Tick)> queue = new();
+    private readonly Action<IReadOnlyList<LogLine>> identifyAnswered;
+    private readonly Action<ManualLook, IReadOnlyList<LogLine>> manualAnswered;
+    private readonly Queue<(Role Role, int Tick, ManualLook? Look)> queue = new();
     private readonly Action<LookReply> resolved;
     private readonly List<LogLine> sentinel = [];
+    private readonly List<LogLine> shown = [];
     private Role? capturing;
+    private ManualLook? capturingLook;
     private bool fetchDone;
     private bool fetchWanted;
+    private int? identifySentTick;
     private bool sentinelDone;
 
-    public LookCapture(Action<LookReply> resolved) => this.resolved = resolved;
+    public LookCapture(
+        Action<LookReply> resolved,
+        Action<ManualLook, IReadOnlyList<LogLine>> manualAnswered,
+        Action<IReadOnlyList<LogLine>> identifyAnswered)
+    {
+        this.resolved = resolved;
+        this.manualAnswered = manualAnswered;
+        this.identifyAnswered = identifyAnswered;
+    }
 
-    public bool HasPending => queue.Count > 0;
+    public bool HasPending => queue.Count > 0 || identifySentTick != null;
 
     public void ExpectFetch(int tick)
     {
@@ -35,11 +49,15 @@ public sealed class LookCapture
         sentinelDone = false;
         fetch.Clear();
         sentinel.Clear();
-        Queue(Role.Fetch, tick);
-        Queue(Role.Sentinel, tick);
+        Queue(Role.Fetch, tick, null);
+        Queue(Role.Sentinel, tick, null);
     }
 
-    public void ExpectManual(int tick) => Queue(Role.Manual, tick);
+    public void ExpectManual(int tick, ManualLook look) => Queue(Role.Manual, tick, look);
+
+    // The server runs a skill when the character is next free, and a failed one says nothing, so this reply can't
+    // take a place in the queue: it is whichever reply turns up while no look is waiting.
+    public void ExpectIdentify(int tick) => identifySentTick = tick;
 
     public bool Offer(LogLine line)
     {
@@ -47,20 +65,37 @@ public sealed class LookCapture
         if (ItemDetailsParser.IsReplyStart(line.Text, line.Font))
         {
             CloseCapture();
-            if (queue.Count == 0)
+            if (queue.Count > 0)
+            {
+                (capturing, _, capturingLook) = queue.Dequeue();
+            }
+            else if (identifySentTick != null)
+            {
+                capturing = Role.Identify;
+                identifySentTick = null;
+            }
+            else
             {
                 return false;
             }
-
-            capturing = queue.Dequeue().Role;
         }
 
-        return capturing switch
+        switch (capturing)
         {
-            Role.Fetch => Append(fetch, line),
-            Role.Sentinel => Append(sentinel, line),
-            _ => false,
-        };
+            case Role.Fetch:
+                fetch.Add(line);
+                return true;
+            case Role.Sentinel:
+                sentinel.Add(line);
+                return true;
+            case Role.Manual or Role.Identify:
+                shown.Add(line);
+                return false;
+            case null:
+                return false;
+            default:
+                throw new UnreachableException();
+        }
     }
 
     // A reply is written within one tick, so it never continues into the next.
@@ -71,31 +106,33 @@ public sealed class LookCapture
         var released = fetch.Concat(sentinel).ToList();
         fetch.Clear();
         sentinel.Clear();
+        shown.Clear();
         fetchWanted = false;
         capturing = null;
+        capturingLook = null;
+        identifySentTick = null;
         queue.Clear();
         return released;
     }
 
-    public void DropManualsSentBefore(int tick)
+    public void DropUnansweredSentBefore(int tick)
     {
-        while (queue.Count > 0 && queue.Peek() is { Role: Role.Manual } manual && manual.Tick < tick)
+        if (identifySentTick < tick)
+        {
+            identifySentTick = null;
+        }
+
+        while (queue.Count > 0 && queue.Peek() is { Role: Role.Manual } unanswered && unanswered.Tick < tick)
         {
             queue.Dequeue();
         }
     }
 
-    private static bool Append(List<LogLine> reply, LogLine line)
-    {
-        reply.Add(line);
-        return true;
-    }
-
-    private void Queue(Role role, int tick)
+    private void Queue(Role role, int tick, ManualLook? look)
     {
         if (queue.Count < MaxQueued)
         {
-            queue.Enqueue((role, tick));
+            queue.Enqueue((role, tick, look));
         }
     }
 
@@ -103,7 +140,19 @@ public sealed class LookCapture
     {
         fetchDone |= capturing == Role.Fetch;
         sentinelDone |= capturing == Role.Sentinel;
+        var lines = shown.ToList();
+        shown.Clear();
+        if (capturingLook is { } look)
+        {
+            manualAnswered(look, lines);
+        }
+        else if (capturing == Role.Identify)
+        {
+            identifyAnswered(lines);
+        }
+
         capturing = null;
+        capturingLook = null;
         if (fetchWanted && fetchDone && sentinelDone)
         {
             Resolve();
@@ -130,5 +179,6 @@ public sealed class LookCapture
         Fetch,
         Sentinel,
         Manual,
+        Identify,
     }
 }

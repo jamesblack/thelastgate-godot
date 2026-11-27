@@ -56,7 +56,8 @@ Every other line is ignored, so everything a player should read goes in a bullet
 - Say when something is off by default or experimental.
 - Keep each bullet to one line. Short is better.
 - Honest hedges are fine when a fix is uncertain ("Fixes the hotbar losing its keys after a reconnect (hopefully)").
-- A bit of humour fits, but don't invent jokes about features you didn't verify.
+- This is a solo project: write as one developer, "I" and "me", never "we" or "us". Asks for feedback say "let me know".
+- Be facetious rather than dry: lead with the funny, player-side view of a change and make light jokes of it. "Stubborn use no longer gets confused by an enemy spawning on a pentagram it just activated" beats "Stubborn use no longer retries an activated pentagram". Don't invent jokes about behaviour you didn't verify.
 
 ## Example
 

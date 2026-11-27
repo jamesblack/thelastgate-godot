@@ -10,7 +10,6 @@ using TheLastGate.Audio;
 using TheLastGate.Characters;
 using TheLastGate.Config;
 using TheLastGate.Hud;
-using TheLastGate.Items;
 using TheLastGate.Map;
 using TheLastGate.Net;
 using TheLastGate.Planner;
@@ -375,10 +374,7 @@ public partial class GameScreen : Control
         soundEffects.PlayClickFor(packet);
         gameSession.UseQueue.Sent(packet);
         gameSession.StubbornUse.Sent(packet);
-        if (ItemLooks.IsManualLook(packet))
-        {
-            gameState.ItemLooks.ManualLookSent();
-        }
+        gameState.ItemLooks.Sent(packet);
 
         // Using or looking at something lets the next window the server opens stay open.
         if ((ClientCommand)packet[0] is ClientCommand.Use or ClientCommand.Look)

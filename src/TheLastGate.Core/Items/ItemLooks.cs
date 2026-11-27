@@ -15,6 +15,8 @@ public enum ItemSlotKind
 
 public sealed record ItemLook(IReadOnlyList<LogLine> Lines, ItemDetails Details);
 
+public sealed record ManualLook(ItemSlotKind Kind, int Index, int Sprite);
+
 // Keeps the look text of every inventory and worn slot, fetched quietly in the background whenever a slot changes,
 // so a tooltip can show the moment the mouse rests on an item.
 public sealed class ItemLooks
@@ -27,6 +29,10 @@ public sealed class ItemLooks
     private const int MaxHeaderless = 64;
     private const int MaxHandoffs = 8;
     private const int ActionOffset = 1;
+    private const int GearSlotOffset = ActionOffset + sizeof(int);
+    private const int IdentifySkill = 52;
+    private const int TicksPerSecond = 20;
+    private const int WeaponStaleTicks = 5 * TicksPerSecond;
 
     private readonly List<(ItemSlotKind Kind, int Index, int Sprite)> arrivals = [];
     private readonly LookCapture capture;
@@ -46,7 +52,7 @@ public sealed class ItemLooks
     public ItemLooks(TextLog chat)
     {
         this.chat = chat;
-        capture = new LookCapture(Resolve);
+        capture = new LookCapture(Resolve, ManualAnswered, IdentifyAnswered);
         Reset();
     }
 
@@ -65,11 +71,10 @@ public sealed class ItemLooks
     }
 
     public static bool IsManualLook(byte[] packet) =>
-        packet.Length > ActionOffset + sizeof(int)
+        packet.Length >= GearSlotOffset + sizeof(int)
         && ((ClientCommand)packet[0] == ClientCommand.InventoryLook
             || ((ClientCommand)packet[0] == ClientCommand.Inventory
-                && BinaryPrimitives.ReadInt32LittleEndian(packet.AsSpan(ActionOffset))
-                == (int)InventoryAction.LookAtGear));
+                && ReadValue(packet, ActionOffset) == (int)InventoryAction.LookAtGear));
 
     public void Reset()
     {
@@ -144,7 +149,11 @@ public sealed class ItemLooks
     {
         BeginHandoff();
         heldSprite = sprite;
-        if (held.Text != null)
+
+        // A hand emptied while another slot changed means the held item was used up on it, as when merging
+        // soulstones or catalysts, so its text describes nothing that is left.
+        var putDown = sprite != 0 || vacated.Count == 0;
+        if (held.Text != null && putDown)
         {
             foreach (var arrival in arrivals)
             {
@@ -176,7 +185,7 @@ public sealed class ItemLooks
             held = vacated[departure];
             vacated.RemoveAt(departure);
         }
-        else if (sprite != held.Sprite)
+        else
         {
             held = new Slot { Sprite = sprite };
         }
@@ -184,10 +193,18 @@ public sealed class ItemLooks
         arrivals.Clear();
     }
 
-    public void ManualLookSent()
+    public void Sent(byte[] packet)
     {
-        capture.ExpectManual(tick);
-        pauseUntil = tick + ManualPauseTicks;
+        if (IsManualLook(packet))
+        {
+            var (kind, index) = LookedAt(packet);
+            capture.ExpectManual(tick, new ManualLook(kind, index, SlotFor(kind, index)?.Sprite ?? 0));
+            pauseUntil = tick + ManualPauseTicks;
+        }
+        else if (heldSprite != 0 && IsIdentify(packet))
+        {
+            capture.ExpectIdentify(tick);
+        }
     }
 
     public bool Offer(LogLine line) => capture.Offer(line);
@@ -202,11 +219,24 @@ public sealed class ItemLooks
             Abandon();
         }
 
-        capture.DropManualsSentBefore(tick - TimeoutTicks);
+        capture.DropUnansweredSentBefore(tick - TimeoutTicks);
         FetchNext();
     }
 
-    public void Prefer(ItemSlotKind kind, int index) => preferred = (kind, index);
+    // God and Osiris weapons count kills and gain levels without the server sending their slot again.
+    public void Prefer(ItemSlotKind kind, int index)
+    {
+        preferred = (kind, index);
+        if (heldSprite == 0 && kind == ItemSlotKind.Worn && index is (int)WornSlot.MainHand or (int)WornSlot.OffHand
+            && SlotFor(kind, index) is { State: SlotState.Ready } slot && tick - slot.ReadyTick >= WeaponStaleTicks)
+        {
+            slot.State = SlotState.Dirty;
+            slot.DirtyTick = tick - DebounceTicks;
+        }
+    }
+
+    public bool IsUpdating(ItemSlotKind kind, int index) =>
+        SlotFor(kind, index) is { State: SlotState.Dirty, Text: not null };
 
     public void ClearPreference() => preferred = null;
 
@@ -226,6 +256,19 @@ public sealed class ItemLooks
 
         return slot.State != SlotState.Empty ? slot.Text : null;
     }
+
+    private static int ReadValue(byte[] packet, int offset) =>
+        BinaryPrimitives.ReadInt32LittleEndian(packet.AsSpan(offset));
+
+    private static bool IsIdentify(byte[] packet) =>
+        packet.Length >= ActionOffset + sizeof(int)
+        && (ClientCommand)packet[0] == ClientCommand.Skill
+        && ReadValue(packet, ActionOffset) == IdentifySkill;
+
+    private static (ItemSlotKind Kind, int Index) LookedAt(byte[] packet) =>
+        (ClientCommand)packet[0] == ClientCommand.InventoryLook
+            ? (ItemSlotKind.Inventory, ReadValue(packet, ActionOffset))
+            : (ItemSlotKind.Worn, ReadValue(packet, GearSlotOffset));
 
     private static void Refill(Slot[] slots)
     {
@@ -267,9 +310,7 @@ public sealed class ItemLooks
         {
             if (reply.Shared.Count > 0)
             {
-                slot.Text = new ItemLook(reply.Shared, ItemDetailsParser.Parse(reply.Shared));
-                slot.State = SlotState.Ready;
-                slot.Failures = 0;
+                slot.Keep(reply.Shared, tick);
             }
             else
             {
@@ -279,6 +320,31 @@ public sealed class ItemLooks
 
         Release(reply.Released);
         flight = null;
+    }
+
+    private void ManualAnswered(ManualLook look, IReadOnlyList<LogLine> lines)
+    {
+        if (heldSprite == 0 && SlotFor(look.Kind, look.Index) is { } slot && slot.Sprite == look.Sprite
+            && look.Sprite != 0)
+        {
+            slot.Keep(lines, tick);
+        }
+    }
+
+    // A look at an item elsewhere could arrive instead, so a reply naming another item is not the held one's.
+    private void IdentifyAnswered(IReadOnlyList<LogLine> lines)
+    {
+        if (heldSprite == 0 || held.Sprite != heldSprite || lines.Count == 0)
+        {
+            return;
+        }
+
+        if (held.Text is { Lines: [var knownName, ..] } && knownName != lines[0])
+        {
+            return;
+        }
+
+        held.Keep(lines, tick);
     }
 
     private void Abandon()
@@ -401,9 +467,18 @@ public sealed class ItemLooks
         public ItemLook? Text { get; set; }
         public int DirtyTick { get; set; }
         public int LastFetchTick { get; set; }
+        public int ReadyTick { get; set; }
         public int Failures { get; set; }
 
         public Slot Copy() => (Slot)MemberwiseClone();
+
+        public void Keep(IReadOnlyList<LogLine> lines, int tick)
+        {
+            Text = new ItemLook(lines, ItemDetailsParser.Parse(lines));
+            ReadyTick = tick;
+            State = SlotState.Ready;
+            Failures = 0;
+        }
 
         public void TakeOver(Slot origin)
         {
@@ -411,6 +486,7 @@ public sealed class ItemLooks
             Text = origin.Text;
             DirtyTick = origin.DirtyTick;
             LastFetchTick = origin.LastFetchTick;
+            ReadyTick = origin.ReadyTick;
             Failures = origin.Failures;
         }
 

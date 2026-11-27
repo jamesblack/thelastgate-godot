@@ -8,11 +8,16 @@ public class ItemLooksTests
 {
     private const int Sword = 100;
     private const int Shield = 200;
+    private const int IdentifySkill = 52;
+    private const int BlessSkill = 21;
+    private const int MainHand = (int)WornSlot.MainHand;
+    private const int Head = (int)WornSlot.Head;
 
     private static readonly LogLine Header = new("Steel Sword:", (int)LogFont.Lime);
     private static readonly LogLine OtherHeader = new("Bronze Sword:", (int)LogFont.Lime);
     private static readonly LogLine Description = new("A finely crafted steel sword.", (int)LogFont.Yellow);
     private static readonly LogLine Chatter = new("Bob: hello", (int)LogFont.Blue);
+    private static readonly LogLine Identified = new("Weapon: 12", (int)LogFont.Yellow);
 
     private readonly TextLog chat = new();
     private readonly ItemLooks looks;
@@ -215,17 +220,116 @@ public class ItemLooksTests
     }
 
     [Fact]
-    public void ManualLookSent_LetsTheReplyThroughAndPausesFetching()
+    public void Sent_LetsTheReplyThroughAndPausesFetching()
     {
         looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
 
-        looks.ManualLookSent();
+        looks.Sent(RightClick(6));
 
         Assert.False(looks.Offer(Header));
         Ticks(19);
         Assert.Empty(sent);
         Ticks(1);
         Assert.Equal(2, sent.Count);
+    }
+
+    [Fact]
+    public void Sent_TheReplyBecomesTheSlotsLook()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+
+        SendAndAnswer(RightClick(5), Header, Description, Identified);
+
+        Assert.Equal([Header, Description, Identified], looks.For(ItemSlotKind.Inventory, 5, Sword)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_TheReplyBecomesAWornSlotsLook()
+    {
+        looks.SlotChanged(ItemSlotKind.Worn, 8, Shield);
+
+        SendAndAnswer(InventoryPackets.For(InventoryAction.LookAtGear, 8, 0), Header, Identified);
+
+        Assert.Equal([Header, Identified], looks.For(ItemSlotKind.Worn, 8, Shield)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_ASlotLookedAtNeedsNoBackgroundFetch()
+    {
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
+
+        SendAndAnswer(RightClick(5), Header, Description);
+        Ticks(100);
+
+        Assert.Empty(sent);
+    }
+
+    [Fact]
+    public void Sent_KeepsTheOldLookWhileAnItemIsHeld()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+        looks.HeldItemChanged(Shield);
+
+        SendAndAnswer(RightClick(5), Header, Description, Identified);
+
+        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Inventory, 5, Sword)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_DropsTheReplyForASlotWhoseItemChanged()
+    {
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Sword);
+        looks.Sent(RightClick(5));
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, Shield);
+
+        looks.Offer(Header);
+        looks.EndOfTick();
+
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 5, Shield));
+    }
+
+    [Fact]
+    public void Sent_IdentifyingTheHeldItemRefreshesItsLook()
+    {
+        PickUpSwordWithItsLook();
+
+        UseSkillAndAnswer(IdentifySkill, Header, Identified);
+
+        Assert.Equal([Header, Identified], looks.Held(Sword)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_TheSlotAnIdentifiedItemIsPutInKeepsItsNewLook()
+    {
+        PickUpSwordWithItsLook();
+        UseSkillAndAnswer(IdentifySkill, Header, Identified);
+
+        looks.SlotChanged(ItemSlotKind.Inventory, 7, Sword);
+        looks.HeldItemChanged(0);
+
+        Assert.Equal([Header, Identified], looks.For(ItemSlotKind.Inventory, 7, Sword)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_AnotherItemsLookAfterIdentifyLeavesTheHeldLookAlone()
+    {
+        PickUpSwordWithItsLook();
+
+        UseSkillAndAnswer(IdentifySkill, OtherHeader, Identified);
+
+        Assert.Equal([Header, Description], looks.Held(Sword)?.Lines);
+    }
+
+    [Fact]
+    public void Sent_OtherSkillsLeaveTheHeldLookAlone()
+    {
+        PickUpSwordWithItsLook();
+
+        UseSkillAndAnswer(BlessSkill, Header, Identified);
+
+        Assert.Equal([Header, Description], looks.Held(Sword)?.Lines);
     }
 
     [Fact]
@@ -255,6 +359,54 @@ public class ItemLooksTests
 
         Assert.Equal([Header, Description], looks.For(ItemSlotKind.Inventory, 7, Sword)?.Lines);
         Assert.Null(looks.Held(Sword));
+    }
+
+    [Fact]
+    public void HeldItemChanged_AnItemUsedUpOnALikeOneLeavesThatOneToBeFetched()
+    {
+        FetchInventorySlot(6, Sword);
+        Answer(OtherHeader, Description);
+        PickUpSwordWithItsLook();
+        Ticks(1);
+        sent.Clear();
+
+        looks.SlotChanged(ItemSlotKind.Inventory, 6, Sword);
+        looks.HeldItemChanged(0);
+
+        Assert.Equal([OtherHeader, Description], looks.For(ItemSlotKind.Inventory, 6, Sword)?.Lines);
+        Assert.True(looks.IsUpdating(ItemSlotKind.Inventory, 6));
+        Ticks(40);
+        Assert.Equal([ItemLook(6), ItemLook(6)], sent);
+    }
+
+    [Fact]
+    public void HeldItemChanged_AnItemMergedIntoANewOneGivesItNoText()
+    {
+        FetchInventorySlot(6, Sword);
+        Answer(OtherHeader, Description);
+        PickUpSwordWithItsLook();
+        Ticks(1);
+
+        looks.SlotChanged(ItemSlotKind.Inventory, 6, 0);
+        looks.SlotChanged(ItemSlotKind.Inventory, 7, Sword);
+        looks.HeldItemChanged(0);
+
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 7, Sword));
+    }
+
+    [Fact]
+    public void HeldItemChanged_AHeldItemChangedInPlaceLosesItsText()
+    {
+        PickUpSwordWithItsLook();
+        Ticks(1);
+
+        looks.HeldItemChanged(Sword);
+        Assert.Null(looks.Held(Sword));
+        Ticks(1);
+        looks.SlotChanged(ItemSlotKind.Inventory, 7, Sword);
+        looks.HeldItemChanged(0);
+
+        Assert.Null(looks.For(ItemSlotKind.Inventory, 7, Sword));
     }
 
     [Fact]
@@ -320,6 +472,45 @@ public class ItemLooksTests
     }
 
     [Fact]
+    public void Prefer_RefetchesAWeaponWhoseLookIsSecondsOldAndKeepsShowingIt()
+    {
+        FetchWornSlot(MainHand);
+        Ticks(100);
+
+        looks.Prefer(ItemSlotKind.Worn, MainHand);
+
+        Assert.True(looks.IsUpdating(ItemSlotKind.Worn, MainHand));
+        Assert.Equal([Header, Description], looks.For(ItemSlotKind.Worn, MainHand, Sword)?.Lines);
+        Ticks(1);
+        Assert.Equal([GearLook(MainHand), GearLook(MainHand)], sent);
+    }
+
+    [Fact]
+    public void Prefer_LeavesAFreshWeaponLookAlone()
+    {
+        FetchWornSlot(MainHand);
+        Ticks(10);
+
+        looks.Prefer(ItemSlotKind.Worn, MainHand);
+        Ticks(1);
+
+        Assert.False(looks.IsUpdating(ItemSlotKind.Worn, MainHand));
+        Assert.Empty(sent);
+    }
+
+    [Fact]
+    public void Prefer_LeavesOtherGearAlone()
+    {
+        FetchWornSlot(Head);
+        Ticks(100);
+
+        looks.Prefer(ItemSlotKind.Worn, Head);
+        Ticks(1);
+
+        Assert.Empty(sent);
+    }
+
+    [Fact]
     public void Held_ShowsNothingWhenTheHandHoldsAnotherItem()
     {
         FetchInventorySlot(5, Sword);
@@ -357,6 +548,8 @@ public class ItemLooksTests
         { MapCommandPackets.ForCharacter(ClientCommand.Look, 5), false },
     };
 
+    private static byte[] RightClick(int slot) => ClientPackets.ThreeValues(ClientCommand.InventoryLook, slot, 0, 0);
+
     private static byte[] ItemLook(int slot) => InventoryPackets.For(InventoryAction.LookAtItem, slot, 0);
 
     private static byte[] GearLook(int slot) => InventoryPackets.For(InventoryAction.LookAtGear, slot, 0);
@@ -393,6 +586,36 @@ public class ItemLooksTests
 
         looks.EndOfTick();
     }
+
+    private void SendAndAnswer(byte[] packet, params LogLine[] reply)
+    {
+        looks.Sent(packet);
+        foreach (var line in reply)
+        {
+            looks.Offer(line);
+        }
+
+        looks.EndOfTick();
+    }
+
+    private void FetchWornSlot(int slot)
+    {
+        looks.SlotChanged(ItemSlotKind.Worn, slot, Sword);
+        Ticks(4);
+        Answer(Header, Description);
+        sent.Clear();
+    }
+
+    private void PickUpSwordWithItsLook()
+    {
+        FetchInventorySlot(5, Sword);
+        Answer(Header, Description);
+        looks.SlotChanged(ItemSlotKind.Inventory, 5, 0);
+        looks.HeldItemChanged(Sword);
+    }
+
+    private void UseSkillAndAnswer(int skill, params LogLine[] reply) =>
+        SendAndAnswer(SkillPackets.Use(skill, 0), reply);
 
     private void AnswerDifferently()
     {
