@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://gcmhjswbbvbj" path="res://Procedural/ProceduralTabs.cs" id="22_tabs"]
 [ext_resource type="PackedScene" uid="uid://knipevkdmiii" path="res://Procedural/key_button.tscn" id="23_key"]
 [ext_resource type="PackedScene" uid="uid://pblwkqjitlib" path="res://Procedural/slider.tscn" id="24_slider"]
+[ext_resource type="Script" uid="uid://b6cgbafpweqjd" path="res://Procedural/DataTable.cs" id="25_table"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focused_example"]
 content_margin_left = 4.0
@@ -3173,5 +3174,53 @@ Warning = true
 [node name="Caption" type="Label" parent="Page/WarningButton/Examples/Example84" unique_id=934563297]
 layout_mode = 2
 text = "waiting for the second click"
+script = ExtResource("3_label")
+Colour = 10
+
+[node name="DataTable" type="HBoxContainer" parent="Page" unique_id=1100031978]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Notes" type="VBoxContainer" parent="Page/DataTable" unique_id=2127570258]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+custom_minimum_size = Vector2(380, 0)
+
+[node name="Heading" type="Label" parent="Page/DataTable/Notes" unique_id=1340057120]
+layout_mode = 2
+text = "Table"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="Text" type="Label" parent="Page/DataTable/Notes" unique_id=1336119661]
+layout_mode = 2
+text = "Give a VBoxContainer game/Procedural/DataTable.cs and call SetColumns with the header of each column, its share of the width and its group, then ShowRows. Groups get a White caption with a gold rule across their columns; the headers are White with a gold rule under them; each row is a settings row, ruled apart and filled while hovered. The first column is the name, the rest are right-aligned, and the tone of a cell colours it: Positive Green, Negative Red, Zero Dim, Dim Grey, Normal Yellow. Preview fills it for this page."
+custom_minimum_size = Vector2(380, 0)
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Examples" type="HBoxContainer" parent="Page/DataTable" unique_id=1758521253]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Example85" type="VBoxContainer" parent="Page/DataTable/Examples" unique_id=1813645899]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Table" type="VBoxContainer" parent="Page/DataTable/Examples/Example85" unique_id=727176789]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("25_table")
+Preview = true
+
+[node name="Caption" type="Label" parent="Page/DataTable/Examples/Example85" unique_id=2041386302]
+layout_mode = 2
+text = "groups, headers and three rows"
 script = ExtResource("3_label")
 Colour = 10

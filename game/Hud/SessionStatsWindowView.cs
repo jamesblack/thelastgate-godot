@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using TheLastGate.Procedural;
 using TheLastGate.Session;
 
 namespace TheLastGate.Hud;
 
 [Tool]
-public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
+public partial class SessionStatsWindowView : CenterContainer
 {
     private const string SessionGroup = "This session";
     private const string HourGroup = "Per hour";
@@ -37,37 +38,24 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
     ];
 
     private TimeSpan? shownElapsed;
-    private EditorThemePreview? themePreview;
-    public SessionStatsWindowView() => AddToGroup(HudContext.Group);
 
-    private DataTable Table => GetNode<DataTable>("Window/Frame/Layout/Body/Table");
-
-    public void ShowContext(HudContext context)
-    {
-        if (Theme != null && context.Sprites is { } sprites)
-        {
-            ThemeSprites.Apply(Theme, sprites);
-        }
-    }
+    private DataTable Table => GetNode<DataTable>("%Table");
 
     public event Action? ResetPressed;
 
     public event Action? ClosePressed;
-
-    public override void _Notification(int what) => themePreview?.Notify(what);
 
     public override void _Ready()
     {
         Table.SetColumns(Columns);
         if (Engine.IsEditorHint())
         {
-            themePreview = EditorThemePreview.Show(this);
             ShowTallies(PreviewTallies, TimeSpan.FromMinutes(90));
             return;
         }
 
-        GetNode<Button>("Window/Frame/Layout/Footer/Row/Reset").Pressed += () => ResetPressed?.Invoke();
-        GetNode<Button>("Window/Close").Pressed += () => ClosePressed?.Invoke();
+        GetNode<ProceduralButton>("%Reset").Pressed += () => ResetPressed?.Invoke();
+        GetNode<ClickArea>("%Close").Released += _ => ClosePressed?.Invoke();
     }
 
     public void ShowWindow(bool shown, IEnumerable<CurrencyTally> tallies, TimeSpan elapsed)
@@ -89,7 +77,7 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
 
     private void ShowTallies(IEnumerable<CurrencyTally> tallies, TimeSpan elapsed)
     {
-        GetNode<Label>("Window/Frame/Layout/Footer/Row/Elapsed").Text = SessionStatsText.Elapsed(elapsed);
+        GetNode<Label>("%Elapsed").Text = SessionStatsText.Elapsed(elapsed);
         Table.ShowRows(tallies.Select(tally => Row(tally, elapsed)).ToArray());
     }
 
@@ -98,16 +86,15 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
         var currency = tally.Currency;
         var netPerHour = (long)tally.NetPerHour(elapsed);
         return new TableRow(
-            [
-                new TableCell(CurrencyName(currency)),
-                new TableCell(SessionStatsText.Amount(currency, tally.Start)),
-                new TableCell(SessionStatsText.Amount(currency, tally.Earned)),
-                new TableCell(SessionStatsText.Amount(currency, tally.Spent)),
-                new TableCell(SessionStatsText.Change(currency, tally.Net), ChangeTone(tally.Net)),
-                new TableCell(SessionStatsText.Amount(currency, (long)tally.EarnedPerHour(elapsed)), CellTone.Dim),
-                new TableCell(SessionStatsText.Change(currency, netPerHour), ChangeTone(netPerHour)),
-            ],
-            Swatch(currency));
+        [
+            new TableCell(CurrencyName(currency)),
+            new TableCell(SessionStatsText.Amount(currency, tally.Start)),
+            new TableCell(SessionStatsText.Amount(currency, tally.Earned)),
+            new TableCell(SessionStatsText.Amount(currency, tally.Spent)),
+            new TableCell(SessionStatsText.Change(currency, tally.Net), ChangeTone(tally.Net)),
+            new TableCell(SessionStatsText.Amount(currency, (long)tally.EarnedPerHour(elapsed)), CellTone.Dim),
+            new TableCell(SessionStatsText.Change(currency, netPerHour), ChangeTone(netPerHour)),
+        ]);
     }
 
     private static CellTone ChangeTone(long change) => Math.Sign(change) switch
@@ -124,17 +111,6 @@ public partial class SessionStatsWindowView : CenterContainer, IHudContextUser
         Currency.BlackStronghold => "Stronghold",
         Currency.Osiris => "Contract",
         Currency.Tokens => "Casino",
-        _ => throw new UnreachableException(),
-    };
-
-    // The swatches are the HUD font sheets' colours.
-    private static Color Swatch(Currency currency) => currency switch
-    {
-        Currency.Experience => Color.Color8(63, 189, 226),
-        Currency.Gold => Color.Color8(243, 219, 106),
-        Currency.BlackStronghold => Color.Color8(255, 118, 111),
-        Currency.Osiris => Color.Color8(188, 113, 249),
-        Currency.Tokens => Color.Color8(70, 226, 73),
         _ => throw new UnreachableException(),
     };
 }
