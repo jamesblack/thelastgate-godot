@@ -7,6 +7,7 @@
 [node name="TextButton" type="Container" unique_id=1588203417]
 mouse_filter = 2
 script = ExtResource("1_button")
+ClickCoversFrame = true
 Profile = "GBG"
 Padding = 2
 

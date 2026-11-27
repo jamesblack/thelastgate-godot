@@ -144,6 +144,24 @@ public class ProceduralButtonTests
     private static InputEventMouseButton Click(bool pressed, Vector2 position) =>
         new() { ButtonIndex = MouseButton.Left, Pressed = pressed, Position = position };
 
+    [TestCase("res://Procedural/text_button.tscn")]
+    [TestCase("res://Procedural/picker.tscn")]
+    [TestCase("res://Procedural/glyph_button.tscn")]
+    [TestCase("res://Procedural/key_button.tscn")]
+    [TestCase("res://Procedural/tab.tscn")]
+    [TestCase("res://Procedural/menu_row.tscn")]
+    public async Task TheClickArea_CoversTheFrameToo(string path)
+    {
+        var part = Show<Control>(path);
+        await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
+        await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
+
+        var click = part.GetNode<Control>("Click");
+
+        AssertThat(click.GetRect()).IsEqual(new Rect2(Vector2.Zero, part.Size));
+        part.Free();
+    }
+
     private static T Show<T>(string path) where T : Node
     {
         var button = GD.Load<PackedScene>(path).Instantiate<T>();

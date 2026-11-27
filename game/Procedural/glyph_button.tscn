@@ -8,6 +8,7 @@
 custom_minimum_size = Vector2(11, 11)
 mouse_filter = 2
 script = ExtResource("1_button")
+ClickCoversFrame = true
 Profile = "G"
 Fill = 1
 

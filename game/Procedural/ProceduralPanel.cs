@@ -25,6 +25,9 @@ public partial class ProceduralPanel : Container, IHudContextUser
         Restyle();
     }
 
+    // A button's whole box answers the mouse, rings included, while its contents stay inside them.
+    [Export] public bool ClickCoversFrame { get; set; }
+
     [Export]
     public ProceduralShape Shape
     {
@@ -189,11 +192,12 @@ public partial class ProceduralPanel : Container, IHudContextUser
         }
 
         var inside = new Rect2(InsetBefore, Size - InsetBefore - InsetAfter);
+        var whole = new Rect2(Vector2.Zero, Size);
         foreach (var child in GetChildren())
         {
             if (child is Control { TopLevel: false } control && !control.IsInGroup(WindowOverlays.Group))
             {
-                FitChildInRect(control, inside);
+                FitChildInRect(control, ClickCoversFrame && control is ClickArea ? whole : inside);
             }
         }
     }

@@ -9,6 +9,7 @@
 custom_minimum_size = Vector2(110, 0)
 mouse_filter = 2
 script = ExtResource("1_picker")
+ClickCoversFrame = true
 Profile = "GBG"
 Fill = 1
 Padding = 2

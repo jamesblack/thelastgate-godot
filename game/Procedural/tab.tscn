@@ -8,6 +8,7 @@
 size_flags_vertical = 8
 mouse_filter = 2
 script = ExtResource("1_panel")
+ClickCoversFrame = true
 Fill = 1
 Profile = "GBG"
 Edges = 11

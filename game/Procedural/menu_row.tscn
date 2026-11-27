@@ -8,6 +8,7 @@
 [node name="MenuRow" type="Container" unique_id=656640519]
 mouse_filter = 2
 script = ExtResource("1_panel")
+ClickCoversFrame = true
 Fill = 2
 Padding = 2
 
