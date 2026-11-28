@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.6.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.5.0...v1.6.0) (2026-11-28)
+
+
+### Features
+
+* **hud:** list your characters and their depot pages beside the depot window ([583c13a](https://github.com/jamesblack/thelastgate-godot/commit/583c13ad1b1dc6316d49947ae8b000d7e4dd6f49))
+* **hud:** name depot pages and arrange them into your own categories by drag and drop ([583c13a](https://github.com/jamesblack/thelastgate-godot/commit/583c13ad1b1dc6316d49947ae8b000d7e4dd6f49))
+* **hud:** open any of your characters' depots at any page with one click from the list ([583c13a](https://github.com/jamesblack/thelastgate-godot/commit/583c13ad1b1dc6316d49947ae8b000d7e4dd6f49))
+* **hud:** press hide again to lower every wall and tall object, even in front of you ([9956a8b](https://github.com/jamesblack/thelastgate-godot/commit/9956a8be93b81d51b32d5e7a46dfad7b7ba81b32))
+* **hud:** sort a character's depot from the list's right-click menu ([583c13a](https://github.com/jamesblack/thelastgate-godot/commit/583c13ad1b1dc6316d49947ae8b000d7e4dd6f49))
+* **items:** refresh a held item's tooltip when you identify it ([7deeb66](https://github.com/jamesblack/thelastgate-godot/commit/7deeb66ad651e66fb36d3befe66ffa36f16c750e))
+* **items:** refresh an item's tooltip when you right-click it ([7deeb66](https://github.com/jamesblack/thelastgate-godot/commit/7deeb66ad651e66fb36d3befe66ffa36f16c750e))
+* **items:** update a god or Osiris weapon's kill count when you hover it ([7deeb66](https://github.com/jamesblack/thelastgate-godot/commit/7deeb66ad651e66fb36d3befe66ffa36f16c750e))
+* **launcher:** keep every character you've loaded in the previous characters list, not just the last 20 ([583c13a](https://github.com/jamesblack/thelastgate-godot/commit/583c13ad1b1dc6316d49947ae8b000d7e4dd6f49))
+* **world:** show only tree trunks and stumps when hide covers everything ([217ba44](https://github.com/jamesblack/thelastgate-godot/commit/217ba444e004cf9dd2bd11393f8b217d09937d53))
+
+
+### Bug Fixes
+
+* **items:** show the right tooltip after corrupting a tarot card ([7deeb66](https://github.com/jamesblack/thelastgate-godot/commit/7deeb66ad651e66fb36d3befe66ffa36f16c750e))
+* **items:** show the right tooltip after merging soulstones or soul catalysts ([7deeb66](https://github.com/jamesblack/thelastgate-godot/commit/7deeb66ad651e66fb36d3befe66ffa36f16c750e))
+
 ## [1.5.0](https://github.com/jamesblack/thelastgate-godot/compare/v1.4.0...v1.5.0) (2026-11-27)
 
 
