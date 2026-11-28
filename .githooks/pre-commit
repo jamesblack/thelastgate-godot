@@ -1,4 +1,5 @@
 #!/bin/sh
 tools/check-godot-files.sh --staged || exit 1
 tools/check-sprite-sheets.sh --staged || exit 1
+tools/check-art-sheets.sh --staged || exit 1
 exec tools/check-code-cleanup.sh --staged

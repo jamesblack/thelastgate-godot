@@ -144,15 +144,14 @@ public class SpriteLoaderSheetTests
     }
 
     [TestCase]
-    public void GetTexture_LooseSprite_IsUnchanged()
+    public void GetTexture_SpriteOffTheCharacterSheets_IsOnItsArtSheet()
     {
         using var loader = NewLoader();
 
-        var sprite = loader.GetTexture(LooseSprite);
+        var sprite = loader.GetTexture(LooseSprite) as AtlasTexture;
 
         AssertThat(sprite).IsNotNull();
-        AssertThat(sprite is AtlasTexture).IsFalse();
-        AssertThat(sprite!.ResourcePath).IsEqual("res://sprites/00002.png");
+        AssertThat(sprite!.Atlas.ResourcePath).IsEqual("res://sprites/items-and-objects.png");
     }
 
     [TestCase]

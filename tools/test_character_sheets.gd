@@ -1,8 +1,7 @@
-# Runs build_character_sheets.gd on a scratch copy of a few frames and checks what it made.
+# Runs build_character_sheets.gd on a few frames drawn here and checks what it made.
 # Usage: godot --headless --path game --script ../tools/test_character_sheets.gd
 extends SceneTree
 
-const SPRITES := "res://sprites/"
 const TOOL := "build_character_sheets.gd"
 
 var scratch := OS.get_temp_dir().path_join("tlg-sheet-test-%d" % Time.get_ticks_usec()) + "/"
@@ -13,7 +12,7 @@ var tool_output := ""
 func _init() -> void:
 	DirAccess.make_dir_recursive_absolute(scratch)
 	for frame in ["02000", "02064", "02447", "22480", "22481", "16336"]:
-		copy_sprite(frame, frame)
+		draw_frame(frame, frame)
 		FileAccess.open(scratch + frame + ".png.import", FileAccess.WRITE).close()
 
 	check(run_tool(["--new", "2000", "knight", "--new", "22480", "flame"]), "the first run failed: " + tool_output)
@@ -39,7 +38,7 @@ func _init() -> void:
 	check(tool_output.contains("02003.png is (32, 32)"), "refuses_a_frame_of_another_size: no error naming the frame")
 	DirAccess.remove_absolute(scratch + "02003.png")
 
-	copy_sprite("02065", "02064")
+	draw_frame("02065", "02064")
 	check(not run_tool([]), "refuses_to_replace_a_frame: a second 02064 replaced the first")
 	check(tool_output.contains("cell 64 already holds a frame"), "refuses_to_replace_a_frame: no error naming the cell")
 
@@ -68,8 +67,17 @@ func run_tool(arguments: Array) -> bool:
 	return exit_code == 0
 
 
-func copy_sprite(from_frame: String, to_frame: String) -> void:
-	var image := Image.load_from_file(SPRITES + from_frame + ".png")
+func draw_frame(pattern_frame: String, to_frame: String) -> void:
+	var number := int(pattern_frame)
+	var size := Vector2i(32, 64) if number >= 22480 and number < 22928 else Vector2i(64, 64)
+	if number == 16336:
+		size = Vector2i(32, 32)
+	var image := Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
+	image.fill(Color.from_hsv(float(number % 97) / 97.0, 0.8, 0.9))
+	for x in size.x:
+		image.set_pixel(x, (x + number) % size.y, Color.BLACK)
+	DirAccess.make_dir_recursive_absolute(scratch + "originals")
+	image.save_png(scratch + "originals/" + to_frame + ".png")
 	image.save_png(scratch + to_frame + ".png")
 
 
@@ -80,7 +88,7 @@ func size_of(file: String) -> Vector2i:
 
 func cell_matches(sheet_file: String, offset: int, frame: String) -> bool:
 	var sheet := Image.load_from_file(scratch + sheet_file)
-	var original := Image.load_from_file(SPRITES + frame + ".png")
+	var original := Image.load_from_file(scratch + "originals/" + frame + ".png")
 	if sheet == null or original == null:
 		return false
 	sheet.convert(Image.FORMAT_RGBA8)

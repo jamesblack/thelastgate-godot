@@ -6,6 +6,7 @@ using System.Linq;
 using Godot;
 using TheLastGate.Config;
 using TheLastGate.Map;
+using FileAccess = Godot.FileAccess;
 
 namespace TheLastGate.Assets;
 
@@ -14,7 +15,10 @@ public sealed class SpriteLoader : IDisposable
     private const string SpriteFolder = "res://sprites/";
     private const string SheetFolder = SpriteFolder + "characters/";
 
+    private readonly Dictionary<string, Texture2D?> artSheets = [];
+    private readonly IReadOnlyDictionary<int, ArtSprite> artSprites;
     private readonly Dictionary<int, uint> averageColours = [];
+    private readonly HashSet<string> averagedSheets = [];
     private readonly SpriteCache<Texture2D> cache;
     private readonly Dictionary<LoadedSheet, bool[]> frameMasks = new(ReferenceEqualityComparer.Instance);
     private readonly Dictionary<int, LoadedSheet> loadedSheets = [];
@@ -29,6 +33,7 @@ public sealed class SpriteLoader : IDisposable
         overrides = SpriteOverrides.Find(Path.Combine(dataPath, DataLayout.Overrides), DataPaths.PlayerOverrides());
         uiFolder = Path.Combine(dataPath, DataLayout.Ui);
         sheets = FindSheets();
+        artSprites = FindArtSprites();
         cache = new SpriteCache<Texture2D>(cacheBudgetBytes, ReleaseTexture);
     }
 
@@ -47,6 +52,15 @@ public sealed class SpriteLoader : IDisposable
 
         loadedSheets.Clear();
         frameMasks.Clear();
+        foreach (var sheet in artSheets.Values)
+        {
+            if (sheet != null)
+            {
+                ReleaseTexture(sheet);
+            }
+        }
+
+        artSheets.Clear();
         foreach (var picture in uiPictures.Values)
         {
             picture?.Dispose();
@@ -68,7 +82,12 @@ public sealed class SpriteLoader : IDisposable
             return sheetCell.Sheet.Texture == null ? SpriteSource.None : SpriteSource.Resource;
         }
 
-        return ResourceLoader.Exists(ResourcePath(spriteNumber)) ? SpriteSource.Resource : SpriteSource.None;
+        if (artSprites.TryGetValue(spriteNumber, out var artSprite))
+        {
+            return ArtSheet(artSprite.Sheet) == null ? SpriteSource.None : SpriteSource.Resource;
+        }
+
+        return SpriteSource.None;
     }
 
     // An empty cell of a sheet still loads, as a transparent frame. This tells it apart, at the cost of reading the
@@ -76,7 +95,7 @@ public sealed class SpriteLoader : IDisposable
     public bool HasFrame(int spriteNumber) =>
         FindSheetCell(spriteNumber) is { } sheetCell
             ? FramesOn(sheetCell)[sheetCell.Offset]
-            : FindSource(spriteNumber) != SpriteSource.None;
+            : artSprites.ContainsKey(spriteNumber) || FindSource(spriteNumber) != SpriteSource.None;
 
     public Texture2D? GetTexture(int shownNumber)
     {
@@ -86,10 +105,10 @@ public sealed class SpriteLoader : IDisposable
             return cachedTexture;
         }
 
-        var texture = FindSheetCell(spriteNumber) is { } sheetCell
+        Texture2D? texture = FindSheetCell(spriteNumber) is { } sheetCell
             ? SheetFrame(sheetCell)
-            : FindSource(spriteNumber) == SpriteSource.Resource
-                ? ResourceLoader.Load<Texture2D>(ResourcePath(spriteNumber))
+            : ShownArtSprite(spriteNumber) is { } artSprite
+                ? ArtFrame(artSprite)
                 : LoadImage(spriteNumber) is { } image
                     ? ImageTexture.CreateFromImage(image)
                     : null;
@@ -98,10 +117,11 @@ public sealed class SpriteLoader : IDisposable
             return null;
         }
 
-        cache.Add(
-            spriteNumber,
-            texture,
-            (long)texture.GetWidth() * texture.GetHeight() * SpritePixels.Rgba8BytesPerPixel);
+        // A frame of a sheet holds no pixels of its own, and the sheet stays loaded, so only textures made here count.
+        var byteSize = texture is AtlasTexture
+            ? 0
+            : (long)texture.GetWidth() * texture.GetHeight() * SpritePixels.Rgba8BytesPerPixel;
+        cache.Add(spriteNumber, texture, byteSize);
         return texture;
     }
 
@@ -109,14 +129,30 @@ public sealed class SpriteLoader : IDisposable
     public uint AverageColour(int shownNumber)
     {
         var spriteNumber = Swaps.GetValueOrDefault(shownNumber, shownNumber);
-        if (!averageColours.TryGetValue(spriteNumber, out var colour))
+        if (averageColours.TryGetValue(spriteNumber, out var colour))
         {
-            colour = LoadImage(spriteNumber) is { } image ? SpriteColours.Average(image.GetData()) : 0;
-            averageColours[spriteNumber] = colour;
+            return colour;
         }
 
+        if (ShownArtSprite(spriteNumber) is { } artSprite)
+        {
+            AverageArtSheet(artSprite.Sheet);
+            return averageColours.GetValueOrDefault(spriteNumber);
+        }
+
+        colour = LoadImage(spriteNumber) is { } image ? SpriteColours.Average(image.GetData()) : 0;
+        averageColours[spriteNumber] = colour;
         return colour;
     }
+
+    // The drawn area comes from the manifest, so trimming a sprite to it never reads its sheet back.
+    public Rect2I? DrawnArea(int shownNumber) =>
+        ShownArtSprite(Swaps.GetValueOrDefault(shownNumber, shownNumber)) is
+        {
+            Used: { Width: > 0, Height: > 0 } used,
+        }
+            ? new Rect2I(used.X, used.Y, used.Width, used.Height)
+            : null;
 
     public Texture2D? GetUiPicture(int pictureNumber)
     {
@@ -150,12 +186,9 @@ public sealed class SpriteLoader : IDisposable
                 return SheetImage(sheetCell);
             }
 
-            return FindSource(spriteNumber) switch
-            {
-                SpriteSource.Override => DecodeOverride(spriteNumber, overrides[spriteNumber]),
-                SpriteSource.Resource => ResourceImage(spriteNumber),
-                _ => null,
-            };
+            return overrides.TryGetValue(spriteNumber, out var filePath)
+                ? DecodeOverride(spriteNumber, filePath)
+                : null;
         }
         catch (Exception exception) when (exception is IOException or InvalidDataException)
         {
@@ -169,6 +202,89 @@ public sealed class SpriteLoader : IDisposable
             .Select(CharacterSheet.FromFileName)
             .OfType<CharacterSheet>()
             .ToArray();
+
+    private static Dictionary<int, ArtSprite> FindArtSprites()
+    {
+        var sprites = new Dictionary<int, ArtSprite>();
+        foreach (var fileName in ResourceLoader.ListDirectory(SpriteFolder))
+        {
+            if (ArtManifest.SheetName(fileName) is not { } sheet)
+            {
+                continue;
+            }
+
+            try
+            {
+                var json = FileAccess.GetFileAsString(SpriteFolder + fileName);
+                foreach (var (spriteNumber, artSprite) in ArtManifest.Parse(sheet, json))
+                {
+                    sprites[spriteNumber] = artSprite;
+                }
+            }
+            catch (InvalidDataException exception)
+            {
+                GD.PushError(
+                    $"The art sheet manifest {fileName} couldn't be read, so its sprites won't show. "
+                    + exception.Message);
+            }
+        }
+
+        return sprites;
+    }
+
+    // An override is served as its own texture, never drawn into its art sheet.
+    private ArtSprite? ShownArtSprite(int spriteNumber) =>
+        overrides.ContainsKey(spriteNumber) ? null : artSprites.GetValueOrDefault(spriteNumber);
+
+    private Texture2D? ArtSheet(string sheet)
+    {
+        if (artSheets.TryGetValue(sheet, out var known))
+        {
+            return known;
+        }
+
+        var texture = ResourceLoader.Load<Texture2D>(SpriteFolder + sheet + ".png");
+        if (texture == null)
+        {
+            GD.PushError($"The art sheet {sheet}.png couldn't be loaded, so its sprites won't show.");
+        }
+
+        artSheets[sheet] = texture;
+        return texture;
+    }
+
+    private AtlasTexture? ArtFrame(ArtSprite artSprite) =>
+        ArtSheet(artSprite.Sheet) is { } sheet
+            ? new AtlasTexture { Atlas = sheet, Region = ToRect(artSprite.Region) }
+            : null;
+
+    // The explored map asks for the colour of every tile it sees, so a sheet is read back once, every sprite on it is
+    // averaged, and the copy is let go.
+    private void AverageArtSheet(string sheet)
+    {
+        if (!averagedSheets.Add(sheet))
+        {
+            return;
+        }
+
+        using var image = ArtSheet(sheet)?.GetImage();
+        if (image == null)
+        {
+            return;
+        }
+
+        image.Convert(Image.Format.Rgba8);
+        var pixels = image.GetData();
+        foreach (var (spriteNumber, artSprite) in artSprites)
+        {
+            if (artSprite.Sheet == sheet && !overrides.ContainsKey(spriteNumber))
+            {
+                averageColours[spriteNumber] = SpriteColours.Average(pixels, image.GetWidth(), artSprite.Region);
+            }
+        }
+    }
+
+    private static Rect2 ToRect(PixelRect rect) => new(rect.X, rect.Y, rect.Width, rect.Height);
 
     // An override that doesn't fit its cell is served on its own, so it isn't treated as a cell of the sheet.
     private SheetCell? FindSheetCell(int spriteNumber)
@@ -319,16 +435,6 @@ public sealed class SpriteLoader : IDisposable
             GD.PushError($"Sprite {spriteNumber} couldn't be read: {exception.Message}");
             return null;
         }
-    }
-
-    private static string ResourcePath(int spriteNumber) =>
-        SpriteFolder + spriteNumber.ToString("00000", CultureInfo.InvariantCulture) + ".png";
-
-    private static Image? ResourceImage(int spriteNumber)
-    {
-        var image = ResourceLoader.Load<Texture2D>(ResourcePath(spriteNumber))?.GetImage();
-        image?.Convert(Image.Format.Rgba8);
-        return image;
     }
 
     // A resource texture is shared with Godot's own resource cache, so only textures made here are disposed.

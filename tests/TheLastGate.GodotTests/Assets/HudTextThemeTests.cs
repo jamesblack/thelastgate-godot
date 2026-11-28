@@ -67,7 +67,7 @@ public class HudTextThemeTests
         AssertThat(Theme.GetFontSize("font_size", "HudYellow")).IsEqual(FontSize);
         AssertThat(Theme.GetColor("font_color", "HudYellow")).IsEqual(Colors.White);
         AssertThat(Rgba(font.GetTextureImage(0, CacheSize, 0)))
-            .IsEqual(Rgba(GD.Load<Texture2D>("res://sprites/18101.png").GetImage()));
+            .IsEqual(Rgba(Image.LoadFromFile(Path.Combine(RepositoryFolder.Find(), "art", "interface", "18101.png"))));
     }
 
     [TestCase]

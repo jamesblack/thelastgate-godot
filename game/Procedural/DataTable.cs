@@ -44,7 +44,9 @@ public partial class DataTable : VBoxContainer
     ];
 
     private readonly List<SettingsRow> rows = [];
-    private VBoxContainer body = new();
+
+    // Made by SetColumns; a node made here would never be freed.
+    private VBoxContainer? body;
     private IReadOnlyList<TableColumn> columns = [];
     private int selectedRow = -1;
     private IReadOnlyList<TableRow> shownRows = [];
@@ -131,6 +133,11 @@ public partial class DataTable : VBoxContainer
 
     public void ShowRows(IReadOnlyList<TableRow> rowsToShow)
     {
+        if (body == null)
+        {
+            throw new InvalidOperationException("A table's columns are set before its rows are shown.");
+        }
+
         shownRows = rowsToShow;
         while (rows.Count < shownRows.Count)
         {

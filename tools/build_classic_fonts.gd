@@ -2,7 +2,8 @@
 # font sheet changes, then commit the fonts and the theme.
 # Each sheet holds 96 letters of 6x9 pixels from its second pixel row, for the characters from space to 127. Grey, Dim
 # and Engraved have no sheet: they are the white letters tinted, Engraved like the lettering in the window art.
-# Usage: godot --headless --path game --script ../tools/build_classic_fonts.gd
+# Nothing is written unless every font sheet is found in art/.
+# Usage: godot --headless --path game --script ../tools/build_classic_fonts.gd [-- --art <folder>]
 # Then save the theme once in the editor: a script run can't write the uids of the theme's font references.
 extends SceneTree
 
@@ -24,11 +25,28 @@ const THEME_PATH := "res://themes/HudTextTheme.tres"
 
 
 func _init() -> void:
+	var art := ProjectSettings.globalize_path("res://").path_join("../art").simplify_path()
+	var arguments := OS.get_cmdline_user_args()
+	if arguments.size() == 2 and arguments[0] == "--art":
+		art = arguments[1]
+	elif not arguments.is_empty():
+		push_error("usage: --script build_classic_fonts.gd [-- --art <folder>]")
+		quit(2)
+		return
+
+	var sheets: Array[Image] = []
+	for index in SHEET_COLOURS.size():
+		var sheet := art_image(art, FIRST_FONT_SPRITE + index)
+		if sheet == null:
+			quit(1)
+			return
+		sheets.append(sheet)
+
 	var theme := Theme.new()
 	theme.default_font_size = FONT_SIZE
 	for index in SHEET_COLOURS.size():
 		var colour: String = SHEET_COLOURS[index]
-		var font := build_font(FIRST_FONT_SPRITE + index)
+		var font := build_font(sheets[index])
 		var path := FONT_FOLDER + colour.to_lower() + ".tres"
 		if not save_keeping_uid(font, path):
 			quit(1)
@@ -65,7 +83,7 @@ func save_keeping_uid(resource: Resource, path: String) -> bool:
 	return true
 
 
-func build_font(sprite_number: int) -> FontFile:
+func build_font(sheet: Image) -> FontFile:
 	var font := FontFile.new()
 	font.fixed_size = FONT_SIZE
 	font.antialiasing = TextServer.FONT_ANTIALIASING_NONE
@@ -73,8 +91,7 @@ func build_font(sprite_number: int) -> FontFile:
 	font.hinting = TextServer.HINTING_NONE
 	font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
 	var size := Vector2i(FONT_SIZE, 0)
-	var sheet: Texture2D = load("res://sprites/%05d.png" % sprite_number)
-	font.set_texture_image(0, size, 0, sheet.get_image())
+	font.set_texture_image(0, size, 0, sheet)
 	font.set_cache_ascent(0, FONT_SIZE, GLYPH_HEIGHT)
 	font.set_cache_descent(0, FONT_SIZE, 0)
 	for character in range(FIRST_CHARACTER, LAST_CHARACTER + 1):
@@ -85,6 +102,21 @@ func build_font(sprite_number: int) -> FontFile:
 		font.set_glyph_uv_rect(0, size, character, cell)
 		font.set_glyph_texture_idx(0, size, character, 0)
 	return font
+
+
+# Null, with the reason pushed, when the sprite is in no group or won't decode.
+func art_image(art: String, sprite_number: int) -> Image:
+	for group in DirAccess.get_directories_at(art):
+		var path := art.path_join(group).path_join("%05d.png" % sprite_number)
+		if FileAccess.file_exists(path):
+			var image := Image.load_from_file(path)
+			if image == null:
+				push_error("art/%s/%05d.png won't decode" % [group, sprite_number])
+				return null
+			image.convert(Image.FORMAT_RGBA8)
+			return image
+	push_error("sprite %d isn't in any art/ folder" % sprite_number)
+	return null
 
 
 func add_variation(theme: Theme, colour: String, font: Font, tint: Color) -> void:

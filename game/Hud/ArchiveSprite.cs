@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using TheLastGate.Assets;
 using TheLastGate.Windows;
 
 namespace TheLastGate.Hud;
@@ -64,16 +65,16 @@ public partial class ArchiveSprite : TextureRect, IHudContextUser
     {
         if (context is { Sprites: { } sprites })
         {
-            Texture = Shown(sprites.GetTexture(spriteNumber));
+            Texture = Shown(sprites, sprites.GetTexture(spriteNumber));
             ApplyFade();
         }
         else if (EditorSprites.Shared is { } editorSprites)
         {
-            Texture = Shown(editorSprites.GetTexture(spriteNumber));
+            Texture = Shown(editorSprites, editorSprites.GetTexture(spriteNumber));
         }
     }
 
-    private Texture2D? Shown(Texture2D? texture)
+    private Texture2D? Shown(SpriteLoader sprites, Texture2D? texture)
     {
         if (!trimToDrawnArea || texture == null)
         {
@@ -82,7 +83,10 @@ public partial class ArchiveSprite : TextureRect, IHudContextUser
 
         if (!Trimmed.TryGetValue(texture, out var trimmed))
         {
-            trimmed = new AtlasTexture { Atlas = texture, Region = texture.GetImage().GetUsedRect() };
+            trimmed = texture is AtlasTexture { Atlas: { } sheet } frame && sprites.DrawnArea(spriteNumber) is { } drawn
+                ? new AtlasTexture
+                    { Atlas = sheet, Region = new Rect2(frame.Region.Position + drawn.Position, drawn.Size) }
+                : new AtlasTexture { Atlas = texture, Region = texture.GetImage().GetUsedRect() };
             Trimmed[texture] = trimmed;
         }
 

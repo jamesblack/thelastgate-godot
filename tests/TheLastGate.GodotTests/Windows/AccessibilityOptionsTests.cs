@@ -65,12 +65,16 @@ public class AccessibilityOptionsTests
     [TestCase]
     public void Rows_SwapOnlyToSpritesTheGameHas()
     {
-        var sprites = Path.Combine(RepositoryFolder.Find(), "game", "sprites");
+        var art = Directory.EnumerateFiles(
+                Path.Combine(RepositoryFolder.Find(), "art"),
+                "*.png",
+                SearchOption.AllDirectories)
+            .Select(Path.GetFileName)
+            .ToHashSet();
 
         var missing = AccessibilityOptions.Rows
             .SelectMany(row => row.Sprites.Values)
-            .Where(sprite => !File.Exists(
-                Path.Combine(sprites, sprite.ToString("00000", CultureInfo.InvariantCulture) + ".png")));
+            .Where(sprite => !art.Contains(sprite.ToString("00000", CultureInfo.InvariantCulture) + ".png"));
 
         AssertThat(missing).IsEmpty();
     }

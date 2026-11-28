@@ -188,6 +188,26 @@ public class DataTableTests
         AssertThat(scrolling.GetNode("Headers").GetParent()).IsEqual(scrolling);
     }
 
+    [TestCase]
+    public void ANewTable_MakesNoNodeOfItsOwnBeforeItsColumns()
+    {
+        var orphansBefore = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
+        var empty = new DataTable();
+
+        var orphansAfter = Performance.GetMonitor(Performance.Monitor.ObjectOrphanNodeCount);
+        empty.Free();
+
+        AssertThat(orphansAfter - orphansBefore).IsEqual(1);
+    }
+
+    [TestCase]
+    public void ShowRows_BeforeTheColumns_Throws()
+    {
+        var empty = AutoFree(new DataTable())!;
+
+        AssertThrown(() => empty.ShowRows(Rows)).IsInstanceOf<InvalidOperationException>();
+    }
+
     private static InputEventMouseButton LeftClick() => new() { ButtonIndex = MouseButton.Left, Pressed = true };
 
     private SettingsRow BodyRow(int row) => table.GetNode("Body").GetChild<SettingsRow>(row);

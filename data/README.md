@@ -1,6 +1,6 @@
 # Game data
 
-Everything in this folder ships with the client. The sprites themselves live in `game/sprites/` and ship as `sprites.pck`, which packaging writes into this folder.
+Everything in this folder ships with the client. The sprites themselves are sheets in `game/sprites/`, built from `art/`, and ship as `sprites.pck`, which packaging writes into this folder.
 
 It is stored in Git LFS, so run `git lfs pull` after cloning. The client reads it directly at run time.
 
