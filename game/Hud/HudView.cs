@@ -498,7 +498,9 @@ public partial class HudView : Control
 
         foreach (var optionButton in GetNode<QuickOptionsView>("%OptionButtons").Buttons)
         {
-            optionButton.ShowMarked(OptionButtons.IsMarked(optionButton.Kind, Settings, player.Mode));
+            optionButton.ShowMarked(
+                OptionButtons.IsMarked(optionButton.Kind, Settings, player.Mode),
+                OptionButtons.IsDoubleMarked(optionButton.Kind, Settings));
         }
 
         foreach (var hotbarButton in GetNode<HotbarView>("%Hotbar").Buttons)

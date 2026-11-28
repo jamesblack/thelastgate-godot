@@ -1,5 +1,6 @@
 using GdUnit4;
 using TheLastGate.Characters;
+using TheLastGate.World;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Characters;
@@ -12,7 +13,7 @@ public class CharacterRecordsTests
     {
         var settings = CharacterRecords.CreateNew().Settings();
 
-        AssertThat(settings.HideWalls).IsTrue();
+        AssertThat(settings.WallHiding).IsEqual(WallHiding.Near);
         AssertThat(settings.HotbarActions[0]).IsEqual(CharacterSettings.Unassigned);
     }
 

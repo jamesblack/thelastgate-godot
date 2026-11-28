@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using TheLastGate.Characters;
 using TheLastGate.Net;
 using TheLastGate.State;
+using TheLastGate.World;
 
 namespace TheLastGate.Hud;
 
@@ -20,7 +22,7 @@ public static class OptionButtons
                 settings.ShowStatBase = !settings.ShowStatBase;
                 return true;
             case OptionButton.HideWalls:
-                settings.HideWalls = !settings.HideWalls;
+                settings.WallHiding = NextWallHiding(settings.WallHiding);
                 return true;
             case OptionButton.Names:
                 settings.ShowNames = !settings.ShowNames;
@@ -38,11 +40,14 @@ public static class OptionButtons
         {
             OptionButton.HealthPercent => settings.ShowHealthPercent,
             OptionButton.StatBase => settings.ShowStatBase,
-            OptionButton.HideWalls => settings.HideWalls,
+            OptionButton.HideWalls => settings.WallHiding != WallHiding.Off,
             OptionButton.Names => settings.ShowNames,
             OptionButton.HealthBars => settings.ShowHealthBars,
             _ => ModeOf(button) == (SpeedMode)mode,
         };
+
+    public static bool IsDoubleMarked(OptionButton button, CharacterSettings settings) =>
+        button == OptionButton.HideWalls && settings.WallHiding == WallHiding.All;
 
     public static string? Help(OptionButton button) =>
         button switch
@@ -56,13 +61,23 @@ public static class OptionButtons
                 "F4/HEALTH: Toggle whether the current health of all characters is displayed as a percent.",
             OptionButton.StatBase =>
                 "F5/STATS: Toggle seeing stat bases on the skill list, displayed as blue numbers.",
-            OptionButton.HideWalls => "F6/HIDE: Toggle whether walls and other high objects are displayed.",
+            OptionButton.HideWalls =>
+                "F6/HIDE: Hide walls and other high objects near you; press again to hide them everywhere, and again to show them.",
             OptionButton.Names => "F7/NAMES: Toggle whether the name of all characters is displayed.",
             OptionButton.HealthBars =>
                 "F8/BARS: Toggle whether the current health of all characters is displayed as bars.",
             OptionButton.Exit =>
                 "F12/EXIT: Leave the game immediately. Will cost you 50% health and can result in death.",
             _ => null,
+        };
+
+    private static WallHiding NextWallHiding(WallHiding wallHiding) =>
+        wallHiding switch
+        {
+            WallHiding.Off => WallHiding.Near,
+            WallHiding.Near => WallHiding.All,
+            WallHiding.All => WallHiding.Off,
+            _ => throw new UnreachableException(),
         };
 
     private static SpeedMode? ModeOf(OptionButton button) =>

@@ -1,5 +1,7 @@
+using System.Buffers.Binary;
 using GdUnit4;
 using TheLastGate.Characters;
+using TheLastGate.World;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Characters;
@@ -7,12 +9,14 @@ namespace TheLastGate.GodotTests.Characters;
 [TestSuite]
 public class CharacterSettingsTests
 {
+    private const int WallHidingOffset = 324;
+
     [TestCase]
     public void New_ShowsWallsNamesAndHealthPercentWithAnEmptyHotbar()
     {
         var settings = new CharacterSettings();
 
-        AssertThat(settings.HideWalls).IsTrue();
+        AssertThat(settings.WallHiding).IsEqual(WallHiding.Near);
         AssertThat(settings.ShowNames).IsTrue();
         AssertThat(settings.ShowHealthPercent).IsTrue();
         AssertThat(settings.ShowHealthBars).IsFalse();
@@ -24,7 +28,7 @@ public class CharacterSettingsTests
     [TestCase]
     public void Write_ThenParse_KeepsTogglesAndHotbar()
     {
-        var settings = new CharacterSettings { HideWalls = false, ShowHealthBars = true };
+        var settings = new CharacterSettings { WallHiding = WallHiding.Off, ShowHealthBars = true };
         settings.HotbarActions[3] = 17;
         settings.HotbarNames[3] = "Protect";
         var stored = new byte[CharacterRecord.SettingsSize];
@@ -32,12 +36,37 @@ public class CharacterSettingsTests
         settings.Write(stored);
         var parsed = CharacterSettings.Parse(stored);
 
-        AssertThat(parsed.HideWalls).IsFalse();
+        AssertThat(parsed.WallHiding).IsEqual(WallHiding.Off);
         AssertThat(parsed.ShowNames).IsTrue();
         AssertThat(parsed.ShowHealthBars).IsTrue();
         AssertThat(parsed.HotbarActions[3]).IsEqual(17);
         AssertThat(parsed.HotbarNames[3]).IsEqual("Protect");
         AssertThat(parsed.HotbarActions[4]).IsEqual(CharacterSettings.Unassigned);
+    }
+
+    [TestCase(0, WallHiding.Off)]
+    [TestCase(1, WallHiding.Near)]
+    [TestCase(2, WallHiding.All)]
+    [TestCase(3, WallHiding.Near)]
+    [TestCase(-1, WallHiding.Near)]
+    public void Parse_ReadsEachWallHiding(int storedValue, WallHiding expected)
+    {
+        var stored = new byte[CharacterRecord.SettingsSize];
+        BinaryPrimitives.WriteInt32LittleEndian(stored.AsSpan(WallHidingOffset), storedValue);
+
+        AssertThat(CharacterSettings.Parse(stored).WallHiding).IsEqual(expected);
+    }
+
+    [TestCase(WallHiding.Off)]
+    [TestCase(WallHiding.Near)]
+    [TestCase(WallHiding.All)]
+    public void Write_ThenParse_KeepsWallHiding(WallHiding wallHiding)
+    {
+        var stored = new byte[CharacterRecord.SettingsSize];
+
+        new CharacterSettings { WallHiding = wallHiding }.Write(stored);
+
+        AssertThat(CharacterSettings.Parse(stored).WallHiding).IsEqual(wallHiding);
     }
 
     [TestCase]

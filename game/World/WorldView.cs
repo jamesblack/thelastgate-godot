@@ -96,7 +96,7 @@ public partial class WorldView : Node2D
     public SpriteLoader Sprites { get; set; } = null!;
     public NoteSet? MapNotes { get; set; }
     public IFontSet Fonts { get; set; } = null!;
-    public bool HideWalls { get; set; } = true;
+    public WallHiding WallHiding { get; set; } = WallHiding.Near;
     public bool ShowNames { get; set; } = true;
     public bool ShowHealthPercent { get; set; } = true;
     public bool ShowHealthBars { get; set; }
@@ -589,7 +589,7 @@ public partial class WorldView : Node2D
                 column,
                 row,
                 State.Player,
-                HideWalls),
+                WallHiding),
             new SpriteLook(
                 tile.Light,
                 environmentTint,

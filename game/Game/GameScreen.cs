@@ -281,7 +281,7 @@ public partial class GameScreen : Control
             ShowNames = characterSettings.ShowNames,
             ShowHealthPercent = characterSettings.ShowHealthPercent,
             ShowHealthBars = characterSettings.ShowHealthBars,
-            HideWalls = characterSettings.HideWalls,
+            WallHiding = characterSettings.WallHiding,
         };
         AddChild(worldView);
         MoveChild(worldView, WorldViewIndex);
@@ -445,7 +445,7 @@ public partial class GameScreen : Control
             worldView.ShowNames = settings.ShowNames;
             worldView.ShowHealthPercent = settings.ShowHealthPercent;
             worldView.ShowHealthBars = settings.ShowHealthBars;
-            worldView.HideWalls = settings.HideWalls;
+            worldView.WallHiding = settings.WallHiding;
             worldView.Refresh();
         }
 

@@ -3,6 +3,7 @@ using TheLastGate.Characters;
 using TheLastGate.Hud;
 using TheLastGate.Net;
 using TheLastGate.State;
+using TheLastGate.World;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Hud;
@@ -34,7 +35,7 @@ public class OptionButtonsTests
         {
             ShowHealthPercent = false,
             ShowStatBase = false,
-            HideWalls = false,
+            WallHiding = WallHiding.Off,
             ShowNames = false,
             ShowHealthBars = false,
         };
@@ -47,12 +48,53 @@ public class OptionButtonsTests
 
         AssertThat(settings.ShowHealthPercent).IsTrue();
         AssertThat(settings.ShowStatBase).IsTrue();
-        AssertThat(settings.HideWalls).IsTrue();
+        AssertThat(settings.WallHiding).IsEqual(WallHiding.Near);
         AssertThat(settings.ShowNames).IsTrue();
         AssertThat(settings.ShowHealthBars).IsTrue();
 
         OptionButtons.Toggle(OptionButton.Names, settings);
         AssertThat(settings.ShowNames).IsFalse();
+    }
+
+    [TestCase]
+    public void Toggle_CyclesWallHiding()
+    {
+        var settings = new CharacterSettings { WallHiding = WallHiding.Off };
+        var seen = new List<WallHiding>();
+
+        for (var press = 0; press < 3; press++)
+        {
+            OptionButtons.Toggle(OptionButton.HideWalls, settings);
+            seen.Add(settings.WallHiding);
+        }
+
+        AssertThat(seen).ContainsExactly(WallHiding.Near, WallHiding.All, WallHiding.Off);
+    }
+
+    [TestCase(WallHiding.Off, false)]
+    [TestCase(WallHiding.Near, true)]
+    [TestCase(WallHiding.All, true)]
+    public void IsMarked_MarksHideForNearAndAll(WallHiding wallHiding, bool marked)
+    {
+        var settings = new CharacterSettings { WallHiding = wallHiding };
+
+        AssertThat(OptionButtons.IsMarked(OptionButton.HideWalls, settings, 1)).IsEqual(marked);
+    }
+
+    [TestCase(OptionButton.HideWalls, WallHiding.All, true)]
+    [TestCase(OptionButton.HideWalls, WallHiding.Near, false)]
+    [TestCase(OptionButton.HideWalls, WallHiding.Off, false)]
+    [TestCase(OptionButton.Names, WallHiding.All, false)]
+    [TestCase(OptionButton.StatBase, WallHiding.All, false)]
+    [TestCase(OptionButton.Fast, WallHiding.All, false)]
+    public void IsDoubleMarked_OnlyMarksHideTwiceWhenHidingAll(
+        OptionButton button,
+        WallHiding wallHiding,
+        bool doubleMarked)
+    {
+        var settings = new CharacterSettings { WallHiding = wallHiding };
+
+        AssertThat(OptionButtons.IsDoubleMarked(button, settings)).IsEqual(doubleMarked);
     }
 
     [TestCase(OptionButton.Fast)]
@@ -63,7 +105,7 @@ public class OptionButtonsTests
         var settings = new CharacterSettings();
 
         AssertThat(OptionButtons.Toggle(button, settings)).IsFalse();
-        AssertThat(settings.HideWalls).IsTrue();
+        AssertThat(settings.WallHiding).IsEqual(WallHiding.Near);
         AssertThat(settings.ShowNames).IsTrue();
     }
 
@@ -87,7 +129,7 @@ public class OptionButtonsTests
         {
             ShowHealthPercent = true,
             ShowStatBase = false,
-            HideWalls = true,
+            WallHiding = WallHiding.Near,
             ShowNames = false,
             ShowHealthBars = true,
         };
@@ -114,7 +156,9 @@ public class OptionButtonsTests
     [TestCase(
         OptionButton.StatBase,
         "F5/STATS: Toggle seeing stat bases on the skill list, displayed as blue numbers.")]
-    [TestCase(OptionButton.HideWalls, "F6/HIDE: Toggle whether walls and other high objects are displayed.")]
+    [TestCase(
+        OptionButton.HideWalls,
+        "F6/HIDE: Hide walls and other high objects near you; press again to hide them everywhere, and again to show them.")]
     [TestCase(OptionButton.Names, "F7/NAMES: Toggle whether the name of all characters is displayed.")]
     [TestCase(
         OptionButton.HealthBars,

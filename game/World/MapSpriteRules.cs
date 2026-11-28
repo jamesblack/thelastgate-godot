@@ -45,21 +45,22 @@ public static class MapSpriteRules
         int column,
         int row,
         PlayerState player,
-        bool hideWalls)
+        WallHiding wallHiding)
     {
         if (itemSprite == 0 || HidesObjectsAndCharacters(tile, column, row))
         {
             return 0;
         }
 
-        var hidesHere = hideWalls && !IsInFrontOfPlayer(column, row);
+        var hidesHere = wallHiding == WallHiding.All
+            || (wallHiding == WallHiding.Near && !IsInFrontOfPlayer(column, row));
         if (hidesHere && !((MapFlags)tile.Flags).HasFlag(MapFlags.IsItem))
         {
             return itemSprite + 1;
         }
 
-        if (hidesHere && !IsFacedByPlayer(column, row, player.Direction)
-            && LowMineWall(itemSprite) is { } lowWall)
+        var keepsFacedWall = wallHiding == WallHiding.Near && IsFacedByPlayer(column, row, player.Direction);
+        if (hidesHere && !keepsFacedWall && LowMineWall(itemSprite) is { } lowWall)
         {
             return lowWall;
         }

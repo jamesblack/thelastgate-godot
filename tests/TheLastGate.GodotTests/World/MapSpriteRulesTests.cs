@@ -90,7 +90,7 @@ public class MapSpriteRulesTests
     [TestCase]
     public void ObjectSprite_ShowsTheWholeWallWhenWallsArentHidden()
     {
-        AssertThat(ObjectAt(BehindThePlayer, Wall, hideWalls: false)).IsEqual(Wall);
+        AssertThat(ObjectAt(BehindThePlayer, Wall, wallHiding: WallHiding.Off)).IsEqual(Wall);
     }
 
     [TestCase]
@@ -103,6 +103,46 @@ public class MapSpriteRulesTests
     public void ObjectSprite_ShowsTheWholeWallInFrontOfThePlayer()
     {
         AssertThat(ObjectAt(InFrontOfThePlayer, Wall)).IsEqual(Wall);
+    }
+
+    [TestCase]
+    public void ObjectSprite_ShortensTheWallInFrontOfThePlayerWhenHidingAll()
+    {
+        AssertThat(ObjectAt(InFrontOfThePlayer, Wall, wallHiding: WallHiding.All)).IsEqual(Wall + 1);
+    }
+
+    [TestCase]
+    public void ObjectSprite_ShowsAWholeItemWhenHidingAll()
+    {
+        AssertThat(ObjectAt(InFrontOfThePlayer, Wall, MapFlags.IsItem, WallHiding.All)).IsEqual(Wall);
+    }
+
+    [TestCase]
+    public void ObjectSprite_LowersTheMineWallThePlayerFacesWhenHidingAll()
+    {
+        AssertThat(ObjectAt((Centre + 1, Centre), 16350, MapFlags.IsItem, WallHiding.All, FacingEast)).IsEqual(457);
+    }
+
+    [TestCase]
+    public void ObjectSprite_LowersAMineWallInFrontOfThePlayerWhenHidingAll()
+    {
+        AssertThat(ObjectAt(InFrontOfThePlayer, 16350, MapFlags.IsItem, WallHiding.All)).IsEqual(457);
+    }
+
+    [TestCase]
+    public void ObjectSprite_LightsAFoundWaypointInFrontOfThePlayerWhenHidingAll()
+    {
+        var (tile, player) = Tile(InFrontOfThePlayer, 1002, Waypoint, MapFlags.IsItem, waypoints: 1u);
+
+        AssertThat(
+                MapSpriteRules.ObjectSprite(
+                    tile,
+                    tile.ItemSprite,
+                    InFrontOfThePlayer.Column,
+                    InFrontOfThePlayer.Row,
+                    player,
+                    WallHiding.All))
+            .IsEqual(LitWaypoint);
     }
 
     [TestCase]
@@ -150,7 +190,7 @@ public class MapSpriteRulesTests
     [TestCase]
     public void ObjectSprite_KeepsTheWholeMineWallWhenWallsArentHidden()
     {
-        AssertThat(ObjectAt(BehindThePlayer, 16350, MapFlags.IsItem, false)).IsEqual(16350);
+        AssertThat(ObjectAt(BehindThePlayer, 16350, MapFlags.IsItem, WallHiding.Off)).IsEqual(16350);
     }
 
     [TestCase(0, 1002)]
@@ -166,7 +206,7 @@ public class MapSpriteRulesTests
                     BehindThePlayer.Column,
                     BehindThePlayer.Row,
                     player,
-                    true))
+                    WallHiding.Near))
             .IsEqual(LitWaypoint);
     }
 
@@ -183,7 +223,7 @@ public class MapSpriteRulesTests
                     BehindThePlayer.Column,
                     BehindThePlayer.Row,
                     player,
-                    true))
+                    WallHiding.Near))
             .IsEqual(Waypoint);
         AssertThat(
                 MapSpriteRules.ObjectSprite(
@@ -192,7 +232,7 @@ public class MapSpriteRulesTests
                     BehindThePlayer.Column,
                     BehindThePlayer.Row,
                     playerWithIt,
-                    true))
+                    WallHiding.Near))
             .IsEqual(Waypoint);
     }
 
@@ -232,11 +272,11 @@ public class MapSpriteRulesTests
         (int Column, int Row) position,
         int objectSprite,
         MapFlags flags = MapFlags.None,
-        bool hideWalls = true,
+        WallHiding wallHiding = WallHiding.Near,
         int direction = 0)
     {
         var (tile, player) = Tile(position, objectSprite: objectSprite, flags: flags, direction: direction);
-        return MapSpriteRules.ObjectSprite(tile, tile.ItemSprite, position.Column, position.Row, player, hideWalls);
+        return MapSpriteRules.ObjectSprite(tile, tile.ItemSprite, position.Column, position.Row, player, wallHiding);
     }
 
     private static (MapTile Tile, PlayerState Player) Tile(

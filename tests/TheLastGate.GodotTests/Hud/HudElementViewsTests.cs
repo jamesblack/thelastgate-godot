@@ -134,11 +134,38 @@ public class HudElementViewsTests
         var view = await HudScene.Show<QuickOptionsView>("res://Hud/quick_options_view.tscn");
         var fast = view.Buttons.First();
 
-        fast.ShowMarked(true);
+        fast.ShowMarked(true, false);
         AssertThat(fast.GetNode<ProceduralPanel>("Cell").Fill).IsEqual(ProceduralFill.Selected);
 
-        fast.ShowMarked(false);
+        fast.ShowMarked(false, false);
         AssertThat(fast.GetNode<ProceduralPanel>("Cell").Fill).IsEqual(ProceduralFill.None);
+        view.Free();
+    }
+
+    [TestCase]
+    public async Task HideMarkedTwice_AddsTheWhiteRing()
+    {
+        var view = await HudScene.Show<QuickOptionsView>("res://Hud/quick_options_view.tscn");
+        var hide = view.Buttons.Single(button => button.Kind == OptionButton.HideWalls);
+        var ring = hide.GetNode<CanvasItem>("BothMarker");
+
+        hide.ShowMarked(true, true);
+        AssertThat(ring.Visible).IsTrue();
+        AssertThat(hide.GetNode<ProceduralPanel>("Cell").Fill).IsEqual(ProceduralFill.Selected);
+
+        hide.ShowMarked(true, false);
+        AssertThat(ring.Visible).IsFalse();
+        view.Free();
+    }
+
+    [TestCase]
+    public async Task OnlyHide_HasTheWhiteRing()
+    {
+        var view = await HudScene.Show<QuickOptionsView>("res://Hud/quick_options_view.tscn");
+
+        var ringed = view.Buttons.Where(button => button.HasNode("BothMarker")).Select(button => button.Kind).ToList();
+
+        AssertThat(ringed).ContainsExactly(OptionButton.HideWalls);
         view.Free();
     }
 

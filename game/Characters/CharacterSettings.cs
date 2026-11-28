@@ -1,11 +1,12 @@
 using System;
 using System.Buffers.Binary;
+using TheLastGate.World;
 
 namespace TheLastGate.Characters;
 
 // The settings block of a character file: name, description and changed flag (read by
-// CharacterRecord), then five int32 toggles at 324 and twenty { char name[8], int32 action }
-// hotbar entries at 344.
+// CharacterRecord), then five int32 toggles at 324 (the first is a WallHiding, the rest 0 or 1)
+// and twenty { char name[8], int32 action } hotbar entries at 344.
 public sealed class CharacterSettings
 {
     public const int HotbarSlots = 20;
@@ -29,7 +30,7 @@ public sealed class CharacterSettings
     private static readonly (int Slot, int Skill, string Name)[] OtherClassStartingSkills =
         [(11, 37, "Blind"), (3, 17, "Protect")];
 
-    public bool HideWalls { get; set; } = true;
+    public WallHiding WallHiding { get; set; } = WallHiding.Near;
     public bool ShowNames { get; set; } = true;
     public bool ShowHealthPercent { get; set; } = true;
     public bool ShowHealthBars { get; set; }
@@ -41,20 +42,20 @@ public sealed class CharacterSettings
 
     public static CharacterSettings Parse(ReadOnlySpan<byte> stored)
     {
-        var toggles = new bool[ToggleCount];
+        var toggles = new int[ToggleCount];
         for (var toggleIndex = 0; toggleIndex < ToggleCount; toggleIndex++)
         {
             toggles[toggleIndex] =
-                BinaryPrimitives.ReadInt32LittleEndian(stored[(TogglesOffset + toggleIndex * sizeof(int))..]) != 0;
+                BinaryPrimitives.ReadInt32LittleEndian(stored[(TogglesOffset + toggleIndex * sizeof(int))..]);
         }
 
         var settings = new CharacterSettings
         {
-            HideWalls = toggles[0],
-            ShowNames = toggles[1],
-            ShowHealthPercent = toggles[2],
-            ShowHealthBars = toggles[3],
-            ShowStatBase = toggles[4],
+            WallHiding = ReadWallHiding(toggles[0]),
+            ShowNames = toggles[1] != 0,
+            ShowHealthPercent = toggles[2] != 0,
+            ShowHealthBars = toggles[3] != 0,
+            ShowStatBase = toggles[4] != 0,
         };
 
         for (var slot = 0; slot < HotbarSlots; slot++)
@@ -83,12 +84,15 @@ public sealed class CharacterSettings
 
     public void Write(Span<byte> stored)
     {
-        bool[] toggles = [HideWalls, ShowNames, ShowHealthPercent, ShowHealthBars, ShowStatBase];
+        int[] toggles =
+        [
+            (int)WallHiding, Stored(ShowNames), Stored(ShowHealthPercent), Stored(ShowHealthBars), Stored(ShowStatBase),
+        ];
         for (var toggleIndex = 0; toggleIndex < ToggleCount; toggleIndex++)
         {
             BinaryPrimitives.WriteInt32LittleEndian(
                 stored[(TogglesOffset + toggleIndex * sizeof(int))..],
-                toggles[toggleIndex] ? 1 : 0);
+                toggles[toggleIndex]);
         }
 
         for (var slot = 0; slot < HotbarSlots; slot++)
@@ -107,6 +111,16 @@ public sealed class CharacterSettings
             HotbarNames[slot] = name;
         }
     }
+
+    private static WallHiding ReadWallHiding(int stored) =>
+        stored switch
+        {
+            0 => WallHiding.Off,
+            2 => WallHiding.All,
+            _ => WallHiding.Near,
+        };
+
+    private static int Stored(bool toggle) => toggle ? 1 : 0;
 
     private static T[] CreateFilled<T>(T value)
     {
