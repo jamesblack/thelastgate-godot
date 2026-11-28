@@ -50,6 +50,8 @@ public partial class HudView : Control
     private const int ManaRow = 6;
     private const int HitScoreMeta = 5;
     private const int ParryScoreMeta = 6;
+    private const int DepotNumberMask = 0x7fff;
+    private const string SortDepotCommand = "#sortdepot";
 
     private static readonly Vector2 HeldItemOffset = new(16, 16);
 
@@ -64,6 +66,7 @@ public partial class HudView : Control
     private static readonly Vector2 OffScreen = new(-1, -1);
 
     private readonly DepotPage depotPage = new();
+    private readonly DepotSwitch depotSwitch = new();
     private readonly ExitSequence exit = new();
     private readonly FocusCache focusCache = new(search => Task.Run(search));
     private readonly LookPanel lookPanel = new();
@@ -159,9 +162,13 @@ public partial class HudView : Control
 
     public Action? SaveMapNotes { get; set; }
 
+    public DepotDirectory? Depots { get; set; }
+
     private bool PlannerEnabled => ClientSettings?.SkillPlanner == true;
 
     private PlayerState Player => state!.Player;
+
+    private static double Now => Time.GetTicksMsec() / 1000.0;
 
     private bool HoldingItem => Player.HeldItem.Sprite != 0;
 
@@ -306,6 +313,11 @@ public partial class HudView : Control
             var shownPage = page;
             depotWindow.PageButton(page).Released += button => ClickDepotPage(shownPage, button);
         }
+
+        var depotCharacters = GetNode<DepotCharactersView>("%DepotCharacters");
+        depotCharacters.PageChosen += ChooseDepotPage;
+        depotCharacters.LayoutChanged += () => Depots?.Save();
+        depotCharacters.SortWanted += SortDepot;
 
         var smithWindow = GetNode<SmithWindowView>("%SmithWindow");
         smithWindow.CloseButton.Released += ClickCloseShop;
@@ -467,7 +479,9 @@ public partial class HudView : Control
         ShowTextWindows();
         RefreshSessionStats();
         GetNode<ShopWindowView>("%ShopWindow").ShowItems(state);
+        FollowDepotSwitch();
         GetNode<DepotWindowView>("%DepotWindow").ShowItems(state, depotPage);
+        ShowDepotCharacters();
         GetNode<SmithWindowView>("%SmithWindow").ShowItems(state);
         ShowWaypoints();
         GetNode<SkillTreeWindowView>("%SkillTreeWindow")
@@ -1218,6 +1232,69 @@ public partial class HudView : Control
         depotPage.Show(page);
         PlayClick();
         GetNode<DepotWindowView>("%DepotWindow").ShowItems(state, depotPage);
+    }
+
+    private void ChooseDepotPage(int characterNumber, int page)
+    {
+        if (state == null)
+        {
+            return;
+        }
+
+        if ((state.Shop.Number & DepotNumberMask) == characterNumber)
+        {
+            depotPage.Show(page);
+            GetNode<DepotWindowView>("%DepotWindow").ShowItems(state, depotPage);
+            return;
+        }
+
+        GetNode<DepotCharactersView>("%DepotCharacters").ClearStatus();
+        state.ShopRefresh.Expect(DepotSwitch.ShopNumber(characterNumber));
+        sendCommand(depotSwitch.Ask(characterNumber, page, Now));
+    }
+
+    private void SortDepot(int characterNumber)
+    {
+        if (Depots is { } depots)
+        {
+            Say($"{SortDepotCommand} {depots.NameOf(characterNumber)}");
+        }
+    }
+
+    private void FollowDepotSwitch()
+    {
+        if (depotSwitch.Seen(state!.OpenShop, state.Shop.Number) is { } wantedPage)
+        {
+            depotPage.Show(wantedPage);
+        }
+
+        if (depotSwitch.Unanswered(Now) is not { } unanswered)
+        {
+            return;
+        }
+
+        state.ShopRefresh.StopExpecting();
+        var panel = GetNode<DepotCharactersView>("%DepotCharacters");
+        if (panel.Visible && Depots is { } depots)
+        {
+            panel.ShowNoAnswer(depots.NameOf(unanswered));
+        }
+    }
+
+    private void ShowDepotCharacters()
+    {
+        var panel = GetNode<DepotCharactersView>("%DepotCharacters");
+        var shown = state!.OpenShop == ShopKind.Depot && ClientSettings?.DepotCharacterList == true && Depots != null;
+        if (panel.Visible != shown)
+        {
+            panel.ClearStatus();
+        }
+
+        panel.Visible = shown;
+        if (shown && Depots is { } depots)
+        {
+            panel.Show(depots.Layout, state.Shop.Number & DepotNumberMask, depotPage.Current);
+        }
     }
 
     private void ScrollDepot(InputEvent inputEvent)

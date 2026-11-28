@@ -23,6 +23,7 @@ public class GeneralOptionsTests
                 (GeneralOption.EscapeClosesWindowsFirst, OptionSection.Miscellaneous),
                 (GeneralOption.GiveMore, OptionSection.Miscellaneous),
                 (GeneralOption.UseQueue, OptionSection.Miscellaneous),
+                (GeneralOption.DepotCharacterList, OptionSection.Miscellaneous),
                 (GeneralOption.StubbornUse, OptionSection.Experimental),
                 (GeneralOption.DivinerCard, OptionSection.ClassHelpers));
     }
@@ -62,6 +63,7 @@ public class GeneralOptionsTests
     [TestCase(GeneralOption.PickTileDrawnUnderMouse)]
     [TestCase(GeneralOption.StubbornUse)]
     [TestCase(GeneralOption.DivinerCard)]
+    [TestCase(GeneralOption.DepotCharacterList)]
     public void Rows_LeaveTheGodotOptionsOffToBehaveLikeTheCurrentClient(GeneralOption option)
     {
         var row = GeneralOptions.Rows.Single(row => row.Option == option);
@@ -83,6 +85,13 @@ public class GeneralOptionsTests
         AssertThat(GeneralOptions.Rows.Single(row => row.Option == GeneralOption.DivinerCard).Label)
             .IsEqual(
                 "Summoner with Diviner: hold your first tarot card while casting Ghost Companion or Shadow Copy, then put it back.");
+    }
+
+    [TestCase]
+    public void Rows_SayWhatTheDepotCharacterListDoes()
+    {
+        AssertThat(GeneralOptions.Rows.Single(row => row.Option == GeneralOption.DepotCharacterList).Label)
+            .IsEqual("Show your characters and their depot pages beside the depot window.");
     }
 
     [TestCase]

@@ -1,4 +1,5 @@
 using GdUnit4;
+using TheLastGate.Map;
 using TheLastGate.Notes;
 using TheLastGate.Windows;
 using static GdUnit4.Assertions;
@@ -22,42 +23,12 @@ public class CategoryRowsTests
     }
 
     [TestCase]
-    public void Build_HidesCollapsedChildren()
-    {
-        var places = notes.AddCategory("Places", 0);
-        notes.AddCategory("Dungeons", 0, places);
-        notes.AddPoint(places, NoteKind.Pin, 1, 1, "Tavern");
-        var quests = notes.AddCategory("Quests", 0);
-
-        var rows = CategoryRows.Build(notes, expanded);
-
-        AssertThat(rows.Select(row => row.Id)).ContainsExactly(places, quests);
-    }
-
-    [TestCase]
-    public void Build_ShowsNotesAfterSubcategories()
-    {
-        var places = notes.AddCategory("Places", 0);
-        var tavern = notes.AddPoint(places, NoteKind.Pin, 1, 1, "Tavern");
-        var dungeons = notes.AddCategory("Dungeons", 0, places);
-        expanded.Add(places);
-
-        var rows = CategoryRows.Build(notes, expanded);
-
-        AssertThat(rows)
-            .ContainsExactly(
-                new CategoryRow(places, true, 0, 0, 0),
-                new CategoryRow(dungeons, true, 1, places, 0),
-                new CategoryRow(tavern, false, 1, places, 1));
-    }
-
-    [TestCase]
     public void Slot_MiddleOfACategory_IsOnto()
     {
         var places = notes.AddCategory("Places", 0);
         var quests = notes.AddCategory("Quests", 0);
 
-        AssertThat(Slot(new NoteDrag(quests, true), 0, Middle, 0)).IsEqual(new NoteDropSlot(places, -1, true));
+        AssertThat(Slot(new CategoryDrag(quests, true), 0, Middle, 0)).IsEqual(new CategoryDropSlot(places, -1, true));
     }
 
     [TestCase]
@@ -68,8 +39,8 @@ public class CategoryRowsTests
         notes.AddPoint(places, NoteKind.Pin, 2, 2, "Second");
         expanded.Add(places);
 
-        AssertThat(Slot(new NoteDrag(first, false), 2, Middle + 0.1f, 1))
-            .IsEqual(new NoteDropSlot(places, 1, false));
+        AssertThat(Slot(new CategoryDrag(first, false), 2, Middle + 0.1f, 1))
+            .IsEqual(new CategoryDropSlot(places, 1, false));
     }
 
     [TestCase]
@@ -79,8 +50,8 @@ public class CategoryRowsTests
         notes.AddCategory("B", 0);
         var third = notes.AddCategory("C", 0);
 
-        AssertThat(Slot(new NoteDrag(third, true), 1, Top, 0)).IsEqual(new NoteDropSlot(0, 1, false));
-        AssertThat(Slot(new NoteDrag(third, true), 0, Top, 0)).IsEqual(new NoteDropSlot(0, 0, false));
+        AssertThat(Slot(new CategoryDrag(third, true), 1, Top, 0)).IsEqual(new CategoryDropSlot(0, 1, false));
+        AssertThat(Slot(new CategoryDrag(third, true), 0, Top, 0)).IsEqual(new CategoryDropSlot(0, 0, false));
     }
 
     [TestCase]
@@ -90,7 +61,7 @@ public class CategoryRowsTests
         notes.AddCategory("B", 0);
         notes.AddCategory("C", 0);
 
-        AssertThat(Slot(new NoteDrag(first, true), 2, Top, 0)).IsEqual(new NoteDropSlot(0, 1, false));
+        AssertThat(Slot(new CategoryDrag(first, true), 2, Top, 0)).IsEqual(new CategoryDropSlot(0, 1, false));
     }
 
     [TestCase]
@@ -102,8 +73,8 @@ public class CategoryRowsTests
         var moving = notes.AddCategory("Moving", 0);
         expanded.Add(a);
 
-        AssertThat(Slot(new NoteDrag(moving, true), 2, Top, 1)).IsEqual(new NoteDropSlot(a, 1, false));
-        AssertThat(Slot(new NoteDrag(moving, true), 2, Top, 0)).IsEqual(new NoteDropSlot(0, 1, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 2, Top, 1)).IsEqual(new CategoryDropSlot(a, 1, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 2, Top, 0)).IsEqual(new CategoryDropSlot(0, 1, false));
     }
 
     [TestCase]
@@ -114,8 +85,8 @@ public class CategoryRowsTests
         var moving = notes.AddCategory("Moving", 0, a);
         expanded.Add(a);
 
-        AssertThat(Slot(new NoteDrag(moving, true), 3, Top, 0)).IsEqual(new NoteDropSlot(0, 1, false));
-        AssertThat(Slot(new NoteDrag(moving, true), 3, Top, 1)).IsEqual(new NoteDropSlot(a, 1, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 3, Top, 0)).IsEqual(new CategoryDropSlot(0, 1, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 3, Top, 1)).IsEqual(new CategoryDropSlot(a, 1, false));
     }
 
     [TestCase]
@@ -128,8 +99,8 @@ public class CategoryRowsTests
         var moving = notes.AddCategory("Moving", 0);
         expanded.Add(places);
 
-        AssertThat(Slot(new NoteDrag(moving, true), 3, Top, 1)).IsNull();
-        AssertThat(Slot(new NoteDrag(moving, true), 2, Top, 1)).IsEqual(new NoteDropSlot(places, 1, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 3, Top, 1)).IsNull();
+        AssertThat(Slot(new CategoryDrag(moving, true), 2, Top, 1)).IsEqual(new CategoryDropSlot(places, 1, false));
     }
 
     [TestCase]
@@ -142,8 +113,8 @@ public class CategoryRowsTests
         var pin = notes.AddPoint(from, NoteKind.Pin, 1, 1, "Camp");
         expanded.Add(places);
 
-        AssertThat(Slot(new NoteDrag(pin, false), 2, Top, 1)).IsNull();
-        AssertThat(Slot(new NoteDrag(pin, false), 3, Top, 1)).IsEqual(new NoteDropSlot(places, 0, false));
+        AssertThat(Slot(new CategoryDrag(pin, false), 2, Top, 1)).IsNull();
+        AssertThat(Slot(new CategoryDrag(pin, false), 3, Top, 1)).IsEqual(new CategoryDropSlot(places, 0, false));
     }
 
     [TestCase]
@@ -154,9 +125,9 @@ public class CategoryRowsTests
         var moving = notes.AddCategory("Moving", 0);
         expanded.Add(places);
 
-        AssertThat(Slot(new NoteDrag(moving, true), 1, Top, 0)).IsEqual(new NoteDropSlot(places, 0, false));
+        AssertThat(Slot(new CategoryDrag(moving, true), 1, Top, 0)).IsEqual(new CategoryDropSlot(places, 0, false));
     }
 
-    private NoteDropSlot? Slot(NoteDrag drag, int rowIndex, float fractionDown, int cursorLevel) =>
-        CategoryRows.Slot(CategoryRows.Build(notes, expanded), drag, rowIndex, fractionDown, cursorLevel);
+    private CategoryDropSlot? Slot(CategoryDrag drag, int rowIndex, float fractionDown, int cursorLevel) =>
+        CategoryRows.Slot(NoteListSource.Build(notes, expanded), drag, rowIndex, fractionDown, cursorLevel);
 }

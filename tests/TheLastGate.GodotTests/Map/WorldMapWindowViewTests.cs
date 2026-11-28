@@ -162,7 +162,7 @@ public class WorldMapWindowViewTests
         await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
 
         view.GetNode<WorldMapCategories>("%Categories")
-            .AskAboutClash(new NoteDrag(moving, true), new NoteDropSlot(places, -1, true), there);
+            .AskAboutClash(new CategoryDrag(moving, true), new CategoryDropSlot(places, -1, true), there);
 
         AssertThat(view.GetNode<MergePrompt>("%MergePrompt").Visible).IsTrue();
     }

@@ -6,12 +6,16 @@ using TheLastGate.Notes;
 using TheLastGate.Windows;
 using static GdUnit4.Assertions;
 
-namespace TheLastGate.GodotTests.Map;
+namespace TheLastGate.GodotTests.Windows;
 
 [TestSuite]
 [RequireGodotRuntime]
 public class CategoryListViewTests
 {
+    private const int FirstId = 1;
+    private const int SecondId = 2;
+    private const int ItemId = 10;
+
     private static readonly Vector2 ListSize = new(220, 120);
 
     private List<int> clashes = [];
@@ -27,15 +31,69 @@ public class CategoryListViewTests
         notes = new NoteSet();
         window = new WorldMapWindow();
         clashes = [];
-        list = GD.Load<PackedScene>("res://Map/category_list.tscn").Instantiate<CategoryListView>();
+        list = GD.Load<PackedScene>("res://Windows/category_list.tscn").Instantiate<CategoryListView>();
         Tree.Root.AddChild(list);
         list.Size = ListSize;
-        list.ClashFound += (_, _, clashId) => clashes.Add(clashId);
         await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
     }
 
     [AfterTest]
     public void FreeTheList() => list.Free();
+
+    [TestCase]
+    public async Task ShowsTheSourcesRowsAndLooks()
+    {
+        await ShowFake(SampleSource());
+
+        AssertThat(RowText(0)).IsEqual("First");
+        AssertThat(RowText(1)).IsEqual("Item");
+        AssertThat(RowText(2)).IsEqual("Second");
+        AssertThat(Row(3).Visible).IsFalse();
+    }
+
+    [TestCase]
+    public async Task NullSwatch_HidesTheSwatch()
+    {
+        await ShowFake(SampleSource());
+
+        AssertThat(Swatch(0).Visible).IsTrue();
+        AssertThat(Swatch(1).Visible).IsFalse();
+    }
+
+    [TestCase]
+    public async Task Drop_RaisesChangedOnlyWhenTheSourceMoved()
+    {
+        var source = SampleSource();
+        var changes = 0;
+        list.Changed += () => changes++;
+        await ShowFake(source);
+
+        list._DropData(TopOf(0), list._GetDragData(Middle(2)));
+        AssertThat(changes).IsEqual(0);
+
+        source.Moves = true;
+        list._DropData(TopOf(0), list._GetDragData(Middle(2)));
+        AssertThat(changes).IsEqual(1);
+        AssertThat(source.Drops).IsEqual(2);
+    }
+
+    [TestCase]
+    public async Task Rename_ReportsIdKindAndName()
+    {
+        var renamed = new List<(int Id, bool IsCategory, string Name)>();
+        list.RowRenamed += (id, isCategory, name) => renamed.Add((id, isCategory, name));
+        await ShowFake(SampleSource());
+
+        list.StartRename(ItemId, false, "Old");
+        var field = Row(1).GetNode<LineEdit>("Cells/Field");
+        AssertThat(field.Text).IsEqual("Old");
+        field.Text = "New";
+        Input.ParseInputEvent(new InputEventKey { Keycode = Key.Enter, Pressed = true });
+        Input.FlushBufferedEvents();
+        await Frame();
+
+        AssertThat(renamed).ContainsExactly((ItemId, false, "New"));
+    }
 
     [TestCase]
     public async Task Show_FillsRowsFromTheTree()
@@ -56,7 +114,7 @@ public class CategoryListViewTests
     [TestCase]
     public async Task WithoutNotes_NoRowsShow()
     {
-        list.Show(window, null);
+        list.Show(null);
         await Frame();
 
         AssertThat(Row(0).Visible).IsFalse();
@@ -184,14 +242,51 @@ public class CategoryListViewTests
     }
 
     [TestCase]
+    public async Task ARowsHoverText_ShowsOnlyWhileHovered()
+    {
+        var row = GD.Load<PackedScene>("res://Windows/category_row.tscn").Instantiate<CategoryRowView>();
+        Tree.Root.AddChild(row);
+        row.Show(
+            new CategoryRow(ItemId, false, 1, FirstId, 0),
+            new CategoryRowLook("Potions", null, CategoryRowState.Normal, "Altchar"),
+            false);
+        var hoverText = row.GetNode<HudLabel>("Cells/HoverText");
+        AssertThat(hoverText.Visible).IsFalse();
+
+        row.GetNode<ClickArea>("Click").EmitSignal(Control.SignalName.MouseEntered);
+        await Frame();
+
+        AssertThat(hoverText.Visible).IsTrue();
+        AssertThat(hoverText.Text).IsEqual("Altchar");
+        row.Free();
+    }
+
+    [TestCase]
+    public async Task WhenARowsHeightChanges_TheListRefitsItsRows()
+    {
+        await ShowNotes();
+        var rows = list.GetNode("Cells/List/Rows");
+        var fitted = rows.GetChildCount();
+
+        Row(0).CustomMinimumSize = new Vector2(0, ListSize.Y / 2);
+        await Frame();
+
+        AssertThat(rows.GetChildCount()).IsLess(fitted);
+    }
+
+    [TestCase]
     public async Task AGhost_HasNoIndentAndShowsItsWholeName()
     {
         var places = notes.AddCategory("Places", 0);
         var deep = notes.AddCategory("A rather long name", 0, places);
-        var ghost = GD.Load<PackedScene>("res://Map/category_row.tscn").Instantiate<CategoryRowView>();
+        var ghost = GD.Load<PackedScene>("res://Windows/category_row.tscn").Instantiate<CategoryRowView>();
         Tree.Root.AddChild(ghost);
 
-        ghost.Show(new CategoryRow(deep, true, 1, places, 0), notes, CategoryRowState.Ghost, false);
+        var row = new CategoryRow(deep, true, 1, places, 0);
+        ghost.Show(
+            row,
+            new NoteListSource(notes, window.Editor).Look(row) with { State = CategoryRowState.Ghost },
+            false);
 
         AssertThat(ghost.GetNode<Control>("Cells/Indent").CustomMinimumSize.X).IsEqual(0f);
         AssertThat(ghost.GetNode<Label>("Cells/Name").ClipText).IsFalse();
@@ -235,7 +330,15 @@ public class CategoryListViewTests
 
     private async Task ShowNotes()
     {
-        list.Show(window, notes);
+        var source = new NoteListSource(notes, window.Editor);
+        source.ClashFound += (_, _, clashId) => clashes.Add(clashId);
+        list.Show(source);
+        await Frame();
+    }
+
+    private async Task ShowFake(FakeSource source)
+    {
+        list.Show(source);
         await Frame();
     }
 
@@ -243,9 +346,55 @@ public class CategoryListViewTests
 
     private string RowText(int index) => Row(index).GetNode<HudLabel>("Cells/Name").Text;
 
+    private ColorRect Swatch(int index) => Row(index).GetNode<ColorRect>("Cells/Swatch/Colour");
+
+    private static FakeSource SampleSource() =>
+        new(
+            [
+                new CategoryRow(FirstId, true, 0, 0, 0),
+                new CategoryRow(ItemId, false, 1, FirstId, 0),
+                new CategoryRow(SecondId, true, 0, 0, 1),
+            ],
+            new Dictionary<int, CategoryRowLook>
+            {
+                [FirstId] = new("First", Colors.Red, CategoryRowState.Normal),
+                [ItemId] = new("Item", null, CategoryRowState.Normal),
+                [SecondId] = new("Second", Colors.Blue, CategoryRowState.Current),
+            });
+
     private Vector2 Middle(int index) => RowPosition(index) + new Vector2(40, Row(index).Size.Y / 2);
 
     private Vector2 TopOf(int index) => RowPosition(index) + new Vector2(40, 1);
 
     private Vector2 RowPosition(int index) => Row(index).GlobalPosition - list.GlobalPosition;
+}
+
+internal sealed class FakeSource(IReadOnlyList<CategoryRow> rows, IReadOnlyDictionary<int, CategoryRowLook> looks)
+    : ICategoryListSource
+{
+    public bool Moves { get; set; }
+
+    public int Drops { get; private set; }
+
+    public int Revision => 0;
+
+    public IReadOnlyCollection<int> Expanded { get; } = [];
+
+    public bool CanDrag => true;
+
+    public IReadOnlyList<CategoryRow> BuildRows() => rows;
+
+    public CategoryRowLook Look(CategoryRow row) => looks[row.Id];
+
+    public void Expand(int categoryId, bool expanded)
+    {
+    }
+
+    public bool CanDrop(CategoryDrag drag, CategoryDropSlot slot) => true;
+
+    public bool Drop(CategoryDrag drag, CategoryDropSlot slot)
+    {
+        Drops++;
+        return Moves;
+    }
 }

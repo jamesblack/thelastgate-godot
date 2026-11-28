@@ -320,7 +320,7 @@ public sealed class WorldMapEditor
     }
 
     // Dropping onto the category an item is already in isn't a target; the line between rows reorders instead.
-    public NoteMoveRefusal CheckDrop(NoteSet notes, NoteDrag drag, NoteDropSlot slot)
+    public NoteMoveRefusal CheckDrop(NoteSet notes, CategoryDrag drag, CategoryDropSlot slot)
     {
         if (!CanDrag)
         {
@@ -339,7 +339,7 @@ public sealed class WorldMapEditor
             : notes.CheckNoteMove(drag.Id, slot.ParentId);
     }
 
-    public NoteDropResult Drop(NoteSet notes, NoteDrag drag, NoteDropSlot slot)
+    public NoteDropResult Drop(NoteSet notes, CategoryDrag drag, CategoryDropSlot slot)
     {
         var refusal = CheckDrop(notes, drag, slot);
         if (refusal != NoteMoveRefusal.None)
@@ -385,7 +385,7 @@ public sealed class WorldMapEditor
         return result;
     }
 
-    public bool RenameDropped(NoteSet notes, int categoryId, NoteDropSlot slot, string name)
+    public bool RenameDropped(NoteSet notes, int categoryId, CategoryDropSlot slot, string name)
     {
         var wanted = name.Trim();
         if (wanted.Length == 0 || notes.FindNamed(slot.ParentId, wanted, notes.Categories.Count, categoryId) != null

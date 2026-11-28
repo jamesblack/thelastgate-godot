@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b18j726rnfcj"]
 
-[ext_resource type="Script" uid="uid://x0e64237xxnb" path="res://Map/CategoryRowView.cs" id="1_row"]
+[ext_resource type="Script" uid="uid://x0e64237xxnb" path="res://Windows/CategoryRowView.cs" id="1_row"]
 [ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
 [ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
 [ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="4_line"]
@@ -55,6 +55,13 @@ size_flags_horizontal = 3
 mouse_filter = 2
 text = "Category"
 clip_text = true
+script = ExtResource("3_label")
+
+[node name="HoverText" type="Label" parent="Cells" unique_id=1402957713]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+text = "Owner"
 script = ExtResource("3_label")
 
 [node name="Field" parent="Cells" unique_id=221857538 instance=ExtResource("6_field")]

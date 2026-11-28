@@ -28,7 +28,7 @@ public class WorldMapDropTests
         var pin = notes.AddPoint(from, NoteKind.Pin, 1, 1, "Camp");
         editor.BeginEdit(notes, pin);
 
-        var result = editor.Drop(notes, new NoteDrag(pin, false), Onto(to));
+        var result = editor.Drop(notes, new CategoryDrag(pin, false), Onto(to));
 
         AssertThat(editor.CanDrag).IsFalse();
         AssertThat(result.Outcome).IsEqual(NoteDropOutcome.Refused);
@@ -44,7 +44,7 @@ public class WorldMapDropTests
         var there = notes.AddPoint(to, NoteKind.Pin, 2, 2, "There");
         var pin = notes.AddPoint(from, NoteKind.Pin, 1, 1, "Camp");
 
-        var result = editor.Drop(notes, new NoteDrag(pin, false), Onto(to));
+        var result = editor.Drop(notes, new CategoryDrag(pin, false), Onto(to));
 
         AssertThat(result.Outcome).IsEqual(NoteDropOutcome.Moved);
         AssertThat(notes.FindCategory(to)!.Notes.Select(note => note.Id)).ContainsExactly(there, pin);
@@ -57,9 +57,9 @@ public class WorldMapDropTests
         var child = notes.AddCategory("Child", 0, parent);
         var pin = notes.AddPoint(parent, NoteKind.Pin, 1, 1, "Camp");
 
-        AssertThat(editor.CheckDrop(notes, new NoteDrag(child, true), Onto(parent)))
+        AssertThat(editor.CheckDrop(notes, new CategoryDrag(child, true), Onto(parent)))
             .IsEqual(NoteMoveRefusal.Missing);
-        AssertThat(editor.CheckDrop(notes, new NoteDrag(pin, false), Onto(parent)))
+        AssertThat(editor.CheckDrop(notes, new CategoryDrag(pin, false), Onto(parent)))
             .IsEqual(NoteMoveRefusal.Missing);
     }
 
@@ -69,7 +69,7 @@ public class WorldMapDropTests
         var first = notes.AddCategory("A", 0);
         var second = notes.AddCategory("B", 0);
 
-        var result = editor.Drop(notes, new NoteDrag(second, true), new NoteDropSlot(0, 0, false));
+        var result = editor.Drop(notes, new CategoryDrag(second, true), new CategoryDropSlot(0, 0, false));
 
         AssertThat(result.Outcome).IsEqual(NoteDropOutcome.Moved);
         AssertThat(notes.Tree().Select(category => category.Id)).ContainsExactly(second, first);
@@ -81,7 +81,7 @@ public class WorldMapDropTests
         var from = notes.AddCategory("From", 0);
         var pin = notes.AddPoint(from, NoteKind.Pin, 1, 1, "Camp");
 
-        AssertThat(editor.CheckDrop(notes, new NoteDrag(pin, false), new NoteDropSlot(0, 0, false)))
+        AssertThat(editor.CheckDrop(notes, new CategoryDrag(pin, false), new CategoryDropSlot(0, 0, false)))
             .IsEqual(NoteMoveRefusal.Missing);
     }
 
@@ -92,7 +92,7 @@ public class WorldMapDropTests
         var there = notes.AddCategory("Dungeons", 0, places);
         var moving = notes.AddCategory("Dungeons", 0);
 
-        var result = editor.Drop(notes, new NoteDrag(moving, true), Onto(places));
+        var result = editor.Drop(notes, new CategoryDrag(moving, true), Onto(places));
 
         AssertThat(result.Outcome).IsEqual(NoteDropOutcome.Clash);
         AssertThat(result.ClashId).IsEqual(there);
@@ -162,10 +162,10 @@ public class WorldMapDropTests
         var middle = notes.AddCategory("Middle", 0, top);
         var moving = notes.AddCategory("Moving", 0);
 
-        editor.Drop(notes, new NoteDrag(moving, true), Onto(middle));
+        editor.Drop(notes, new CategoryDrag(moving, true), Onto(middle));
 
         AssertThat(editor.ExpandedCategories.Order()).ContainsExactly(top, middle);
     }
 
-    private static NoteDropSlot Onto(int categoryId) => new(categoryId, Last, true);
+    private static CategoryDropSlot Onto(int categoryId) => new(categoryId, Last, true);
 }

@@ -62,12 +62,11 @@ public partial class WorldMapCategories : Control
     public override void _Ready()
     {
         List.CategoryClicked += id => window?.Editor.ChooseCategory(id);
-        List.NoteClicked += SelectNote;
+        List.ItemClicked += SelectNote;
         List.CategoryMenuWanted += OpenCategoryMenu;
-        List.NoteMenuWanted += (id, position) => NoteMenuWanted?.Invoke(new NoteHit(id, -1), position);
-        List.NotesChanged += SaveChanges;
-        List.CategoryRenamed += Rename;
-        List.ClashFound += AskAboutClash;
+        List.ItemMenuWanted += (id, position) => NoteMenuWanted?.Invoke(new NoteHit(id, -1), position);
+        List.Changed += SaveChanges;
+        List.RowRenamed += Rename;
         Button("%New").Pressed += () => OpenNewPrompt(NoParent);
         Button("%Import").Pressed += () => OpenImportPrompt(NoParent);
         Button("%Export").Pressed += () => Export(window?.Editor.CurrentCategoryId ?? 0);
@@ -104,9 +103,13 @@ public partial class WorldMapCategories : Control
 
     public void Show(WorldMapWindow shownWindow, NoteSet? shownNotes)
     {
+        if (shownWindow != window || shownNotes != notes)
+        {
+            List.Show(ListSourceFor(shownWindow, shownNotes));
+        }
+
         window = shownWindow;
         notes = shownNotes;
-        List.Show(shownWindow, shownNotes);
         foreach (var name in (string[])["New", "Import"])
         {
             Button($"%{name}").Disabled = shownNotes == null;
@@ -122,7 +125,7 @@ public partial class WorldMapCategories : Control
         }
     }
 
-    public void AskAboutClash(NoteDrag drag, NoteDropSlot slot, int clashId)
+    public void AskAboutClash(CategoryDrag drag, CategoryDropSlot slot, int clashId)
     {
         if (notes != null && window != null)
         {
@@ -160,12 +163,22 @@ public partial class WorldMapCategories : Control
         }
     }
 
-    private void StartRename(int categoryId) => List.StartRename(categoryId);
+    private NoteListSource? ListSourceFor(WorldMapWindow shownWindow, NoteSet? shownNotes)
+    {
+        if (shownNotes == null)
+        {
+            return null;
+        }
 
-    private void Rename(int categoryId, string name)
+        var source = new NoteListSource(shownNotes, shownWindow.Editor);
+        source.ClashFound += AskAboutClash;
+        return source;
+    }
+
+    private void Rename(int id, bool isCategory, string name)
     {
         var wanted = name.Trim();
-        if (wanted.Length > 0 && notes?.RenameCategory(categoryId, wanted) == true)
+        if (isCategory && wanted.Length > 0 && notes?.RenameCategory(id, wanted) == true)
         {
             SaveChanges();
         }
@@ -252,7 +265,7 @@ public partial class WorldMapCategories : Control
                 OpenImportPrompt(category.Id);
                 break;
             case MenuItem.Rename:
-                StartRename(category.Id);
+                List.StartRename(category.Id, true, category.Name);
                 break;
             case MenuItem.Export:
                 Export(category.Id);

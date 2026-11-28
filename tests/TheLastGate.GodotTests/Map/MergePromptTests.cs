@@ -40,7 +40,7 @@ public class MergePromptTests
     {
         var (moving, places, there) = Clashing();
 
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         AssertThat(prompt.Visible).IsTrue();
         AssertThat(Text("%Question")).IsEqual("Move \"Dungeons\" into \"Places\"?");
@@ -58,7 +58,7 @@ public class MergePromptTests
 
         notes.AddPoint(moving, NoteKind.Pin, 9, 9, "One more");
 
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         AssertThat(Button("%Merge").Disabled).IsTrue();
         AssertThat(prompt.GetNode<Control>("%Problem").Visible).IsTrue();
@@ -70,7 +70,7 @@ public class MergePromptTests
     {
         var (moving, places, there) = Clashing();
         notes.AddPoint(moving, NoteKind.Pin, 9, 9, "Boss");
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         Press("%Merge");
 
@@ -85,7 +85,7 @@ public class MergePromptTests
     {
         var (moving, places, there) = Clashing();
         var pin = notes.AddPoint(moving, NoteKind.Pin, 9, 9, "Boss");
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         Press("%Rename");
         AssertThat(prompt.GetNode<LineEdit>("%Name").Text).IsEqual("Dungeons (2)");
@@ -101,7 +101,7 @@ public class MergePromptTests
     public void MergePrompt_MoveIsDisabledWhileTheNameIsTaken()
     {
         var (moving, places, there) = Clashing();
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
         Press("%Rename");
 
         prompt.GetNode<LineEdit>("%Name").Text = "dungeons";
@@ -114,7 +114,7 @@ public class MergePromptTests
     public async Task MergePrompt_ClosesWhenTheDraggedCategoryIsGone()
     {
         var (moving, places, there) = Clashing();
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         notes.RemoveCategory(moving);
         await Tree.ToSignal(Tree, SceneTree.SignalName.ProcessFrame);
@@ -127,14 +127,14 @@ public class MergePromptTests
     public void RenameField_KeepsHotkeysAway()
     {
         var (moving, places, there) = Clashing();
-        prompt.Open(notes, editor, new NoteDrag(moving, true), Onto(places), there);
+        prompt.Open(notes, editor, new CategoryDrag(moving, true), Onto(places), there);
 
         Press("%Rename");
 
         AssertThat(TextFields.BeingTypedIn(prompt.GetViewport())).IsSame(prompt.GetNode<LineEdit>("%Name"));
     }
 
-    private static NoteDropSlot Onto(int categoryId) => new(categoryId, -1, true);
+    private static CategoryDropSlot Onto(int categoryId) => new(categoryId, -1, true);
 
     private (int Moving, int Places, int There) Clashing()
     {

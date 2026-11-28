@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheLastGate.Notes;
 
 namespace TheLastGate.Windows;
 
@@ -13,24 +12,17 @@ public static class CategoryRows
     private const float LineBand = 0.25f;
     private const int Last = -1;
 
-    public static IReadOnlyList<CategoryRow> Build(NoteSet notes, IReadOnlyCollection<int> expanded)
-    {
-        var rows = new List<CategoryRow>();
-        AddList(notes, expanded, 0, 0, rows);
-        return rows;
-    }
-
     // The top and bottom of a row are the lines above and below it; the middle of a category drops into it.
-    public static NoteDropSlot? Slot(
+    public static CategoryDropSlot? Slot(
         IReadOnlyList<CategoryRow> rows,
-        NoteDrag drag,
+        CategoryDrag drag,
         int rowIndex,
         float fractionDown,
         int cursorLevel)
     {
         if (rowIndex < rows.Count && rows[rowIndex].IsCategory && fractionDown is >= LineBand and <= 1 - LineBand)
         {
-            return new NoteDropSlot(rows[rowIndex].Id, Last, true);
+            return new CategoryDropSlot(rows[rowIndex].Id, Last, true);
         }
 
         var lineAt = rowIndex < rows.Count && fractionDown > 0.5f ? rowIndex + 1 : rowIndex;
@@ -43,36 +35,6 @@ public static class CategoryRows
             .ThenByDescending(candidate => candidate.Level)
             .Select(candidate => candidate.Slot)
             .FirstOrDefault();
-    }
-
-    private static void AddList(
-        NoteSet notes,
-        IReadOnlyCollection<int> expanded,
-        int parentId,
-        int depth,
-        List<CategoryRow> rows)
-    {
-        var children = notes.Categories
-            .Where(category => category.ParentId == parentId && category.Id != parentId)
-            .ToList();
-        for (var index = 0; index < children.Count; index++)
-        {
-            var child = children[index];
-            rows.Add(new CategoryRow(child.Id, true, depth, parentId, index));
-            if (!expanded.Contains(child.Id) || depth + 1 >= NoteLimits.Depth)
-            {
-                continue;
-            }
-
-            AddList(notes, expanded, child.Id, depth + 1, rows);
-            var subcategories = notes.Categories.Count(category =>
-                category.ParentId == child.Id && category.Id != child.Id);
-            for (var noteIndex = 0; noteIndex < child.Notes.Count; noteIndex++)
-            {
-                rows.Add(
-                    new CategoryRow(child.Notes[noteIndex].Id, false, depth + 1, child.Id, subcategories + noteIndex));
-            }
-        }
     }
 
     // Under the last row of an expanded category the line could end that list or any list it sits in, so each depth
@@ -121,7 +83,11 @@ public static class CategoryRows
 
     // Categories only land among the subcategories and notes only among the notes; an item moving down its own list
     // is counted without itself, as the move takes it out first.
-    private static NoteDropSlot? Fit(IReadOnlyList<CategoryRow> rows, NoteDrag drag, int parentId, int displayIndex)
+    private static CategoryDropSlot? Fit(
+        IReadOnlyList<CategoryRow> rows,
+        CategoryDrag drag,
+        int parentId,
+        int displayIndex)
     {
         var subcategories = rows.Count(row => row.IsCategory && row.ParentId == parentId);
         var own = rows.Where(row => row.Id == drag.Id && row.IsCategory == drag.IsCategory && row.ParentId == parentId)
@@ -138,6 +104,6 @@ public static class CategoryRows
             index--;
         }
 
-        return new NoteDropSlot(parentId, index, false);
+        return new CategoryDropSlot(parentId, index, false);
     }
 }

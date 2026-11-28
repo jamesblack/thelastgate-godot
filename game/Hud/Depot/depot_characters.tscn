@@ -1,0 +1,264 @@
+[gd_scene format=3 uid="uid://dlh5ylohmbp7"]
+
+[ext_resource type="Script" uid="uid://crtt02ocwo2gc" path="res://Hud/Depot/DepotCharactersView.cs" id="1_view"]
+[ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
+[ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Windows/category_list.tscn" id="4_list"]
+[ext_resource type="PackedScene" uid="uid://07n24263pdjd" path="res://Procedural/text_button.tscn" id="5_button"]
+[ext_resource type="PackedScene" uid="uid://2to2s7a08woj" path="res://Procedural/text_field.tscn" id="6_field"]
+[ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="7_menu"]
+[ext_resource type="Script" uid="uid://gwfuqhuficca" path="res://Procedural/ModalBackdrop.cs" id="8_backdrop"]
+
+[node name="DepotCharacters" type="Control" unique_id=184192213]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 320.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Frame" type="Container" parent="." unique_id=1218735526]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="Frame" unique_id=1250294938]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="Frame/Layout" unique_id=322330851]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 4
+
+[node name="Column" type="VBoxContainer" parent="Frame/Layout/Body" unique_id=1239437629]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="List" parent="Frame/Layout/Body/Column" unique_id=1287767399 instance=ExtResource("4_list")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Status" type="Label" parent="Frame/Layout/Body/Column" unique_id=722741279]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+mouse_filter = 2
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 0
+
+[node name="Footer" type="Container" parent="Frame/Layout" unique_id=1501420176]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="Frame/Layout/Footer" unique_id=641822520]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="NewCategory" parent="Frame/Layout/Footer/Centre" unique_id=1600883640 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "New category"
+
+[node name="NewBlocker" type="ColorRect" parent="." unique_id=1011787270]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("8_backdrop")
+
+[node name="Window" type="HBoxContainer" parent="NewBlocker" unique_id=1855147483]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="NewBlocker/Window" unique_id=1585099909]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="NewBlocker/Window/Frame" unique_id=1234763504]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="NewBlocker/Window/Frame/Layout" unique_id=2007656196]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="NewBlocker/Window/Frame/Layout/Body" unique_id=324491685]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="NewBlocker/Window/Frame/Layout/Body/Content" unique_id=525945526]
+layout_mode = 2
+mouse_filter = 2
+text = "New category"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="NameLabel" type="Label" parent="NewBlocker/Window/Frame/Layout/Body/Content" unique_id=1869388392]
+layout_mode = 2
+mouse_filter = 2
+text = "Name"
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="NewName" parent="NewBlocker/Window/Frame/Layout/Body/Content" unique_id=865739993 instance=ExtResource("6_field")]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+max_length = 31
+
+[node name="Footer" type="Container" parent="NewBlocker/Window/Frame/Layout" unique_id=285451210]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="NewBlocker/Window/Frame/Layout/Footer" unique_id=813656485]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="NewBlocker/Window/Frame/Layout/Footer/Centre" unique_id=189795108]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="NewCreate" parent="NewBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=713800402 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Create"
+
+[node name="NewCancel" parent="NewBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1100738484 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="DeleteBlocker" type="ColorRect" parent="." unique_id=1043480567]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.35)
+script = ExtResource("8_backdrop")
+
+[node name="Window" type="HBoxContainer" parent="DeleteBlocker" unique_id=1635555277]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Frame" type="Container" parent="DeleteBlocker/Window" unique_id=1558298709]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_panel")
+Fill = 2
+Profile = "GBGGBG"
+
+[node name="Layout" type="VBoxContainer" parent="DeleteBlocker/Window/Frame" unique_id=762637216]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="Container" parent="DeleteBlocker/Window/Frame/Layout" unique_id=678278680]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Padding = 6
+
+[node name="Content" type="VBoxContainer" parent="DeleteBlocker/Window/Frame/Layout/Body" unique_id=166690411]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Heading" type="Label" parent="DeleteBlocker/Window/Frame/Layout/Body/Content" unique_id=308340087]
+layout_mode = 2
+mouse_filter = 2
+text = "Delete category"
+script = ExtResource("3_label")
+Colour = 9
+
+[node name="DeleteQuestion" type="Label" parent="DeleteBlocker/Window/Frame/Layout/Body/Content" unique_id=665493188]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+autowrap_mode = 3
+script = ExtResource("3_label")
+Colour = 1
+
+[node name="Footer" type="Container" parent="DeleteBlocker/Window/Frame/Layout" unique_id=541596954]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_panel")
+Fill = 1
+Profile = "GBG"
+Edges = 1
+Padding = 4
+
+[node name="Centre" type="CenterContainer" parent="DeleteBlocker/Window/Frame/Layout/Footer" unique_id=337573381]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre" unique_id=336116465]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="DeleteConfirm" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1876318234 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Delete"
+
+[node name="DeleteCancel" parent="DeleteBlocker/Window/Frame/Layout/Footer/Centre/Buttons" unique_id=1075001867 instance=ExtResource("5_button")]
+unique_name_in_owner = true
+layout_mode = 2
+Caption = "Cancel"
+
+[node name="Menu" parent="." unique_id=1977772532 instance=ExtResource("7_menu")]
+unique_name_in_owner = true

@@ -19,6 +19,7 @@ public enum GeneralOption
     PickTileDrawnUnderMouse,
     StubbornUse,
     DivinerCard,
+    DepotCharacterList,
 }
 
 public enum OptionSection
@@ -94,6 +95,11 @@ public static class GeneralOptions
         new(
             GeneralOption.UseQueue,
             "Queued Actions: holding Ctrl+Shift when using or taking an item queues it. Limit 5.",
+            false,
+            OptionSection.Miscellaneous),
+        new(
+            GeneralOption.DepotCharacterList,
+            "Show your characters and their depot pages beside the depot window.",
             false,
             OptionSection.Miscellaneous),
         new(

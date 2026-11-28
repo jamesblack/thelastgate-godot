@@ -15,8 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://gxauy1xqrtxw" path="res://Procedural/help_button.tscn" id="13_help"]
 [ext_resource type="PackedScene" uid="uid://2e2s6myjaeaa" path="res://Procedural/resize_grip.tscn" id="14_grip"]
 [ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="15_menu"]
-[ext_resource type="PackedScene" uid="uid://b18j726rnfcj" path="res://Map/category_row.tscn" id="16_row"]
-[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Map/category_list.tscn" id="17_list"]
+[ext_resource type="PackedScene" uid="uid://b18j726rnfcj" path="res://Windows/category_row.tscn" id="16_row"]
+[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Windows/category_list.tscn" id="17_list"]
 [ext_resource type="PackedScene" uid="uid://kaamqjccgmjc" path="res://Procedural/glyph_button.tscn" id="18_glyph"]
 [ext_resource type="PackedScene" uid="uid://evikuhwcdff" path="res://Procedural/ruled_heading.tscn" id="19_heading"]
 [ext_resource type="PackedScene" uid="uid://vfrcujuqvvmt" path="res://Procedural/picker.tscn" id="20_choice"]
@@ -2307,7 +2307,7 @@ Colour = 9
 
 [node name="Text" type="Label" parent="Page/TreeRow/Notes" unique_id=1817564832]
 layout_mode = 2
-text = "game/Map/category_row.tscn is one row of a tree list: indent 10 per level, the chevron (> closed, v open), a 9 x 9 swatch and the name. Notes keep their Pin:, Text: or Path: prefix and an empty swatch when they use their category's colour. Current is steel blue; Selected is steel blue with a G ring; hovered lights 2.2x; Dimmed (a hidden category) has Dim text and a dark swatch. The list (category_list.tscn) pools the rows beside the scroll bar; Preview fills it with sample notes, so drag them about here."
+text = "game/Windows/category_list.tscn and category_row.tscn are the shared tree list. The list shows any ICategoryListSource (the map's notes, the depot's pages): the source builds the rows, says which categories are open and which drops it takes, and gives each row a look of text, an optional swatch, a state and an optional hover text, shown dim at the row's right end while it is hovered (a depot page away from its own character names that character). The list pools the rows beside the scroll bar. A row is indent 10 per level, the chevron (> closed, v open), a 9 x 9 swatch and the text; a look without a swatch leaves the swatch empty, as notes in their category's colour and every depot page do. Current is steel blue; Selected is steel blue with a G ring; hovered lights 2.2x; Dimmed (a hidden category) has Dim text and a dark swatch. Preview fills the list with sample notes, so drag them about here."
 custom_minimum_size = Vector2(380, 0)
 autowrap_mode = 3
 script = ExtResource("3_label")

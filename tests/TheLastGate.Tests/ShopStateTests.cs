@@ -6,6 +6,7 @@ namespace TheLastGate.Tests;
 public class ShopStateTests
 {
     private const int ShopNumber = 1201;
+    private const int OtherShopNumber = 1207;
     private readonly TickProcessor processor;
 
     private readonly GameState state = new();
@@ -64,6 +65,56 @@ public class ShopStateTests
     }
 
     [Fact]
+    public void ShopRefresh_AsksForTheExpectedShopUntilItOpens()
+    {
+        var refresh = new ShopRefresh();
+        var sent = new List<byte[]>();
+        refresh.Send = sent.Add;
+
+        refresh.Expect(OtherShopNumber);
+        RefreshTicks(refresh, ShopNumber);
+
+        Assert.Equal([ClientPackets.OneValue(ClientCommand.Look, OtherShopNumber)], sent);
+        sent.Clear();
+        RefreshTicks(refresh, OtherShopNumber);
+        RefreshTicks(refresh, OtherShopNumber);
+        Assert.Equal(
+            [
+                ClientPackets.OneValue(ClientCommand.Look, OtherShopNumber),
+                ClientPackets.OneValue(ClientCommand.Look, OtherShopNumber),
+            ],
+            sent);
+    }
+
+    [Fact]
+    public void ShopRefresh_ReturnsToTheOpenShopWhenTheExpectedOneIsGivenUp()
+    {
+        var refresh = new ShopRefresh();
+        var sent = new List<byte[]>();
+        refresh.Send = sent.Add;
+
+        refresh.Expect(OtherShopNumber);
+        refresh.StopExpecting();
+        RefreshTicks(refresh, ShopNumber);
+
+        Assert.Equal([ClientPackets.OneValue(ClientCommand.Look, ShopNumber)], sent);
+    }
+
+    [Fact]
+    public void ShopRefresh_ForgetsTheExpectedShopWhenTheShopCloses()
+    {
+        var refresh = new ShopRefresh();
+        var sent = new List<byte[]>();
+        refresh.Send = sent.Add;
+
+        refresh.Expect(OtherShopNumber);
+        refresh.EndOfTick(null, 0);
+        RefreshTicks(refresh, ShopNumber);
+
+        Assert.Equal([ClientPackets.OneValue(ClientCommand.Look, ShopNumber)], sent);
+    }
+
+    [Fact]
     public void EachTick_RefreshesTheOpenShop()
     {
         var sent = new List<byte[]>();
@@ -76,6 +127,14 @@ public class ShopStateTests
         }
 
         Assert.Contains(ClientPackets.OneValue(ClientCommand.Look, ShopNumber), sent);
+    }
+
+    private static void RefreshTicks(ShopRefresh refresh, int openShopNumber)
+    {
+        for (var tick = 0; tick < 9; tick++)
+        {
+            refresh.EndOfTick(ShopKind.Merchant, openShopNumber);
+        }
     }
 
     private void OpenShop() => Process(ShopCommands());

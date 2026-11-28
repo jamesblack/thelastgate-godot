@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://2e2s6myjaeaa" path="res://Procedural/resize_grip.tscn" id="7_grip"]
 [ext_resource type="PackedScene" uid="uid://gxauy1xqrtxw" path="res://Procedural/help_button.tscn" id="8_help"]
 [ext_resource type="Script" uid="uid://b34mtc82b8qbi" path="res://Hud/HudLabel.cs" id="9_label"]
-[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Map/category_list.tscn" id="10_list"]
+[ext_resource type="PackedScene" uid="uid://8paclu61yuh8" path="res://Windows/category_list.tscn" id="10_list"]
 [ext_resource type="PackedScene" uid="uid://tmxisnkka8wu" path="res://Procedural/procedural_menu.tscn" id="11_menu"]
 [ext_resource type="PackedScene" uid="uid://vanevdhtppvp" path="res://Map/merge_prompt.tscn" id="12_merge"]
 [ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="13_panel"]

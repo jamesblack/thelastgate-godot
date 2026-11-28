@@ -10,6 +10,7 @@ using TheLastGate.Audio;
 using TheLastGate.Characters;
 using TheLastGate.Config;
 using TheLastGate.Hud;
+using TheLastGate.Hud.Depot;
 using TheLastGate.Map;
 using TheLastGate.Net;
 using TheLastGate.Planner;
@@ -36,7 +37,10 @@ public partial class GameScreen : Control
     private readonly TickPacer pacer = new();
     private readonly HashSet<string> reportedUnusualData = [];
     private readonly Stopwatch sessionClock = Stopwatch.StartNew();
+    private string[] characterFiles = [];
     private ServerConnection connection = null!;
+    private DepotLayoutKeeper? depotKeeper;
+    private DepotDirectory? depots;
     private ExploredMapKeeper? exploredMap;
     private FontSets? fontSets;
     private HudView hudView = null!;
@@ -151,6 +155,7 @@ public partial class GameScreen : Control
         navigationKeys.TurnOn();
         exploredMap?.Save();
         mapNotes?.Save();
+        depots?.Save();
         CursorShapes.Clear();
         connection?.Dispose();
         sprites?.Dispose();
@@ -175,6 +180,7 @@ public partial class GameScreen : Control
         {
             exploredMap?.Save();
             mapNotes?.Save();
+            depots?.Save();
         }
 
         lastConnectionState = connectionState;
@@ -299,6 +305,9 @@ public partial class GameScreen : Control
         hudView.MapNotes = mapNotes?.Notes;
         worldView.MapNotes = mapNotes?.Notes;
         hudView.SaveMapNotes = mapNotes == null ? null : mapNotes.Save;
+        depotKeeper = new DepotLayoutKeeper(login.Server);
+        characterFiles = clientSettings.CharacterHistory.Entries.Select(entry => entry.FilePath).ToArray();
+        ShowDepots(login.Record.Key);
         hudView.Show(gameState, gameSession, fonts, Counted("Player", SendAction));
         if (Timings.Recorder != null && packetCounter != null)
         {
@@ -412,6 +421,21 @@ public partial class GameScreen : Control
         settings.SetStartingHotbar(CharacterRace.FromNumber(createdKey.Race).Class);
         record.Store(settings);
         CharacterStore.Save(record);
+        ShowDepots(createdKey);
+    }
+
+    private void ShowDepots(LoginKey loggedIn)
+    {
+        if (depotKeeper == null)
+        {
+            return;
+        }
+
+        depots = new DepotDirectory(
+            depotKeeper,
+            CharacterRace.FromNumber(loggedIn.Race).Season,
+            DepotCharacters.FromHistory(loggedIn, characterFiles, DepotCharacters.ReadKey));
+        hudView.Depots = depots;
     }
 
     private void ApplyCharacterSettings(CharacterSettings settings)
@@ -432,8 +456,13 @@ public partial class GameScreen : Control
     private void SaveCharacterName()
     {
         var record = login.Record;
+        var renamed = record.Key.Name != gameState.Player.Name;
         record.Key = record.Key with { Name = gameState.Player.Name, Race = gameState.Player.Race };
         CharacterStore.Save(record);
+        if (renamed)
+        {
+            ShowDepots(record.Key);
+        }
     }
 
     private void ReportUnusualDataOnce(string description)

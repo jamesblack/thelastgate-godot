@@ -67,6 +67,7 @@ public sealed class ClientSettings
         GlideMovement = file.GetValue(WorldSection, "glide_movement", false).AsBool();
         StubbornUse = file.GetValue(GeneralSection, "stubborn_use", false).AsBool();
         DivinerCard = file.GetValue(GeneralSection, "diviner_card", false).AsBool();
+        DepotCharacterList = file.GetValue(GeneralSection, "depot_character_list", false).AsBool();
         LoadKeyBindings(file);
         CursorScale = Math.Clamp(
             file.GetValue(DisplaySection, "cursor_scale", DefaultCursorScale).AsSingle(),
@@ -107,6 +108,7 @@ public sealed class ClientSettings
     public bool GlideMovement { get; set; }
     public bool StubbornUse { get; set; }
     public bool DivinerCard { get; set; }
+    public bool DepotCharacterList { get; set; }
     public float CursorScale { get; set; }
     public float ScreenGamma { get; set; }
     public float WorldGamma { get; set; }
@@ -132,6 +134,7 @@ public sealed class ClientSettings
             GeneralOption.PickTileDrawnUnderMouse => PickTileDrawnUnderMouse,
             GeneralOption.StubbornUse => StubbornUse,
             GeneralOption.DivinerCard => DivinerCard,
+            GeneralOption.DepotCharacterList => DepotCharacterList,
             _ => throw new UnreachableException(),
         };
         set
@@ -176,6 +179,9 @@ public sealed class ClientSettings
                     break;
                 case GeneralOption.DivinerCard:
                     DivinerCard = value;
+                    break;
+                case GeneralOption.DepotCharacterList:
+                    DepotCharacterList = value;
                     break;
                 default:
                     throw new UnreachableException();
@@ -268,6 +274,7 @@ public sealed class ClientSettings
         file.SetValue(WorldSection, "glide_movement", GlideMovement);
         file.SetValue(GeneralSection, "stubborn_use", StubbornUse);
         file.SetValue(GeneralSection, "diviner_card", DivinerCard);
+        file.SetValue(GeneralSection, "depot_character_list", DepotCharacterList);
         file.SetValue(
             LauncherSection,
             "character_names",

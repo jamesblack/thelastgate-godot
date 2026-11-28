@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://8paclu61yuh8"]
 
-[ext_resource type="Script" uid="uid://7phkwoegntm5" path="res://Map/CategoryListView.cs" id="1_list"]
+[ext_resource type="Script" uid="uid://7phkwoegntm5" path="res://Windows/CategoryListView.cs" id="1_list"]
 [ext_resource type="Script" uid="uid://b551wij4ne4n5" path="res://Procedural/ProceduralPanel.cs" id="2_panel"]
 [ext_resource type="Script" uid="uid://1wtkfp1fu2nj" path="res://Procedural/ProceduralScrollBar.cs" id="3_scroll"]
 [ext_resource type="Script" uid="uid://74vf6mlwqypw" path="res://Procedural/ProceduralLine.cs" id="4_line"]

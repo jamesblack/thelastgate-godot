@@ -5,10 +5,9 @@ using TheLastGate.Assets;
 using TheLastGate.Hud;
 using TheLastGate.Notes;
 using TheLastGate.Procedural;
-using TheLastGate.Windows;
 using TheLastGate.World;
 
-namespace TheLastGate.Map;
+namespace TheLastGate.Windows;
 
 public enum CategoryRowState
 {
@@ -40,9 +39,10 @@ public partial class CategoryRowView : ProceduralPanel
     private bool hoverable = true;
     private bool hovered;
     private string previewText = "";
+    private string shownHoverText = "";
     private CategoryRowState shownState;
 
-    // For the style guide: a row shown as this text in PreviewState, without notes to read it from.
+    // For the style guide: a row shown as this text in PreviewState, without a source to read it from.
     [Export]
     public string PreviewText
     {
@@ -81,6 +81,8 @@ public partial class CategoryRowView : ProceduralPanel
     [Export] public bool PreviewHovered { get; set; }
 
     private LineEdit Field => GetNode<LineEdit>("Cells/Field");
+
+    private HudLabel HoverLabel => GetNode<HudLabel>("Cells/HoverText");
 
     public event Action<MapButton, Vector2>? Pressed;
 
@@ -121,32 +123,29 @@ public partial class CategoryRowView : ProceduralPanel
         };
     }
 
-    public void Show(CategoryRow row, NoteSet notes, CategoryRowState state, bool expanded)
+    public void Show(CategoryRow row, CategoryRowLook look, bool expanded)
     {
-        var ghost = state is CategoryRowState.Ghost or CategoryRowState.RefusedGhost;
+        var ghost = look.State is CategoryRowState.Ghost or CategoryRowState.RefusedGhost;
         GetNode<Control>("Cells/Indent").CustomMinimumSize = new Vector2(ghost ? 0 : row.Depth * IndentPerLevel, 0);
         var chevron = GetNode<Line2D>("Cells/Chevron/Line");
         chevron.Visible = row.IsCategory;
         chevron.Points = expanded ? Opened : Collapsed;
-        var dimmed = state == CategoryRowState.Dimmed;
+        var dimmed = look.State == CategoryRowState.Dimmed;
         var name = GetNode<HudLabel>("Cells/Name");
         name.ClipText = !ghost;
         name.Colour = dimmed ? TextColour.Dim : TextColour.Yellow;
+        name.Text = look.Text;
+        shownHoverText = ghost ? "" : look.HoverText;
+        HoverLabel.Text = shownHoverText;
+        HoverLabel.Colour = TextColour.Dim;
         var colour = GetNode<ColorRect>("Cells/Swatch/Colour");
-        if (row.IsCategory && notes.FindCategory(row.Id) is { } category)
+        colour.Visible = look.Swatch != null;
+        if (look.Swatch is { } swatch)
         {
-            name.Text = category.Name;
-            colour.Visible = true;
-            colour.Color = Swatch(NotePalette.Rgb(category.ColourIndex), dimmed);
-        }
-        else if (notes.OwnerOf(row.Id) is { } owner && notes.FindNote(row.Id) is { } note)
-        {
-            name.Text = WorldMapWording.KindPrefix(note.Kind) + note.Label;
-            colour.Visible = note.ColourIndex != Note.CategoryColour;
-            colour.Color = Swatch(NoteSet.Rgb(owner, note), dimmed);
+            colour.Color = dimmed ? swatch.Darkened(1 - DimmedSwatch) : swatch;
         }
 
-        shownState = state;
+        shownState = look.State;
         ShowLight();
     }
 
@@ -156,6 +155,7 @@ public partial class CategoryRowView : ProceduralPanel
     {
         GetNode<Control>("Cells/Name").Visible = false;
         Field.Visible = true;
+        ShowLight();
         Field.Text = currentName;
         Field.GrabFocus();
         Field.SelectAll();
@@ -173,6 +173,7 @@ public partial class CategoryRowView : ProceduralPanel
     {
         Field.Visible = false;
         GetNode<Control>("Cells/Name").Visible = true;
+        ShowLight();
     }
 
     private void ShowPreview()
@@ -183,20 +184,12 @@ public partial class CategoryRowView : ProceduralPanel
         }
 
         hovered = PreviewHovered;
-        var sample = new NoteSet();
-        var category = sample.AddCategory(previewText, PreviewColour);
-        var id = PreviewIsNote ? sample.AddPoint(category, NoteKind.Pin, 1, 1, previewText) : category;
-        Show(new CategoryRow(id, !PreviewIsNote, PreviewDepth, 0, 0), sample, PreviewState, PreviewExpanded);
-        if (PreviewIsNote)
-        {
-            GetNode<HudLabel>("Cells/Name").Text = previewText;
-        }
-    }
-
-    private static Color Swatch(uint rgb, bool dimmed)
-    {
-        var colour = Color.Color8((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
-        return dimmed ? colour.Darkened(1 - DimmedSwatch) : colour;
+        var rgb = NotePalette.Rgb(PreviewColour);
+        Color? swatch = PreviewIsNote ? null : Color.Color8((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+        Show(
+            new CategoryRow(1, !PreviewIsNote, PreviewDepth, 0, 0),
+            new CategoryRowLook(previewText, swatch, PreviewState),
+            PreviewExpanded);
     }
 
     private void FinishRename(string name)
@@ -207,6 +200,7 @@ public partial class CategoryRowView : ProceduralPanel
 
     private void ShowLight()
     {
+        HoverLabel.Visible = shownHoverText.Length > 0 && hovered && hoverable && !Field.Visible;
         var ringed = shownState is CategoryRowState.Selected or CategoryRowState.Target or CategoryRowState.Ghost
             or CategoryRowState.RefusedGhost;
         Profile = ringed ? "G" : "";

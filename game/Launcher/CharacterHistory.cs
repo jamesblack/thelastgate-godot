@@ -6,8 +6,6 @@ namespace TheLastGate.Launcher;
 
 public sealed class CharacterHistory
 {
-    public const int MaxEntries = 20;
-
     private readonly List<PreviousCharacter> entries = [];
 
     public CharacterHistory()
@@ -18,7 +16,7 @@ public sealed class CharacterHistory
     {
         foreach (var entry in mostRecentFirst)
         {
-            if (entries.Count < MaxEntries && IndexOf(entry.FilePath) < 0)
+            if (IndexOf(entry.FilePath) < 0)
             {
                 entries.Add(entry);
             }
@@ -38,10 +36,6 @@ public sealed class CharacterHistory
         }
 
         entries.Insert(0, character);
-        if (entries.Count > MaxEntries)
-        {
-            entries.RemoveRange(MaxEntries, entries.Count - MaxEntries);
-        }
     }
 
     public void Describe(PreviousCharacter character)

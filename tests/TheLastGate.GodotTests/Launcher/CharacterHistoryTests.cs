@@ -39,18 +39,32 @@ public class CharacterHistoryTests
     }
 
     [TestCase]
-    public void Use_KeepsOnlyTheMostRecentEntries()
+    public void Use_KeepsEveryCharacter()
     {
         var history = new CharacterHistory();
 
-        for (var fileNumber = 0; fileNumber < CharacterHistory.MaxEntries + 5; fileNumber++)
+        for (var fileNumber = 0; fileNumber < 25; fileNumber++)
         {
             history.Use(new PreviousCharacter($"Character {fileNumber}", $"C:/saves/{fileNumber}.moa"));
         }
 
-        AssertThat(history.Entries.Count).IsEqual(CharacterHistory.MaxEntries);
+        AssertThat(history.Entries.Count).IsEqual(25);
         AssertThat(history.Entries[0].FilePath).IsEqual("C:/saves/24.moa");
-        AssertThat(history.Entries[^1].FilePath).IsEqual("C:/saves/5.moa");
+        AssertThat(history.Entries[^1].FilePath).IsEqual("C:/saves/0.moa");
+    }
+
+    [TestCase]
+    public void Constructor_KeepsEverySavedCharacter()
+    {
+        var saved = new PreviousCharacter[25];
+        for (var fileNumber = 0; fileNumber < saved.Length; fileNumber++)
+        {
+            saved[fileNumber] = new PreviousCharacter($"Character {fileNumber}", $"C:/saves/{fileNumber}.moa");
+        }
+
+        var history = new CharacterHistory(saved);
+
+        AssertThat(history.Entries).ContainsExactly(saved);
     }
 
     [TestCase]

@@ -2,19 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Godot;
 using Godot.Collections;
+using TheLastGate.Map;
 using TheLastGate.Notes;
 using TheLastGate.Profiling;
-using TheLastGate.Windows;
 using TheLastGate.World;
 
-namespace TheLastGate.Map;
+namespace TheLastGate.Windows;
 
 [Tool]
 public partial class CategoryListView : Control
 {
-    private const string RowScene = "res://Map/category_row.tscn";
+    private const string RowScene = "res://Windows/category_row.tscn";
     private const string DragId = "id";
     private const string DragIsCategory = "category";
     private const double AutoScrollSeconds = 0.1;
@@ -26,15 +27,17 @@ public partial class CategoryListView : Control
 
     private readonly List<CategoryRowView> pool = [];
     private string builtKey = "";
-    private NoteDrag? dragged;
-    private NoteDropSlot? dropSlot;
+    private CategoryDrag? dragged;
+    private CategoryDropSlot? dropSlot;
+    private int fittedRowHeight;
     private CategoryRowView? ghost;
     private double lastAutoScroll;
-    private NoteSet? notes;
     private int renamingId;
+    private bool renamingIsCategory;
     private PackedScene? rowScene;
+    private CategoryDrag? rowToShow;
     private IReadOnlyList<CategoryRow> rows = [];
-    private WorldMapWindow? window;
+    private ICategoryListSource? source;
 
     // For the style guide: shows sample notes that can be dragged about, in the game as in the editor.
     [Export] public bool Preview { get; set; }
@@ -54,17 +57,15 @@ public partial class CategoryListView : Control
 
     public event Action<int>? CategoryClicked;
 
-    public event Action<int>? NoteClicked;
+    public event Action<int>? ItemClicked;
 
     public event Action<int, Vector2>? CategoryMenuWanted;
 
-    public event Action<int, Vector2>? NoteMenuWanted;
+    public event Action<int, Vector2>? ItemMenuWanted;
 
-    public event Action<NoteDrag, NoteDropSlot, int>? ClashFound;
+    public event Action? Changed;
 
-    public event Action? NotesChanged;
-
-    public event Action<int, string>? CategoryRenamed;
+    public event Action<int, bool, string>? RowRenamed;
 
     public override void _Ready()
     {
@@ -78,18 +79,26 @@ public partial class CategoryListView : Control
 
     public override void _Process(double delta)
     {
-        if (window == null || notes == null || !IsVisibleInTree())
+        if (source == null || !IsVisibleInTree())
         {
             return;
         }
 
         var key =
-            $"{notes.GetHashCode()}:{notes.Revision}:{string.Join(',', window.Editor.ExpandedCategories.Order())}";
+            $"{RuntimeHelpers.GetHashCode(source)}:{source.Revision}:{string.Join(',', source.Expanded.Order())}";
         if (key != builtKey)
         {
             builtKey = key;
-            rows = CategoryRows.Build(notes, window.Editor.ExpandedCategories);
+            rows = source.BuildRows();
         }
+
+        // The HUD font that sets a row's height may reach the rows after they were first fitted.
+        if (pool.Count > 0 && RowHeight != fittedRowHeight)
+        {
+            FillPool();
+        }
+
+        ScrollToWantedRow();
 
         if (dragged != null && !GetGlobalRect().HasPoint(GetGlobalMousePosition()))
         {
@@ -127,11 +136,10 @@ public partial class CategoryListView : Control
         }
     }
 
-    public void Show(WorldMapWindow shownWindow, NoteSet? shownNotes)
+    public void Show(ICategoryListSource? shownSource)
     {
-        window = shownWindow;
-        notes = shownNotes;
-        if (shownNotes == null)
+        source = shownSource;
+        if (shownSource == null)
         {
             rows = [];
             builtKey = "";
@@ -139,10 +147,12 @@ public partial class CategoryListView : Control
         }
     }
 
-    public void StartRename(int categoryId)
+    public void ScrollTo(int id, bool isCategory) => rowToShow = new CategoryDrag(id, isCategory);
+
+    public void StartRename(int id, bool isCategory, string currentName)
     {
-        var index = rows.ToList().FindIndex(row => row.IsCategory && row.Id == categoryId);
-        if (index < 0 || notes?.FindCategory(categoryId) is not { } category)
+        var index = rows.ToList().FindIndex(row => row.IsCategory == isCategory && row.Id == id);
+        if (index < 0)
         {
             return;
         }
@@ -153,20 +163,21 @@ public partial class CategoryListView : Control
         }
 
         ShowRows();
-        renamingId = categoryId;
-        pool[index - Scroll].BeginRename(category.Name);
+        renamingId = id;
+        renamingIsCategory = isCategory;
+        pool[index - Scroll].BeginRename(currentName);
     }
 
     public override Variant _GetDragData(Vector2 atPosition)
     {
-        if (notes == null || window is not { Editor.CanDrag: true } || RowUnder(atPosition) is not { } under
+        if (source is not { CanDrag: true } || RowUnder(atPosition) is not { } under
             || under.Index >= rows.Count)
         {
             return default;
         }
 
         var row = rows[under.Index];
-        dragged = new NoteDrag(row.Id, row.IsCategory);
+        dragged = new CategoryDrag(row.Id, row.IsCategory);
         if (GetViewport().GuiIsDragging())
         {
             SetDragPreview(Ghost(row));
@@ -177,7 +188,7 @@ public partial class CategoryListView : Control
 
     public override bool _CanDropData(Vector2 atPosition, Variant data)
     {
-        if (notes == null || window == null || DragOf(data) is not { } drag)
+        if (source == null || DragOf(data) is not { } drag)
         {
             return false;
         }
@@ -185,7 +196,7 @@ public partial class CategoryListView : Control
         dragged = drag;
         AutoScroll(atPosition);
         var slot = SlotAt(atPosition, drag);
-        var allowed = slot is { } found && window.Editor.CheckDrop(notes, drag, found) == NoteMoveRefusal.None;
+        var allowed = slot is { } found && source.CanDrop(drag, found);
         dropSlot = allowed ? slot : null;
         ShowDropLine(atPosition, allowed ? slot : null);
         ShowGhost(drag, allowed);
@@ -196,34 +207,24 @@ public partial class CategoryListView : Control
 
     public override void _DropData(Vector2 atPosition, Variant data)
     {
-        if (notes == null || window == null || DragOf(data) is not { } drag || SlotAt(atPosition, drag) is not { } slot)
+        if (source == null || DragOf(data) is not { } drag || SlotAt(atPosition, drag) is not { } slot)
         {
             return;
         }
 
-        var result = window.Editor.Drop(notes, drag, slot);
-        switch (result.Outcome)
+        if (source.Drop(drag, slot))
         {
-            case NoteDropOutcome.Moved:
-                NotesChanged?.Invoke();
-                break;
-            case NoteDropOutcome.Clash:
-                ClashFound?.Invoke(drag, slot, result.ClashId);
-                break;
-            case NoteDropOutcome.Refused:
-                break;
-            default:
-                throw new UnreachableException();
+            Changed?.Invoke();
         }
 
         dragged = null;
         ClearDrop();
     }
 
-    private static NoteDrag? DragOf(Variant data) =>
+    private static CategoryDrag? DragOf(Variant data) =>
         data.VariantType == Variant.Type.Dictionary && data.AsGodotDictionary() is { } fields
         && fields.ContainsKey(DragId)
-            ? new NoteDrag(fields[DragId].AsInt32(), fields[DragIsCategory].AsBool())
+            ? new CategoryDrag(fields[DragId].AsInt32(), fields[DragIsCategory].AsBool())
             : null;
 
     private CategoryRowView NewRow()
@@ -239,7 +240,8 @@ public partial class CategoryListView : Control
             AddPooledRow();
         }
 
-        var wanted = Math.Max(1, (int)(Rows.Size.Y / RowHeight));
+        fittedRowHeight = RowHeight;
+        var wanted = Math.Max(1, (int)(Rows.Size.Y / fittedRowHeight));
         while (pool.Count < wanted)
         {
             AddPooledRow();
@@ -268,10 +270,29 @@ public partial class CategoryListView : Control
         pool.Add(row);
     }
 
+    private void ScrollToWantedRow()
+    {
+        if (rowToShow is not { } wanted || pool.Count == 0)
+        {
+            return;
+        }
+
+        rowToShow = null;
+        var index = rows.ToList().FindIndex(row => row.IsCategory == wanted.IsCategory && row.Id == wanted.Id);
+        if (index >= 0 && index < Scroll)
+        {
+            ScrollBar.Value = index;
+        }
+        else if (index >= Scroll + pool.Count)
+        {
+            ScrollBar.Value = index - pool.Count + 1;
+        }
+    }
+
     private void ShowRows()
     {
         using var timing = Timings.Measure("maplist.rows");
-        if (notes == null || window == null)
+        if (source == null)
         {
             foreach (var row in pool)
             {
@@ -299,37 +320,28 @@ public partial class CategoryListView : Control
             if (row.Visible)
             {
                 var shown = rows[index];
-                row.Show(shown, notes, StateOf(shown), window.Editor.ExpandedCategories.Contains(shown.Id));
+                row.Show(shown, LookOf(shown), source.Expanded.Contains(shown.Id));
             }
         }
     }
 
-    private CategoryRowState StateOf(CategoryRow row)
+    private CategoryRowLook LookOf(CategoryRow row)
     {
-        var editor = window!.Editor;
+        var look = source!.Look(row);
         if (dragged is { } drag && drag.Id == row.Id && drag.IsCategory == row.IsCategory)
         {
-            return CategoryRowState.Source;
+            return look with { State = CategoryRowState.Source };
         }
 
-        if (row.IsCategory && dropSlot is { Onto: true } slot && slot.ParentId == row.Id)
-        {
-            return CategoryRowState.Target;
-        }
-
-        if (row.IsCategory ? editor.CurrentCategoryId == row.Id : editor.SelectedNoteId == row.Id)
-        {
-            return row.IsCategory ? CategoryRowState.Current : CategoryRowState.Selected;
-        }
-
-        var category = row.IsCategory ? notes!.FindCategory(row.Id) : notes!.OwnerOf(row.Id);
-        return category != null && !notes.IsShown(category) ? CategoryRowState.Dimmed : CategoryRowState.Normal;
+        return row.IsCategory && dropSlot is { Onto: true } slot && slot.ParentId == row.Id
+            ? look with { State = CategoryRowState.Target }
+            : look;
     }
 
     private void PressRow(int slot, MapButton button, Vector2 at)
     {
         var index = Scroll + slot;
-        if (window == null || index >= rows.Count)
+        if (source == null || index >= rows.Count)
         {
             return;
         }
@@ -339,19 +351,19 @@ public partial class CategoryListView : Control
         switch (button)
         {
             case MapButton.Left when row.IsCategory && pool[slot].OnChevron(at):
-                window.Editor.Expand(row.Id, !window.Editor.ExpandedCategories.Contains(row.Id));
+                source.Expand(row.Id, !source.Expanded.Contains(row.Id));
                 break;
             case MapButton.Left when row.IsCategory:
                 CategoryClicked?.Invoke(row.Id);
                 break;
             case MapButton.Left:
-                NoteClicked?.Invoke(row.Id);
+                ItemClicked?.Invoke(row.Id);
                 break;
             case MapButton.Right when row.IsCategory:
                 CategoryMenuWanted?.Invoke(row.Id, mouse);
                 break;
             case MapButton.Right:
-                NoteMenuWanted?.Invoke(row.Id, mouse);
+                ItemMenuWanted?.Invoke(row.Id, mouse);
                 break;
             case MapButton.None:
                 break;
@@ -366,7 +378,7 @@ public partial class CategoryListView : Control
         renamingId = 0;
         if (id != 0)
         {
-            CategoryRenamed?.Invoke(id, name);
+            RowRenamed?.Invoke(id, renamingIsCategory, name);
         }
     }
 
@@ -387,7 +399,7 @@ public partial class CategoryListView : Control
         return (index, fraction);
     }
 
-    private NoteDropSlot? SlotAt(Vector2 atPosition, NoteDrag drag)
+    private CategoryDropSlot? SlotAt(Vector2 atPosition, CategoryDrag drag)
     {
         if (RowUnder(atPosition) is not { } under)
         {
@@ -399,7 +411,7 @@ public partial class CategoryListView : Control
         return CategoryRows.Slot(rows, drag, under.Index, under.FractionDown, cursorLevel);
     }
 
-    private void ShowDropLine(Vector2 atPosition, NoteDropSlot? slot)
+    private void ShowDropLine(Vector2 atPosition, CategoryDropSlot? slot)
     {
         DropLine.Visible = slot is { Onto: false };
         if (slot is not { Onto: false } line || RowUnder(atPosition) is not { } under)
@@ -428,7 +440,7 @@ public partial class CategoryListView : Control
     private Control Ghost(CategoryRow row)
     {
         ghost = NewRow();
-        ghost.Show(row, notes!, CategoryRowState.Ghost, false);
+        ghost.Show(row, source!.Look(row) with { State = CategoryRowState.Ghost }, false);
         ghost.CustomMinimumSize = new Vector2(Rows.Size.X, 0);
         ghost.Position = new Vector2(GhostOffset, -RowHeight / 2f);
         var holder = new Control { MouseFilter = MouseFilterEnum.Ignore, ZIndex = GhostLayer, ZAsRelative = false };
@@ -436,12 +448,13 @@ public partial class CategoryListView : Control
         return holder;
     }
 
-    private void ShowGhost(NoteDrag drag, bool allowed)
+    private void ShowGhost(CategoryDrag drag, bool allowed)
     {
         var row = rows.FirstOrDefault(candidate => candidate.Id == drag.Id && candidate.IsCategory == drag.IsCategory);
         if (ghost != null && row != default)
         {
-            ghost.Show(row, notes!, allowed ? CategoryRowState.Ghost : CategoryRowState.RefusedGhost, false);
+            var state = allowed ? CategoryRowState.Ghost : CategoryRowState.RefusedGhost;
+            ghost.Show(row, source!.Look(row) with { State = state }, false);
         }
     }
 
@@ -469,12 +482,13 @@ public partial class CategoryListView : Control
         sample.AddPoint(places, NoteKind.Pin, 2, 2, "Tavern");
         sample.AddCategory("Quests", 4);
         sample.AddCategory("Shared", 7);
-        var preview = new WorldMapWindow();
-        preview.Editor.Expand(places, true);
-        preview.Editor.Expand(shops, true);
-        preview.Editor.ChooseCategory(places);
-        Show(preview, sample);
-        rows = CategoryRows.Build(sample, preview.Editor.ExpandedCategories);
+        var editor = new WorldMapEditor();
+        editor.Expand(places, true);
+        editor.Expand(shops, true);
+        editor.ChooseCategory(places);
+        var preview = new NoteListSource(sample, editor);
+        Show(preview);
+        rows = preview.BuildRows();
         FillPool();
     }
 }

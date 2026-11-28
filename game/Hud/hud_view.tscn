@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c43vvk1g7qgns" path="res://Hud/TextWindow/text_windows.tscn" id="20_textwindows"]
 [ext_resource type="PackedScene" uid="uid://cv82ogaee8q8m" path="res://Hud/Shop/shop_window.tscn" id="21_shopwindow"]
 [ext_resource type="PackedScene" uid="uid://cikoega2qm5yf" path="res://Hud/Depot/depot_window.tscn" id="22_depotwindow"]
+[ext_resource type="PackedScene" uid="uid://dlh5ylohmbp7" path="res://Hud/Depot/depot_characters.tscn" id="47_depotcharacters"]
 [ext_resource type="PackedScene" uid="uid://bkd1i4cug6ojj" path="res://Hud/Smith/smith_window.tscn" id="23_smithwindow"]
 [ext_resource type="PackedScene" uid="uid://c4nhp1yrm7a4i" path="res://Hud/Waypoints/waypoint_window.tscn" id="24_waypointwindow"]
 [ext_resource type="PackedScene" uid="uid://dunfj2uaq4jcb" path="res://Hud/SkillTree/skill_tree_window.tscn" id="25_skilltreewindow"]
@@ -292,6 +293,14 @@ offset_left = 480.0
 offset_top = 280.0
 offset_right = 777.0
 offset_bottom = 596.0
+
+[node name="DepotCharacters" parent="." unique_id=1876543210 instance=ExtResource("47_depotcharacters")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 771.0
+offset_top = 280.0
+offset_right = 971.0
+offset_bottom = 589.0
 
 [node name="SmithWindow" parent="." unique_id=1421905378 instance=ExtResource("23_smithwindow")]
 unique_name_in_owner = true

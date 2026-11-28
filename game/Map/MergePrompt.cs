@@ -9,10 +9,10 @@ namespace TheLastGate.Map;
 public partial class MergePrompt : ModalBackdrop
 {
     private int clashId;
-    private NoteDrag drag;
+    private CategoryDrag drag;
     private WorldMapEditor? editor;
     private NoteSet? notes;
-    private NoteDropSlot slot;
+    private CategoryDropSlot slot;
 
     private LineEdit NameField => GetNode<LineEdit>("%Name");
 
@@ -41,8 +41,8 @@ public partial class MergePrompt : ModalBackdrop
     public void Open(
         NoteSet shownNotes,
         WorldMapEditor shownEditor,
-        NoteDrag dragged,
-        NoteDropSlot droppedAt,
+        CategoryDrag dragged,
+        CategoryDropSlot droppedAt,
         int clash)
     {
         if (shownNotes.FindCategory(dragged.Id) is not { } moved || shownNotes.FindCategory(clash) is not { } there)
