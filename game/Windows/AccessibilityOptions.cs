@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TheLastGate.Assets;
 
 namespace TheLastGate.Windows;
 
@@ -17,7 +18,7 @@ public sealed record AccessibilityRow(AccessibilityOption Option, string Label, 
 public static class AccessibilityOptions
 {
     private const int HiddenHoleTrap = 16859;
-    private const int ObviousHoleTrap = 34194;
+    private const int ObviousHoleTrap = SpriteNumbers.FirstClientOnly;
 
     public static IReadOnlyList<AccessibilityRow> Rows { get; } =
     [

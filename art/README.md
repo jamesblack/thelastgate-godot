@@ -10,6 +10,9 @@ Each folder is a group, and each group becomes one sheet, `game/sprites/<group>.
 - Group names are lower case words joined by `-` (`floors`, `unsorted-32x32`). `characters` is reserved, and a name
   can't be only digits.
 - Character frames don't go here: they live on the character sheets in `game/sprites/characters/`.
+- Sprites only this client draws (the server never sends them) are numbered from 70000
+  (`SpriteNumbers.FirstClientOnly`), above the 16-bit numbers the server can send, so new server art never collides
+  with them.
 
 ## Adding, changing or regrouping a sprite
 

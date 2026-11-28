@@ -2,6 +2,7 @@ using GdUnit4;
 using Godot;
 using TheLastGate.Assets;
 using TheLastGate.Map;
+using TheLastGate.World;
 using static GdUnit4.Assertions;
 
 namespace TheLastGate.GodotTests.Assets;
@@ -12,6 +13,7 @@ public class SpriteLoaderArtSheetTests
 {
     private const long CacheBytes = 64L * 1024 * 1024;
     private const string FloorSheet = "res://sprites/floors.png";
+    private const string ScenerySheet = "res://sprites/scenery.png";
     private const int FloorSprite = 116;
     private const int FontStrip = 18101;
     private const int TransparentSprite = 10;
@@ -38,6 +40,19 @@ public class SpriteLoaderArtSheetTests
         AssertThat(sprite!.Atlas.ResourcePath).IsEqual(FloorSheet);
         AssertThat(sprite.Region).IsEqual(FloorRegion);
         AssertThat(loader.FindSource(FloorSprite)).IsEqual(SpriteSource.Resource);
+    }
+
+    [TestCase]
+    public void GetTexture_EveryTreeTrunk_IsOnTheScenerySheet()
+    {
+        using var loader = NewLoader();
+
+        var sheets = MapSpriteRules.TreeTrunks.Values
+            .Select(trunk => (loader.GetTexture(trunk) as AtlasTexture)?.Atlas.ResourcePath)
+            .Distinct()
+            .ToList();
+
+        AssertThat(sheets).ContainsExactly(ScenerySheet);
     }
 
     [TestCase]

@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using TheLastGate.Assets;
 using TheLastGate.State;
 
 namespace TheLastGate.World;
@@ -18,6 +21,13 @@ public static class MapSpriteRules
     private const int ShimmeringFloor = 16980;
     private const int FlickerTicks = 10;
     private const int FlickerCycle = 666;
+    private const int FirstTreeTrunk = SpriteNumbers.FirstClientOnly + 100;
+
+    private static readonly int[] TreesWithTrunks =
+    [
+        330, 332, 880, 882, 884, 1112, 1114, 1138, 1238, 1240, 2864, 2866, 2870, 2874, 2876, 2878, 2880, 5784,
+        320, 356, 358, 360, 362, 1116, 2868, 2872, 5828, 5830, 5832, 5834, 6846, 6848, 6850, 6852, 1093, 1096,
+    ];
 
     private static readonly int[] LowMineWalls = [457, 456, 455, 466, 459, 458, 468, 467, 467];
 
@@ -26,6 +36,10 @@ public static class MapSpriteRules
         1002, 1008, 1013, 1034, 1010, 1052, 1100, 1099, 1012, 1109, 1118, 1141, 1158, 1145, 1014, 1005,
         1006, 1007, 402, 500, 520, 531, 542, 551, 558, 543, 544, 545, 546, 547, 548, 549,
     ];
+
+    public static IReadOnlyDictionary<int, int> TreeTrunks { get; } =
+        TreesWithTrunks.Select((tree, index) => (tree, index))
+            .ToDictionary(pair => pair.tree, pair => FirstTreeTrunk + pair.index);
 
     public static int FloorSprite(in MapTile tile, int clientTick)
     {
@@ -56,7 +70,9 @@ public static class MapSpriteRules
             || (wallHiding == WallHiding.Near && !IsInFrontOfPlayer(column, row));
         if (hidesHere && !((MapFlags)tile.Flags).HasFlag(MapFlags.IsItem))
         {
-            return itemSprite + 1;
+            return wallHiding == WallHiding.All && TreeTrunks.TryGetValue(itemSprite, out var trunk)
+                ? trunk
+                : itemSprite + 1;
         }
 
         var keepsFacedWall = wallHiding == WallHiding.Near && IsFacedByPlayer(column, row, player.Direction);

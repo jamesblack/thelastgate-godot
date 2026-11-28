@@ -19,7 +19,7 @@ public class AccessibilityOptionsTests
     {
         var sprites = AccessibilityOptions.SpritesFor([AccessibilityOption.ObviousHoleTraps]);
 
-        AssertThat(sprites).IsEqual(new Dictionary<int, int> { [16859] = 34194 });
+        AssertThat(sprites).IsEqual(new Dictionary<int, int> { [16859] = 70000 });
     }
 
     [TestCase]
@@ -34,7 +34,7 @@ public class AccessibilityOptionsTests
         var sprites = AccessibilityOptions.SpritesFor(
             [AccessibilityOption.ObviousHoleTraps, AccessibilityOption.ObviousHoleTraps]);
 
-        AssertThat(sprites).IsEqual(new Dictionary<int, int> { [16859] = 34194 });
+        AssertThat(sprites).IsEqual(new Dictionary<int, int> { [16859] = 70000 });
     }
 
     [TestCase]

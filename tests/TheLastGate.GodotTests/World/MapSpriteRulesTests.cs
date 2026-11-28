@@ -145,6 +145,35 @@ public class MapSpriteRulesTests
             .IsEqual(LitWaypoint);
     }
 
+    [TestCase(330, 70100)]
+    [TestCase(5784, 70117)]
+    [TestCase(320, 70118)]
+    [TestCase(2872, 70125)]
+    [TestCase(1096, 70135)]
+    public void ObjectSprite_ShowsATreesTrunkWhenHidingAll(int tree, int trunk)
+    {
+        AssertThat(ObjectAt(BehindThePlayer, tree, wallHiding: WallHiding.All)).IsEqual(trunk);
+        AssertThat(ObjectAt(InFrontOfThePlayer, tree, wallHiding: WallHiding.All)).IsEqual(trunk);
+    }
+
+    [TestCase]
+    public void ObjectSprite_ShowsATreesDitherWhenHidingNear()
+    {
+        AssertThat(ObjectAt(BehindThePlayer, 330)).IsEqual(331);
+    }
+
+    [TestCase]
+    public void ObjectSprite_ShowsAWholeLookableTreeWhenHidingAll()
+    {
+        AssertThat(ObjectAt(BehindThePlayer, 330, MapFlags.IsItem, WallHiding.All)).IsEqual(330);
+    }
+
+    [TestCase]
+    public void TreeTrunks_HasThirtySixTrees()
+    {
+        AssertThat(MapSpriteRules.TreeTrunks.Count).IsEqual(36);
+    }
+
     [TestCase]
     public void ObjectSprite_ShowsNothingWhereThereIsNoObject()
     {
